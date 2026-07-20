@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 
 from .forms import (
     UserRegisterForm, 
-    AuthenticationForm
+    UserLoginForm
 )
 
 
@@ -13,7 +13,7 @@ from .forms import (
 class LoginView(LoginView):
     template_name = 'accounts/login.html'
     redirect_authenticated_user = True
-    from_class = AuthenticationForm
+    form_class = UserLoginForm
 
 
 class RegisterView(SuccessMessageMixin, CreateView):

@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.db.models import F, DecimalField, ExpressionWrapper
+from django.db.models.functions import Round
+
 from .models import (
     ProductModel, 
     ProductStatusType,
@@ -12,19 +14,33 @@ from django.views.generic import (
 class ShopProductView(ListView):
     template_name = "shop/shop.html"
     context_object_name = "products"
-    paginate_by = 9
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
             status=ProductStatusType.publish.value
+        ).annotate(
+            final_price=Round(ExpressionWrapper(
+                 F("price") - (F("price") * F("discount_percent") / 100),
+                 output_field=DecimalField()
+            ))
         )
+        
         
         if q := self.request.GET.get('q'):
             queryset = queryset.filter(title__icontains=q)        
-        if min_price := self.request.GET.get('min_price'):
-            queryset = queryset.filter(price__gte=min_price)        
-        if max_price := self.request.GET.get('max_price'):
-            queryset = queryset.filter(price__lte=max_price)
+        try:
+            if min_price := self.request.GET.get('min_price'):
+                min_price = int(min_price)
+                queryset = queryset.filter(final_price__gte=min_price)
+        except (ValueError, TypeError):
+            pass 
+        try:
+            if max_price := self.request.GET.get('max_price'):
+                max_price = int(max_price)
+                queryset = queryset.filter(final_price__lte=max_price)
+        except (ValueError, TypeError):
+            pass
         
         return queryset
     
