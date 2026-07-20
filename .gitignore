@@ -217,7 +217,14 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+postgres/
+
 
 # igonre database files
+<<<<<<< HEAD
 postgre/data/
+=======
+postgre/data/*
+
+>>>>>>> 540a6324a05a1e743fba314bb6e7340ef1862ff6
  
