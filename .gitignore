@@ -221,8 +221,7 @@ postgres/
 
 
 # igonre database files
-<<<<<<< HEAD
-postgre/data/
+
 =======
 postgre/data/*
 

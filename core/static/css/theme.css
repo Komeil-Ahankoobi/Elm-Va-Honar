@@ -1,0 +1,131 @@
+@import url("fonts.css");
+
+html {
+    transition:
+        background-color 250ms ease,
+        color 250ms ease;
+}
+
+body,
+.site-header,
+.site-footer,
+.brand-panel,
+[class*="card"],
+[class*="panel"],
+input,
+textarea,
+select,
+button {
+    transition:
+        background-color 250ms ease,
+        color 250ms ease,
+        border-color 250ms ease,
+        box-shadow 250ms ease;
+    font-family: "Vazirmatn", sans-serif;
+}
+
+/* ============================================================
+   DARK THEME — token overrides
+   Same variable names every page already styles itself with,
+   just repointed to a warm, near-black palette that matches the
+   brand's existing dark surfaces (footer / brand panel = #1e1510).
+   ============================================================ */
+html[data-theme="dark"] {
+    --clr-base: #0f0f18;
+    --clr-base-alt: #16161f;
+    --clr-accent: #a8b4d4;
+    --clr-accent-mid: #c2cede;
+    --clr-gold: #c9a96e;
+    --clr-text: #ede9e3;
+    --clr-subtext: #c5bfb8;
+    --clr-muted: #7a7684;
+    --clr-border: #2a2a3a;
+    --clr-card-bg: #1a1a26;
+
+    --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.65);
+}
+
+/* The frosted-glass header background is hardcoded per page as
+   rgba(253,248,240, .8x) — i.e. it isn't driven by --clr-base.
+   Repoint it explicitly so the header doesn't stay a bright cream
+   slab floating over a dark page. !important is used deliberately:
+   theme.css is the single, intentional override layer loaded last
+   for exactly this purpose. */
+html[data-theme="dark"] .site-header,
+html[data-theme="dark"] .topbar {
+    background: rgba(10, 10, 20, 0.9) !important;
+}
+
+/* Inputs/selects/etc inherit --clr-base for background in most
+   pages; this just guards any literal white fallbacks. */
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+    color-scheme: dark;
+}
+
+html[data-theme="light"] input,
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
+    color-scheme: light;
+}
+
+/* ============================================================
+   THEME TOGGLE BUTTON
+   Sun/moon icon swap, no layout shift, keyboard accessible.
+   ============================================================ */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--clr-border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--clr-text);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+        border-color 200ms ease,
+        background-color 200ms ease,
+        transform 200ms ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--clr-gold);
+    background: rgba(201, 169, 110, 0.08);
+}
+
+.theme-toggle:active {
+    transform: scale(0.92);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--clr-accent);
+    outline-offset: 2px;
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+    display: none;
+}
+
+/* Show the icon for the theme you'd switch TO. In light mode the
+   button offers the moon (switch to dark); in dark mode it offers
+   the sun (switch to light). */
+html[data-theme="light"] .theme-toggle .icon-moon {
+    display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}

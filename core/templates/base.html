@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>قلم و کاغذ — مرکب. کاغذ. ظرافت.</title>
+  <meta name="description"
+    content="لوازم‌التحریر ممتاز برای نویسندگان حرفه‌ای. دفترها، قلم‌ها، مرکب و لوازم میز با بالاترین کیفیت." />
+
+  <!-- اول preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- بعد preload -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
+
+  <!-- بعد load معمولی -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap">
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet" />
+    </noscript>
+    <link rel="stylesheet" href="{% static 'css/home.css'%}">
+    <link rel="stylesheet" href="{% static 'css/about-us.css'%}">
+    <link rel="stylesheet" href="{% static 'css/contact.css'%}">
+    <link rel="stylesheet" href="{% static 'css/shop.css'%}">
+    <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
+    
+    
+    {% block extra_css %} {% endblock extra_css %}
+    
+    {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
+</head>
+
+<body>
+    <header class="site-header" id="site-header" role="banner">
+    <div class="container">
+      <nav class="nav-inner" aria-label="ناوبری اصلی">
+
+        <!-- Logo -->
+        <a href="home.html" class="nav-logo" aria-label="صفحه اصلی قلم و کاغذ">
+          <span class="nav-logo-name">علم <em style="font-style:italic; color:var(--clr-accent);">&</em> هنر</span>
+          <span class="nav-logo-sub">تأسیس ۱۳۰۳</span>
+        </a>
+
+        <!-- Main links -->
+        <ul class="nav-links" role="list">
+  <li><a href="{% url 'website:home' %}">خانه</a></li>
+  <li><a href="{% url 'shop:show-product-view' %}">فروشگاه</a></li>
+
+  <li class="nav-dropdown">
+    <a href="#" class="nav-dropdown-toggle">دسته‌بندی‌ها</a>
+    <ul class="nav-dropdown-menu">
+      
+      <li><a href="#"></a></li>
+      
+    </ul>
+  </li>
+
+  <li><a href="{% url 'website:about' %}">درباره ما</a></li>
+  <li><a href="{% url 'website:contact' %}">تماس</a></li>
+  {% if request.user.is_authenticated %}
+  <form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+    <li><button type="submit" class="login">خروج</button></li>
+  </form>
+  {% else %}
+  <li><a href="{% url 'accounts:login' %}" class="login">ورود</a></li>
+  {% endif %}
+</ul>
+
+        <!-- Live date -->
+        <span class="nav-date" id="live-date" aria-live="polite"></span>
+
+        <!-- Cart CTA -->
+        <a href="bag.html" class="nav-cta" aria-label="باز کردن سبد خرید">سبد (۰)</a>
+
+        <!-- Mobile hamburger -->
+        <button class="nav-mobile-toggle" aria-label="باز کردن منو" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <rect x="2" y="5" width="18" height="1.5" rx=".75" fill="currentColor" />
+            <rect x="2" y="10.25" width="12" height="1.5" rx=".75" fill="currentColor" />
+            <rect x="2" y="15.5" width="18" height="1.5" rx=".75" fill="currentColor" />
+          </svg>
+        </button>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile Slide-out Menu -->
+  <div class="mobile-menu-overlay"></div>
+
+  <nav class="nav-mobile-menu" aria-label="منوی موبایل">
+    <div class="nav-mobile-menu-header">
+      <a href="home.html" class="nav-logo" style="color: #F5F0E6; text-decoration: none;">
+        <span class="nav-logo-name" style="font-size: 1.4rem;">علم <em
+            style="font-style:italic; color:var(--clr-gold);">&</em> هنر</span>
+      </a>
+      <button class="mobile-close-btn" aria-label="بستن منو">✕</button>
+    </div>
+
+    <ul role="list">
+      <li><a href="home.html">خانه</a></li>
+      <li><a href="shop.html">فروشگاه</a></li>
+      <li><a href="about-us.html">درباره ما</a></li>
+      <li><a href="contact.html">تماس</a></li>
+      <li><a href="login.html" class="login">ورود</a></li>
+    </ul>
+
+    <a href="bag.html" class="nav-cta">سبد خرید (۰)</a>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="site-footer" aria-label="فوتر سایت">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Brand column -->
+        <div>
+          <p class="footer-brand-name">قلم <em style="font-style:italic; color:var(--clr-gold);">&</em> کاغذ</p>
+          <p class="footer-tagline">لوازم‌التحریر ممتاز برای کسانی که باور دارند ابزار درست، جریان اندیشه را روان‌تر
+            می‌کند.</p>
+          <div class="footer-socials" aria-label="لینک‌های شبکه اجتماعی">
+            <a href="#" class="social-icon" aria-label="دنبال کردن در اینستاگرام">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="دنبال کردن در پینترست">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                aria-hidden="true">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.76 1.23-5.22 1.23-5.22s-.31-.63-.31-1.56c0-1.46.85-2.55 1.9-2.55.9 0 1.33.67 1.33 1.48 0 .9-.58 2.26-.87 3.51-.25 1.05.52 1.9 1.54 1.9 1.84 0 3.26-1.95 3.26-4.76 0-2.49-1.79-4.23-4.34-4.23-2.96 0-4.69 2.22-4.69 4.51 0 .89.34 1.85.77 2.37.08.1.09.19.07.29-.08.32-.25 1.05-.28 1.19-.04.18-.14.22-.32.13-1.25-.58-2.03-2.42-2.03-3.89 0-3.15 2.29-6.05 6.61-6.05 3.47 0 6.16 2.47 6.16 5.77 0 3.44-2.17 6.21-5.18 6.21-1.01 0-1.97-.53-2.3-1.14l-.62 2.33c-.23.87-.84 1.95-1.25 2.61.94.29 1.94.45 2.97.45 5.52 0 10-4.48 10-10S17.52 2 12 2z" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="دنبال کردن در ایکس">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="تماشا در یوتیوب">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                aria-hidden="true">
+                <rect x="2" y="5" width="20" height="14" rx="4" />
+                <polygon points="10,9 10,15 15,12" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Shop column -->
+        <div>
+          <p class="footer-col-title">فروشگاه</p>
+          <ul class="footer-links">
+            <li><a href="#">دفترها</a></li>
+            <li><a href="#">قلم‌های فواره</a></li>
+            <li><a href="#">خودکارها</a></li>
+            <li><a href="#">مرکب</a></li>
+            <li><a href="#">لوازم میز</a></li>
+            <li><a href="#">ست هدیه</a></li>
+          </ul>
+        </div>
+
+        <!-- Support column -->
+        <div>
+          <p class="footer-col-title">پشتیبانی</p>
+          <ul class="footer-links">
+            <li><a href="#">داستان ما</a></li>
+            <li><a href="#">ارسال و مرجوعی</a></li>
+            <li><a href="#">راهنمای نگهداری</a></li>
+            <li><a href="#">سوالات متداول</a></li>
+            <li><a href="#">تماس با ما</a></li>
+            <li><a href="#">کیت مطبوعاتی</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact column -->
+        <div>
+          <p class="footer-col-title">بازدید</p>
+          <ul class="footer-links" style="line-height:1.8;">
+            <li style="color:rgba(253,248,240,0.55); font-size:0.875rem;">خیابان ولیعصر، پلاک ۱۲</li>
+            <li style="color:rgba(253,248,240,0.55); font-size:0.875rem;">تهران، ایران</li>
+            <li style="margin-top:0.8rem;"><a href="mailto:salam@qalamokagaz.ir">salam@qalamokagaz.ir</a></li>
+            <li><a href="tel:+982112345678">۰۲۱-۱۲۳۴-۵۶۷۸</a></li>
+            <li style="color:rgba(253,248,240,0.35); font-size:0.8rem; margin-top:0.8rem;">شنبه–پنجشنبه · ۱۰ تا ۱۸</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">© ۱۴۰۳ قلم و کاغذ. تمامی حقوق محفوظ است.</p>
+        <nav class="footer-legal" aria-label="لینک‌های قانونی">
+          <a href="#">سیاست حریم خصوصی</a>
+          <a href="#">شرایط فروش</a>
+          <a href="#">تنظیمات کوکی</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       BACK TO TOP BUTTON
+       ============================================================ -->
+  <button class="back-to-top" id="back-to-top" aria-label="بازگشت به بالا">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M9 13V5M9 5L5 9M9 5l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <script src="{% static 'js/home.js'%}" defer></script>
+  <script src="{% static 'vendor/toastify.js' %}"></script>
+
+  {% include 'messages.html' %}
+  
+</body>
+    
+
+
+{% block extra_js %} {% endblock extra_js %}
+
+{% block extra_js_no_compress %} {% endblock extra_js_no_compress %}

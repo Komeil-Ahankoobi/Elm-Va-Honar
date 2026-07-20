@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <section class="contact-hero" aria-label="تماس با ما">
+      <div class="hero-bg" aria-hidden="true">
+        <svg class="paper-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+          style="opacity:1; position:absolute; inset:0; width:100%; height:100%;" aria-hidden="true">
+          <defs>
+            <pattern id="laid-h-c" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="2" x2="4" y2="2" stroke="#8A8494" stroke-width="0.4" opacity="0.5" />
+            </pattern>
+            <pattern id="laid-v-c" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
+              <line x1="14" y1="0" x2="14" y2="4" stroke="#8A8494" stroke-width="0.7" opacity="0.6" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#laid-h-c)" />
+          <rect width="100%" height="100%" fill="url(#laid-v-c)" />
+        </svg>
+      </div>
+
+      <div class="container">
+        <div class="contact-hero-content">
+          <span class="hero-kicker">تماس با ما</span>
+          <h1 class="contact-hero-title">برایمان بنویسید. <em>ما همیشه جواب می‌دهیم.</em></h1>
+          <p class="contact-hero-lede">
+            سوال درباره سفارش، نوک قلمی که نیاز به تنظیم دارد، یا دفتری که هنوز تصمیم نگرفتید — کارگاه ما هر پیامی را
+            شخصاً می‌خواند.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section contact-section" aria-label="فرم تماس و اطلاعات">
+      <div class="container contact-grid">
+
+        <!-- Form -->
+        <div class="contact-form-wrap">
+          <h2 class="contact-form-title">ارسال پیام</h2>
+          <p class="contact-form-sub">ظرف یک روز کاری، شنبه تا پنجشنبه پاسخ می‌دهیم.</p>
+
+          <form class="contact-form" id="contact-form" onsubmit="return false;" aria-label="فرم تماس">
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="cf-name">نام کامل</label>
+                <input type="text" id="cf-name" name="name" placeholder="نام و نام خانوادگی" autocomplete="name"
+                  required />
+              </div>
+              <div class="form-field">
+                <label for="cf-email">آدرس ایمیل</label>
+                <input type="email" id="cf-email" name="email" placeholder="ایمیل شما" autocomplete="email" required />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="cf-subject">موضوع</label>
+              <select id="cf-subject" name="subject">
+                <option value="general">استعلام عمومی</option>
+                <option value="order">سفارش موجود</option>
+                <option value="repair">تعمیر قلم</option>
+                <option value="wholesale">عمده‌فروشی و مطبوعات</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="cf-message">پیام</label>
+              <textarea id="cf-message" name="message" rows="6" placeholder="کمی درباره نیازتان بگویید…"
+                required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary contact-submit">
+              ارسال پیام
+              <span class="btn-arrow" aria-hidden="true">←</span>
+            </button>
+
+            <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <!-- Details -->
+        <aside class="contact-details">
+
+          <div class="contact-detail-block">
+            <span class="contact-detail-eyebrow">بازدید از کارگاه</span>
+            <p class="contact-detail-text">
+              خیابان ولیعصر، پلاک ۱۲<br />
+              تهران، ایران
+            </p>
+          </div>
+
+          <div class="contact-detail-block">
+            <span class="contact-detail-eyebrow">نوشتن یا تماس</span>
+            <p class="contact-detail-text">
+              <a href="mailto:salam@qalamokagaz.ir">salam@qalamokagaz.ir</a><br />
+              <a href="tel:+982112345678">۰۲۱-۱۲۳۴-۵۶۷۸</a>
+            </p>
+          </div>
+
+          <div class="contact-detail-block">
+            <span class="contact-detail-eyebrow">ساعات کاری</span>
+            <ul class="contact-hours">
+              <li><span>شنبه – چهارشنبه</span><span>۱۰ تا ۱۸</span></li>
+              <li><span>پنجشنبه</span><span>۱۰ تا ۱۴</span></li>
+              <li><span>جمعه</span><span>تعطیل</span></li>
+            </ul>
+          </div>
+
+          <div class="contact-detail-block">
+            <span class="contact-detail-eyebrow">میز تعمیرات</span>
+            <p class="contact-detail-text contact-detail-muted">
+              هر قلم قلم و کاغذ را بدون وقت قبلی به کارگاه بیاورید. اکثر تنظیمات نوک قلم همان‌جا انجام می‌شود.
+            </p>
+          </div>
+
+        </aside>
+
+      </div>
+    </section>
+
+{% endblock content %}

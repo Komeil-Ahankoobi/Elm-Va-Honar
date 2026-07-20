@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+
+    <div class="breadcrumb-strip">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="مسیر ناوبری">
+          <a href="home.html">خانه</a>
+          <span class="sep">/</span>
+          <a href="shop.html">فروشگاه</a>
+          <span class="sep">/</span>
+          <a href="shop.html">قلم‌ها</a>
+          <span class="sep">/</span>
+          <span class="current">قلم فواره مریدیان</span>
+        </nav>
+      </div>
+    </div>
+
+    <section class="product-detail">
+      <div class="container">
+        <div class="pd-layout">
+
+          <!-- GALLERY -->
+          <div class="pd-gallery">
+            <div class="pd-main-image">
+              <span class="pd-badge">پرفروش</span>
+              <img src="https://picsum.photos/seed/pen2/900/900" alt="قلم فواره مریدیان در رنگ ابونیت، نمای کامل"
+                id="pd-main-img" />
+              <span class="pd-zoom-hint" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M21 21l-4.3-4.3" />
+                </svg>
+                برای زوم کردن نگه دارید
+              </span>
+            </div>
+            <div class="pd-thumbs">
+              <button class="pd-thumb active" aria-label="مشاهده تصویر ۱"><img
+                  src="https://picsum.photos/seed/pen2/200/200" alt="" /></button>
+              <button class="pd-thumb" aria-label="مشاهده تصویر ۲"><img src="https://picsum.photos/seed/pen2b/200/200"
+                  alt="" /></button>
+              <button class="pd-thumb" aria-label="مشاهده تصویر ۳"><img src="https://picsum.photos/seed/pen2c/200/200"
+                  alt="" /></button>
+              <button class="pd-thumb" aria-label="مشاهده تصویر ۴"><img src="https://picsum.photos/seed/pen2d/200/200"
+                  alt="" /></button>
+              <button class="pd-thumb" aria-label="مشاهده تصویر ۵"><img src="https://picsum.photos/seed/pen2e/200/200"
+                  alt="" /></button>
+            </div>
+          </div>
+
+          <!-- INFO -->
+          <div class="pd-info">
+            <p class="pd-category">
+                {% for category in object.category.all %}
+                    <a href="#">{{category.title}} </a>
+                    {% if not forloop.last %} ,{% endif %}
+                    {% endfor %}</p>
+            <h1 class="pd-title">{{object.title}}</h1>
+
+            <div class="pd-rating-row">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">۴.۹ از ۵</span>
+              <a href="#reviews">۹۶ نظر</a>
+            </div>
+
+            <div class="pd-price-row">
+              <span class="pd-price">{{object.get_price|intcomma}} تومان</span>
+            </div>
+
+            <p class="pd-description">
+             {{object.description}}
+            </p>
+
+            <!-- Nib width -->
+            <div class="pd-option-group">
+              <div class="pd-option-label">
+                <span>ضخامت نوک</span>
+                <span class="selected-value">نازک</span>
+              </div>
+              <div class="pd-nib-options">
+                <button class="pd-nib-btn">بسیار نازک</button>
+                <button class="pd-nib-btn active">نازک</button>
+                <button class="pd-nib-btn">متوسط</button>
+                <button class="pd-nib-btn">ضخیم</button>
+                <button class="pd-nib-btn">کالیگرافی ۱.۱</button>
+              </div>
+            </div>
+
+            <!-- Barrel colour -->
+            <div class="pd-option-group">
+              <div class="pd-option-label">
+                <span>رنگ بدنه</span>
+                <span class="selected-value">مشکی ابونیت</span>
+              </div>
+              <div class="pd-color-options">
+                <button class="pd-color-swatch active" style="--swatch-color:#1A1A1A;"
+                  aria-label="مشکی ابونیت"></button>
+                <button class="pd-color-swatch" style="--swatch-color:#1C1C2E;" aria-label="بورگوندی"></button>
+                <button class="pd-color-swatch" style="--swatch-color:#1F3A2E;" aria-label="سبز جنگلی"></button>
+                <button class="pd-color-swatch" style="--swatch-color:#5B4632;" aria-label="لاک‌پشتی"></button>
+              </div>
+            </div>
+
+            <!-- Purchase row -->
+            <div class="pd-purchase-row">
+              <div class="pd-qty">
+                <button type="button" aria-label="کاهش تعداد" id="qty-minus">−</button>
+                <input type="text" value="1" id="qty-input" aria-label="تعداد" inputmode="numeric" />
+                <button type="button" aria-label="افزایش تعداد" id="qty-plus">+</button>
+              </div>
+              <button class="btn-primary">افزودن به سبد — ۷۸۰,۰۰۰ تومان</button>
+              <button class="btn-wishlist-lg" aria-label="افزودن به علاقه‌مندی">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  aria-hidden="true">
+                  <path
+                    d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+                </svg>
+              </button>
+            </div>
+
+            <button class="btn-ghost-full">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2L2 7l10 5 10-5z" />
+              </svg>
+              خرید سریع با پرداخت اکسپرس
+            </button>
+
+            <!-- Trust badges -->
+            <div class="pd-trust-row">
+              <div class="pd-trust-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  aria-hidden="true">
+                  <rect x="3" y="7" width="18" height="13" rx="2" />
+                  <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+                </svg>
+                <span>گارانتی<br />مادام‌العمر نوک</span>
+              </div>
+              <div class="pd-trust-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  aria-hidden="true">
+                  <path d="M16 3H1v13h15M16 8h4l3 3v5h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" />
+                </svg>
+                <span>ارسال رایگان<br />در تهران</span>
+              </div>
+              <div class="pd-trust-item">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                  aria-hidden="true">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+                <span>مرجوعی<br />۳۰ روزه</span>
+              </div>
+            </div>
+
+            <!-- Accordion -->
+            <div class="pd-accordion">
+              <div class="pd-accordion-item open">
+                <button class="pd-accordion-trigger" aria-expanded="true">
+                  جزئیات محصول
+                  <span class="plus">+</span>
+                </button>
+                <div class="pd-accordion-panel">
+                  <div class="pd-accordion-panel-inner">
+                    <ul>
+                      <li>بدنه ابونیت توپر تراشیده‌شده با دست، پرداخت نرم</li>
+                      <li>نوک طلای ۱۸ عیار، دست‌آراسته در کارگاه در پنج ضخامت</li>
+                      <li>مکانیزم پیستونی — ظرفیت مرکب ۱.۲ میلی‌لیتر</li>
+                      <li>رزوه برنجی با گارانتی مادام‌العمر مکانیکی</li>
+                      <li>ارائه در جعبه روکش گردو با پارچه نگهداری</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pd-accordion-item">
+                <button class="pd-accordion-trigger" aria-expanded="false">
+                  ارسال و مرجوعی
+                  <span class="plus">+</span>
+                </button>
+                <div class="pd-accordion-panel">
+                  <div class="pd-accordion-panel-inner">
+                    <p>ارسال رایگان ردیابی‌شده در تهران، در ۲-۳ روز کاری. ارسال به سایر شهرها با هزینه. مرجوعی تا ۳۰ روز
+                      در شرایط اصلی پذیرفته می‌شود — محصولات حکاکی‌شده قابل مرجوع نیستند.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pd-accordion-item">
+                <button class="pd-accordion-trigger" aria-expanded="false">
+                  راهنمای نگهداری
+                  <span class="plus">+</span>
+                </button>
+                <div class="pd-accordion-panel">
+                  <div class="pd-accordion-panel-inner">
+                    <p>هر ۴-۶ هفته یا هنگام تغییر رنگ مرکب با آب ولرم شستشو دهید. هنگام عدم استفاده روزانه نوک را رو به
+                      بالا نگه دارید. از قرار گرفتن طولانی در معرض نور مستقیم آفتاب پرهیز کنید.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPEC TABLE -->
+    <section class="specs-section" aria-label="مشخصات محصول">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-eyebrow">مشخصات فنی</span>
+          <span class="gold-rule" aria-hidden="true"></span>
+          <h2 class="section-title" style="font-size:clamp(1.6rem,3vw,2.2rem);">ساخته‌شده با دقت بالا</h2>
+        </header>
+        <div class="specs-grid">
+          <div class="spec-row"><span class="spec-label">جنس</span><span class="spec-value">ابونیت توپر</span></div>
+          <div class="spec-row"><span class="spec-label">نوک</span><span class="spec-value">طلای ۱۸ عیار</span></div>
+          <div class="spec-row"><span class="spec-label">سیستم پرکردن</span><span class="spec-value">پیستونی</span>
+          </div>
+          <div class="spec-row"><span class="spec-label">ظرفیت مرکب</span><span class="spec-value">۱.۲ میلی‌لیتر</span>
+          </div>
+          <div class="spec-row"><span class="spec-label">طول (درب بسته)</span><span class="spec-value">۱۴۲
+              میلی‌متر</span></div>
+          <div class="spec-row"><span class="spec-label">وزن</span><span class="spec-value">۲۸ گرم</span></div>
+          <div class="spec-row"><span class="spec-label">منشأ</span><span class="spec-value">دست‌ساز ایران</span></div>
+          <div class="spec-row"><span class="spec-label">گارانتی</span><span class="spec-value">مادام‌العمر، فقط
+              نوک</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="reviews-section" id="reviews">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-eyebrow">نظرات</span>
+          <span class="gold-rule" aria-hidden="true"></span>
+          <h2 class="section-title" style="font-size:clamp(1.6rem,3vw,2.2rem);">نویسندگان چه می‌گویند</h2>
+        </header>
+
+        <div class="reviews-summary">
+          <div class="reviews-score">
+            <div class="reviews-score-num">۴.۹</div>
+            <span class="stars">★★★★★</span>
+            <p class="reviews-score-count">بر اساس ۹۶ نظر</p>
+          </div>
+          <div class="reviews-bars">
+            <div class="reviews-bar-row"><span>۵ ستاره</span>
+              <div class="reviews-bar-track">
+                <div class="reviews-bar-fill" style="width:88%;"></div>
+              </div><span>۸۴</span>
+            </div>
+            <div class="reviews-bar-row"><span>۴ ستاره</span>
+              <div class="reviews-bar-track">
+                <div class="reviews-bar-fill" style="width:9%;"></div>
+              </div><span>۹</span>
+            </div>
+            <div class="reviews-bar-row"><span>۳ ستاره</span>
+              <div class="reviews-bar-track">
+                <div class="reviews-bar-fill" style="width:2%;"></div>
+              </div><span>۲</span>
+            </div>
+            <div class="reviews-bar-row"><span>۲ ستاره</span>
+              <div class="reviews-bar-track">
+                <div class="reviews-bar-fill" style="width:1%;"></div>
+              </div><span>۱</span>
+            </div>
+            <div class="reviews-bar-row"><span>۱ ستاره</span>
+              <div class="reviews-bar-track">
+                <div class="reviews-bar-fill" style="width:0%;"></div>
+              </div><span>۰</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviews-list">
+          <article class="review-card">
+            <div class="review-header">
+              <span class="review-author">الناز ه. <span class="review-verified">خریدار تأییدشده</span></span>
+              <span class="review-date">۸ خرداد ۱۴۰۵</span>
+            </div>
+            <div class="review-stars">★★★★★</div>
+            <p class="review-body">نوک نازک واقعاً نازک است — حتی روی کاغذ معمولی هیچ پریدگی‌ای ندارد. حدود یک هفته طول
+              کشید تا جا بیفتد و حالا روان‌ترین قلمی است که دارم. ارزشش را دارد.</p>
+          </article>
+
+          <article class="review-card">
+            <div class="review-header">
+              <span class="review-author">توماس ر. <span class="review-verified">خریدار تأییدشده</span></span>
+              <span class="review-date">۲۴ اردیبهشت ۱۴۰۵</span>
+            </div>
+            <div class="review-stars">★★★★★</div>
+            <p class="review-body">سنگین‌تر از انتظارم بود — به بهترین شکل. در طول یک جلسه طولانی نوشتن حس وزن خوبی
+              دارد. مکانیزم پیستون هم لذت‌بخش است.</p>
+          </article>
+
+          <article class="review-card">
+            <div class="review-header">
+              <span class="review-author">پریا ن. <span class="review-verified">خریدار تأییدشده</span></span>
+              <span class="review-date">۱۲ اردیبهشت ۱۴۰۵</span>
+            </div>
+            <div class="review-stars">★★★★☆</div>
+            <p class="review-body">قلم زیبا و بسته‌بندی هدیه‌اش عالی است. یک ستاره کم کردم چون نوک متوسط کمی ضخیم‌تر از
+              انتظارم بود — اگر مطمئن نیستید یک سایز پایین‌تر انتخاب کنید.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATED PRODUCTS -->
+    <section class="related-section">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-eyebrow">مکمل مریدیان</span>
+          <span class="gold-rule" aria-hidden="true"></span>
+          <h2 class="section-title" style="font-size:clamp(1.6rem,3vw,2.2rem);">مجموعه را کامل کنید</h2>
+          <p class="section-subtitle">مرکب، کاغذ و لوازم انتخاب‌شده برای هماهنگی با مریدیان.</p>
+        </header>
+
+        <div class="related-grid">
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/ink3/500/400" alt="مرکب سانگوئن — ۵۰ میلی‌لیتر" loading="eager"
+                fetchpriority="high" />
+            </div>
+            <div class="product-body">
+              <p class="product-category">مرکب</p>
+              <h3 class="product-name">مرکب سانگوئن — ۵۰ میلی‌لیتر</h3>
+              <span class="product-price">۱۲۰,۰۰۰ تومان</span>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/notebook1/500/400" alt="دفتر آلداین — رنگ توتون" loading="lazy" />
+            </div>
+            <div class="product-body">
+              <p class="product-category">دفترها</p>
+              <h3 class="product-name">دفتر آلداین — رنگ توتون</h3>
+              <span class="product-price">۱۸۰,۰۰۰ تومان</span>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/desk4/500/400" alt="جاقلمی گردویی" loading="lazy" />
+            </div>
+            <div class="product-body">
+              <p class="product-category">لوازم میز</p>
+              <h3 class="product-name">جاقلمی گردویی — تکی</h3>
+              <span class="product-price">۱۴۵,۰۰۰ تومان</span>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/wax5/500/400" alt="ست مهر موم بورگوندی" loading="lazy" />
+            </div>
+            <div class="product-body">
+              <p class="product-category">لوازم میز</p>
+              <h3 class="product-name">ست مهر موم بورگوندی</h3>
+              <span class="product-price">۲۲۰,۰۰۰ تومان</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+{% endblock content %}

@@ -3,6 +3,8 @@ psycopg[binary]
 
 # Environment variables
 python-decouple
+pillow
+faker
 
 # برای static files (چون ENABLE_WHITENOISE داری)
 whitenoise
