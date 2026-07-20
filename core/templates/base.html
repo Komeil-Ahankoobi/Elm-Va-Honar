@@ -22,21 +22,22 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
       rel="stylesheet" />
-    </noscript>
-    <link rel="stylesheet" href="{% static 'css/home.css'%}">
-    <link rel="stylesheet" href="{% static 'css/about-us.css'%}">
-    <link rel="stylesheet" href="{% static 'css/contact.css'%}">
-    <link rel="stylesheet" href="{% static 'css/shop.css'%}">
-    <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
-    
-    
-    {% block extra_css %} {% endblock extra_css %}
-    
-    {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
+  </noscript>
+  <link rel="stylesheet" href="{% static 'css/home.css'%}">
+  <link rel="stylesheet" href="{% static 'css/about-us.css'%}">
+  <link rel="stylesheet" href="{% static 'css/contact.css'%}">
+  <link rel="stylesheet" href="{% static 'css/shop.css'%}">
+  <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
+  <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
+
+
+  {% block extra_css %} {% endblock extra_css %}
+
+  {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
 </head>
 
 <body>
-    <header class="site-header" id="site-header" role="banner">
+  <header class="site-header" id="site-header" role="banner">
     <div class="container">
       <nav class="nav-inner" aria-label="ناوبری اصلی">
 
@@ -48,29 +49,29 @@
 
         <!-- Main links -->
         <ul class="nav-links" role="list">
-  <li><a href="{% url 'website:home' %}">خانه</a></li>
-  <li><a href="{% url 'shop:show-product-view' %}">فروشگاه</a></li>
+          <li><a href="{% url 'website:home' %}">خانه</a></li>
+          <li><a href="{% url 'shop:show-product-view' %}">فروشگاه</a></li>
 
-  <li class="nav-dropdown">
-    <a href="#" class="nav-dropdown-toggle">دسته‌بندی‌ها</a>
-    <ul class="nav-dropdown-menu">
-      
-      <li><a href="#"></a></li>
-      
-    </ul>
-  </li>
+          <li class="nav-dropdown">
+            <a href="#" class="nav-dropdown-toggle">دسته‌بندی‌ها</a>
+            <ul class="nav-dropdown-menu">
 
-  <li><a href="{% url 'website:about' %}">درباره ما</a></li>
-  <li><a href="{% url 'website:contact' %}">تماس</a></li>
-  {% if request.user.is_authenticated %}
-  <form action="{% url 'accounts:logout' %}" method="post">
-    {% csrf_token %}
-    <li><button type="submit" class="login">خروج</button></li>
-  </form>
-  {% else %}
-  <li><a href="{% url 'accounts:login' %}" class="login">ورود</a></li>
-  {% endif %}
-</ul>
+              <li><a href="#"></a></li>
+
+            </ul>
+          </li>
+
+          <li><a href="{% url 'website:about' %}">درباره ما</a></li>
+          <li><a href="{% url 'website:contact' %}">تماس</a></li>
+          {% if request.user.is_authenticated %}
+          <form action="{% url 'accounts:logout' %}" method="post">
+            {% csrf_token %}
+            <li><button type="submit" class="login">خروج</button></li>
+          </form>
+          {% else %}
+          <li><a href="{% url 'accounts:login' %}" class="login">ورود</a></li>
+          {% endif %}
+        </ul>
 
         <!-- Live date -->
         <span class="nav-date" id="live-date" aria-live="polite"></span>
@@ -222,12 +223,16 @@
   </button>
 
   <script src="{% static 'js/home.js'%}" defer></script>
-  <script src="{% static 'vendor/toastify.js' %}"></script>
+  <script src="{% static 'vendor/toastify/toastify.js'%}"></script>
 
   {% include 'messages.html' %}
-  
+
+  <script>
+    console.log(Toastify);
+  </script>
+
 </body>
-    
+
 
 
 {% block extra_js %} {% endblock extra_js %}

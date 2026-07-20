@@ -14,10 +14,13 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript><link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
-    rel="stylesheet" /></noscript>
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet" />
+  </noscript>
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
 
 
 </head>
@@ -138,15 +141,14 @@
           </p>
 
           <!-- Login Form -->
-          <form  action="{% url 'accounts:login' %}" method="post" aria-label="فرم ورود">
+          <form action="{% url 'accounts:login' %}" method="post" aria-label="فرم ورود">
             {% csrf_token %}
 
             <!-- Email -->
             <div class="form-group">
               <label class="form-label">نام کاربری</label>
               <div class="input-wrap">
-                <input class="form-input" type="name"  name="name" 
-                   aria-required="true"  dir="ltr" />
+                <input class="form-input" type="text" name="username" aria-required="true" dir="ltr" />
                 <!-- Envelope icon -->
                 <svg class="input-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
                   aria-hidden="true">
@@ -159,10 +161,10 @@
 
             <!-- Password -->
             <div class="form-group">
-              <label class="form-label" >رمز عبور</label>
+              <label class="form-label">رمز عبور</label>
               <div class="input-wrap">
-                <input class="form-input" type="password" name="password"
-                  autocomplete="current-password" aria-required="true" aria-describedby="password-error" dir="ltr" />
+                <input class="form-input" type="password" name="password" autocomplete="current-password"
+                  aria-required="true" aria-describedby="password-error" dir="ltr" />
                 <!-- Lock icon -->
                 <svg class="input-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
                   aria-hidden="true">
@@ -267,10 +269,16 @@
   <!-- ============================================================
        JAVASCRIPT
        ============================================================ -->
-  <script src="js/login.js" defer></script>
-  <script src="{% static 'vendor/toastify.js' %}"></script>
+  <script src="{% static 'js/login.js' %}" defer></script>
+  <script src="{% static 'vendor/toastify/toastify.js'%}"></script>
 
   {% include 'messages.html' %}
+
+  <script>
+    console.log(Toastify);
+  </script>
+
+
 
 </body>
 
