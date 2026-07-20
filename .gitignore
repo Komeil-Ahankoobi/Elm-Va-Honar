@@ -219,6 +219,6 @@ __marimo__/
 
 
 # igonre database files
-postgres/data/*
+postgre/data/*
 
  
