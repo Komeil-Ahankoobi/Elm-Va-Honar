@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+    <section class="page-header">
+      <span class="page-header-watermark" aria-hidden="true">فروشگاه</span>
+      <nav class="breadcrumb" aria-label="مسیر ناوبری">
+        <a href="home.html">خانه</a>
+        <span>/</span>
+        <a href="shop.html" style="color:var(--clr-accent);">همه محصولات</a>
+      </nav>
+      <h1 class="page-title">خرید از <em>مجموعه کامل</em></h1>
+      <p class="page-subtitle">هر دفتر، نوک قلم و شیشه مرکب — انتخاب‌شده برای میز متفکرانه.</p>
+    </section>
+
+
+    <section class="shop-section">
+      <div class="container">
+        <div class="shop-layout">
+
+          <!-- FILTER RAIL -->
+          <aside class="filter-rail" aria-label="فیلترهای محصول">
+
+            <form method="get" class="filter-form">
+
+              <div class="filter-group">
+                <h3 class="filter-group-title">دسته‌بندی</h3>
+                <div class="filter-group">س
+                  <h3 class="filter-group-title">دسته‌بندی</h3>
+                  <div class="custom-select" id="category-select">
+                    <button type="button" class="custom-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                      <span class="custom-select-value">همه محصولات</span>
+                    </button>
+                    <input type="hidden" name="category_id" value="{{ request.GET.category_id }}">
+                    <ul class="custom-select-options" role="listbox" tabindex="-1">
+                      <li class="custom-select-option" data-value="" role="option">همه محصولات</li>
+                      {% for category in categories %}
+                      <li class="custom-select-option" data-value="{{ category.id }}" role="option">{{ category.title }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <input
+                  type="text"
+                  name="q"
+                  class="filter-search-input"
+                  placeholder="جستجوی محصول..."
+                  value="{{ request.GET.q }}"
+                  aria-label="جستجوی محصول"
+                />
+              </div>
+
+              <div class="filter-group">
+                <h3 class="filter-group-title">قیمت</h3>
+                <div class="price-inputs">
+                  <input
+                    type="number"
+                    name="min_price"
+                    class="price-input"
+                    placeholder="کمترین قیمت"
+                    value="{{ request.GET.min_price }}"
+                    min="0"
+                    aria-label="کمترین قیمت"
+                  />
+                  <span class="price-input-sep">تا</span>
+                  <input
+                    type="number"
+                    name="max_price"
+                    class="price-input"
+                    placeholder="بیشترین قیمت"
+                    value="{{ request.GET.max_price }}"
+                    min="0"
+                    aria-label="بیشترین قیمت"
+                  />
+                </div>
+              </div>
+
+              <button type="submit" class="btn-apply-filters">اعمال فیلتر</button>
+
+            </form>
+
+          </aside>
+
+          <!-- PRODUCT GRID -->
+          <div>
+
+            <div class="shop-toolbar">
+              <p class="shop-count"><strong>{{total_product}}</strong> محصول</p>
+              <div class="sort-select-wrap">
+                <select class="sort-select" aria-label="مرتب‌سازی محصولات">
+                  <option>ویژه</option>
+                  <option>قیمت: کم به زیاد</option>
+                  <option>قیمت: زیاد به کم</option>
+                  <option>جدیدترین</option>
+                  <option>پرفروش‌ترین</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="product-grid" id="product-grid" role="list" aria-label="محصولات">
+            {% for product in products %}
+              <a href="#" class="product-card-link">
+                <article class="product-card reveal" role="listitem">
+                  <div class="product-img-wrap">
+                    <img src="https://picsum.photos/seed/notebook1/600/520" alt="دفتر آلداین — رنگ توتون"
+                      loading="eager" fetchpriority="high" width="600" height="520" />
+                    <span class="product-badge">جدید</span>
+                    <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <path
+                          d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="product-body">
+                    <p class="product-category">
+                      {% for cat in product.category.all %}
+                        {{ cat.title }}{% if not forloop.last %}، {% endif %}
+                      {% endfor %}
+                    </p>
+                    <h3 class="product-name">{{product.title}}</h3>
+                    <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۱۲۸)</span></div>
+                    <div class="product-meta">
+                      <span class="product-price">{{product.get_price|intcomma}} تومان</span>
+                      <a class="btn-quick-view" href="{% url 'shop:show-product-detail-view' slug=product.slug %}" aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
+                    </div>
+                  </div>
+                </article>
+              </a>
+            {% endfor %}
+            </div>
+            <nav class="pagination" aria-label="صفحه‌بندی محصولات">
+              {% if page_obj.has_other_pages %}
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">
+                                <i class="bi-chevron-double-right small"></i>
+                            </span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">
+                                <i class="bi-chevron-double-left small"></i>
+                            </span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock content %}

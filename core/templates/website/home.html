@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="hero" id="hero" aria-label="خوش آمدید به قلم و کاغذ">
+
+      <!-- Parallax-driven background -->
+      <div class="hero-bg" id="hero-bg" aria-hidden="true">
+        <svg class="paper-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+          style="opacity:1; position:absolute; inset:0; width:100%; height:100%;" aria-hidden="true">
+          <defs>
+            <pattern id="laid-h" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="2" x2="4" y2="2" stroke="#8A8494" stroke-width="0.4" opacity="0.5" />
+            </pattern>
+            <pattern id="laid-v" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
+              <line x1="14" y1="0" x2="14" y2="4" stroke="#8A8494" stroke-width="0.7" opacity="0.6" />
+            </pattern>
+            <filter id="grain" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"
+                result="noise" />
+              <feColorMatrix type="saturate" values="0" in="noise" result="grey" />
+              <feBlend in="SourceGraphic" in2="grey" mode="multiply" />
+            </filter>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#laid-h)" />
+          <rect width="100%" height="100%" fill="url(#laid-v)" />
+          <rect width="100%" height="100%" filter="url(#grain)" opacity="0.06" />
+        </svg>
+
+        <svg
+          style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0.025; pointer-events:none;"
+          width="600" height="600" viewBox="0 0 600 600" aria-hidden="true">
+          <text x="300" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="520" fill="#1C1C2E"
+            font-style="italic">&amp;</text>
+        </svg>
+      </div>
+
+      <!-- Hero content -->
+      <div class="hero-content">
+        <span class="hero-kicker">
+          لوازم‌التحریر علم و هنر · از ۱۳۰۳
+        </span>
+
+        <h1 class="hero-title">
+          علم <em>&</em> هنر
+        </h1>
+
+        <p class="hero-tagline">مرکب. کاغذ. ظرافت.</p>
+
+        <div class="hero-cta-group">
+          <a href="#categories" class="btn-primary">
+            کاوش در مجموعه
+            <span class="btn-arrow" aria-hidden="true">←</span>
+          </a>
+          <a href="about-us.html" class="btn-ghost">
+            داستان ما
+          </a>
+        </div>
+      </div>
+
+      <!-- Animated ink ripple -->
+      <div class="ink-ripple" aria-hidden="true">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="6" fill="#1C1C2E" opacity="0.8" />
+          <circle cx="32" cy="32" r="12" stroke="#1C1C2E" stroke-width="1" opacity="0.4">
+            <animate attributeName="r" values="6;24;6" dur="3s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="32" cy="32" r="12" stroke="#C9A96E" stroke-width="0.5" opacity="0.3">
+            <animate attributeName="r" values="12;30;12" dur="3s" begin="1s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" begin="1s" repeatCount="indefinite" />
+          </circle>
+        </svg>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-indicator" aria-hidden="true">
+        <span>اسکرول</span>
+        <div class="scroll-line"></div>
+      </div>
+
+    </section>
+
+
+    <!-- ============================================================
+       SECTION 2: CATEGORY GRID
+       ============================================================ -->
+    <section class="section categories" id="categories" aria-label="خرید بر اساس دسته‌بندی">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-eyebrow">مجموعه‌ها</span>
+          <span class="gold-rule" aria-hidden="true"></span>
+          <h2 class="section-title">ساخته‌شده برای هر آیین نوشتن</h2>
+          <p class="section-subtitle">از صفحات صبحگاهی تا مکاتبات شامگاهی، هر سطحی ابزار مناسب خود را می‌طلبد.</p>
+        </header>
+
+        <div class="category-grid" id="category-grid">
+
+          <!-- Card: Notebooks -->
+          <article class="category-card" data-tilt>
+            <div class="card-orb" aria-hidden="true"></div>
+            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+              <rect x="8" y="4" width="34" height="44" rx="3" stroke="currentColor" stroke-width="2" />
+              <rect x="4" y="8" width="6" height="36" rx="2" stroke="currentColor" stroke-width="1.5" />
+              <line x1="16" y1="16" x2="36" y2="16" stroke="currentColor" stroke-width="1.5" />
+              <line x1="16" y1="22" x2="36" y2="22" stroke="currentColor" stroke-width="1.5" />
+              <line x1="16" y1="28" x2="28" y2="28" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <h3 class="card-title">دفترها</h3>
+            <p class="card-desc">صحافی ژاپنی، خط‌کشی فرانسوی، دوخت اسمیت. از همان صفحه اول تا آخر صاف می‌ماند.</p>
+            <span class="card-link">خرید دفتر <span aria-hidden="true">←</span></span>
+            <div class="card-accent-line" aria-hidden="true"></div>
+          </article>
+
+          <!-- Card: Pens -->
+          <article class="category-card" data-tilt>
+            <div class="card-orb" aria-hidden="true"></div>
+            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+              <path d="M14 38 L36 10 L44 18 L22 46 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+              <path d="M36 10 L40 6 L46 12 L44 18" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+              <path d="M14 38 L8 44 L14 46 L16 40 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+              <line x1="31" y1="15" x2="23" y2="41" stroke="currentColor" stroke-width="1" opacity="0.4" />
+            </svg>
+            <h3 class="card-title">قلم‌ها</h3>
+            <p class="card-desc">نوک‌های دست‌ساز، بدنه رزینی و وزن متعادل برای ساعت‌ها نوشتن بدون خستگی.</p>
+            <span class="card-link">خرید قلم <span aria-hidden="true">←</span></span>
+            <div class="card-accent-line" aria-hidden="true"></div>
+          </article>
+
+          <!-- Card: Ink -->
+          <article class="category-card" data-tilt>
+            <div class="card-orb" aria-hidden="true"></div>
+            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+              <path d="M26 8 C26 8 14 22 14 32 C14 39 19.4 45 26 45 C32.6 45 38 39 38 32 C38 22 26 8 26 8Z"
+                stroke="currentColor" stroke-width="2" />
+              <path d="M20 36 C20 36 18 32 22 30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M26 8 L26 6 M26 6 L22 2 M26 6 L30 2" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" />
+            </svg>
+            <h3 class="card-title">مرکب</h3>
+            <p class="card-desc">بیش از ۸۰ رنگ: گالیک آهن، رنگدانه و براق. کیفیت بایگانی، شخصیت درخشان.</p>
+            <span class="card-link">خرید مرکب <span aria-hidden="true">←</span></span>
+            <div class="card-accent-line" aria-hidden="true"></div>
+          </article>
+
+          <!-- Card: Desk Accessories -->
+          <article class="category-card" data-tilt>
+            <div class="card-orb" aria-hidden="true"></div>
+            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+              <rect x="6" y="36" width="40" height="8" rx="2" stroke="currentColor" stroke-width="2" />
+              <rect x="12" y="12" width="10" height="24" rx="2" stroke="currentColor" stroke-width="1.5" />
+              <rect x="26" y="20" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="38" cy="30" r="3" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <h3 class="card-title">لوازم میز</h3>
+            <p class="card-desc">جاقلمی، زیردستی، مهر موم و سنگ کاغذ. میز باسلیقه.</p>
+            <span class="card-link">خرید لوازم میز <span aria-hidden="true">←</span></span>
+            <div class="card-accent-line" aria-hidden="true"></div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+       SECTION 3: FEATURED PRODUCTS CAROUSEL
+       ============================================================ -->
+    <section class="section products" id="products" aria-label="محصولات ویژه">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-eyebrow">ویژه</span>
+          <span class="gold-rule" aria-hidden="true"></span>
+          <h2 class="section-title">انتخاب سردبیر</h2>
+          <p class="section-subtitle">هر هفته توسط ویراستاران لوازم‌التحریر ما انتخاب می‌شود. موجودی محدود.</p>
+        </header>
+      </div>
+
+      <div class="carousel-wrapper container" style="position:relative;">
+        <button class="carousel-btn carousel-btn-prev" id="carousel-prev" aria-label="محصولات قبلی">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M7 4L12 9L7 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <div class="carousel" id="carousel" role="list" aria-label="کاروسل محصولات ویژه">
+
+          <!-- Product 1 -->
+          <article class="product-card" role="listitem">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/notebook1/600/440" alt="دفتر آلداین — رنگ توتون" loading="eager"
+                fetchpriority="high" width="600" height="440" />
+              <span class="product-badge">جدید</span>
+            </div>
+            <div class="product-body">
+              <p class="product-category">دفترها</p>
+              <h3 class="product-name">دفتر آلداین — رنگ توتون</h3>
+              <div class="product-meta">
+                <span class="product-price">۱۸۰,۰۰۰ تومان</span>
+                <button class="btn-quick-view" aria-label="نمای سریع دفتر آلداین">نمای سریع</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 -->
+          <article class="product-card" role="listitem">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/pen2/600/440" alt="قلم فواره مریدیان — ابونیت" loading="eager"
+                fetchpriority="high" width="600" height="440" />
+              <span class="product-badge" style="background:var(--clr-gold);color:#0F0F18;">پرفروش</span>
+            </div>
+            <div class="product-body">
+              <p class="product-category">قلم‌ها</p>
+              <h3 class="product-name">قلم فواره مریدیان — ابونیت</h3>
+              <div class="product-meta">
+                <span class="product-price">۷۸۰,۰۰۰ تومان</span>
+                <button class="btn-quick-view" aria-label="نمای سریع قلم فواره مریدیان">نمای سریع</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 3 -->
+          <article class="product-card" role="listitem">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/ink3/600/440" alt="مرکب سانگوئن — ۵۰ میلی‌لیتر" loading="lazy"
+                width="600" height="440" />
+            </div>
+            <div class="product-body">
+              <p class="product-category">مرکب</p>
+              <h3 class="product-name">مرکب سانگوئن — شیشه ۵۰ میلی‌لیتری</h3>
+              <div class="product-meta">
+                <span class="product-price">۱۲۰,۰۰۰ تومان</span>
+                <button class="btn-quick-view" aria-label="نمای سریع مرکب سانگوئن">نمای سریع</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 4 -->
+          <article class="product-card" role="listitem">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/desk4/600/440" alt="جاقلمی گردویی" loading="lazy" width="600"
+                height="440" />
+              <span class="product-badge">محدود</span>
+            </div>
+            <div class="product-body">
+              <p class="product-category">لوازم میز</p>
+              <h3 class="product-name">جاقلمی گردویی — تکی</h3>
+              <div class="product-meta">
+                <span class="product-price">۱۴۵,۰۰۰ تومان</span>
+                <button class="btn-quick-view" aria-label="نمای سریع جاقلمی گردویی">نمای سریع</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 5 -->
+          <article class="product-card" role="listitem">
+            <div class="product-img-wrap">
+              <img src="https://picsum.photos/seed/wax5/600/440" alt="ست مهر موم بورگوندی" loading="lazy" width="600"
+                height="440" />
+            </div>
+            <div class="product-body">
+              <p class="product-category">لوازم میز</p>
+              <h3 class="product-name">ست مهر موم بورگوندی — مونوگرام</h3>
+              <div class="product-meta">
+                <span class="product-price">۲۲۰,۰۰۰ تومان</span>
+                <button class="btn-quick-view" aria-label="نمای سریع ست مهر موم">نمای سریع</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <button class="carousel-btn carousel-btn-next" id="carousel-next" aria-label="محصولات بعدی">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M11 14L6 9L11 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+       PHILOSOPHY BAND
+       ============================================================ -->
+    <section class="philosophy-band" aria-label="فلسفه ما">
+      <blockquote>
+        <p class="philosophy-quote">
+          «نوشتن با دست نوستالژی نیست — خالص‌ترین شکل توجهی است که برایمان مانده.»
+        </p>
+        <footer class="philosophy-attr">— مجله قلم و کاغذ</footer>
+      </blockquote>
+    </section>
+
+
+    <!-- ============================================================
+       NEWSLETTER STRIP
+       ============================================================ -->
+    <section class="newsletter section" aria-label="عضویت در خبرنامه">
+      <div class="container">
+        <span class="section-eyebrow">نامه قلم</span>
+        <span class="gold-rule" aria-hidden="true"></span>
+        <h2 class="newsletter-title">ماهانه ارسال می‌شود. هرگز عجولانه نیست.</h2>
+        <p class="newsletter-sub">محصولات جدید، نقد مرکب‌ها و تمرین‌های نوشتاری — مستقیم در صندوق ورودی شما.</p>
+        <form class="newsletter-form" onsubmit="return false;" aria-label="ثبت‌نام در خبرنامه">
+          <label for="nl-email" class="sr-only">آدرس ایمیل</label>
+          <input class="newsletter-input" type="email" id="nl-email" name="email" placeholder="ایمیل شما"
+            autocomplete="email" aria-required="true" />
+          <button type="submit" class="btn-primary" style="padding:0.75rem 1.8rem;">
+            عضویت
+          </button>
+        </form>
+      </div>
+    </section>
+
+  
+
+{% endblock content %}
+

@@ -36,7 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.humanize',
     'django.contrib.staticfiles',
+    
+    'accounts',
+    'website',
+    "shop"
 ]
 
 MIDDLEWARE = [
@@ -54,7 +59,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,7 +128,7 @@ MEDDIA_URL = 'media/'
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
 MEDDIA_ROOT = BASE_DIR / 'media/'
 
-STATICFILES_DIR = [
+STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
@@ -147,7 +152,6 @@ SERVER_EMAIL = config("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 PASSWORD_RESET_TIMEOUT = config("PASSWORD_RESET_TIMEOUT", cast=int, default=3600)
     
-# # accounts model settings
-# AUTH_USER_MODEL = 'accounts.User'
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL= '/'
+# accounts model settings
+LOGIN_REDIRECT_URL = 'website:home'
+LOGOUT_REDIRECT_URL= 'website:home'

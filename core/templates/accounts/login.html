@@ -1,0 +1,277 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper & Quill — ورود به حساب</title>
+  <meta name="description" content="ورود به حساب کاربری Paper & Quill" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+
+</head>
+
+<body>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="site-header" role="banner">
+    <nav class="nav-inner" aria-label="Navigation">
+      <a href="/" class="nav-logo" aria-label="Paper & Quill Home">
+        <span class="nav-logo-name">Paper <em>&</em> Quill</span>
+        <span class="nav-logo-sub">Est. 1924</span>
+      </a>
+      <a href="{% url 'website:home' %}" class="nav-back" aria-label="بازگشت به فروشگاه">
+        بازگشت به فروشگاه
+        <span class="arrow" aria-hidden="true">←</span>
+      </a>
+    </nav>
+  </header>
+
+
+  <!-- ============================================================
+       MAIN — two-column grid
+       ============================================================ -->
+  <main>
+    <div class="page-wrap">
+
+      <!-- LEFT: Brand panel -->
+      <aside class="brand-panel" aria-hidden="true">
+        <!-- Paper texture -->
+        <svg class="brand-panel-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="laid-h2" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="2" x2="4" y2="2" stroke="#FDF8F0" stroke-width="0.4" opacity="0.5" />
+            </pattern>
+            <pattern id="laid-v2" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
+              <line x1="14" y1="0" x2="14" y2="4" stroke="#FDF8F0" stroke-width="0.7" opacity="0.6" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#laid-h2)" />
+          <rect width="100%" height="100%" fill="url(#laid-v2)" />
+        </svg>
+
+        <!-- Watermark ampersand -->
+        <span class="brand-panel-mono" aria-hidden="true">&amp;</span>
+
+        <div class="brand-panel-content">
+          <span class="brand-eyebrow">حساب کاربری</span>
+          <span class="brand-gold-rule"></span>
+
+          <h2 class="brand-panel-title">
+            به دنیای<br />نوشتار خوش آمدید
+          </h2>
+
+          <p class="brand-panel-quote">
+            "خواندن و نوشتن، هر دو، عمل‌هایی از حضور کامل‌اند."
+          </p>
+
+          <!-- Mini floating pen -->
+          <div class="brand-pen-wrap">
+            <svg width="80" height="230" viewBox="0 0 180 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="pen-sh2" x="-20%" y="-5%" width="150%" height="110%">
+                  <feDropShadow dx="4" dy="8" stdDeviation="8" flood-color="#2C1B18" flood-opacity="0.4" />
+                </filter>
+              </defs>
+              <g filter="url(#pen-sh2)">
+                <rect x="68" y="50" width="44" height="340" rx="22" fill="rgba(253,248,240,0.15)" />
+                <rect x="64" y="90" width="52" height="8" rx="4" fill="#C9A96E" />
+                <rect x="64" y="102" width="52" height="2" rx="1" fill="#B8941F" />
+                <ellipse cx="90" cy="52" rx="22" ry="12" fill="rgba(253,248,240,0.08)" />
+                <rect x="68" y="50" width="44" height="30" rx="0" fill="rgba(253,248,240,0.08)" />
+                <rect x="106" y="52" width="7" height="200" rx="3.5" fill="#C9A96E" />
+                <ellipse cx="109.5" cy="254" rx="7" ry="7" fill="#C9A96E" />
+                <path d="M68 390 Q68 420 90 450 Q112 420 112 390 L112 370 L68 370 Z" fill="rgba(253,248,240,0.12)" />
+                <path d="M75 450 L90 510 L105 450 Z" fill="#C0A020" />
+                <path d="M80 450 L90 510 L100 450 Z" fill="#C9A96E" />
+                <line x1="90" y1="455" x2="90" y2="508" stroke="#7A6010" stroke-width="1.5" />
+                <rect x="80" y="180" width="20" height="80" rx="10" fill="rgba(255,255,255,0.08)" />
+              </g>
+              <ellipse cx="90" cy="518" rx="3" ry="4" fill="#C9A96E" opacity="0.7">
+                <animate attributeName="cy" values="518;528;518" dur="2.8s" repeatCount="indefinite" calcMode="spline"
+                  keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" />
+                <animate attributeName="opacity" values="0.7;0;0.7" dur="2.8s" repeatCount="indefinite" />
+              </ellipse>
+            </svg>
+          </div>
+        </div>
+      </aside>
+
+
+      <!-- RIGHT: Login form panel -->
+      <section class="login-panel" aria-label="فرم ورود">
+        <!-- Subtle paper texture -->
+        <svg class="login-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="laid-h3" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="2" x2="4" y2="2" stroke="#8A8494" stroke-width="0.4" opacity="0.5" />
+            </pattern>
+            <pattern id="laid-v3" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
+              <line x1="14" y1="0" x2="14" y2="4" stroke="#8A8494" stroke-width="0.7" opacity="0.6" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#laid-h3)" />
+          <rect width="100%" height="100%" fill="url(#laid-v3)" />
+        </svg>
+
+        <div class="login-card" id="login-card">
+
+          <!-- Title area -->
+          <span class="login-eyebrow">ورود به حساب</span>
+          <span class="login-gold-rule" aria-hidden="true"></span>
+          <h1 class="login-title">خوش آمدید <em>&</em></h1>
+          <p class="login-subtitle">
+            برای دسترسی به سفارش‌ها، علاقه‌مندی‌ها<br />و پیشنهادات ویژه وارد شوید.
+          </p>
+
+          <!-- Login Form -->
+          <form  action="{% url 'accounts:login' %}" method="post" aria-label="فرم ورود">
+            {% csrf_token %}
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label">نام کاربری</label>
+              <div class="input-wrap">
+                <input class="form-input" type="name"  name="name" 
+                   aria-required="true"  dir="ltr" />
+                <!-- Envelope icon -->
+                <svg class="input-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+                  aria-hidden="true">
+                  <rect x="1" y="3" width="14" height="10" rx="2" />
+                  <path d="M1 5l7 5 7-5" />
+                </svg>
+              </div>
+              <p class="form-error" id="email-error" role="alert">لطفاً یک نام کاربری معتبر وارد کنید.</p>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label class="form-label" >رمز عبور</label>
+              <div class="input-wrap">
+                <input class="form-input" type="password" name="password"
+                  autocomplete="current-password" aria-required="true" aria-describedby="password-error" dir="ltr" />
+                <!-- Lock icon -->
+                <svg class="input-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+                  aria-hidden="true">
+                  <rect x="3" y="7" width="10" height="8" rx="2" />
+                  <path d="M5 7V5a3 3 0 016 0v2" />
+                  <circle cx="8" cy="11" r="1" fill="currentColor" stroke="none" />
+                </svg>
+                <!-- Toggle visibility -->
+                <button type="button" class="pwd-toggle" id="pwd-toggle" aria-label="نمایش رمز عبور">
+                  <svg id="eye-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+                    stroke-width="1.5" aria-hidden="true">
+                    <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" />
+                    <circle cx="8" cy="8" r="2" />
+                  </svg>
+                </button>
+              </div>
+              <p class="form-error" id="password-error" role="alert">رمز عبور نمی‌تواند خالی باشد.</p>
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="form-meta">
+              <label class="checkbox-wrap">
+                <input type="checkbox" id="remember" name="remember" />
+                <span class="checkbox-label">مرا به خاطر بسپار</span>
+              </label>
+              <a href="#" class="forgot-link">فراموشی رمز عبور</a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-primary" id="login-btn">
+              <span class="btn-text">ورود به حساب</span>
+              <span class="btn-arrow" aria-hidden="true">←</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+
+          </form>
+
+          <!-- Divider -->
+          <div class="form-divider" aria-hidden="true">
+            <span>یا</span>
+          </div>
+
+          <!-- Ghost / Social login -->
+          <button class="btn-ghost" type="button" aria-label="ورود با Google">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4" />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853" />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05" />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335" />
+            </svg>
+            ورود با Google
+          </button>
+
+          <!-- Register -->
+          <p class="login-register">
+            حساب کاربری ندارید؟
+            <a href="{% url 'accounts:register' %}">ثبت‌نام کنید</a>
+          </p>
+
+          <!-- Success state (hidden by default) -->
+          <div class="success-state" id="success-state" role="status" aria-live="polite">
+            <div class="success-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h2 class="success-title">خوش آمدید</h2>
+            <p class="success-sub">در حال انتقال به صفحه اصلی…</p>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="login-footer" role="contentinfo">
+    <p class="login-footer-copy">© ۲۰۲۴ Paper & Quill Ltd. تمامی حقوق محفوظ است.</p>
+    <nav aria-label="Legal links">
+      <ul class="login-footer-links">
+        <li><a href="#">حریم خصوصی</a></li>
+        <li><a href="#">شرایط استفاده</a></li>
+        <li><a href="{% url 'website:contact' %}">تماس با ما</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script src="js/login.js" defer></script>
+  <script src="{% static 'vendor/toastify.js' %}"></script>
+
+  {% include 'messages.html' %}
+
+</body>
+
+</html>
