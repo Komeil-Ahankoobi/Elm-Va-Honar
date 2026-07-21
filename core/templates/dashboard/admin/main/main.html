@@ -1,0 +1,328 @@
+{% extends 'dashboard/admin/base.html' %}
+
+
+    {% block content %}
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="باز کردن منو" aria-expanded="false">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M2 4h14M2 9h14M2 14h14" />
+          </svg>
+        </button>
+        <div>
+          <div class="topbar-breadcrumb">
+            <span>علم و هنر</span>
+            <span>›</span>
+            <span style="color:var(--clr-subtext);">داشبورد</span>
+          </div>
+          <div class="topbar-title">خلاصه فروش</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="7.5" cy="7.5" r="5.5" />
+            <path d="M11.5 11.5l4 4" />
+          </svg>
+          <input type="text" placeholder="جستجو در سفارش‌ها…" />
+        </div>
+        <button class="notif-btn">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M9 1a6 6 0 0 1 6 6v4l2 2H1l2-2V7a6 6 0 0 1 6-6z" />
+            <path d="M7 15a2 2 0 0 0 4 0" />
+          </svg>
+          <span class="notif-badge">۵</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- KPI GRID -->
+      <div class="kpi-grid">
+
+        <div class="kpi-card gold">
+          <div class="kpi-header">
+            <div>
+              <div class="kpi-label">درآمد این ماه</div>
+            </div>
+            <div class="kpi-icon">
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="rgba(255,255,255,0.6)"
+                stroke-width="1.7">
+                <circle cx="9" cy="9" r="7" />
+                <path d="M9 5v4l3 3" />
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">۸۴,۲۰۰,۰۰۰</div>
+          <div class="kpi-footer">
+            <span class="kpi-delta up">↑ ۱۴٪</span>
+            <span class="kpi-delta-label" style="color:rgba(255,255,255,0.35);">نسبت به ماه قبل</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <div class="kpi-label">تعداد سفارش</div>
+            <div class="kpi-icon">
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-gold)" stroke-width="1.7">
+                <path d="M2 3h14M2 9h14M2 15h8" />
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">۳۴۱</div>
+          <div class="kpi-footer">
+            <span class="kpi-delta up">↑ ۹٪</span>
+            <span class="kpi-delta-label">نسبت به ماه قبل</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <div class="kpi-label">مشتریان جدید</div>
+            <div class="kpi-icon">
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-accent)" stroke-width="1.7">
+                <circle cx="9" cy="6" r="4" />
+                <path d="M2 16c0-3.31 3.13-6 7-6s7 2.69 7 6" />
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">۷۸</div>
+          <div class="kpi-footer">
+            <span class="kpi-delta down">↓ ۳٪</span>
+            <span class="kpi-delta-label">نسبت به ماه قبل</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <div class="kpi-label">میانگین ارزش سفارش</div>
+            <div class="kpi-icon">
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-gold)" stroke-width="1.7">
+                <rect x="2" y="5" width="14" height="10" rx="2" />
+                <path d="M12 5V4a3 3 0 0 0-6 0v1" />
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">۲۴۷,۰۰۰</div>
+          <div class="kpi-footer">
+            <span class="kpi-delta up">↑ ۶٪</span>
+            <span class="kpi-delta-label">تومان</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK STATS -->
+      <div class="quick-stats">
+        <div class="stat-mini">
+          <div>
+            <div class="stat-mini-label">موجودی بحرانی</div>
+            <div class="stat-mini-value">۸ محصول</div>
+          </div>
+          <div class="stat-mini-dot dot-gold"></div>
+        </div>
+        <div class="stat-mini">
+          <div>
+            <div class="stat-mini-label">سفارش‌های در حال پردازش</div>
+            <div class="stat-mini-value">۱۲ سفارش</div>
+          </div>
+          <div class="stat-mini-dot dot-navy"></div>
+        </div>
+        <div class="stat-mini">
+          <div>
+            <div class="stat-mini-label">بازخورد مشتریان</div>
+            <div class="stat-mini-value">۴.۸ / ۵</div>
+          </div>
+          <div class="stat-mini-dot dot-green"></div>
+        </div>
+      </div>
+
+      <!-- CHART + TOP PRODUCTS -->
+      <div class="dash-grid">
+
+        <!-- SALES CHART -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-eyebrow">تحلیل</div>
+              <div class="card-title">فروش ۶ ماه اخیر (تومان)</div>
+            </div>
+            <button class="card-action">صادر کردن</button>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-bars" id="chart">
+              <!-- JS draws these -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP PRODUCTS -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-eyebrow">پرفروش‌ها</div>
+              <div class="card-title">محصولات برتر</div>
+            </div>
+          </div>
+          <div class="product-list">
+            <div class="product-row">
+              <span class="product-rank">۱</span>
+              <div class="product-thumb"><img src="https://picsum.photos/seed/nb1/80/80" alt="دفتر"></div>
+              <div class="product-info">
+                <div class="product-name-sm">دفتر یادداشت چرمی ممتاز</div>
+                <div class="product-cat-sm">دفترها</div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-val">۱۲۴</div>
+                <div class="product-sales-label">فروش</div>
+              </div>
+            </div>
+            <div class="product-row">
+              <span class="product-rank">۲</span>
+              <div class="product-thumb"><img src="https://picsum.photos/seed/pen2/80/80" alt="قلم"></div>
+              <div class="product-info">
+                <div class="product-name-sm">قلم فواره کلاسیک اونوتو</div>
+                <div class="product-cat-sm">قلم‌های فواره</div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-val">۹۷</div>
+                <div class="product-sales-label">فروش</div>
+              </div>
+            </div>
+            <div class="product-row">
+              <span class="product-rank">۳</span>
+              <div class="product-thumb"><img src="https://picsum.photos/seed/ink3/80/80" alt="مرکب"></div>
+              <div class="product-info">
+                <div class="product-name-sm">ست مرکب ایرشین — کوارتت</div>
+                <div class="product-cat-sm">مرکب</div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-val">۸۳</div>
+                <div class="product-sales-label">فروش</div>
+              </div>
+            </div>
+            <div class="product-row">
+              <span class="product-rank">۴</span>
+              <div class="product-thumb"><img src="https://picsum.photos/seed/wax4/80/80" alt="مهر"></div>
+              <div class="product-info">
+                <div class="product-name-sm">ست مهر موم بورگوندی</div>
+                <div class="product-cat-sm">لوازم میز</div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-val">۵۸</div>
+                <div class="product-sales-label">فروش</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDERS TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-eyebrow">جدیدترین‌ها</div>
+            <div class="card-title">آخرین سفارش‌ها</div>
+          </div>
+          <button class="card-action" onclick="window.location.href=`admin-products.html`">مشاهده همه</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>شماره سفارش</th>
+                <th>مشتری</th>
+                <th>محصول</th>
+                <th>مبلغ</th>
+                <th>وضعیت</th>
+                <th>تاریخ</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="order-id">#۱۰۰۴۲</span></td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar-sm">ز</div>
+                    زهرا موسوی
+                  </div>
+                </td>
+                <td>دفتر یادداشت چرمی</td>
+                <td>۳۸۰,۰۰۰ ت</td>
+                <td><span class="badge success">ارسال شد</span></td>
+                <td>۱۴۰۳/۰۹/۱۲</td>
+                <td><button class="action-btn" onclick="window.location.href=`admin-edit-product.html`">جزئیات</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#۱۰۰۴۱</span></td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar-sm">ع</div>
+                    علیرضا کریمی
+                  </div>
+                </td>
+                <td>قلم فواره کلاسیک</td>
+                <td>۵۵۰,۰۰۰ ت</td>
+                <td><span class="badge warning">در حال پردازش</span></td>
+                <td>۱۴۰۳/۰۹/۱۲</td>
+                <td><button class="action-btn" onclick="window.location.href=`admin-edit-product.html`">جزئیات</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#۱۰۰۴۰</span></td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar-sm">ن</div>
+                    نگار احمدی
+                  </div>
+                </td>
+                <td>ست مرکب ایرشین</td>
+                <td>۲۲۰,۰۰۰ ت</td>
+                <td><span class="badge success">ارسال شد</span></td>
+                <td>۱۴۰۳/۰۹/۱۱</td>
+                <td><button class="action-btn" onclick="window.location.href=`admin-edit-product.html`">جزئیات</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#۱۰۰۳۹</span></td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar-sm">م</div>
+                    مریم حسینی
+                  </div>
+                </td>
+                <td>ست مهر موم</td>
+                <td>۲۲۰,۰۰۰ ت</td>
+                <td><span class="badge danger">مرجوع شد</span></td>
+                <td>۱۴۰۳/۰۹/۱۰</td>
+                <td><button class="action-btn" onclick="window.location.href=`admin-edit-product.html`">جزئیات</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#۱۰۰۳۸</span></td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar-sm">ر</div>
+                    رضا طاهری
+                  </div>
+                </td>
+                <td>دفتر روزانه</td>
+                <td>۱۸۵,۰۰۰ ت</td>
+                <td><span class="badge neutral">در انتظار پرداخت</span></td>
+                <td>۱۴۰۳/۰۹/۰۹</td>
+                <td><button class="action-btn" onclick="window.location.href=`admin-edit-product.html`">جزئیات</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+    {% endblock content %}
+
+  

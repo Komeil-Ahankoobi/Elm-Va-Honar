@@ -1,0 +1,166 @@
+{% extends 'dashboard/admin/base.html' %}
+
+{% block content %}
+        <div class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
+                    aria-label="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <div class="topbar-breadcrumb">
+                        <span>علم و هنر</span>
+                        <span>›</span>
+                        <a href="admin-orders.html">سفارش‌ها</a>
+                        <span>›</span>
+                        <span style="color:var(--clr-subtext);">جزئیات سفارش ۱۰۰۴۲#</span>
+                    </div>
+                    <div class="topbar-title">جزئیات سفارش ۱۰۰۴۲#</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="action-btn"
+                    style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;"
+                    onclick="viewInvoice('#۱۰۰۴۲')">
+                    نمایش فاکتور
+                </button>
+                <button class="action-btn" style="margin-left: 0.75rem;" onclick="window.history.back()">
+                    بازگشت به لیست
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <div class="dash-grid main-order-grid" style="grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">اقلام سفارش</div>
+                        <span class="badge success">ارسال شده</span>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>محصول</th>
+                                    <th>تعداد</th>
+                                    <th>قیمت واحد</th>
+                                    <th>جمع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <div class="product-thumb" style="width:48px; height:48px;">
+                                                <img src="https://picsum.photos/seed/nb1/80/80" alt="">
+                                            </div>
+                                            <div>
+                                                <div class="product-name-sm">دفتر یادداشت چرمی ممتاز</div>
+                                                <div class="product-cat-sm">دفترها • مشکی</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>۱</td>
+                                    <td>۳۸۰,۰۰۰ ت</td>
+                                    <td><strong>۳۸۰,۰۰۰ ت</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <div class="product-thumb" style="width:48px; height:48px;">
+                                                <img src="https://picsum.photos/seed/pen2/80/80" alt="">
+                                            </div>
+                                            <div>
+                                                <div class="product-name-sm">قلم فواره کلاسیک اونوتو</div>
+                                                <div class="product-cat-sm">قلم‌های فواره • آبی</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>۱</td>
+                                    <td>۴۵۰,۰۰۰ ت</td>
+                                    <td><strong>۴۵۰,۰۰۰ ت</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">خلاصه سفارش</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <span style="color:var(--clr-muted);">شماره سفارش</span>
+                            <span class="order-id">#۱۰۰۴۲</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <span style="color:var(--clr-muted);">تاریخ ثبت</span>
+                            <span>۱۴۰۳/۰۹/۱۲ - ۱۴:۳۵</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <span style="color:var(--clr-muted);">وضعیت</span>
+                            <span class="badge success">ارسال شده</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                            <span style="color:var(--clr-muted);">روش پرداخت</span>
+                            <span>کارت به کارت</span>
+                        </div>
+
+                        <div class="gold-line"></div>
+
+                        <div style="margin: 1.25rem 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>جمع اقلام</span>
+                                <span>۸۳۰,۰۰۰ ت</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>هزینه ارسال</span>
+                                <span>۳۰,۰۰۰ ت</span>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
+                                <span>مبلغ کل</span>
+                                <span style="color: var(--clr-gold);">۸۶۰,۰۰۰ ت</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <div class="card-title">اطلاعات مشتری</div>
+                </div>
+                <div class="customer-info-grid"
+                    style="padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <div class="customer-cell" style="margin-bottom: 1rem;">
+                            <div class="customer-avatar-sm" style="width: 52px; height: 52px; font-size: 1.1rem;">ز
+                            </div>
+                            <div>
+                                <div style="font-weight: 600;">زهرا موسوی</div>
+                                <div style="color:var(--clr-muted); font-size: 0.85rem;">۰۹۱۲۳۴۵۶۷۸۹</div>
+                            </div>
+                        </div>
+                        <p style="color:var(--clr-subtext); line-height: 1.6;">
+                            تهران، خیابان ولیعصر، پلاک ۴۵۶، واحد ۱۲
+                        </p>
+                    </div>
+                    <div>
+                        <div class="card-title" style="font-size: 0.85rem; margin-bottom: 0.75rem;">یادداشت سفارش</div>
+                        <p style="color:var(--clr-subtext); font-style: italic;">
+                            لطفا سفارش را تا ساعت ۱۸ امروز تحویل دهید. ممنون.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+{% endblock content %}

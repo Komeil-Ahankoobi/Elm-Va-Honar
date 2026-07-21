@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>پنل مدیریت — علم و هنر</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-name">علم <em>&</em> هنر</div>
+      <div class="sidebar-brand-sub">پنل مدیریت</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-label">اصلی</div>
+      <a class="sidebar-link active" href="{% url 'dashboard:home' %}">
+        <svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="1" y="1" width="7" height="7" rx="1.5" />
+          <rect x="10" y="1" width="7" height="7" rx="1.5" />
+          <rect x="1" y="10" width="7" height="7" rx="1.5" />
+          <rect x="10" y="10" width="7" height="7" rx="1.5" />
+        </svg>
+        داشبورد
+      </a>
+      <a class="sidebar-link" href="{% url 'dashboard:admin:orders' %}">
+        <svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M2 3h14M2 9h14M2 15h8" />
+        </svg>
+        سفارش‌ها
+        <span class="badge success" style="margin-right:auto; font-size:0.65rem;">۱۲</span>
+      </a>
+      <a class="sidebar-link" href="{% url 'dashboard:admin:products' %}">
+        <svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="2" y="3" width="14" height="12" rx="2" />
+          <path d="M2 7h14" />
+          <path d="M6 3V1M12 3V1" />
+        </svg>
+        محصولات
+      </a>
+      <a class="sidebar-link" href="{% url 'dashboard:admin:customers' %}">
+        <svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="9" cy="6" r="4" />
+          <path d="M2 16c0-3.31 3.13-6 7-6s7 2.69 7 6" />
+        </svg>
+        مشتریان
+      </a>
+
+
+      <div class="sidebar-label">تنظیمات</div>
+      <a class="sidebar-link" href="admin-settings.html">
+        <svg class="icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="9" cy="9" r="3" />
+          <path
+            d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M14.78 3.22l-1.42 1.42M4.64 13.36l-1.42 1.42" />
+        </svg>
+        تنظیمات
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">ا</div>
+        <div>
+          <div class="user-info-name">احمد رضایی</div>
+          <div class="user-info-role">مدیر ارشد</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  
+    <div class="main">
+        {% block content %}
+  
+        {% endblock content %}
+    </div><!-- /main -->
+
+
+  <script src="js/admin-dashboard.js"></script>
+</body>  
+
+</html>
+

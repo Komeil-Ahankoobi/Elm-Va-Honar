@@ -1,6 +1,5 @@
 from django.db.models import F, DecimalField, ExpressionWrapper
 from django.db.models.functions import Round
-from django.core.exceptions import FieldError
 
 from .models import (
     ProductModel, 
