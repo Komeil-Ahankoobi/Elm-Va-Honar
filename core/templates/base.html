@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
   <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
 
-
+  
   {% block extra_css %} {% endblock extra_css %}
 
   {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
@@ -75,6 +75,16 @@
 
         <!-- Live date -->
         <span class="nav-date" id="live-date" aria-live="polite"></span>
+
+        <!-- Profile Button -->
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'dashboard:home' %}" class="nav-profile-btn" aria-label="پروفایل من">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+        {% endif %}
 
         <!-- Cart CTA -->
         <a href="bag.html" class="nav-cta" aria-label="باز کردن سبد خرید">سبد (۰)</a>

@@ -1,0 +1,110 @@
+{% extends 'dashboard/admin/base.html' %}
+
+
+{% block content %}
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()" aria-label="Toggle Navigation Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div>
+          <div class="topbar-breadcrumb">
+            <span>علم و هنر</span>
+            <span>›</span>
+            <span style="color:var(--clr-subtext);">سفارش‌ها</span>
+          </div>
+          <div class="topbar-title">مدیریت سفارش‌ها</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-search">
+          <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="7.5" cy="7.5" r="5.5" />
+            <path d="M11.5 11.5l4 4" />
+          </svg>
+          <input type="text" id="searchInput" placeholder="جستجو در سفارش‌ها..." />
+        </div>
+        <button class="notif-btn">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M9 1a6 6 0 0 1 6 6v4l2 2H1l2-2V7a6 6 0 0 1 6-6z" />
+            <path d="M7 15a2 2 0 0 0 4 0" />
+          </svg>
+          <span class="notif-badge">۳</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="card mb-md" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div class="card-title">فیلترها</div>
+          <button class="card-action" onclick="resetFilters()">پاک کردن همه</button>
+        </div>
+        <div class="filters-body" style="padding: 1.2rem 1.5rem;">
+          <select id="statusFilter" class="action-btn filter-select wide">
+            <option value="">همه وضعیت‌ها</option>
+            <option value="success">ارسال شده</option>
+            <option value="warning">در حال پردازش</option>
+            <option value="danger">مرجوع شده</option>
+            <option value="neutral">در انتظار پرداخت</option>
+          </select>
+
+          <input type="date" id="dateFrom" class="action-btn filter-select">
+          <span style="color: var(--clr-muted);">تا</span>
+          <input type="date" id="dateTo" class="action-btn filter-select">
+
+          <button class="action-btn" onclick="filterOrders()"
+            style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">
+            اعمال فیلتر
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-eyebrow">لیست کامل</div>
+            <div class="card-title">سفارش‌ها</div>
+          </div>
+          <button class="card-action">صادر کردن اکسل</button>
+        </div>
+        <div class="table-wrap">
+          <table id="ordersTable">
+            <thead>
+              <tr>
+                <th>شماره سفارش</th>
+                <th>مشتری</th>
+                <th>محصولات</th>
+                <th style="text-align: left;">مبلغ کل</th>
+                <th>وضعیت</th>
+                <th>تاریخ</th>
+                <th style="width: 100px;">عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="order-id">#۱۰۰۴۲</span></td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar-sm">ز</div>
+                    زهرا موسوی
+                  </div>
+                </td>
+                <td>دفتر یادداشت چرمی + قلم فواره</td>
+                <td style="text-align: left;">۸۶۰,۰۰۰ ت</td>
+                <td><span class="badge success">ارسال شد</span></td>
+                <td>۱۴۰۳/۰۹/۱۲</td>
+                <td><a href="{% url 'dashboard:admin:orders-detail' %}" class="action-btn" >جزئیات</a></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+{% endblock content %}

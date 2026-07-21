@@ -1,0 +1,175 @@
+{% extends 'dashboard/admin/base.html' %}
+
+
+{% block content %}
+    <div class="main">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
+                    aria-label="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <div class="topbar-breadcrumb">
+                        <span>علم و هنر</span>
+                        <span>›</span>
+                        <span style="color:var(--clr-subtext);">محصولات</span>
+                    </div>
+                    <div class="topbar-title">مدیریت محصولات</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-search">
+                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <circle cx="7.5" cy="7.5" r="5.5" />
+                        <path d="M11.5 11.5l4 4" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="جستجو در محصولات..." />
+                </div>
+                <button class="action-btn"
+                    style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;"
+                    onclick="addNewProduct()">
+                    + افزودن محصول
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <div class="quick-stats">
+                <div class="stat-mini">
+                    <div>
+                        <div class="stat-mini-label">کل محصولات</div>
+                        <div class="stat-mini-value">۴۸</div>
+                        <div class="kpi-footer" style="margin-top:6px;">
+                            <span class="kpi-delta up">↑ ۶٪</span>
+                            <span class="kpi-delta-label">نسبت به ماه گذشته</span>
+                        </div>
+                    </div>
+                    <div class="kpi-icon">
+                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-gold)"
+                            stroke-width="1.6">
+                            <rect x="2" y="3" width="14" height="12" rx="2" />
+                            <path d="M2 7h14" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="stat-mini">
+                    <div>
+                        <div class="stat-mini-label">موجودی بحرانی</div>
+                        <div class="stat-mini-value">۷ محصول</div>
+                        <div class="kpi-footer" style="margin-top:6px;">
+                            <span class="kpi-delta down">نیاز به بررسی</span>
+                        </div>
+                    </div>
+                    <div class="kpi-icon">
+                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-warning)"
+                            stroke-width="1.6">
+                            <path d="M9 2L17 16H1L9 2Z" />
+                            <path d="M9 6V10" />
+                            <circle cx="9" cy="13" r="0.7" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="stat-mini">
+                    <div>
+                        <div class="stat-mini-label">ارزش موجودی انبار</div>
+                        <div class="stat-mini-value">۸۴,۰۰۰,۰۰۰</div>
+                        <div class="kpi-footer" style="margin-top:6px;">
+                            <span class="kpi-delta up">تومان</span>
+                        </div>
+                    </div>
+                    <div class="kpi-icon">
+                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-accent)"
+                            stroke-width="1.6">
+                            <circle cx="9" cy="9" r="7" />
+                            <path d="M9 5v8" />
+                            <path d="M6 8.5h6" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-md" style="margin-bottom: 1.5rem;">
+                <div class="card-header">
+                    <div class="card-title">فیلترها</div>
+                    <button class="card-action" onclick="resetFilters()">پاک کردن</button>
+                </div>
+                <div class="filters-body" style="padding: 1.2rem 1.5rem;">
+                    <select id="categoryFilter" class="action-btn filter-select wide">
+                        <option value="">همه دسته‌ها</option>
+                        <option value="دفترها">دفترها</option>
+                        <option value="قلم‌ها">قلم‌ها</option>
+                        <option value="مرکب">مرکب</option>
+                        <option value="لوازم میز">لوازم میز</option>
+                    </select>
+
+                    <select id="statusFilter" class="action-btn filter-select">
+                        <option value="">همه وضعیت‌ها</option>
+                        <option value="موجود">موجود</option>
+                        <option value="کم موجود">کم موجود</option>
+                        <option value="ناموجود">ناموجود</option>
+                    </select>
+
+                    <button class="action-btn" onclick="filterProducts()"
+                        style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">
+                        اعمال فیلتر
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-eyebrow">کاتالوگ محصولات</div>
+                        <div class="card-title">لیست محصولات</div>
+                    </div>
+                    <button class="card-action">صادر کردن اکسل</button>
+                </div>
+                <div class="table-wrap">
+                    <table id="productsTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">تصویر</th>
+                                <th>نام محصول</th>
+                                <th>SKU</th>
+                                <th>دسته‌بندی</th>
+                                <th style="text-align: left;">قیمت</th>
+                                <th style="text-align: center;">موجودی</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ ثبت</th>
+                                <th style="width: 130px;">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src="https://picsum.photos/seed/nb1/80/80" alt="دفتر"
+                                        class="product-table-img"></td>
+                                <td><strong>دفتر یادداشت چرمی ممتاز</strong></td>
+                                <td><span class="order-id">NB-4582</span></td>
+                                <td>دفترها</td>
+                                <td style="text-align: left;">۳۸۰,۰۰۰ ت</td>
+                                <td style="text-align: center; font-weight: 600;">۴۲</td>
+                                <td><span class="badge success">موجود</span></td>
+                                <td>۱۴۰۳/۰۸/۱۵</td>
+                                <td>
+                                    <a href="{% url 'dashboard:admin:edit-products' %}" class="action-btn">ویرایش</a>
+                                </td>
+                            </tr>
+
+                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}

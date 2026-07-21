@@ -1,0 +1,116 @@
+{% extends 'dashboard/admin/base.html' %}
+
+
+{% block content %}
+    
+        <div class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
+                    aria-label="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <div class="topbar-breadcrumb">
+                        <span>علم و هنر</span>
+                        <span>›</span>
+                        <span>محصولات</span>
+                        <span>›</span>
+                        <span style="color: var(--clr-subtext);">ویرایش محصول</span>
+                    </div>
+                    <div class="topbar-title">ویرایش محصول</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="action-btn" onclick="window.location.href='admin-products.html'">انصراف</button>
+                    <button class="action-btn" onclick="updateProduct()"
+                        style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">ذخیره
+                        تغییرات</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="card-header">
+                    <div class="card-title">مشخصات فنی محصول</div>
+                </div>
+                <div style="padding: 2rem;">
+
+                    <div class="dash-grid" style="gap: 1.5rem;">
+                        <div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">نام
+                                    محصول</label>
+                                <input type="text" class="action-btn"
+                                    style="width: 100%; padding: 0.75rem 1rem; text-align: right; cursor: text;"
+                                    value="دفتر یادداشت چرمی ممتاز" />
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">کد
+                                    محصول (SKU)</label>
+                                <input type="text" class="action-btn"
+                                    style="width: 100%; padding: 0.75rem 1rem; text-align: left; direction: ltr; cursor: text;"
+                                    value="NOTE-1024" />
+                            </div>
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">دسته
+                                    بندی</label>
+                                <select class="action-btn" style="width: 100%; padding: 0.75rem 1rem;">
+                                    <option value="لوازم میز">لوازم میز</option>
+                                    <option value="قلم و مرکب">قلم و مرکب</option>
+                                    <option value="کاغذ و دفتر" selected>کاغذ و دفتر</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">قیمت
+                                    (تومان)</label>
+                                <input type="text" class="action-btn"
+                                    style="width: 100%; padding: 0.75rem 1rem; text-align: left; direction: ltr; cursor: text;"
+                                    value="۳۸۰,۰۰۰" />
+                            </div>
+                            <div style="margin-bottom: 1.5rem;">
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">موجودی
+                                    انبار</label>
+                                <input type="number" class="action-btn"
+                                    style="width: 100%; padding: 0.75rem 1rem; text-align: center; cursor: text;"
+                                    value="۱۸" />
+                            </div>
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">وضعیت</label>
+                                <select class="action-btn" style="width: 100%; padding: 0.75rem 1rem;">
+                                    <option value="موجود" selected>موجود</option>
+                                    <option value="کم موجود">کم موجود</option>
+                                    <option value="ناموجود">ناموجود</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <label
+                            style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">توضیحات
+                            محصول</label>
+                        <textarea class="action-btn"
+                            style="width: 100%; height: 160px; padding: 1rem; resize: vertical;">دفتر یادداشت چرمی با کیفیت بالا، مناسب برای یادداشت‌برداری روزانه و هدیه. جلد چرمی طبیعی با دوخت دستی.</textarea>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    
+{% endblock content %}

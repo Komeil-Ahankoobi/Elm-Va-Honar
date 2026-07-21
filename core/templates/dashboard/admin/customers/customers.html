@@ -1,0 +1,134 @@
+{% extends 'dashboard/admin/base.html' %}
+
+{% block content %}
+    
+        <div class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
+                    aria-label="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <div class="topbar-breadcrumb">
+                        <span>علم و هنر</span>
+                        <span>›</span>
+                        <span style="color:var(--clr-subtext);">مشتریان</span>
+                    </div>
+                    <div class="topbar-title">مدیریت مشتریان</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-search">
+                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <circle cx="7.5" cy="7.5" r="5.5" />
+                        <path d="M11.5 11.5l4 4" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="جستجو در مشتریان..." />
+                </div>
+                <button class="action-btn"
+                    style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;"
+                    onclick="addNewCustomer()">
+                    + افزودن مشتری
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-eyebrow">لیست کاربران سیستم</div>
+                        <div class="card-title">مشتریان ثبت‌نام شده</div>
+                    </div>
+                    <button class="card-action">خروجی CSV</button>
+                </div>
+                <div class="table-wrap">
+                    <table id="customersTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px; text-align: center;">پروفایل</th>
+                                <th>نام و نام خانوادگی</th>
+                                <th>شماره تماس</th>
+                                <th>پست الکترونیک</th>
+                                <th style="text-align: center;">تعداد سفارش</th>
+                                <th style="text-align: left;">مجموع خرید</th>
+                                <th>تاریخ عضویت</th>
+                                <th>وضعیت حساب</th>
+                                <th style="width: 100px;">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="customer-avatar-sm">ع</div>
+                                </td>
+                                <td><strong>علی علوی</strong></td>
+                                <td>۰۹۱۲۳۴۵۶۷۸۹</td>
+                                <td>ali.alavi@email.com</td>
+                                <td style="text-align: center; font-weight: 600;">۵</td>
+                                <td style="text-align: left;">۱,۲۴۰,۰۰0 ت</td>
+                                <td>۱۴۰۳/۰۸/۱۰</td>
+                                <td><span class="badge success">فعال</span></td>
+                                <td>
+                                    <button class="action-btn" onclick="viewCustomer(1)">مشاهده</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="customer-avatar-sm">ر</div>
+                                </td>
+                                <td><strong>رضا محمدی</strong></td>
+                                <td>۰۹۱۹۸۷۶۵۴۳۲</td>
+                                <td>reza.mohammadi@email.com</td>
+                                <td style="text-align: center; font-weight: 600;">۲</td>
+                                <td style="text-align: left;">۴۵۰,۰۰۰ ت</td>
+                                <td>۱۴۰۳/۰۸/۱۲</td>
+                                <td><span class="badge success">فعال</span></td>
+                                <td>
+                                    <button class="action-btn" onclick="viewCustomer(2)">مشاهده</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="customer-avatar-sm">س</div>
+                                </td>
+                                <td><strong>سارا اکبری</strong></td>
+                                <td>۰۹۳۵۱۲۳۴۵۶۷</td>
+                                <td>sara.akbari@email.com</td>
+                                <td style="text-align: center; font-weight: 600;">۰</td>
+                                <td style="text-align: left;">۰ ت</td>
+                                <td>۱۴۰۳/۰۸/۲۲</td>
+                                <td><span class="badge warning">غیرفعال</span></td>
+                                <td>
+                                    <button class="action-btn" onclick="viewCustomer(3)">مشاهده</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="customer-avatar-sm">م</div>
+                                </td>
+                                <td><strong>مریم حسینی</strong></td>
+                                <td>۰۹۱۷۸۹۴۵۶۲۳</td>
+                                <td>maryam.hosseini@email.com</td>
+                                <td style="text-align: center; font-weight: 600;">۱۲</td>
+                                <td style="text-align: left;">۳,۷۸۰,۰۰۰ ت</td>
+                                <td>۱۴۰۳/۰۹/۰۵</td>
+                                <td><span class="badge success">فعال</span></td>
+                                <td>
+                                    <button class="action-btn" onclick="viewCustomer(4)">مشاهده</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    
+{% endblock content %}
