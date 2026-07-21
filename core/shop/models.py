@@ -54,6 +54,9 @@ class ProductModel(models.Model):
         discounted_amount = self.price - discount_amount
         return round(discounted_amount)
     
+    def is_publish(self):
+        return self.status == ProductStatusType.publish.value
+    
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")
     file = models.ImageField(upload_to="product/extra-img/")

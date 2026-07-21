@@ -1,0 +1,118 @@
+{% extends 'dashboard/admin/base.html' %}
+
+{% block content %}
+        <div class="topbar">
+            <div class="topbar-left">
+                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
+                    aria-label="Toggle Navigation Menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <div class="topbar-breadcrumb">
+                        <span>علم و هنر</span>
+                        <span>›</span>
+                        <span style="color:var(--clr-subtext);">تنظیمات</span>
+                    </div>
+                    <div class="topbar-title">تنظیمات پروفایل کاربری</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-search">
+                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <circle cx="7.5" cy="7.5" r="5.5" />
+                        <path d="M11.5 11.5l4 4" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="جستجو..." />
+                </div>
+                <button type="button" class="notif-btn">
+                    <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                        stroke-width="1.7">
+                        <path d="M9 1a6 6 0 0 1 6 6v4l2 2H1l2-2V7a6 6 0 0 1 6-6z" />
+                        <path d="M7 15a2 2 0 0 0 4 0" />
+                    </svg>
+                    <span class="notif-badge">۳</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <form method="post" action="{% url 'dashboard:admin:security-edit' %}" id="settingsForm" onsubmit="saveSettings(event)">
+                {% csrf_token %}
+
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-eyebrow">اطلاعات کاربری</div>
+                            <div class="card-title">مشخصات ادمین</div>
+                        </div>
+                    </div>
+                    <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 400px;">
+                            <label for="adminName"
+                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">نام و نام
+                                خانوادگی</label>
+                            <input type="text" id="adminName" class="action-btn" value="احمد رضایی"
+                                style="padding: 0.6rem 1rem; text-align: right; width: 100%; background: transparent; cursor: text;"
+                                required disabled/>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-eyebrow">امنیت حساب</div>
+                            <div class="card-title">تغییر رمز عبور</div>
+                        </div>
+                    </div>
+                    <div
+                        style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; width: 100%; max-width: 400px;">
+
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label for="currentPassword"
+                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">رمز عبور
+                                فعلی</label>
+                            {{ form.old_password}}
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label for="newPassword"
+                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">رمز عبور
+                                جدید</label>
+                            {{ form.new_password1 }}
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label for="confirmPassword"
+                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">تکرار رمز عبور
+                                جدید</label>
+                            {{ form.new_password2 }}
+                        </div>
+
+                    </div>
+                </div>
+
+                <div
+                    style="display: flex; gap: 1rem; align-items: center; justify-content: flex-start; flex-wrap: wrap;">
+                    <button type="submit" class="action-btn"
+                        style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600; padding: 0.6rem 2rem;">
+                        ذخیره تغییرات
+                    </button>
+                    <button type="button" class="action-btn" onclick="window.location.href='admin-dashboard.html'"
+                        style="padding: 0.6rem 1.5rem;">
+                        انصراف
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    
+
+{% endblock content %}
