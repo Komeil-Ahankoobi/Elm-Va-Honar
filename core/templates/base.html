@@ -105,18 +105,27 @@
     </div>
 
     <ul role="list">
-      <li><a href="home.html">خانه</a></li>
-      <li><a href="shop.html">فروشگاه</a></li>
-      <li><a href="about-us.html">درباره ما</a></li>
-      <li><a href="contact.html">تماس</a></li>
-      <li><a href="login.html" class="login">ورود</a></li>
+      <li><a href="{% url 'website:home' %}">خانه</a></li>
+      <li><a href="{% url 'shop:show-product-view' %}">فروشگاه</a></li>
+      <li><a href="{% url 'website:about' %}">درباره ما</a></li>
+      <li><a href="{% url 'website:contact' %}">تماس</a></li>
+      {% if request.user.is_authenticated %}
+      <form action="{% url 'accounts:logout' %}" method="post">
+        {% csrf_token %}
+        <li><button type="submit" class="login">خروج</button></li>
+      </form>
+      {% else %}
+      <li><a href="{% url 'accounts:login' %}" class="login">ورود</a></li>
+      {% endif %}
     </ul>
 
     <a href="bag.html" class="nav-cta">سبد خرید (۰)</a>
   </nav>
 
   <main>
-    {% block content %}{% endblock content %}
+    {% block content %}
+    
+    {% endblock content %}
   </main>
 
   <footer class="site-footer" aria-label="فوتر سایت">
@@ -222,7 +231,13 @@
     </svg>
   </button>
 
+  <script src="{% static 'js/bag.js'%}" defer></script>
+  <script src="{% static 'js/contact.js'%}" defer></script>
   <script src="{% static 'js/home.js'%}" defer></script>
+  <script src="{% static 'js/login.js'%}" defer></script>
+  <script src="{% static 'js/product-detail.js'%}" defer></script>
+  <script src="{% static 'js/shop.js'%}" defer></script>
+  <script src="{% static 'js/theme.js'%}" defer></script>
   <script src="{% static 'vendor/toastify/toastify.js'%}"></script>
 
   {% include 'messages.html' %}

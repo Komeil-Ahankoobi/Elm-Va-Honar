@@ -712,7 +712,6 @@ a {
     text-align: center;
     font-size: var(--fs-sm);
     color: var(--clr-muted);
-    margin-top: var(--space-md);
     padding-top: var(--space-md);
     border-top: 1px solid var(--clr-border);
 }

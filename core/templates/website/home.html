@@ -52,7 +52,7 @@
             کاوش در مجموعه
             <span class="btn-arrow" aria-hidden="true">←</span>
           </a>
-          <a href="about-us.html" class="btn-ghost">
+          <a href="{% url 'website:about' %}" class="btn-ghost">
             داستان ما
           </a>
         </div>
@@ -302,15 +302,6 @@
         <span class="section-eyebrow">نامه قلم</span>
         <span class="gold-rule" aria-hidden="true"></span>
         <h2 class="newsletter-title">ماهانه ارسال می‌شود. هرگز عجولانه نیست.</h2>
-        <p class="newsletter-sub">محصولات جدید، نقد مرکب‌ها و تمرین‌های نوشتاری — مستقیم در صندوق ورودی شما.</p>
-        <form class="newsletter-form" onsubmit="return false;" aria-label="ثبت‌نام در خبرنامه">
-          <label for="nl-email" class="sr-only">آدرس ایمیل</label>
-          <input class="newsletter-input" type="email" id="nl-email" name="email" placeholder="ایمیل شما"
-            autocomplete="email" aria-required="true" />
-          <button type="submit" class="btn-primary" style="padding:0.75rem 1.8rem;">
-            عضویت
-          </button>
-        </form>
       </div>
     </section>
 

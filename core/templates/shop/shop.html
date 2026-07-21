@@ -57,12 +57,14 @@
                 <div class="shop-toolbar">
                     <p class="shop-count"><strong>{{total_product}}</strong> محصول</p>
                     <div class="sort-select-wrap">
-                        <select class="sort-select" aria-label="مرتب‌سازی محصولات">
-                            <option>ویژه</option>
-                            <option>قیمت: کم به زیاد</option>
-                            <option>قیمت: زیاد به کم</option>
-                            <option>جدیدترین</option>
-                            <option>پرفروش‌ترین</option>
+                        <select class="sort-select" name="filter-by" onchange="filterProducts(this)">
+                            <option value="">مرتب‌سازی</option>
+                            <option value="cheep_to_exp" {% if filter_by == "cheep_to_exp" %}selected{% endif %}>ارزان‌ترین
+                                به گران‌ترین</option>
+                            <option value="exp_to_cheep" {% if filter_by == "exp_to_cheep" %}selected{% endif %}>
+                                گران‌ترین به ارزان‌ترین
+                            </option>
+                            <option value="new" {% if filter_by == "new" %}selected{% endif %}>جدیدترین</option>
                         </select>
                     </div>
                 </div>
@@ -107,21 +109,21 @@
                 <nav class="pagination" aria-label="صفحه‌بندی محصولات">
                     {% if page_obj.has_other_pages %}
                     {% if page_obj.has_previous %}
-                    <a class="page-btn nav-arrow" href="?page={{ page_obj.previous_page_number }}"
-                        aria-label="صفحه قبل">→</a>
+                    <a class="page-btn nav-arrow" href="?page={{ page_obj.previous_page_number }}" aria-label="صفحه قبل"
+                        onclick="goToPage(event, `{{ page_obj.previous_page_number }}`)">→</a>
                     {% endif %}
 
                     {% for i in page_obj.paginator.page_range %}
                     {% if page_obj.number == i %}
-                    <a class="page-btn active" href="?page={{ i }}">{{ i }}</a>
+                    <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
                     {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-btn"
-                        href="?page={{ i }}">{{ i }}</a>
+                        href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
                         {% endif %}
                         {% endfor %}
 
                         {% if page_obj.has_next %}
-                        <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}"
-                            aria-label="صفحه بعد">←</a>
+                        <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد"
+                            onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">←</a>
                         {% endif %}
                         {% endif %}
                 </nav>
