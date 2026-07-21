@@ -1,5 +1,6 @@
 from django.db.models import F, DecimalField, ExpressionWrapper
 from django.db.models.functions import Round
+from django.core.exceptions import FieldError
 
 from .models import (
     ProductModel, 
@@ -42,13 +43,25 @@ class ShopProductView(ListView):
         except (ValueError, TypeError):
             pass
         
+        filter_by = self.request.GET.get('filter-by')
+        
+        if filter_by == 'cheep_to_exp':
+            queryset = queryset.order_by('final_price')        
+        elif filter_by == 'exp_to_cheep':
+            queryset = queryset.order_by('-final_price')        
+        elif filter_by == 'new':
+            queryset = queryset.order_by('-created_date')
+        
+        
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_product'] = self.get_queryset().count()
+        context['total_product'] = self.object_list.count()
         context['categories'] = ProductCategoryModel.objects.all()
         
+        context['filter_by'] = self.request.GET.get('filter-by')
+
         return context
     
 

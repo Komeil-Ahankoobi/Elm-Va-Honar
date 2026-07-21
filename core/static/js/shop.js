@@ -106,39 +106,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function goToPage(event, pageNumber) {
+    event.preventDefault();
 
-<script>
-document.querySelectorAll('.custom-select').forEach(function (wrapper) {
-  const trigger = wrapper.querySelector('.custom-select-trigger');
-  const valueLabel = wrapper.querySelector('.custom-select-value');
-  const hiddenInput = wrapper.querySelector('input[type="hidden"]');
-  const options = wrapper.querySelectorAll('.custom-select-option');
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-  trigger.addEventListener('click', function () {
-    wrapper.classList.toggle('open');
-    trigger.setAttribute('aria-expanded', wrapper.classList.contains('open'));
-  });
+    params.set("page", pageNumber);
 
-  options.forEach(function (option) {
-    if (option.dataset.value === hiddenInput.value) {
-      option.classList.add('selected');
-      valueLabel.textContent = option.textContent.trim();
-    }
-    option.addEventListener('click', function () {
-      hiddenInput.value = option.dataset.value;
-      valueLabel.textContent = option.textContent.trim();
-      options.forEach(function (o) { o.classList.remove('selected'); });
-      option.classList.add('selected');
-      wrapper.classList.remove('open');
-      trigger.setAttribute('aria-expanded', 'false');
-    });
-  });
+    const newUrl = `${url.pathname}?${params.toString()}`;
 
-  document.addEventListener('click', function (e) {
-    if (!wrapper.contains(e.target)) {
-      wrapper.classList.remove('open');
-      trigger.setAttribute('aria-expanded', 'false');
-    }
-  });
-});
-</script>
+    window.location.href = newUrl;
+}
+
+function filterProducts(selectedElemnt) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    const paramsName = selectedElemnt.name;
+    const paramsValue = selectedElemnt.value;
+
+    params.set(paramsName, paramsValue);
+
+    const newUrl = `${url.pathname}?${params.toString()}`;
+    window.location.href = newUrl;
+}
