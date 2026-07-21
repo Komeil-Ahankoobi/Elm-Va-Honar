@@ -1,5 +1,5 @@
 {% extends 'dashboard/admin/base.html' %}
-
+{% load humanize %}
 
 {% block content %}
     <div class="main">
@@ -139,7 +139,6 @@
                             <tr>
                                 <th style="width: 80px;">تصویر</th>
                                 <th>نام محصول</th>
-                                <th>SKU</th>
                                 <th>دسته‌بندی</th>
                                 <th style="text-align: left;">قیمت</th>
                                 <th style="text-align: center;">موجودی</th>
@@ -149,27 +148,55 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for product in products %}
                             <tr>
                                 <td><img src="https://picsum.photos/seed/nb1/80/80" alt="دفتر"
                                         class="product-table-img"></td>
-                                <td><strong>دفتر یادداشت چرمی ممتاز</strong></td>
-                                <td><span class="order-id">NB-4582</span></td>
-                                <td>دفترها</td>
-                                <td style="text-align: left;">۳۸۰,۰۰۰ ت</td>
-                                <td style="text-align: center; font-weight: 600;">۴۲</td>
-                                <td><span class="badge success">موجود</span></td>
-                                <td>۱۴۰۳/۰۸/۱۵</td>
+                                <td><strong>{{ product.title }}</strong></td>
+                                <td>
+                                    {% for cat in product.category.all %}
+                                    {{ cat.title }}{% if not forloop.last %}، {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td style="text-align: left;">{{product.get_price|intcomma}} تومان</td>
+                                <td style="text-align: center; font-weight: 600;">{{product.stock}}</td>
+                                {% if product.is_publish %}
+                                <td><span class="badge ">نمایش</span></td>
+                                {% else %}
+                                <td><span class="badge ">عدم نمایش</span></td>
+                                {% endif %}
+                                <td>{{product.created_date|naturalday}}</td>
                                 <td>
                                     <a href="{% url 'dashboard:admin:edit-products' %}" class="action-btn">ویرایش</a>
                                 </td>
                             </tr>
-
-                    
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
 
         </div>
+            <nav class="pagination" aria-label="صفحه‌بندی محصولات">
+                {% if page_obj.has_other_pages %}
+                {% if page_obj.has_previous %}
+                <a class="page-btn nav-arrow" href="?page={{ page_obj.previous_page_number }}" aria-label="صفحه قبل"
+                    onclick="goToPage(event, `{{ page_obj.previous_page_number }}`)">→</a>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
+                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-btn"
+                    href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد"
+                        onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">←</a>
+                    {% endif %}
+                    {% endif %}
+            </nav>
     </div>
 {% endblock content %}
