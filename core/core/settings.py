@@ -24,9 +24,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY", default='django-insecure-p58l@s92)c-_vl6m3p3z#e9+$e17x$2q(od!-6902j^lyg161m')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool, default=True)
+DEBUG = config("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast= lambda v: [item.strip() for item in v.split(',')] ,default="*")
+
+# Runflare (like most PaaS providers) terminates HTTPS at a proxy and forwards
+# plain HTTP to the container. Without this, Django thinks every request is
+# insecure, which breaks CSRF checks, secure cookies and redirects.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Needed so Django trusts POST requests (login, admin, forms) coming from
+# your Runflare subdomain / custom domain over HTTPS.
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
+    cast=lambda v: [item.strip() for item in v.split(',')] if v else [],
+    default=""
+)
 
 # Application definition
 
@@ -47,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,14 +138,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDDIA_URL = 'media/'
+MEDIA_URL = 'media/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
-MEDDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+# whitenoise compresses static files and adds hashed filenames so they can be
+# cached forever by the browser. Requires `python manage.py collectstatic`.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
