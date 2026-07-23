@@ -1,4 +1,3 @@
-@import url("fonts.css");
 
 html {
     transition:
@@ -21,7 +20,6 @@ button {
         color 250ms ease,
         border-color 250ms ease,
         box-shadow 250ms ease;
-    font-family: "Vazirmatn", sans-serif;
 }
 
 /* ============================================================
