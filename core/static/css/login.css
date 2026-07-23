@@ -1,4 +1,3 @@
-@import url("fonts.css");
 
 :root {
     --clr-base: #f7f5f2;
@@ -60,7 +59,7 @@ html {
 }
 
 body {
-    font-family: "Vazirmatn", sans-serif;
+    
     font-weight: var(--fw-light);
     font-size: var(--fs-base);
     color: var(--clr-text);
