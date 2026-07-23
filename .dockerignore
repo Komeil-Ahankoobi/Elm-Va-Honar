@@ -1,0 +1,12 @@
+.git
+.gitignore
+envs/
+postgre/
+**/__pycache__/
+*.pyc
+db.sqlite3
+core/staticfiles/
+core/media/*
+!core/media/.gitkeep
+README.md
+docs/

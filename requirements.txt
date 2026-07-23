@@ -1,5 +1,6 @@
 Django>=5.2,<5.3
 psycopg[binary]
+gunicorn
 
 # Environment variables
 python-decouple
