@@ -1,4 +1,4 @@
-@import url("fonts.css");
+
 
 :root {
     --clr-base: #f7f5f2; /* warm ivory — clean, not clinical */
@@ -99,7 +99,6 @@ html {
 }
 
 body {
-    font-family: "Vazirmatn", sans-serif;
     font-size: var(--fs-base);
     color: var(--clr-text);
     background-color: var(--clr-base);
