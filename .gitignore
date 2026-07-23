@@ -222,8 +222,8 @@ postgres/
 
 # igonre database files
 
-=======
 postgre/data/*
+media/
 
 >>>>>>> 540a6324a05a1e743fba314bb6e7340ef1862ff6
  

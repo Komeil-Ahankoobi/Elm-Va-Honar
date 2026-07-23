@@ -31,11 +31,10 @@
                     </svg>
                     <input type="text" id="searchInput" placeholder="جستجو در محصولات..." />
                 </div>
-                <button class="action-btn"
-                    style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;"
-                    onclick="addNewProduct()">
+                <a class="action-btn" href="{% url 'dashboard:admin:add-product' %}"
+                    style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">
                     + افزودن محصول
-                </button>
+                </a>
             </div>
         </div>
 
@@ -150,7 +149,7 @@
                         <tbody>
                             {% for product in products %}
                             <tr>
-                                <td><img src="https://picsum.photos/seed/nb1/80/80" alt="دفتر"
+                                <td><img src="{{ product.image.url }}"
                                         class="product-table-img"></td>
                                 <td><strong>{{ product.title }}</strong></td>
                                 <td>
@@ -167,7 +166,7 @@
                                 {% endif %}
                                 <td>{{product.created_date|naturalday}}</td>
                                 <td>
-                                    <a href="{% url 'dashboard:admin:edit-products' %}" class="action-btn">ویرایش</a>
+                                    <a href="{% url 'dashboard:admin:edit-products' pk=product.id %}" class="action-btn">ویرایش</a>
                                 </td>
                             </tr>
                             {% endfor %}

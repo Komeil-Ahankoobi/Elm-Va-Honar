@@ -1,7 +1,10 @@
 from django.views.generic import (
     TemplateView,
     ListView,
-    DetailView
+    DetailView,
+    UpdateView,
+    CreateView,
+    DeleteView
 )
 from django.db.models import F, DecimalField, ExpressionWrapper
 from django.db.models.functions import Round
@@ -9,14 +12,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import PasswordChangeView
+from django.contrib import messages
 
 from ..permissions import HasAdminAccessPermission
-from .forms import AdminPasswordChangeForm
+from .forms import (
+    AdminPasswordChangeForm,
+    AdminProductDetailEditFrom,
+)
 from shop.models import (
     ProductModel,
     ProductStatusType,
     ProductCategoryModel
 )
+
 
 
 class AdminDashboardHomeView(HasAdminAccessPermission,TemplateView):
@@ -88,12 +96,40 @@ class AdminProductsListView(LoginRequiredMixin, HasAdminAccessPermission, ListVi
         return context
 
 
-class AdminEditProductsView(TemplateView):
+class AdminProductDetailEditView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, UpdateView):
     template_name = 'dashboard/admin/products/edit-products.html'
+    success_message = 'ویرایش فرم با موفقیت انجام شد'
+    queryset = ProductModel.objects.all()
+    form_class = AdminProductDetailEditFrom
+    context_object_name = 'product'
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:admin:edit-products', kwargs={'pk': self.get_object().pk})
 
 
+class AdminAddProductView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, CreateView):
+    template_name = "dashboard/admin/products/add-product.html"
+    success_message = 'افزودن محصول با موفقیت انجام شد'
+    queryset = ProductModel.objects.all()
+    form_class = AdminProductDetailEditFrom
+    context_object_name = 'product'
+    
+    def form_valid(self, form):
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('dashboard:admin:add-product')
+
+
+class AdminProductsDeleteView(LoginRequiredMixin, HasAdminAccessPermission, DeleteView):
+    success_url = reverse_lazy("dashboard:admin:products-list")
+    queryset = ProductModel.objects.all()
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'محصول با موفقیت حذف شد')
+        return super().form_valid(form)
+    
+    
 class AdminCustomersView(TemplateView):
     template_name = 'dashboard/admin/customers/customers.html'
-
-
 

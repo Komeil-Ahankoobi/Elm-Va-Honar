@@ -1,0 +1,99 @@
+{% extends 'dashboard/admin/base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="topbar">
+    <div class="topbar-left">
+        <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()" aria-label="Toggle Navigation Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <div>
+            <div class="topbar-breadcrumb">
+                <span>علم و هنر</span>
+                <span>›</span>
+                <span>محصولات</span>
+                <span>›</span>
+                <span style="color: var(--clr-subtext);">افزودن محصول</span>
+            </div>
+            <div class="topbar-title">افزودن محصول جدید</div>
+        </div>
+    </div>
+    <div class="topbar-right">
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="{% url 'dashboard:admin:products-list' %}" class="action-btn"
+                onclick="window.location.href='admin-products.html'">انصراف</a>
+            <button class="action-btn" style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;"
+                form="pro-form-add">ذخیره
+                محصول</button>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+            <div class="card-title">مشخصات فنی محصول</div>
+        </div>
+        <div style="padding: 2rem;">
+            <form action="{% url 'dashboard:admin:add-product' %}" method="post" class="dash-grid" style="gap: 1.5rem;" id="pro-form-add">
+    {% csrf_token %}
+
+    <div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">نام</label>
+            {{ form.title }}
+        </div>
+
+        <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-around; align-items: center; gap: 1rem;">
+            <div style="flex: 1;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">اسم کوتاه</label>
+                {{ form.slug }}
+            </div>
+            <div style="flex: 1;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">تصویر</label>
+                {{ form.image }}
+            </div>
+        </div>
+
+        <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">دسته بندی</label>
+            {{ form.category }}
+        </div>
+    </div>
+
+    <div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">قیمت (تومان)</label>
+            {{ form.price }}
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">درصد تخفیف</label>
+            {{ form.discount_percent }}
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">موجودی انبار</label>
+            {{ form.stock }}
+        </div>
+        <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">وضعیت</label>
+            {{ form.status }}
+        </div>
+    </div>
+
+    <div style="margin-top: 2rem; grid-column: 1 / -1;">
+        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--clr-muted);">توضیحات محصول</label>
+        {{ form.description }}
+    </div>
+</form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
