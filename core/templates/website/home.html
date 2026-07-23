@@ -27,33 +27,28 @@
           <rect width="100%" height="100%" filter="url(#grain)" opacity="0.06" />
         </svg>
 
-        <svg
-          style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0.025; pointer-events:none;"
-          width="600" height="600" viewBox="0 0 600 600" aria-hidden="true">
-          <text x="300" y="380" text-anchor="middle" font-family="Georgia, serif" font-size="520" fill="#1C1C2E"
-            font-style="italic">&amp;</text>
-        </svg>
+       
       </div>
 
       <!-- Hero content -->
       <div class="hero-content">
         <span class="hero-kicker">
-          لوازم‌التحریر علم و هنر · از ۱۳۰۳
+          نوشت افزار علم و هنر از ۱۳۹۲
         </span>
 
         <h1 class="hero-title">
-          علم <em>&</em> هنر
+          علم و هنر
         </h1>
 
-        <p class="hero-tagline">مرکب. کاغذ. ظرافت.</p>
+        <p class="hero-tagline">از دل کاغذ تا ذهن شما</p>
 
         <div class="hero-cta-group">
-          <a href="#categories" class="btn-primary">
-            کاوش در مجموعه
+          <a href="{% url 'shop:show-product-view' %}" class="btn-primary">
+            رفتن به فروشگاه
             <span class="btn-arrow" aria-hidden="true">←</span>
           </a>
           <a href="{% url 'website:about' %}" class="btn-ghost">
-            داستان ما
+            درباره ما
           </a>
         </div>
       </div>

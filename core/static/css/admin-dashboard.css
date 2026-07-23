@@ -32,6 +32,22 @@
     --radius-lg: 16px;
 }
 
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("../fonts/Vazirmatn-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -44,9 +60,11 @@ html,
 body {
     overflow-x: hidden;
     width: 100%;
+    font-family: "Vazirmatn", sans-serif;
 }
 
 body {
+    font-family: "Vazirmatn", sans-serif;
     font-size: 0.9rem;
     color: var(--clr-text);
     background: var(--clr-base);
