@@ -53,6 +53,7 @@
 }
 
 body {
+    font-family: "Vazirmatn", sans-serif;
     font-weight: var(--fw-light);
     color: var(--clr-text);
     background: var(--clr-base);

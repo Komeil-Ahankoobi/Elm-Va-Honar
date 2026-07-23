@@ -99,6 +99,7 @@ html {
 }
 
 body {
+    font-family: "Vazirmatn", sans-serif;
     font-size: var(--fs-base);
     color: var(--clr-text);
     background-color: var(--clr-base);

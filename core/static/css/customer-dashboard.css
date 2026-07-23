@@ -36,6 +36,7 @@
 }
 
 body {
+    font-family: "Vazirmatn", sans-serif;
     font-family: var(--ff-body);
     font-size: 0.9rem;
     color: var(--clr-text);
