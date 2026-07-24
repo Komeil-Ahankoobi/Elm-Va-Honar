@@ -131,3 +131,31 @@ function filterProducts(selectedElemnt) {
     const newUrl = `${url.pathname}?${params.toString()}`;
     window.location.href = newUrl;
 }
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+async function addToCart(url, product_id) {
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({
+            product_id: product_id,
+        }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+}
+
+document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        addToCart(btn.dataset.url, btn.dataset.productId);
+    });
+});
