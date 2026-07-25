@@ -35,11 +35,8 @@
             requestAnimationFrame(() => {
                 const scrollY = window.scrollY;
 
-                /* Header shadow on scroll */
-                header.classList.toggle("scrolled", scrollY > 40);
-
-                /* Back-to-top: visible after 400px */
-                backTop.classList.toggle("visible", scrollY > 400);
+                if (header) header.classList.toggle("scrolled", scrollY > 40);
+                if (backTop) backTop.classList.toggle("visible", scrollY > 400);
 
                 ticking = false;
             });
@@ -49,11 +46,12 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    backTop.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    if (backTop) {
+        backTop.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
 })();
-
 /* ----------------------------------------------------------
        3. HERO PARALLAX ON MOUSEMOVE
        Moves the paper-texture bg very subtly on cursor position.

@@ -1,6 +1,6 @@
-from .cart import CartSession
+from .utils import get_cart
 
 def cart_processor(request):
-    cart = CartSession(request.session)
+    cart = get_cart(request)
     return {'cart': cart}
 

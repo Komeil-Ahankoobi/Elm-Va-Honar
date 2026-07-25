@@ -132,30 +132,34 @@ function filterProducts(selectedElemnt) {
     window.location.href = newUrl;
 }
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-}
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    }
 
-async function addToCart(url, product_id) {
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken"),
-        },
-        body: JSON.stringify({
-            product_id: product_id,
-        }),
+    async function addToCart(url, product_id) {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            body: JSON.stringify({
+                product_id: product_id,
+            }),
+        });
+
+        const data = await response.json();
+
+        const cartCountEl = document.getElementById("cart-count");
+        if (cartCountEl){
+            cartCountEl.textContent = `سبد (${data.total_quantity})`
+        }
+    }
+
+    document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            addToCart(btn.dataset.url, btn.dataset.productId);
+        });
     });
-
-    const data = await response.json();
-    console.log(data);
-}
-
-document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
-    btn.addEventListener("click", () => {
-        addToCart(btn.dataset.url, btn.dataset.productId);
-    });
-});

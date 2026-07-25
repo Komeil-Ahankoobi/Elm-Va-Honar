@@ -4,71 +4,72 @@
 
 {% block content %}
 
-<section class="page-header">
-    <span class="page-header-watermark" aria-hidden="true">فروشگاه</span>
-    <nav class="breadcrumb" aria-label="مسیر ناوبری">
-        <a href="{% url 'website:home' %}">خانه</a>
-        <span>/</span>
-        <span href="shop.html" style="color:var(--clr-accent);">همه محصولات</span>
-    </nav>
-    <h1 class="page-title">خرید از <em>مجموعه کامل</em></h1>
-    <p class="page-subtitle">هر دفتر، نوک قلم و شیشه مرکب — انتخاب‌شده برای میز متفکرانه.</p>
-</section>
+<div class="shop-dark-theme">
+
+    <section class="page-header">
+        <nav class="breadcrumb" aria-label="مسیر ناوبری">
+            <a href="{% url 'website:home' %}">خانه</a>
+            <span>/</span>
+            <span href="shop.html" class="ff">همه محصولات</span>
+        </nav>
+        <h1 class="page-title">خرید از <em>مجموعه کامل</em></h1>
+        <p class="page-subtitle">هر دفتر، نوک قلم و شیشه مرکب — انتخاب‌شده برای میز متفکرانه.</p>
+    </section>
 
 
-<section class="shop-section">
-    <div class="container">
-        <div class="shop-layout">
+    <section class="shop-section">
+        <div class="container">
+            <div class="shop-layout">
 
-            <!-- FILTER RAIL -->
-            <aside class="filter-rail" aria-label="فیلترهای محصول">
+                <!-- FILTER RAIL -->
+                <aside class="filter-rail" aria-label="فیلترهای محصول">
 
-                <form method="get" class="filter-form">
+                    <form method="get" class="filter-form">
 
-                    <div class="filter-group">
-                        <h3 class="filter-group-title">جستجوی</h3>
-                    </div>
+                        <div class="filter-group">
+                            <h3 class="filter-group-title">جستجوی</h3>
+                        </div>
 
-                    <div class="filter-group">
-                        <input type="text" name="q" class="filter-search-input" placeholder="جستجوی محصول..."
-                            value="{{ request.GET.q }}" aria-label="جستجوی محصول" />
-                    </div>
+                        <div class="filter-group">
+                            <input type="text" name="q" class="filter-search-input" placeholder="جستجوی محصول..."
+                                value="{{ request.GET.q }}" aria-label="جستجوی محصول" />
+                        </div>
 
-                    <div class="filter-group">
-                        <h3 class="filter-group-title">قیمت</h3>
-                        <div class="price-inputs">
-                            <input type="number" name="min_price" class="price-input" placeholder="کمترین قیمت"
-                                value="{{ request.GET.min_price }}" min="0" aria-label="کمترین قیمت" />
-                            <span class="price-input-sep">تا</span>
-                            <input type="number" name="max_price" class="price-input" placeholder="بیشترین قیمت"
-                                value="{{ request.GET.max_price }}" min="0" aria-label="بیشترین قیمت" />
+                        <div class="filter-group">
+                            <h3 class="filter-group-title">قیمت</h3>
+                            <div class="price-inputs">
+                                <input type="number" name="min_price" class="price-input" placeholder="کمترین قیمت"
+                                    value="{{ request.GET.min_price }}" min="0" aria-label="کمترین قیمت" />
+                                <span class="price-input-sep">تا</span>
+                                <input type="number" name="max_price" class="price-input" placeholder="بیشترین قیمت"
+                                    value="{{ request.GET.max_price }}" min="0" aria-label="بیشترین قیمت" />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-apply-filters">اعمال فیلتر</button>
+
+                    </form>
+
+                </aside>
+
+                <!-- PRODUCT GRID -->
+                <div>
+
+                    <div class="shop-toolbar">
+                        <p class="shop-count"><strong>{{total_product}}</strong> محصول</p>
+                        <div class="sort-select-wrap">
+                            <select class="sort-select" name="filter-by" onchange="filterProducts(this)">
+                                <option value="">مرتب‌سازی</option>
+                                <option value="cheep_to_exp" {% if filter_by == "cheep_to_exp" %}selected{% endif %}>
+                                    ارزان‌ترین
+                                    به گران‌ترین</option>
+                                <option value="exp_to_cheep" {% if filter_by == "exp_to_cheep" %}selected{% endif %}>
+                                    گران‌ترین به ارزان‌ترین
+                                </option>
+                                <option value="new" {% if filter_by == "new" %}selected{% endif %}>جدیدترین</option>
+                            </select>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn-apply-filters">اعمال فیلتر</button>
-
-                </form>
-
-            </aside>
-
-            <!-- PRODUCT GRID -->
-            <div>
-
-                <div class="shop-toolbar">
-                    <p class="shop-count"><strong>{{total_product}}</strong> محصول</p>
-                    <div class="sort-select-wrap">
-                        <select class="sort-select" name="filter-by" onchange="filterProducts(this)">
-                            <option value="">مرتب‌سازی</option>
-                            <option value="cheep_to_exp" {% if filter_by == "cheep_to_exp" %}selected{% endif %}>
-                                ارزان‌ترین
-                                به گران‌ترین</option>
-                            <option value="exp_to_cheep" {% if filter_by == "exp_to_cheep" %}selected{% endif %}>
-                                گران‌ترین به ارزان‌ترین
-                            </option>
-                            <option value="new" {% if filter_by == "new" %}selected{% endif %}>جدیدترین</option>
-                        </select>
-                    </div>
-                </div>
 
                 <div class="product-grid" id="product-grid" role="list" aria-label="محصولات">
                     {% for product in products %}
@@ -113,7 +114,7 @@
                                     <circle cx="20" cy="21" r="1" />
                                     <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
                                 </svg>
-                                <span>افزودن به سبد</span>
+                                <a href="{% url 'cart:session-add-product' %}">افزودن به سبد</a>
                             </button>
                         </div>
                     </article>
@@ -126,23 +127,25 @@
                         onclick="goToPage(event, `{{ page_obj.previous_page_number }}`)">→</a>
                     {% endif %}
 
-                    {% for i in page_obj.paginator.page_range %}
-                    {% if page_obj.number == i %}
-                    <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
-                    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-btn"
-                        href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
-                        {% endif %}
-                        {% endfor %}
+                        {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
+                        <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
+                        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-btn"
+                            href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
+                            {% endif %}
+                            {% endfor %}
 
-                        {% if page_obj.has_next %}
-                        <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد"
-                            onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">←</a>
-                        {% endif %}
-                        {% endif %}
-                </nav>
+                            {% if page_obj.has_next %}
+                            <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}"
+                                aria-label="صفحه بعد" onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">←</a>
+                            {% endif %}
+                            {% endif %}
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+</div>
 
 {% endblock content %}
