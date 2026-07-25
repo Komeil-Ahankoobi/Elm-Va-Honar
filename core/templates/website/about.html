@@ -2,257 +2,363 @@
 {% load static %}
 
 {% block content %}
-    
-    <section class="about-hero" aria-label="درباره قلم و کاغذ">
-      <div class="hero-bg" aria-hidden="true">
-        <svg class="paper-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-          style="opacity:1; position:absolute; inset:0; width:100%; height:100%;" aria-hidden="true">
-          <defs>
-            <pattern id="laid-h-a" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="2" x2="4" y2="2" stroke="#8A8494" stroke-width="0.4" opacity="0.5" />
-            </pattern>
-            <pattern id="laid-v-a" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
-              <line x1="14" y1="0" x2="14" y2="4" stroke="#8A8494" stroke-width="0.7" opacity="0.6" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#laid-h-a)" />
-          <rect width="100%" height="100%" fill="url(#laid-v-a)" />
-        </svg>
+
+<!-- ============================================================
+     PAGE TITLE + BREADCRUMB
+     ============================================================ -->
+<section class="page-title-section" aria-label="عنوان صفحه">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="مسیر بازگشت">
+      <a href="{% url 'website:home' %}">خانه</a>
+      <span class="breadcrumb-sep">&rsaquo;</span>
+      <span class="breadcrumb-current">درباره ما</span>
+    </nav>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT INTRO — image + brand copy + quick stats
+     ============================================================ -->
+<section class="about-intro-section" aria-label="معرفی فروشگاه">
+  <div class="container">
+    <div class="about-intro-grid">
+      <div class="about-intro-media">
+        <img src="https://picsum.photos/seed/elmvhonar-tools/760/620" alt="ابزار نقاشی و هنری علم و هنر" loading="lazy"
+          width="760" height="620" />
       </div>
 
-      <div class="container">
-        <div class="about-hero-content">
-          <span class="hero-kicker">داستان ما · از ۱۳۰۳</span>
-          <h1 class="about-hero-title">سه نسل با دستان <em>مرکب‌آلود</em>.</h1>
-          <p class="about-hero-lede">
-            قلم و کاغذ از یک میز کار ساده در یک چاپخانه تهران آغاز شد و آرام‌آرام، با هدف و تدبیر، به خانه‌ای تبدیل شد
-            که هنوز هر نوک قلم را با دست آزمایش می‌کند. ما عجله نداشته‌ایم و هرگز نخواهیم داشت.
-          </p>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section story-section" aria-label="چگونه آغاز کردیم">
-      <div class="container story-grid">
-        <div class="story-media" aria-hidden="true">
-          <div class="story-frame">
-            <img src="https://picsum.photos/seed/atelier1924/640/780" alt="" loading="eager" fetchpriority="high"
-              width="640" height="780" />
-          </div>
-          <span class="story-media-caption">میز کار اصلی، هنوز در حال استفاده.</span>
-        </div>
-
-        <div class="story-copy">
-          <span class="section-eyebrow">چگونه آغاز کردیم</span>
-          <span class="gold-rule" style="margin-left:0;"></span>
-          <h2 class="section-title" style="text-align:right;">حرفه‌ای که با دست آموختیم، با دست نگه داشتیم</h2>
-          <p class="story-paragraph">
-            در سال ۱۳۰۳، نادر قلمی یک میز کار در اتاق پشتی یک چاپخانه در تهران راه انداخت و قلم‌های روزنامه‌نگاران و
-            کارمندان را تعمیر می‌کرد. او هیچ دفترچه‌ای برای ثبت شکایات نداشت — فقط دفترچه‌ای برای تعمیرات، و آنچه از هر
-            کدام آموخت.
-          </p>
-          <p class="story-paragraph">
-            آن دفترچه تبدیل به یک روش شد. روش تبدیل به کارگاه شد. پس از چهار بار تغییر آدرس و یک تعطیلی در دوران جنگ،
-            کارگاه هنوز بر همان اصلی اداره می‌شود که نادر روی صفحه اول نوشت: یک ابزار باید از دستی که آن را فروخته، دوام
-            بیشتری بیاورد.
-          </p>
-          <p class="story-paragraph">
-            امروز نوه‌اش علی همان میز آزمایش نوک قلم را اداره می‌کند، که اکنون یازده صنعتگر متخصص در صحافی، ترکیب مرکب و
-            چرم‌دوزی همراهش هستند. اینجا هیچ چیز انبوه تولید نمی‌شود. همه چیز اینجا برای به ارث رسیدن است.
-          </p>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section timeline-section" aria-label="تاریخچه ما">
-      <div class="container">
-        <header class="section-header">
-          <span class="section-eyebrow">یک قرن، کم‌وبیش</span>
-          <span class="gold-rule" aria-hidden="true"></span>
-          <h2 class="section-title">نقاط عطفی که دوستشان داریم</h2>
-          <p class="section-subtitle">هر سالی در این فهرست نیست. اینها آن‌هایی هستند که روش کارمان را تغییر دادند.</p>
-        </header>
-
-        <ol class="timeline" id="timeline">
-          <li class="timeline-item">
-            <span class="timeline-year">۱۳۰۳</span>
-            <div class="timeline-body">
-              <h3 class="timeline-title">میز کار باز می‌شود</h3>
-              <p class="timeline-desc">نادر قلمی شروع به تعمیر قلم‌های فواره در یک چاپخانه تهران می‌کند، یک مشتری در یک
-                زمان.</p>
-            </div>
-          </li>
-          <li class="timeline-item">
-            <span class="timeline-year">۱۳۳۰</span>
-            <div class="timeline-body">
-              <h3 class="timeline-title">اولین مرکب خانگی</h3>
-              <p class="timeline-desc">پس از سال‌ها ترکیب رنگدانه برای مشتریان ثابت، کارگاه اولین مرکب اختصاصی خود را
-                بطری می‌کند: قرمز سانگوئن عمیق که هنوز فروخته می‌شود.</p>
-            </div>
-          </li>
-          <li class="timeline-item">
-            <span class="timeline-year">۱۳۵۷</span>
-            <div class="timeline-body">
-              <h3 class="timeline-title">صحافخانه می‌پیوندد</h3>
-              <p class="timeline-desc">یک صحافخانه در اصفهان زیر یک سقف می‌آید و اولین دفترهای قلم و کاغذ به چاپ می‌رسد.
-              </p>
-            </div>
-          </li>
-          <li class="timeline-item">
-            <span class="timeline-year">۱۳۸۲</span>
-            <div class="timeline-body">
-              <h3 class="timeline-title">نسل سوم</h3>
-              <p class="timeline-desc">علی قلمی میز آزمایش نوک قلمی را که جدش ساخته بود تحویل می‌گیرد، پس از یازده سال
-                آموزش زیر نظر پدرش.</p>
-            </div>
-          </li>
-          <li class="timeline-item">
-            <span class="timeline-year">۱۴۰۳</span>
-            <div class="timeline-body">
-              <h3 class="timeline-title">یک قرن، کامل نگه داشته شد</h3>
-              <p class="timeline-desc">صد سال بعد، هر قلمی که می‌فروشیم هنوز با دست روی همان میزی که نادر ساخته آزمایش
-                می‌شود.</p>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-
-    <section class="section values-section" aria-label="آنچه باور داریم">
-      <div class="container">
-        <header class="section-header">
-          <span class="section-eyebrow">آنچه راهنمای ماست</span>
-          <span class="gold-rule" aria-hidden="true"></span>
-          <h2 class="section-title">سه چیزی که در آن‌ها کوتاه نمی‌آییم</h2>
-        </header>
-
-        <div class="category-grid">
-
-          <article class="category-card" data-tilt>
-            <div class="card-orb" aria-hidden="true"></div>
-            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-              <path d="M10 42 L42 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              <path d="M30 10 L42 10 L42 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-              <circle cx="14" cy="38" r="3.5" stroke="currentColor" stroke-width="1.5" />
-            </svg>
-            <h3 class="card-title">ساخته‌شده برای استفاده</h3>
-            <p class="card-desc">دفتری که برای نوشتن در آن خیلی گرانبها باشد در تنها کارش شکست خورده. ما برای استفاده
-              روزانه می‌سازیم، نه قفسه نمایش.</p>
-            <div class="card-accent-line" aria-hidden="true"></div>
-          </article>
-
-          <article class="category-card" data-tilt>
-            <div class="card-orb" aria-hidden="true"></div>
-            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-              <circle cx="26" cy="26" r="20" stroke="currentColor" stroke-width="2" />
-              <path d="M26 14 L26 26 L34 31" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            <h3 class="card-title">بدون میانبر زمانی</h3>
-            <p class="card-desc">صحافی دوخته‌شده از چسب بیشتر طول می‌کشد. مرکب کهنه از رنگ بیشتر طول می‌کشد. ما عمداً
-              راه کندتر را انتخاب می‌کنیم.</p>
-            <div class="card-accent-line" aria-hidden="true"></div>
-          </article>
-
-          <article class="category-card" data-tilt>
-            <div class="card-orb" aria-hidden="true"></div>
-            <svg class="card-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-              <path d="M26 6 L31 20 L46 20 L34 29 L38 44 L26 35 L14 44 L18 29 L6 20 L21 20 Z" stroke="currentColor"
-                stroke-width="2" stroke-linejoin="round" />
-            </svg>
-            <h3 class="card-title">تعمیر، نه جایگزینی</h3>
-            <p class="card-desc">هر قلمی که می‌فروشیم می‌تواند برای همیشه برای تعمیر نزد ما برگردد. ترجیح می‌دهیم آنچه
-              دوستش داری را مرمت کنیم تا یکی جدید بفروشیم.</p>
-            <div class="card-accent-line" aria-hidden="true"></div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-
-    <section class="philosophy-band" aria-label="فلسفه ما">
-      <blockquote>
-        <p class="philosophy-quote">
-          «ما میراث نمی‌سازیم با نامیدنش. میراث می‌سازیم با ساختن چیزهایی که ارزش نگهداری دارند.»
+      <div class="about-intro-content">
+        <h2 class="intro-title">درباره <span class="grad-text">ElmVHonar</span></h2>
+        <p class="intro-tagline">ما همراه خلاقیت شما هستیم.</p>
+        <p class="intro-desc">
+          ElmVHonar با هدف ارائه بهترین و باکیفیت‌ترین لوازم هنری برای هنرمندان،
+          طراحان و علاقه‌مندان به هنر فعالیت خود را آغاز کرده است. ما باور داریم که
+          هر اثر هنری، با ابزار مناسب و الهام درست، خلق می‌شود.
         </p>
-        <footer class="philosophy-attr">— علی قلمی، نسل سوم</footer>
-      </blockquote>
-    </section>
 
+        <div class="intro-stats">
+          <div class="intro-stat">
+            <span class="intro-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path
+                  d="M9 3h6a1 1 0 0 1 1 1v3.2a2 2 0 1 1 0 3.6V14a1 1 0 0 1-1 1h-3.2a2 2 0 1 0-3.6 0H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h3.2a2 2 0 1 1 3.6 0H14" />
+              </svg>
+            </span>
+            <span class="intro-stat-number">+10K</span>
+            <span class="intro-stat-label">مشتری راضی</span>
+          </div>
 
-    <section class="section team-section" aria-label="افراد پشت میز کار">
-      <div class="container">
-        <header class="section-header">
-          <span class="section-eyebrow">کارگاه</span>
-          <span class="gold-rule" aria-hidden="true"></span>
-          <h2 class="section-title">یازده جفت دست</h2>
-          <p class="section-subtitle">هر قطعه‌ای که از کارگاه ما خارج می‌شود از دست کسی گذشته که می‌تواند دقیقاً توضیح
-            دهد چطور ساخته شده.</p>
-        </header>
+          <div class="intro-stat">
+            <span class="intro-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M12 2 3 8l9 6 9-6-9-6Z" />
+                <path d="M3 8v8l9 6 9-6V8" />
+              </svg>
+            </span>
+            <span class="intro-stat-number">+500</span>
+            <span class="intro-stat-label">محصول متنوع</span>
+          </div>
 
-        <div class="team-grid">
-
-          <article class="team-card">
-            <div class="team-photo">
-              <img src="https://picsum.photos/seed/thomasquill/400/480" alt="علی قلمی، استاد صنعتگر" loading="lazy"
-                width="400" height="480" />
-            </div>
-            <h3 class="team-name">علی قلمی</h3>
-            <p class="team-role">استاد صنعتگر، نوک‌قلم‌ساز</p>
-          </article>
-
-          <article class="team-card">
-            <div class="team-photo">
-              <img src="https://picsum.photos/seed/marinaink/400/480" alt="مریم هلیس، استاد مرکب" loading="lazy"
-                width="400" height="480" />
-            </div>
-            <h3 class="team-name">مریم هلیس</h3>
-            <p class="team-role">استاد مرکب، ۸۰+ رنگ</p>
-          </article>
-
-          <article class="team-card">
-            <div class="team-photo">
-              <img src="https://picsum.photos/seed/idrisbind/400/480" alt="ادریس جعفری، سرپرست صحافی" loading="lazy"
-                width="400" height="480" />
-            </div>
-            <h3 class="team-name">ادریس جعفری</h3>
-            <p class="team-role">سرپرست صحافی</p>
-          </article>
-
-          <article class="team-card">
-            <div class="team-photo">
-              <img src="https://picsum.photos/seed/saorise/400/480" alt="سارا لنون، چرم‌دوزی" loading="lazy" width="400"
-                height="480" />
-            </div>
-            <h3 class="team-name">سارا لنون</h3>
-            <p class="team-role">چرم‌دوزی و تکمیل‌کاری</p>
-          </article>
-
+          <div class="intro-stat">
+            <span class="intro-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="3.2" />
+                <circle cx="12" cy="12" r="9" />
+              </svg>
+            </span>
+            <span class="intro-stat-number">2+</span>
+            <span class="intro-stat-label">سال تجربه</span>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-
-    <section class="newsletter section" aria-label="عضویت در خبرنامه">
-      <div class="container">
-        <span class="section-eyebrow">نامه قلم</span>
-        <span class="gold-rule" aria-hidden="true"></span>
-        <h2 class="newsletter-title">ماهانه ارسال می‌شود. هرگز عجولانه نیست.</h2>
-        <p class="newsletter-sub">محصولات جدید، نقد مرکب‌ها و تمرین‌های نوشتاری — مستقیم در صندوق ورودی شما.</p>
-        <form class="newsletter-form" onsubmit="return false;" aria-label="ثبت‌نام در خبرنامه">
-          <label for="nl-email" class="sr-only">آدرس ایمیل</label>
-          <input class="newsletter-input" type="email" id="nl-email" name="email" placeholder="ایمیل شما"
-            autocomplete="email" aria-required="true" />
-          <button type="submit" class="btn-primary" style="padding:0.75rem 1.8rem;">
-            عضویت
-          </button>
-        </form>
+<!-- ============================================================
+     QUICK BENEFITS STRIP
+     ============================================================ -->
+<section class="section service-highlights">
+  <div class="container">
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <img src="/static/images/24.png" alt="">
+        </div>
+        <div class="service-text">
+          <h3>پشتیبانی ۲۴/۷</h3>
+          <p>پاسخگوی شما در تمام روزهای هفته</p>
+        </div>
       </div>
-    </section>
+
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <defs>
+              <!-- تعریف گرادینت رنگی دقیقاً مشابه سایر آیکون‌ها -->
+              <linearGradient id="boxGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fbc2eb"></stop>
+                <stop offset="50%" stop-color="#a1c4fd"></stop>
+                <stop offset="100%" stop-color="#c2e9fb"></stop>
+              </linearGradient>
+            </defs>
+
+            <g stroke="url(#boxGradient)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <!-- بدنه و خطوط اصلی جعبه -->
+              <path d="M 50 22 L 82 37 L 50 52 L 18 37 Z"></path>
+              <path d="M 18 37 L 18 70 L 50 85 L 82 70 L 82 37"></path>
+              <path d="M 50 52 L 50 85"></path>
+
+              <!-- روبان روی جعبه -->
+              <path d="M 38 27.5 L 58 37 L 46 42.5 L 26 33 Z"></path>
+              <path d="M 46 42.5 L 46 55 L 40 52 L 34 55 L 34 36.8"></path>
+            </g>
+
+            <!-- جرقه‌ها / ستاره‌های درخشان کنار جعبه -->
+            <g fill="url(#boxGradient)">
+              <!-- ستاره بزرگ بالا سمت چپ -->
+              <path d="M 23 16 C 23 20 23 20 27 20 C 23 20 23 20 23 24 C 23 20 23 20 19 20 C 23 20 23 20 23 16 Z">
+              </path>
+              <!-- ستاره کوچک -->
+              <path d="M 16 28 C 16 30 16 30 18 30 C 16 30 16 30 16 32 C 16 30 16 30 14 30 C 16 30 16 30 16 28 Z">
+              </path>
+            </g>
+          </svg>
+        </div>
+        <div class="service-text">
+          <h3>بسته‌بندی ایمن</h3>
+          <p>بسته‌بندی استاندارد و محافظت شده</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <img src="/static/images/service.png" alt="">
+        </div>
+        <div class="service-text">
+          <h3>ارسال سریع</h3>
+          <p>ارسال به سراسر کشور در کوتاه‌ترین زمان</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <defs>
+              <!-- گرادینت اصلی برای سپر، تیک نازک و ستاره‌ها -->
+              <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f8a5c2"></stop>
+                <stop offset="35%" stop-color="#c7acee"></stop>
+                <stop offset="70%" stop-color="#85a3f8"></stop>
+                <stop offset="100%" stop-color="#fbe8a6"></stop>
+              </linearGradient>
+            </defs>
+
+            <!-- ۱. بدنه سپر -->
+            <path d="M 50 18 C 65 18 80 23 80 34 C 80 60 50 82 50 82 C 50 82 20 60 20 34 C 20 23 35 18 50 18 Z"
+              stroke="url(#shieldGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            </path>
+
+            <!-- ۲. تیک نازک و ظریف (با stroke-width کمتر) -->
+            <path d="M 35 46 L 45 56 L 65 34" stroke="url(#shieldGrad)" stroke-width="4.5" fill="none"
+              stroke-linecap="round" stroke-linejoin="round"></path>
+
+            <!-- ۳. ستاره‌های درخشان -->
+            <g fill="url(#shieldGrad)">
+              <!-- ستاره سمت چپ -->
+              <path d="M 30 30 C 30 33 30 33 33 33 C 30 33 30 33 30 36 C 30 33 30 33 27 33 C 30 33 30 33 30 30 Z">
+              </path>
+              <!-- ستاره بالا -->
+              <path d="M 38 23 C 38 25 38 25 40 25 C 38 25 38 25 38 27 C 38 25 38 25 36 25 C 38 25 38 25 38 23 Z">
+              </path>
+              <!-- ستاره سمت راست -->
+              <path d="M 69 47 C 69 49 69 49 71 49 C 69 49 69 49 69 51 C 69 49 69 49 67 49 C 69 49 69 49 69 47 Z">
+              </path>
+            </g>
+          </svg>
+        </div>
+        <div class="service-text">
+          <h3>ضمانت اصالت کالا</h3>
+          <p>تضمین اصالت تمامی محصولات</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WHY ELMVHONAR
+     ============================================================ -->
+<section class="section why-section" aria-label="چرا علم و هنر">
+  <div class="container">
+    <header class="about-section-header">
+      <h2 class="about-section-title">چرا <span class="grad-text">ElmVHonar</span> ؟</h2>
+      <p class="about-section-subtitle">ما فقط یک فروشگاه نیستیم؛ ما یک همراه برای هنرمندان و خلاقان هستیم.</p>
+    </header>
+
+    <div class="category-grid2 why-grid">
+      <article class="category-card">
+        <div class="card-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path
+              d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
+            <circle cx="12" cy="12" r="3.5" />
+          </svg>
+        </div>
+        <h3 class="card-title">الهام‌بخش خلاقیت</h3>
+        <p class="card-desc">ما با ارائه محصولات خاص و جذاب، الهام‌بخش لحظات خلاقانه شما هستیم.</p>
+      </article>
+
+      <article class="category-card">
+        <div class="card-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M4 9h16l-1.5 9.5a2 2 0 0 1-2 1.7H7.5a2 2 0 0 1-2-1.7L4 9Z" />
+            <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+          </svg>
+        </div>
+        <h3 class="card-title">قیمت منصفانه</h3>
+        <p class="card-desc">کیفیت بالا را با قیمتی مناسب و رعایت منصفانه ارائه می‌دهیم.</p>
+      </article>
+
+      <article class="category-card">
+        <div class="card-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="3" y="3" width="7" height="7" rx="1.4" />
+            <rect x="14" y="3" width="7" height="7" rx="1.4" />
+            <rect x="3" y="14" width="7" height="7" rx="1.4" />
+            <rect x="14" y="14" width="7" height="7" rx="1.4" />
+          </svg>
+        </div>
+        <h3 class="card-title">تنوع بی‌نظیر</h3>
+        <p class="card-desc">از ابزار طراحی تا رنگ‌ها، هر آنچه نیاز هنری شماست را در یک‌جا پیدا کنید.</p>
+      </article>
+
+      <article class="category-card">
+        <div class="card-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="4.5" />
+            <circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <h3 class="card-title">انتخاب هوشمندانه</h3>
+        <p class="card-desc">با بررسی و تحقیق دقیق، بهترین محصولات را برای شما تهیه می‌کنیم.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TEAM
+     ============================================================ -->
+<section class="section team-section" aria-label="تیم ما">
+  <div class="container xxx">
+    <header class="about-section-header">
+      <h2 class="about-section-title">تیم ما</h2>
+      <p class="about-section-subtitle">ما یک گروه کوچک اما پرانرژی هستیم که با عشق به هنر، برای شما بهترین‌ها را فراهم
+        می‌کنیم.</p>
+    </header>
+
+    <div class="team-grid">
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://picsum.photos/seed/elmvhonar-team1/400/480" alt="آرمان یوسفی" loading="lazy" width="400"
+            height="480" />
+        </div>
+        <h3 class="team-name">آرمان یوسفی</h3>
+        <p class="team-role">مدیر فنی</p>
+        <div class="team-social">
+          <a href="#" aria-label="لینکدین آرمان یوسفی">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3a1.94 1.94 0 1 0 0 3.88A1.94 1.94 0 0 0 5.25 3ZM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.85 1.56-1.75 3.2-1.75 3.42 0 4.05 2.25 4.05 5.18V20Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="اینستاگرام آرمان یوسفی">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://picsum.photos/seed/elmvhonar-team2/400/480" alt="سارا محمدی" loading="lazy" width="400"
+            height="480" />
+        </div>
+        <h3 class="team-name">سارا محمدی</h3>
+        <p class="team-role">کارشناس پشتیبانی</p>
+        <div class="team-social">
+          <a href="#" aria-label="لینکدین سارا محمدی">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3a1.94 1.94 0 1 0 0 3.88A1.94 1.94 0 0 0 5.25 3ZM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.85 1.56-1.75 3.2-1.75 3.42 0 4.05 2.25 4.05 5.18V20Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="اینستاگرام سارا محمدی">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://picsum.photos/seed/elmvhonar-team3/400/480" alt="امیررضا احمدی" loading="lazy" width="400"
+            height="480" />
+        </div>
+        <h3 class="team-name">امیررضا احمدی</h3>
+        <p class="team-role">مدیر بازاریابی</p>
+        <div class="team-social">
+          <a href="#" aria-label="لینکدین امیررضا احمدی">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3a1.94 1.94 0 1 0 0 3.88A1.94 1.94 0 0 0 5.25 3ZM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.85 1.56-1.75 3.2-1.75 3.42 0 4.05 2.25 4.05 5.18V20Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="اینستاگرام امیررضا احمدی">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="team-photo">
+          <img src="https://picsum.photos/seed/elmvhonar-team4/400/480" alt="نرگس جعفری" loading="lazy" width="400"
+            height="480" />
+        </div>
+        <h3 class="team-name">نرگس جعفری</h3>
+        <p class="team-role">مدیر محتوا</p>
+        <div class="team-social">
+          <a href="#" aria-label="لینکدین نرگس جعفری">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3a1.94 1.94 0 1 0 0 3.88A1.94 1.94 0 0 0 5.25 3ZM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.85 1.56-1.75 3.2-1.75 3.42 0 4.05 2.25 4.05 5.18V20Z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="اینستاگرام نرگس جعفری">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
 
 {% endblock content %}
