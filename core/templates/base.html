@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="{% static 'css/about-us.css'%}">
   <link rel="stylesheet" href="{% static 'css/contact.css'%}">
   <link rel="stylesheet" href="{% static 'css/shop.css'%}">
+  <link rel="stylesheet" href="{% static 'css/cart-summary.css'%}">
   <link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
   <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
 
@@ -82,7 +83,7 @@
                             </svg>
                         </a>
                         {% else %}
-                        <a href="{% url 'accounts:login' %}" type="submit" class="logout-text-btn">ورود</ش>
+                        <a href="{% url 'accounts:login' %}" type="submit" class="logout-text-btn">ورود</a  >
 
                         <a href="{% url 'accounts:login' %}" class="nav-icon-btn nav-profile-btn"
                             aria-label="ورود / ثبت‌نام">
@@ -95,8 +96,15 @@
                         {% endif %}
 
         <!-- Cart CTA -->
-        <a href="bag.html" class="nav-cta" aria-label="باز کردن سبد خرید">سبد (۰)</a>
-
+                        <a href="{% url 'cart:session-cart-summary' %}" class="nav-icon-btn nav-cta-cart" aria-label="باز کردن سبد خرید">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <path d="M16 10a4 4 0 0 1-8 0" />
+                            </svg>
+                            <span class="cart-count">{{ cart.get_total_quantity }}</span>
+                        </a>
                         <!-- Mobile Hamburger (مخفی در دسکتاپ) -->
                         <button class="nav-mobile-toggle" aria-label="باز کردن منو" aria-expanded="false">
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -199,6 +207,7 @@
     </footer>
 
     <script src="{% static 'js/home.js' %}" defer></script>
+    <script src="{% static 'js/bag.js' %}" defer></script>
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
     {% include 'messages.html' %}
 

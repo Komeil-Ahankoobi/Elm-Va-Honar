@@ -9,6 +9,7 @@ if (cartItemsEl) {
     const toastEl = document.getElementById("toast");
 
     function showToast(msg) {
+        if (!toastEl) return;
         toastEl.textContent = msg;
         toastEl.classList.add("show");
         clearTimeout(showToast._t);
@@ -25,14 +26,19 @@ if (cartItemsEl) {
 
     // آپدیت وضعیت خالی/پر بودن سبد و دکمه checkout
     function updateEmptyState() {
-        const items = [...cartItemsEl.querySelectorAll(".cart-item")];
+        const items = [...cartItemsEl.querySelectorAll(".cart-row")];
         const isEmpty = items.length === 0;
-        emptyEl.classList.toggle("show", isEmpty);
+
+        if (emptyEl) {
+            emptyEl.style.display = isEmpty ? "flex" : "none";
+        }
 
         const checkoutBtn = document.getElementById("checkout-btn");
-        checkoutBtn.disabled = isEmpty;
-        checkoutBtn.style.opacity = isEmpty ? "0.5" : "1";
-        checkoutBtn.style.cursor = isEmpty ? "not-allowed" : "pointer";
+        if (checkoutBtn) {
+            checkoutBtn.disabled = isEmpty;
+            checkoutBtn.style.opacity = isEmpty ? "0.5" : "1";
+            checkoutBtn.style.cursor = isEmpty ? "not-allowed" : "pointer";
+        }
     }
 
     // درخواست افزایش/کاهش تعداد به سمت جنگو
@@ -82,7 +88,9 @@ if (cartItemsEl) {
         const btn = e.target.closest("[data-action]");
         if (!btn) return;
 
-        const item = btn.closest(".cart-item");
+        const item = btn.closest(".cart-row");
+        if (!item) return;
+
         const action = btn.dataset.action;
         const productId = item.dataset.id;
 
@@ -91,18 +99,25 @@ if (cartItemsEl) {
             if (!data) return;
 
             // آپدیت تعداد همین آیتم
-            item.querySelector(".qty-val").textContent = data.quantity;
+            const qtyEl = item.querySelector(".qty-val");
+            if (qtyEl) qtyEl.textContent = data.quantity;
 
             // آپدیت قیمت کل همین آیتم
-            item.querySelector(".item-prices").textContent = fmt(data.item_total_price);
+            const totalEl = item.querySelector(".cart-row-total");
+            if (totalEl) totalEl.textContent = fmt(data.item_total_price);
 
             // آپدیت جمع کل سبد (هم subtotal هم total) و شمارنده navbar
-            document.getElementById("sum-subtotal").textContent = fmt(data.cart_total_price);
-            document.getElementById("sum-total").textContent = fmt(data.cart_total_price);
-            document.getElementById("cart-count").textContent = `سبد (${data.total_quantity})`;
+            const subtotalEl = document.getElementById("sum-subtotal");
+            const totalSumEl = document.getElementById("sum-total");
+            const cartCountEl = document.getElementById("cart-count");
+
+            if (subtotalEl) subtotalEl.textContent = fmt(data.cart_total_price);
+            if (totalSumEl) totalSumEl.textContent = fmt(data.cart_total_price);
+            if (cartCountEl) cartCountEl.textContent = `سبد (${data.total_quantity})`;
 
         } else if (action === "remove") {
-            const name = item.querySelector(".item-name").textContent;
+            const nameEl = item.querySelector(".cart-row-name");
+            const name = nameEl ? nameEl.textContent : "";
 
             const data = await deleteProduct(productId);
             if (!data) return;
@@ -112,9 +127,13 @@ if (cartItemsEl) {
                 item.remove();
                 updateEmptyState();
 
-                document.getElementById("sum-subtotal").textContent = fmt(data.cart_total_price);
-                document.getElementById("sum-total").textContent = fmt(data.cart_total_price);
-                document.getElementById("cart-count").textContent = `سبد (${data.total_quantity})`;
+                const subtotalEl = document.getElementById("sum-subtotal");
+                const totalSumEl = document.getElementById("sum-total");
+                const cartCountEl = document.getElementById("cart-count");
+
+                if (subtotalEl) subtotalEl.textContent = fmt(data.cart_total_price);
+                if (totalSumEl) totalSumEl.textContent = fmt(data.cart_total_price);
+                if (cartCountEl) cartCountEl.textContent = `سبد (${data.total_quantity})`;
 
                 showToast(`"${name}" از سبد حذف شد`);
             }, 280);
@@ -122,10 +141,13 @@ if (cartItemsEl) {
     });
 
     // Checkout
-    document.getElementById("checkout-btn").addEventListener("click", () => {
-        if (cartItemsEl.querySelectorAll(".cart-item").length === 0) return;
-        showToast("در حال انتقال به درگاه پرداخت…");
-    });
+    const checkoutBtn = document.getElementById("checkout-btn");
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener("click", () => {
+            if (cartItemsEl.querySelectorAll(".cart-row").length === 0) return;
+            showToast("در حال انتقال به درگاه پرداخت…");
+        });
+    }
 
     updateEmptyState();
 }
