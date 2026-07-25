@@ -103,7 +103,7 @@
                                     href="{% url 'shop:show-product-detail-view' slug=product.slug %}"
                                     aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
                             </div>
-                            <button type="button" class="btn-add-to-cart" data-product-id="{{ product.id }}"
+                            <button type="button" class="btn-add-to-cart"
                                 aria-label="افزودن {{ product.title }} به سبد خرید"
                                 data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}">
                                 >

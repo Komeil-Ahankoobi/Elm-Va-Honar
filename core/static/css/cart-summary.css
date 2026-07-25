@@ -146,7 +146,8 @@ ul {
     font-family: var(--ff-display);
     font-size: var(--fs-xl);
     font-weight: var(--fw-bold);
-    margin-top: 0.4rem;
+    margin-top: 2.5rem;
+
 }
 .gold-rule {
     display: block;
