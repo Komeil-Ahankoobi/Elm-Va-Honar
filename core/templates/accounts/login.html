@@ -6,41 +6,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paper & Quill — ورود به حساب</title>
-  <meta name="description" content="ورود به حساب کاربری Paper & Quill" />
+  <title>ElmVHonar — ورود به حساب کاربری</title>
+  <meta name="description" content="ورود به حساب کاربری فروشگاه علم و هنر" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
-    rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
-      rel="stylesheet" />
-  </noscript>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap">
+
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
   <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
-
 
 </head>
 
 <body>
 
   <!-- ============================================================
-       HEADER
+       HEADER — minimal breadcrumb, floats over the page
        ============================================================ -->
-  <header class="site-header" role="banner">
-    <nav class="nav-inner" aria-label="Navigation">
-      <a href="/" class="nav-logo" aria-label="Paper & Quill Home">
-        <span class="nav-logo-name">Paper <em>&</em> Quill</span>
-        <span class="nav-logo-sub">Est. 1924</span>
-      </a>
-      <a href="{% url 'website:home' %}" class="nav-back" aria-label="بازگشت به فروشگاه">
-        بازگشت به فروشگاه
-        <span class="arrow" aria-hidden="true">←</span>
-      </a>
-    </nav>
+  <header class="login-topbar" role="banner">
+    <div class="login-topbar-inner">
+      <nav class="breadcrumb" aria-label="مسیر بازگشت">
+        <span class="breadcrumb-current">ورود به حساب کاربری</span>
+        <span class="breadcrumb-sep">&lsaquo;</span>
+        <a href="{% url 'website:home' %}" class="breadcrumb-home">
+          خانه
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            aria-hidden="true">
+            <path d="M3 11.5 12 4l9 7.5" />
+            <path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9" />
+          </svg>
+        </a>
+      </nav>
+    </div>
   </header>
 
 
@@ -52,103 +50,82 @@
 
       <!-- LEFT: Brand panel -->
       <aside class="brand-panel" aria-hidden="true">
-        <!-- Paper texture -->
-        <svg class="brand-panel-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="laid-h2" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="2" x2="4" y2="2" stroke="#FDF8F0" stroke-width="0.4" opacity="0.5" />
-            </pattern>
-            <pattern id="laid-v2" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
-              <line x1="14" y1="0" x2="14" y2="4" stroke="#FDF8F0" stroke-width="0.7" opacity="0.6" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#laid-h2)" />
-          <rect width="100%" height="100%" fill="url(#laid-v2)" />
-        </svg>
-
-        <!-- Watermark ampersand -->
-        <span class="brand-panel-mono" aria-hidden="true">&amp;</span>
+        <div class="brand-panel-media">
+          <img src="{% static 'images/login.png' %}" alt="" loading="lazy" />
+        </div>
+        <div class="brand-panel-overlay"></div>
 
         <div class="brand-panel-content">
-          <span class="brand-eyebrow">حساب کاربری</span>
-          <span class="brand-gold-rule"></span>
-
           <h2 class="brand-panel-title">
-            به دنیای<br />نوشتار خوش آمدید
+            خوش آمدید به<br />
+            <span class="grad-text">ElmvHonar</span>
           </h2>
 
-          <p class="brand-panel-quote">
-            "خواندن و نوشتن، هر دو، عمل‌هایی از حضور کامل‌اند."
+          <p class="brand-panel-desc">
+            برای دسترسی به حساب کاربری خود وارد شوید و از تجربه خرید لذت ببرید.
           </p>
 
-          <!-- Mini floating pen -->
-          <div class="brand-pen-wrap">
-            <svg width="80" height="230" viewBox="0 0 180 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <filter id="pen-sh2" x="-20%" y="-5%" width="150%" height="110%">
-                  <feDropShadow dx="4" dy="8" stdDeviation="8" flood-color="#2C1B18" flood-opacity="0.4" />
-                </filter>
-              </defs>
-              <g filter="url(#pen-sh2)">
-                <rect x="68" y="50" width="44" height="340" rx="22" fill="rgba(253,248,240,0.15)" />
-                <rect x="64" y="90" width="52" height="8" rx="4" fill="#C9A96E" />
-                <rect x="64" y="102" width="52" height="2" rx="1" fill="#B8941F" />
-                <ellipse cx="90" cy="52" rx="22" ry="12" fill="rgba(253,248,240,0.08)" />
-                <rect x="68" y="50" width="44" height="30" rx="0" fill="rgba(253,248,240,0.08)" />
-                <rect x="106" y="52" width="7" height="200" rx="3.5" fill="#C9A96E" />
-                <ellipse cx="109.5" cy="254" rx="7" ry="7" fill="#C9A96E" />
-                <path d="M68 390 Q68 420 90 450 Q112 420 112 390 L112 370 L68 370 Z" fill="rgba(253,248,240,0.12)" />
-                <path d="M75 450 L90 510 L105 450 Z" fill="#C0A020" />
-                <path d="M80 450 L90 510 L100 450 Z" fill="#C9A96E" />
-                <line x1="90" y1="455" x2="90" y2="508" stroke="#7A6010" stroke-width="1.5" />
-                <rect x="80" y="180" width="20" height="80" rx="10" fill="rgba(255,255,255,0.08)" />
-              </g>
-              <ellipse cx="90" cy="518" rx="3" ry="4" fill="#C9A96E" opacity="0.7">
-                <animate attributeName="cy" values="518;528;518" dur="2.8s" repeatCount="indefinite" calcMode="spline"
-                  keySplines="0.4 0 0.6 1; 0.4 0 0.6 1" />
-                <animate attributeName="opacity" values="0.7;0;0.7" dur="2.8s" repeatCount="indefinite" />
-              </ellipse>
-            </svg>
-          </div>
+          <ul class="brand-benefits">
+            <li class="brand-benefit">
+              <span class="brand-benefit-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" />
+                </svg>
+              </span>
+              <span class="brand-benefit-text">
+                <strong>دسترسی سریع</strong>
+                <span>سفارش‌ها و اطلاعات حساب خود را مدیریت کنید.</span>
+              </span>
+            </li>
+
+            <li class="brand-benefit">
+              <span class="brand-benefit-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z" />
+                </svg>
+              </span>
+              <span class="brand-benefit-text">
+                <strong>تجربه شخصی‌سازی شده</strong>
+                <span>محصولات مورد علاقه خود را ذخیره کنید.</span>
+              </span>
+            </li>
+
+            <li class="brand-benefit">
+              <span class="brand-benefit-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M21 8 12 3 3 8l9 5 9-5Z" />
+                  <path d="M3 8v8l9 5 9-5V8" />
+                  <path d="M12 13v8" />
+                </svg>
+              </span>
+              <span class="brand-benefit-text">
+                <strong>پیگیری سفارش‌ها</strong>
+                <span>وضعیت سفارش‌های خود را به‌راحتی ببینید.</span>
+              </span>
+            </li>
+          </ul>
         </div>
       </aside>
 
 
       <!-- RIGHT: Login form panel -->
       <section class="login-panel" aria-label="فرم ورود">
-        <!-- Subtle paper texture -->
-        <svg class="login-texture" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="laid-h3" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="2" x2="4" y2="2" stroke="#8A8494" stroke-width="0.4" opacity="0.5" />
-            </pattern>
-            <pattern id="laid-v3" x="0" y="0" width="28" height="4" patternUnits="userSpaceOnUse">
-              <line x1="14" y1="0" x2="14" y2="4" stroke="#8A8494" stroke-width="0.7" opacity="0.6" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#laid-h3)" />
-          <rect width="100%" height="100%" fill="url(#laid-v3)" />
-        </svg>
-
         <div class="login-card" id="login-card">
 
           <!-- Title area -->
-          <span class="login-eyebrow">ورود به حساب</span>
-          <span class="login-gold-rule" aria-hidden="true"></span>
-          <h1 class="login-title">خوش آمدید <em>&</em></h1>
-          <p class="login-subtitle">
-            برای دسترسی به سفارش‌ها، علاقه‌مندی‌ها<br />و پیشنهادات ویژه وارد شوید.
-          </p>
+          <h1 class="login-title">ورود به حساب کاربری</h1>
+          <span class="login-title-rule" aria-hidden="true"></span>
 
           <!-- Login Form -->
           <form action="{% url 'accounts:login' %}" method="post" aria-label="فرم ورود">
             {% csrf_token %}
 
-            <!-- Email -->
+            <!-- Email / Mobile -->
             <div class="form-group">
-              <label class="form-label">نام کاربری</label>
+              <label class="form-label" for="username">ایمیل یا شماره موبایل</label>
               <div class="input-wrap">
-                <input class="form-input" type="text" name="username" aria-required="true" dir="ltr" />
+                <input class="form-input" type="text" id="username" name="username" dir="ltr"
+                  placeholder="ایمیل یا شماره موبایل خود را وارد کنید" aria-required="true" />
                 <!-- Envelope icon -->
                 <svg class="input-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
                   aria-hidden="true">
@@ -161,10 +138,11 @@
 
             <!-- Password -->
             <div class="form-group">
-              <label class="form-label">رمز عبور</label>
+              <label class="form-label" for="password">رمز عبور</label>
               <div class="input-wrap">
-                <input class="form-input" type="password" name="password" autocomplete="current-password"
-                  aria-required="true" aria-describedby="password-error" dir="ltr" />
+                <input class="form-input" type="password" id="password" name="password" dir="ltr"
+                  placeholder="رمز عبور خود را وارد کنید" autocomplete="current-password" aria-required="true"
+                  aria-describedby="password-error" />
                 <!-- Lock icon -->
                 <svg class="input-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
                   aria-hidden="true">
@@ -190,18 +168,24 @@
                 <input type="checkbox" id="remember" name="remember" />
                 <span class="checkbox-label">مرا به خاطر بسپار</span>
               </label>
-              <a href="#" class="forgot-link">فراموشی رمز عبور</a>
+              <a href="#" class="forgot-link">رمز عبور را فراموش کرده‌اید؟</a>
             </div>
 
             <!-- Submit -->
             <button type="submit" class="btn-primary" id="login-btn">
-              <span class="btn-text">ورود به حساب</span>
-              <span class="btn-arrow" aria-hidden="true">←</span>
+              <span class="btn-arrow" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                  <path d="M10 17l5-5-5-5" />
+                  <path d="M15 12H3" />
+                </svg>
+              </span>
+              <span class="btn-text">ورود به حساب کاربری</span>
               <span class="btn-spinner" aria-hidden="true"></span>
             </button>
 
           </form>
-          
+
           <!-- Register -->
           <p class="login-register">
             حساب کاربری ندارید؟
@@ -221,12 +205,6 @@
   <script src="{% static 'vendor/toastify/toastify.js'%}"></script>
 
   {% include 'messages.html' %}
-
-  <script>
-    console.log(Toastify);
-  </script>
-
-
 
 </body>
 
