@@ -183,3 +183,33 @@ PASSWORD_RESET_TIMEOUT = config("PASSWORD_RESET_TIMEOUT", cast=int, default=3600
 # accounts model settings
 LOGIN_REDIRECT_URL = 'website:home'
 LOGOUT_REDIRECT_URL= 'website:home'
+
+# ===== Logging =====
+# Without this, Django swallows 500-error tracebacks in production (DEBUG=False)
+# instead of printing them anywhere. This sends them to stdout/stderr, which
+# gunicorn (with --capture-output) forwards to the platform's log viewer.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
