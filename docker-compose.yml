@@ -8,7 +8,7 @@ services:
         environment:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres    
+            - POSTGRES_PASSWORD=postgres
         restart: always
         ports:
             - 5841:5432
@@ -22,7 +22,17 @@ services:
         build:
             context: .
             dockerfile: dockerfiles/dev/django/Dockerfile
-        command: "python manage.py runserver 0.0.0.0:8000"
+        command: >
+            bash -c " python -c ' import socket, time while True:
+                try:
+                    s = socket.create_connection((\"db\", 5432), timeout=1)
+                    s.close()
+                    break
+                except OSError:
+                    print(\"Waiting for database...\")
+                    time.sleep(1)
+            '; python manage.py runserver 0.0.0.0:8000 "
+
         volumes:
             - ./core:/usr/src/app
         ports:

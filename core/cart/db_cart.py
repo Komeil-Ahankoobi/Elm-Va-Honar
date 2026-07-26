@@ -49,6 +49,7 @@ class CartDB:
         item = self.cart_obj.cart_items.get(product_id=product_id)
         item.quantity += 1
         item.save()
+        
     def decrease_quantity(self, product_id):
         item = self.cart_obj.cart_items.get(product_id=product_id)
         if item.quantity != 1:

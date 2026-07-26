@@ -73,7 +73,6 @@ body {
     position: relative;
 }
 
-
 .nav-dropdown-menu {
     display: none;
     position: absolute;
@@ -230,10 +229,10 @@ button {
     transition: color var(--transition-fast);
 }
 .breadcrumb a:hover {
-    color: var(--pastel-mint)
+    color: var(--pastel-mint);
 }
 .breadcrumb span {
-    color: var(--pastel-mint)
+    color: var(--pastel-mint);
 }
 
 .page-title {
@@ -274,6 +273,25 @@ button {
 /* ============================================================
        SHOP LAYOUT — filter rail + product grid
        ============================================================ */
+
+.product-grid2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .product-grid2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid2 {
+        grid-template-columns: 1fr;
+    }
+}
+
 .shop-section {
     padding: var(--space-lg) 0 var(--space-xl);
     background-color: var(--bg-dark);
@@ -442,7 +460,7 @@ button {
 }
 
 .sort-select:focus {
-    border-color: #6366f1
+    border-color: #6366f1;
 }
 
 .sort-select-wrap::after {
@@ -482,7 +500,6 @@ button {
         grid-template-columns: repeat(1, 1fr) !important;
     }
 }
-
 
 /* ---- Pagination ---- */
 .pagination {
@@ -1015,14 +1032,14 @@ button {
 }
 
 /* ---- Product cards ---- */
-.shop-dark-theme .product-card {
+.shop-dark-theme .product-card2 {
     background: var(--clr-card-bg);
     border: 1px solid var(--clr-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
 }
 
-.shop-dark-theme .product-card:hover {
+.shop-dark-theme .product-card2:hover {
     border-color: rgba(255, 255, 255, 0.22);
     box-shadow: var(--shadow-md);
 }
