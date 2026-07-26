@@ -1,0 +1,151 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="topbar">
+    <div class="icon-group">
+        <button class="icon-btn">
+            <span class="badge">2</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+            </svg>
+        </button>
+        <button class="icon-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2l1.5 5h9L18 2" />
+                <path d="M3.5 7h17l-1.6 12.1a2 2 0 0 1-2 1.9H7.1a2 2 0 0 1-2-1.9L3.5 7z" />
+                <circle cx="9.5" cy="12.5" r="0" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="user-chip">
+        <div class="user-meta">
+            <div class="name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</div>
+            <div class="greet">خوش آمدید</div>
+        </div>
+        <div class="avatar">{{ user.user_profile.first_name|first }}</div>
+    </div>
+</div>
+
+<h2 class="page-title">سفارش‌های من</h2>
+<p class="page-sub">لیست تمامی سفارش‌های ثبت شده توسط شما</p>
+
+<div class="order-list">
+
+    {% for order in orders %}
+    <section class="card order-row">
+        <div class="order-col order-number">
+            <span class="col-label">شماره سفارش</span>
+            <span class="col-value">{{ order.id }}</span>
+        </div>
+
+        <div class="order-col order-date">
+            <span class="col-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                تاریخ ثبت
+            </span>
+            <span class="col-value">
+                {{ order.created_date|date:"Y/m/d" }}
+                <span class="col-time">{{ order.created_date|date:"H:i" }}</span>
+            </span>
+        </div>
+
+        <div class="order-col order-amount">
+            <span class="col-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+                مبلغ سفارش
+            </span>
+            <span class="col-value">{{ order.total_price }} <span class="currency">تومان</span></span>
+        </div>
+
+        <div class="order-col order-status">
+            <span class="col-label">وضعیت سفارش</span>
+            <span class="status-pill status-{{ order.get_status.label }}">
+                <span class="dot"></span>
+                {{ order.get_status.label }}
+            </span>
+        </div>
+
+        <div class="order-col order-action">
+            <a href="{% url 'dashboard:customer:order-detail' pk=order.id %}" class="view-details-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                مشاهده جزئیات
+            </a>
+        </div>
+    </section>
+    {% empty %}
+    <p>هنوز سفارشی ثبت نکرده‌اید</p>
+    {% endfor %}
+
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="page-btn next">
+        بعدی
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+        </svg>
+    </a>
+    {% else %}
+    <span class="page-btn next disabled">
+        بعدی
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+        </svg>
+    </span>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    {% if num == page_obj.number %}
+    <span class="page-btn active">{{ num }}</span>
+    {% else %}
+    <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="page-btn prev">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+        قبلی
+    </a>
+    {% else %}
+    <span class="page-btn prev disabled">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+        قبلی
+    </span>
+    {% endif %}
+</div>
+
+<script>
+    document.querySelectorAll('.order-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.order-tab').forEach(function (t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            var status = tab.dataset.status;
+            document.querySelectorAll('.order-row').forEach(function (row) {
+                var pill = row.querySelector('.status-pill');
+                var rowStatus = pill ? pill.className.match(/status-(\w+)/)[1] : '';
+                row.style.display = (status === 'all' || rowStatus === status) ? '' : 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}

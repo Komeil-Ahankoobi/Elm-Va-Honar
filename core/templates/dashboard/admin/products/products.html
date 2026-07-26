@@ -1,201 +1,280 @@
 {% extends 'dashboard/admin/base.html' %}
 {% load humanize %}
 
+{% block title %}مدیریت محصولات | علم و هنر{% endblock %}
+
+{% block extra_css %}
+  
+{% endblock %}
+
 {% block content %}
-    <div class="main">
-        <div class="topbar">
-            <div class="topbar-left">
-                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
-                    aria-label="Toggle Navigation Menu">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-                <div>
-                    <div class="topbar-breadcrumb">
-                        <span>علم و هنر</span>
-                        <span>›</span>
-                        <span style="color:var(--clr-subtext);">محصولات</span>
-                    </div>
-                    <div class="topbar-title">مدیریت محصولات</div>
-                </div>
-            </div>
-            <div class="topbar-right">
-                <div class="topbar-search">
-                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor"
-                        stroke-width="1.8">
-                        <circle cx="7.5" cy="7.5" r="5.5" />
-                        <path d="M11.5 11.5l4 4" />
-                    </svg>
-                    <input type="text" id="searchInput" placeholder="جستجو در محصولات..." />
-                </div>
-                <a class="action-btn" href="{% url 'dashboard:admin:add-product' %}"
-                    style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">
-                    + افزودن محصول
-                </a>
-            </div>
-        </div>
 
-        <div class="content">
-
-            <div class="quick-stats">
-                <div class="stat-mini">
-                    <div>
-                        <div class="stat-mini-label">کل محصولات</div>
-                        <div class="stat-mini-value">۴۸</div>
-                        <div class="kpi-footer" style="margin-top:6px;">
-                            <span class="kpi-delta up">↑ ۶٪</span>
-                            <span class="kpi-delta-label">نسبت به ماه گذشته</span>
-                        </div>
-                    </div>
-                    <div class="kpi-icon">
-                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-gold)"
-                            stroke-width="1.6">
-                            <rect x="2" y="3" width="14" height="12" rx="2" />
-                            <path d="M2 7h14" />
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="stat-mini">
-                    <div>
-                        <div class="stat-mini-label">موجودی بحرانی</div>
-                        <div class="stat-mini-value">۷ محصول</div>
-                        <div class="kpi-footer" style="margin-top:6px;">
-                            <span class="kpi-delta down">نیاز به بررسی</span>
-                        </div>
-                    </div>
-                    <div class="kpi-icon">
-                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-warning)"
-                            stroke-width="1.6">
-                            <path d="M9 2L17 16H1L9 2Z" />
-                            <path d="M9 6V10" />
-                            <circle cx="9" cy="13" r="0.7" fill="currentColor" />
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="stat-mini">
-                    <div>
-                        <div class="stat-mini-label">ارزش موجودی انبار</div>
-                        <div class="stat-mini-value">۸۴,۰۰۰,۰۰۰</div>
-                        <div class="kpi-footer" style="margin-top:6px;">
-                            <span class="kpi-delta up">تومان</span>
-                        </div>
-                    </div>
-                    <div class="kpi-icon">
-                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--clr-accent)"
-                            stroke-width="1.6">
-                            <circle cx="9" cy="9" r="7" />
-                            <path d="M9 5v8" />
-                            <path d="M6 8.5h6" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-md" style="margin-bottom: 1.5rem;">
-                <div class="card-header">
-                    <div class="card-title">فیلترها</div>
-                    <button class="card-action" onclick="resetFilters()">پاک کردن</button>
-                </div>
-                <div class="filters-body" style="padding: 1.2rem 1.5rem;">
-                    <select id="categoryFilter" class="action-btn filter-select wide">
-                        <option value="">همه دسته‌ها</option>
-                        <option value="دفترها">دفترها</option>
-                        <option value="قلم‌ها">قلم‌ها</option>
-                        <option value="مرکب">مرکب</option>
-                        <option value="لوازم میز">لوازم میز</option>
-                    </select>
-
-                    <select id="statusFilter" class="action-btn filter-select">
-                        <option value="">همه وضعیت‌ها</option>
-                        <option value="موجود">موجود</option>
-                        <option value="کم موجود">کم موجود</option>
-                        <option value="ناموجود">ناموجود</option>
-                    </select>
-
-                    <button class="action-btn" onclick="filterProducts()"
-                        style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">
-                        اعمال فیلتر
-                    </button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-eyebrow">کاتالوگ محصولات</div>
-                        <div class="card-title">لیست محصولات</div>
-                    </div>
-                    <button class="card-action">صادر کردن اکسل</button>
-                </div>
-                <div class="table-wrap">
-                    <table id="productsTable">
-                        <thead>
-                            <tr>
-                                <th style="width: 80px;">تصویر</th>
-                                <th>نام محصول</th>
-                                <th>دسته‌بندی</th>
-                                <th style="text-align: left;">قیمت</th>
-                                <th style="text-align: center;">موجودی</th>
-                                <th>وضعیت</th>
-                                <th>تاریخ ثبت</th>
-                                <th style="width: 130px;">عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for product in products %}
-                            <tr>
-                                <td><img src="{{ product.image.url }}"
-                                        class="product-table-img"></td>
-                                <td><strong>{{ product.title }}</strong></td>
-                                <td>
-                                    {% for cat in product.category.all %}
-                                    {{ cat.title }}{% if not forloop.last %}، {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td style="text-align: left;">{{product.get_price|intcomma}} تومان</td>
-                                <td style="text-align: center; font-weight: 600;">{{product.stock}}</td>
-                                {% if product.is_publish %}
-                                <td><span class="badge ">نمایش</span></td>
-                                {% else %}
-                                <td><span class="badge ">عدم نمایش</span></td>
-                                {% endif %}
-                                <td>{{product.created_date|naturalday}}</td>
-                                <td>
-                                    <a href="{% url 'dashboard:admin:edit-products' pk=product.id %}" class="action-btn">ویرایش</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-            <nav class="pagination" aria-label="صفحه‌بندی محصولات">
-                {% if page_obj.has_other_pages %}
-                {% if page_obj.has_previous %}
-                <a class="page-btn nav-arrow" href="?page={{ page_obj.previous_page_number }}" aria-label="صفحه قبل"
-                    onclick="goToPage(event, `{{ page_obj.previous_page_number }}`)">→</a>
-                {% endif %}
-
-                {% for i in page_obj.paginator.page_range %}
-                {% if page_obj.number == i %}
-                <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
-                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-btn"
-                    href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
-                    {% endif %}
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                    <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد"
-                        onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">←</a>
-                    {% endif %}
-                    {% endif %}
-            </nav>
+  <!-- هدر صفحه -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">محصولات</div>
+      <div class="page-breadcrumb">
+        <span class="current">محصولات</span>
+        <span>‹</span>
+        <span>داشبورد</span>
+      </div>
     </div>
+
+    <a class="add-product-btn" href="{% url 'dashboard:admin:add-product' %}">
+      افزودن محصول جدید
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 3v12M3 9h12" stroke-linecap="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- KPI های محصولات -->
+  <div class="kpi-grid kpi-grid-5">
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">کل محصولات</div>
+        <div class="kpi-icon purple">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M9 2l6.5 3.5v7L9 16l-6.5-3.5v-7L9 2z"/>
+            <path d="M2.5 5.5L9 9l6.5-3.5M9 9v7"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۳۲۷</div>
+      <div class="kpi-value-label">محصول</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۸٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">محصولات فعال</div>
+        <div class="kpi-icon blue">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="9" cy="9" r="7"/>
+            <path d="M5.5 9.2l2.3 2.3 4.7-5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۲۷۸</div>
+      <div class="kpi-value-label">محصول</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۷٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">محصولات غیرفعال</div>
+        <div class="kpi-icon red">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="9" cy="9" r="7"/>
+            <path d="M6.3 6.3l5.4 5.4M11.7 6.3l-5.4 5.4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۴۹</div>
+      <div class="kpi-value-label">محصول</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۱۲٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">موجودی کل محصولات</div>
+        <div class="kpi-icon green">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <rect x="2" y="2" width="6" height="6" rx="1.4"/>
+            <rect x="10" y="2" width="6" height="6" rx="1.4"/>
+            <rect x="2" y="10" width="6" height="6" rx="1.4"/>
+            <rect x="10" y="10" width="6" height="6" rx="1.4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۱,۴۶۳</div>
+      <div class="kpi-value-label">عدد</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۹٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">ارزش کل موجودی</div>
+        <div class="kpi-icon purple">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <rect x="1.5" y="4.5" width="15" height="10" rx="2"/>
+            <path d="M1.5 7.5h15M12 11h2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۱۲,۴۵۰,۰۰۰</div>
+      <div class="kpi-value-label">تومان</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۱۵٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- نوار فیلتر و جستجو -->
+  <div class="filters-toolbar">
+
+    <button class="toolbar-filters-toggle" type="button" onclick="resetFilters()">
+      فیلترها
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M2.5 3.5h13L10.5 9v5l-3 1.5V9L2.5 3.5z"/>
+      </svg>
+    </button>
+
+    <div class="toolbar-select">
+      <select id="categoryFilter">
+        <option value="">همه دسته‌بندی‌ها</option>
+        <option value="دفترها">دفترها</option>
+        <option value="قلم‌ها">قلم‌ها</option>
+        <option value="مرکب">مرکب</option>
+        <option value="لوازم میز">لوازم میز</option>
+      </select>
+      <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7l4 4 4-4"/></svg>
+    </div>
+
+    <div class="toolbar-select">
+      <select id="statusFilter">
+        <option value="">وضعیت: همه</option>
+        <option value="موجود">موجود</option>
+        <option value="کم موجود">کم موجود</option>
+        <option value="ناموجود">ناموجود</option>
+      </select>
+      <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7l4 4 4-4"/></svg>
+    </div>
+
+    <div class="toolbar-search">
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+        <circle cx="7.5" cy="7.5" r="5.5"/>
+        <path d="M11.5 11.5l4 4"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="جستجو بر اساس نام محصول، دسته‌بندی، کد محصول...">
+    </div>
+
+  </div>
+
+  <!-- کارت اصلی جدول -->
+  <div class="card orders-card">
+
+    <div class="table-wrap">
+      <table id="productsTable">
+        <thead>
+          <tr>
+            <th>محصول</th>
+            <th>دسته‌بندی</th>
+            <th>قیمت (تومان)</th>
+            <th style="text-align:center;">موجودی</th>
+            <th>وضعیت</th>
+            <th>تاریخ اضافه شدن</th>
+            <th style="width:130px;">عملیات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <tr>
+            <td>
+              <div class="product-cell">
+                <div class="product-cell-text">
+                  <div class="product-cell-title">{{ product.title }}</div>
+                  <div class="product-cell-code">کد: PRD-{{ product.id|stringformat:"04d" }}</div>
+                </div>
+                <img src="{{ product.image.url }}" class="product-cell-img" alt="{{ product.title }}">
+              </div>
+            </td>
+            <td>
+              {% for cat in product.category.all %}
+              {{ cat.title }}{% if not forloop.last %}، {% endif %}
+              {% endfor %}
+            </td>
+            <td>{{ product.get_price|intcomma }}</td>
+            <td style="text-align:center; font-weight:600;">{{ product.stock }}</td>
+            {% if product.is_publish %}
+            <td><span class="badge success">فعال</span></td>
+            {% else %}
+            <td><span class="badge danger">غیرفعال</span></td>
+            {% endif %}
+            <td>
+              <div class="date-cell">
+                <div>{{ product.created_date|naturalday }}</div>
+                <div class="date-time">{{ product.created_date|date:"H:i" }}</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions-group">
+                <form action="{% url 'dashboard:admin:product-delete' pk=product.id %}" method="post"
+                onsubmit="return confirm('آیا از حذف این محصول مطمئن هستید؟');">
+                {% csrf_token %}
+                <button class="icon-action-btn delete" type="submit" aria-label="حذف">
+                  <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M3.5 5h11M7 5V3.5h4V5M4.5 5l.7 9.5a1.5 1.5 0 0 0 1.5 1.4h4.6a1.5 1.5 0 0 0 1.5-1.4L13.5 5"/>
+                  </svg>
+                </button>
+              </form>
+                <a href="{% url 'dashboard:admin:edit-products' pk=product.id %}" class="icon-action-btn edit" aria-label="ویرایش">
+                  <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M11.5 2.5l4 4L6 16H2v-4l9.5-9.5z"/>
+                  </svg>
+                </a>
+                
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- فوتر جدول: صفحه‌بندی -->
+    <div class="table-footer">
+      <div class="pagination-info">
+        نمایش {{ page_obj.start_index }} تا {{ page_obj.end_index }} از {{ page_obj.paginator.count }} محصول
+      </div>
+
+      <nav class="pagination-controls" aria-label="صفحه‌بندی محصولات">
+        {% if page_obj.has_other_pages %}
+          {% if page_obj.has_previous %}
+          <a class="page-btn nav-arrow" href="?page={{ page_obj.previous_page_number }}" aria-label="صفحه قبل"
+            onclick="goToPage(event, `{{ page_obj.previous_page_number }}`)">قبلی</a>
+          {% endif %}
+
+          {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
+            {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+            <a class="page-btn" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد"
+            onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">بعدی</a>
+          {% endif %}
+        {% endif %}
+      </nav>
+
+      <div class="toolbar-select per-page-select">
+        <select id="perPage">
+          <option>تعداد در صفحه: ۶</option>
+          <option>تعداد در صفحه: ۱۲</option>
+          <option>تعداد در صفحه: ۲۴</option>
+        </select>
+        <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7l4 4 4-4"/></svg>
+      </div>
+    </div>
+
+  </div>
+
 {% endblock content %}

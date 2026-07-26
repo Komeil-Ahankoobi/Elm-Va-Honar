@@ -1,0 +1,96 @@
+from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
+from decimal import Decimal
+from django.contrib.auth.models import User
+
+from shop.models import ProductModel
+
+# Create your models here.
+class OrderStatusType(models.IntegerChoices):
+    pending = 1, 'در انتظار پرداخت'
+    succes = 2, 'موفقیت آمیز'
+    faild = 3, 'لغو شده'
+
+
+class UserAddressModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='adresses')
+    
+    address = models.CharField(max_length=255)
+    state = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    zip_code = models.CharField(max_length=50)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    
+
+class CoponModel(models.Model):
+    code = models.CharField(max_length=100, unique=True)
+    discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    max_limit_usage = models.PositiveIntegerField(default=10)
+    used_by = models.ManyToManyField(User, related_name='copon_users', blank=True)
+
+    expiration_date = models.DateTimeField(null=True,blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+
+    @property
+    def is_usage_limit_reached(self):
+        return self.used_by.count() >= self.max_limit_usage
+
+    def can_be_used_by(self, user):
+        return user not in self.used_by.all() and not self.is_usage_limit_reached
+
+    def __str__(self):
+        return self.code
+    
+    
+    
+class OrderModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+
+    address = models.CharField(max_length=255)
+    state = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+
+    total_price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
+
+    copon = models.ForeignKey(CoponModel, on_delete=models.PROTECT, null=True, blank=True, related_name='copon')
+    status = models.IntegerField(choices=OrderStatusType.choices, default=OrderStatusType.pending.value)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_date"]
+        
+        
+    def __str__(self):
+        return f'{self.user.username} - {self.id}'
+    
+    def get_status(self):
+        return {
+            "id":self.status,
+            "title":OrderStatusType(self.status).name,
+            "label":OrderStatusType(self.status).label,
+        }
+
+    @property
+    def is_successful(self):
+        return self.status == OrderStatusType.success.value
+
+
+class OrderItemsModel(models.Model):
+    order = models.ForeignKey(OrderModel, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT)
+
+    quantity = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.product.title} - {self.order.id}'

@@ -1,0 +1,171 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="topbar">
+    <div class="icon-group">
+        <button class="icon-btn">
+            <span class="badge">2</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+            </svg>
+        </button>
+        <button class="icon-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2l1.5 5h9L18 2" />
+                <path d="M3.5 7h17l-1.6 12.1a2 2 0 0 1-2 1.9H7.1a2 2 0 0 1-2-1.9L3.5 7z" />
+                <circle cx="9.5" cy="12.5" r="0" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="user-chip">
+        <div class="user-meta">
+            <div class="name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</div>
+            <div class="greet">خوش آمدید</div>
+        </div>
+        <div class="avatar">{{ user.user_profile.first_name|first }}</div>
+    </div>
+</div>
+
+<div class="page-title-row">
+    <h2 class="page-title">تنظیمات</h2>
+    <div class="page-title-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+                d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
+        </svg>
+    </div>
+</div>
+<p class="page-sub">مدیریت تنظیمات حساب کاربری</p>
+
+<section class="card settings-card">
+
+    <div class="settings-header">
+        <div class="settings-icon-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l8 3v6c0 5-3.4 8.7-8 11-4.6-2.3-8-6-8-11V5l8-3z" />
+                <path d="M9 12l2 2 4-4" />
+            </svg>
+        </div>
+        <div class="settings-header-text">
+            <h3 class="card-title">تغییر رمز عبور</h3>
+            <p class="settings-desc">برای امنیت حساب خود، از رمز عبور قوی استفاده کنید.</p>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'dashboard:customer:setting' %}" class="settings-form" onsubmit="return confirm('آیا از تغییر رمز عبور مطمئن هستید؟')">
+        {% csrf_token %}
+
+        <div class="settings-field">
+            <div class="settings-field-label">
+                <span>رمز عبور فعلی</span>
+                <span class="required-dot"></span>
+            </div>
+            <div class="password-box">
+                <input type="password" name="old_password" placeholder="رمز عبور فعلی خود را وارد کنید">
+                <button type="button" class="toggle-password" aria-label="نمایش رمز عبور">
+                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="settings-field">
+            <div class="settings-field-label">
+                <span>رمز عبور جدید</span>
+                <span class="required-dot"></span>
+            </div>
+            <div class="password-box">
+                <input type="password" name="new_password1" placeholder="رمز عبور جدید خود را وارد کنید">
+                <button type="button" class="toggle-password" aria-label="نمایش رمز عبور">
+                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="settings-field">
+            <div class="settings-field-label">
+                <span>رمز عبور جدید برای تایید</span>
+                <span class="required-dot"></span>
+            </div>
+            <div class="password-box">
+                <input type="password" name="new_password2" placeholder="رمز عبور جدید را دوباره وارد کنید">
+                <button type="button" class="toggle-password" aria-label="نمایش رمز عبور">
+                    <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="password-tips">
+            <div class="tips-header">
+                <span>نکات ایمنی برای رمز عبور:</span>
+                <div class="info-icon-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="16" x2="12" y2="12" />
+                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                    </svg>
+                </div>
+            </div>
+            <div class="tips-list">
+                <div class="tip-item">
+                    <span>حداقل ۸ کاراکتر</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg>
+                </div>
+                <div class="tip-item">
+                    <span>ترکیبی از حروف بزرگ و کوچک</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg>
+                </div>
+                <div class="tip-item">
+                    <span>شامل عدد یا نماد</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9 12l2 2 4-4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary settings-submit-btn">تغییر رمز عبور</button>
+
+    </form>
+</section>
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var input = btn.previousElementSibling;
+            var isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.classList.toggle('is-visible', isPassword);
+        });
+    });
+</script>
+{% endblock %}

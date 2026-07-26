@@ -1,0 +1,310 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="topbar">
+    <div class="icon-group">
+        <button class="icon-btn">
+            <span class="badge">2</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+            </svg>
+        </button>
+        <button class="icon-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2l1.5 5h9L18 2" />
+                <path d="M3.5 7h17l-1.6 12.1a2 2 0 0 1-2 1.9H7.1a2 2 0 0 1-2-1.9L3.5 7z" />
+                <circle cx="9.5" cy="12.5" r="0" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="user-chip">
+        <div class="user-meta">
+            <div class="name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</div>
+            <div class="greet">خوش آمدید</div>
+        </div>
+        <div class="avatar">{{ user.user_profile.first_name|first }}</div>
+    </div>
+</div>
+
+<div class="breadcrumb">
+    <a href="{% url 'dashboard:customer:order' %}">سفارش‌های من</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6" />
+    </svg>
+    <span class="current">جزئیات سفارش</span>
+</div>
+
+<div class="page-header-row">
+    <div class="page-title-row">
+        <h2 class="page-title">جزئیات سفارش</h2>
+        <div class="page-title-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+                <path d="M3 8v8l9 5 9-5V8" />
+                <path d="M12 13v8" />
+            </svg>
+        </div>
+    </div>
+    <a href="{% url 'dashboard:customer:order' %}" class="btn-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+        بازگشت
+    </a>
+</div>
+
+<!-- order summary bar -->
+<section class="card order-summary-bar">
+    <div class="summary-col">
+        <span class="col-label">شماره سفارش</span>
+        <span class="col-value">
+            #{{ order.id }}
+            <button type="button" class="copy-btn" data-copy="{{ order.id }}" aria-label="کپی شماره سفارش">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+            </button>
+        </span>
+    </div>
+    <div class="summary-col">
+        <span class="col-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            تاریخ ثبت
+        </span>
+        <span class="col-value">{{ order.created_at|date:"Y/m/d" }} - {{ order.created_at|date:"H:i" }}</span>
+    </div>
+    <div class="summary-col">
+        <span class="col-label">وضعیت سفارش</span>
+        <span class="status-pill status-{{ order.status }}">
+            <span class="dot"></span>
+            {{ order.get_status_display }}
+        </span>
+    </div>
+    <div class="summary-col">
+        <span class="col-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+            روش پرداخت
+        </span>
+        <span class="col-value">{{ order.get_payment_method_display }}</span>
+    </div>
+    <div class="summary-col total-col">
+        <span class="col-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                <path d="M19 13h2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-2a2 2 0 0 0 0 4Z" />
+            </svg>
+            مبلغ کل سفارش
+        </span>
+        <span class="col-value">{{ order.total_price }} <span class="currency">تومان</span></span>
+    </div>
+</section>
+
+<!-- shipping + products -->
+<div class="order-detail-row order-detail-row-1">
+
+    <section class="card shipping-info-card">
+        <div class="card-title-row">
+            <h3 class="card-title">اطلاعات ارسال</h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z" />
+                <circle cx="12" cy="10" r="2.5" />
+            </svg>
+        </div>
+
+        <div class="info-block">
+            <span class="info-label">نام گیرنده:</span>
+            <span class="info-value">{{ order.address.full_name }}</span>
+        </div>
+        <div class="info-block">
+            <span class="info-label">شماره تماس:</span>
+            <span class="info-value" dir="ltr">{{ order.address.phone_number }}</span>
+        </div>
+        <div class="info-block">
+            <span class="info-label">آدرس:</span>
+            <span class="info-value">{{ order.address.address }}</span>
+        </div>
+        <div class="info-block">
+            <span class="info-label">کد پستی:</span>
+            <span class="info-value" dir="ltr">{{ order.address.zip_code }}</span>
+        </div>
+    </section>
+
+    <section class="card products-card">
+        <div class="card-title-row">
+            <h3 class="card-title">محصولات سفارش</h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2l1.5 5h9L18 2" />
+                <path d="M3.5 7h17l-1.6 12.1a2 2 0 0 1-2 1.9H7.1a2 2 0 0 1-2-1.9L3.5 7z" />
+            </svg>
+        </div>
+
+        <div class="products-table">
+            <div class="products-table-header">
+                <span class="col-product">محصول</span>
+                <span class="col-unit-price">قیمت واحد</span>
+                <span class="col-qty">تعداد</span>
+                <span class="col-total">جمع</span>
+            </div>
+
+            {% for item in order.items.all %}
+            <div class="product-row">
+                <div class="col-product">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="product-thumb">
+                    <div class="product-meta">
+                        <span class="product-name">{{ item.product.title }}</span>
+                        <span class="product-code">کد محصول: {{ item.product.id }}</span>
+                    </div>
+                </div>
+                <span class="col-unit-price">{{ item.unit_price }} <span class="currency">تومان</span></span>
+                <span class="col-qty">{{ item.quantity }}</span>
+                <span class="col-total">{{ item.total_price }} <span class="currency">تومان</span></span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<!-- payment + summary + timeline -->
+<div class="order-detail-row order-detail-row-2">
+
+    <section class="card payment-info-card">
+        <div class="card-title-row">
+            <h3 class="card-title">اطلاعات پرداخت</h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+        </div>
+
+        <div class="payment-row">
+            <span class="payment-label">روش پرداخت:</span>
+            <span class="payment-value">{{ order.payment.method_display }}</span>
+        </div>
+        <div class="payment-row">
+            <span class="payment-label">شماره تراکنش:</span>
+            <span class="payment-value" dir="ltr">{{ order.payment.transaction_id }}</span>
+        </div>
+        <div class="payment-row">
+            <span class="payment-label">تاریخ پرداخت:</span>
+            <span class="payment-value" dir="ltr">{{ order.payment.paid_at|date:"Y/m/d - H:i" }}</span>
+        </div>
+    </section>
+
+    <section class="card price-summary-card">
+        <div class="price-row">
+            <span class="price-label">جمع محصولات</span>
+            <span class="price-value">{{ order.items_total }} <span class="currency">تومان</span></span>
+        </div>
+        <div class="price-row">
+            <span class="price-label">هزینه ارسال</span>
+            <span class="price-value">{{ order.shipping_cost }} <span class="currency">تومان</span></span>
+        </div>
+        {% if order.discount_amount %}
+        <div class="price-row">
+            <span class="price-label">کد تخفیف ({{ order.discount_code }})</span>
+            <span class="price-value discount">-{{ order.discount_amount }} <span class="currency">تومان</span></span>
+        </div>
+        {% endif %}
+        <div class="price-divider"></div>
+        <div class="price-row total">
+            <span class="price-label">مبلغ کل</span>
+            <span class="price-value">{{ order.total_price }} <span class="currency">تومان</span></span>
+        </div>
+    </section>
+
+    <section class="card status-timeline-card">
+        <h3 class="card-title">وضعیت سفارش</h3>
+
+        <div class="status-timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">{{ order.created_at|date:"Y/m/d - H:i" }}</span>
+                    <span class="timeline-title">ثبت سفارش</span>
+                    <span class="timeline-desc">سفارش شما با موفقیت ثبت شد.</span>
+                </div>
+                <div class="timeline-icon-col">
+                    <div class="timeline-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="timeline-line"></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">{{ order.paid_at|date:"Y/m/d - H:i" }}</span>
+                    <span class="timeline-title">پرداخت تایید شد</span>
+                    <span class="timeline-desc">پرداخت سفارش شما با موفقیت تایید شد.</span>
+                </div>
+                <div class="timeline-icon-col">
+                    <div class="timeline-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="timeline-line"></div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <span class="timeline-date">{{ order.processing_at|date:"Y/m/d - H:i" }}</span>
+                    <span class="timeline-title">در حال آماده‌سازی</span>
+                    <span class="timeline-desc">سفارش شما در حال آماده‌سازی می‌باشد.</span>
+                </div>
+                <div class="timeline-icon-col">
+                    <div class="timeline-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
+                    <div class="timeline-line"></div>
+                </div>
+            </div>
+
+            <div class="timeline-item delivered">
+                <div class="timeline-content">
+                    <span class="timeline-date">{{ order.delivered_at|date:"Y/m/d - H:i" }}</span>
+                    <span class="timeline-title">تحویل شده</span>
+                    <span class="timeline-desc">سفارش شما با موفقیت تحویل داده شد.</span>
+                </div>
+                <div class="timeline-icon-col">
+                    <div class="timeline-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M21 8l-9-5-9 5 9 5 9-5z" />
+                            <path d="M3 8v8l9 5 9-5V8" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var value = btn.dataset.copy;
+            navigator.clipboard.writeText(value);
+        });
+    });
+</script>
+{% endblock %}

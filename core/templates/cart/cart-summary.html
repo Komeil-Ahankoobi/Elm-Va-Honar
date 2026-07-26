@@ -5,6 +5,31 @@
 <main class="cart-page">
   <div class="container">
 
+    <!-- STEP INDICATOR -->
+    <ol class="checkout-stepper2" aria-label="مراحل تسویه حساب">
+      <li class="step-item2 completed">
+        <span class="step-circle2" aria-hidden="true">
+          1
+        </span>
+        <span class="step-label2">سبد خرید</span>
+      </li>
+
+      <li class="step-connector2" aria-hidden="true"></li>
+
+      <li class="step-item2" aria-current="step">
+        <span class="step-circle2">۲</span>
+        <span class="step-label2">آدرس و ارسال</span>
+      </li>
+
+      <li class="step-connector2" aria-hidden="true"></li>
+
+      <li class="step-item2">
+        <span class="step-circle2">۳</span>
+        <span class="step-label2">پرداخت</span>
+      </li>
+    </ol>
+
+
     <!-- HEADER -->
     <section class="cart-page-header">
       <h1 class="cart-page-title">سبد خرید</h1>
@@ -27,7 +52,7 @@
             <div class="cart-row-info">
               <span class="cart-row-cat">
                 {% for category in item.product_obj.category.all %}
-                  <a href="#">{{ category.title }}</a>{% if not forloop.last %}، {% endif %}
+                <a href="#">{{ category.title }}</a>{% if not forloop.last %}، {% endif %}
                 {% endfor %}
               </span>
               <h3 class="cart-row-name">{{ item.product_obj.title }}</h3>
@@ -36,9 +61,11 @@
 
             <div class="cart-row-qty">
               <div class="qty-stepper">
-                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" data-action="dec" aria-label="کم کردن تعداد">−</button>
+                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" data-action="dec"
+                  aria-label="کم کردن تعداد">−</button>
                 <span class="qty-val">{{ item.quantity }}</span>
-                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" data-action="inc" aria-label="زیاد کردن تعداد">+</button>
+                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" data-action="inc"
+                  aria-label="زیاد کردن تعداد">+</button>
               </div>
               <button type="button" class="cart-row-remove" data-action="remove" aria-label="حذف از سبد">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -70,7 +97,7 @@
         </div>
 
         <!-- GIFT NOTE -->
-       
+
 
       </div>
 
@@ -107,16 +134,16 @@
         <div class="cart-summary-divider"></div>
 
         <div class="cart-summary-total">
-          <span class="label">مجموع پرداخت</span>
+          <span class="label">مجموع پرداختی</span>
           <span class="amount" id="sum-total">{{ cart.get_total_payment_amount|intcomma }} تومان</span>
         </div>
 
-        <button type="button" class="btn-checkout" id="checkout-btn">
+        <a href="{% url 'order:order-checkout' %}" type="button" class="btn-checkout" id="checkout-btn">
           ادامه به پرداخت
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
-        </button>
+        </a>
 
         <div class="secure-note">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
