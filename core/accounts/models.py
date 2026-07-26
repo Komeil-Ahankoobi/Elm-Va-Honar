@@ -12,6 +12,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=12, validators=[validate_iranian_cellphone_number])
     image = models.ImageField(upload_to="profile/",default="profile/default.png")
+    
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 

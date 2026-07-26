@@ -1,118 +1,256 @@
 {% extends 'dashboard/admin/base.html' %}
 
 {% block content %}
-        <div class="topbar">
-            <div class="topbar-left">
-                <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()"
-                    aria-label="Toggle Navigation Menu">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-                <div>
-                    <div class="topbar-breadcrumb">
-                        <span>علم و هنر</span>
-                        <span>›</span>
-                        <span style="color:var(--clr-subtext);">تنظیمات</span>
-                    </div>
-                    <div class="topbar-title">تنظیمات پروفایل کاربری</div>
-                </div>
-            </div>
-            <div class="topbar-right">
-                <div class="topbar-search">
-                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor"
-                        stroke-width="1.8">
-                        <circle cx="7.5" cy="7.5" r="5.5" />
-                        <path d="M11.5 11.5l4 4" />
-                    </svg>
-                    <input type="text" id="searchInput" placeholder="جستجو..." />
-                </div>
-                <button type="button" class="notif-btn">
-                    <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor"
-                        stroke-width="1.7">
-                        <path d="M9 1a6 6 0 0 1 6 6v4l2 2H1l2-2V7a6 6 0 0 1 6-6z" />
-                        <path d="M7 15a2 2 0 0 0 4 0" />
-                    </svg>
-                    <span class="notif-badge">۳</span>
-                </button>
-            </div>
-        </div>
 
         <div class="content">
-            <form method="post" action="{% url 'dashboard:admin:security-edit' %}" id="settingsForm" onsubmit="saveSettings(event)">
-                {% csrf_token %}
 
-                <div class="card" style="margin-bottom: 1.5rem;">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-eyebrow">اطلاعات کاربری</div>
-                            <div class="card-title">مشخصات ادمین</div>
-                        </div>
+            <div class="page-header">
+                <div>
+                    <div class="page-title">تنظیمات</div>
+                    <div class="page-breadcrumb">
+                        <span>داشبورد</span>
+                        <span>‹</span>
+                        <span class="current">تنظیمات</span>
                     </div>
-                    <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                </div>
+            </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 400px;">
-                            <label for="adminName"
-                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">نام و نام
-                                خانوادگی</label>
-                            <input type="text" id="adminName" class="action-btn" value="احمد رضایی"
-                                style="padding: 0.6rem 1rem; text-align: right; width: 100%; background: transparent; cursor: text;"
-                                required disabled/>
+            <!-- ===================== ردیف اول: اطلاعات حساب + نکات امنیتی ===================== -->
+            <div class="settings-top-grid">
+
+                <!-- کارت اطلاعات حساب کاربری -->
+                <div class="card">
+                    <div class="settings-card-header">
+                        <div class="card-title">اطلاعات حساب کاربری</div>
+                        <div class="settings-card-subtitle">اطلاعات حساب کاربری خود را مشاهده و مدیریت کنید.</div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-main">
+                            <div class="profile-avatar-lg">
+                                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="profile-main-name">
+                                    {{ request.user.get_full_name|default:"مدیر محترم" }}
+                                    <span class="role-badge">{{ request.user.role|default:"مدیر فروشگاه" }}</span>
+                                </div>
+                                <div class="profile-main-desc">مدیریت و کنترل کامل فروشگاه</div>
+                                <div class="profile-main-joined">عضو از {{ request.user.date_joined|date:"Y/m/d"|default:"۱۴۰۲/۰۱/۱۵" }}</div>
+                            </div>
                         </div>
 
+                        <div class="profile-meta">
+                            <div class="profile-meta-row">
+                                <span class="profile-meta-icon">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16v16H4z" style="display:none"></path>
+                                        <path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6z"></path>
+                                        <path d="m22 6-10 7L2 6"></path>
+                                    </svg>
+                                </span>
+                                {{ request.user.email|default:"admin@elmvhonar.ir" }}
+                            </div>
+                            <div class="profile-meta-row">
+                                <span class="profile-meta-icon">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                </span>
+                                {{ request.user.date_joined|date:"Y/m/d"|default:"۱۴۰۲/۰۱/۱۵" }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card" style="margin-bottom: 1.5rem;">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-eyebrow">امنیت حساب</div>
-                            <div class="card-title">تغییر رمز عبور</div>
-                        </div>
+                <!-- کارت نکات امنیتی -->
+                <div class="card">
+                    <div class="settings-card-header">
+                        <div class="card-title">نکات امنیتی</div>
+                        <div class="settings-card-subtitle">برای حفظ امنیت حساب کاربری خود این نکات را رعایت کنید.</div>
                     </div>
-                    <div
-                        style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; width: 100%; max-width: 400px;">
 
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <label for="currentPassword"
-                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">رمز عبور
-                                فعلی</label>
-                            {{ form.old_password}}
+                    <div class="tips-list">
+                        <div class="tip-row">
+                            <span class="tip-icon pink">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="tip-title">رمز عبور قوی انتخاب کنید</div>
+                                <div class="tip-desc">از ترکیب حروف بزرگ و کوچک، اعداد و نمادها استفاده کنید.</div>
+                            </div>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <label for="newPassword"
-                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">رمز عبور
-                                جدید</label>
-                            {{ form.new_password1 }}
+                        <div class="tip-row">
+                            <span class="tip-icon green">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="tip-title">رمز عبور خود را به اشتراک نگذارید</div>
+                                <div class="tip-desc">رمز عبور خود را با هیچ‌کس به اشتراک نگذارید.</div>
+                            </div>
                         </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <label for="confirmPassword"
-                                style="font-size: 0.9rem; font-weight: 500; color: var(--clr-text);">تکرار رمز عبور
-                                جدید</label>
-                            {{ form.new_password2 }}
+                        <div class="tip-row">
+                            <span class="tip-icon blue">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="4" width="20" height="13" rx="2"></rect>
+                                    <line x1="2" y1="20" x2="22" y2="20"></line>
+                                </svg>
+                            </span>
+                            <div>
+                                <div class="tip-title">از دستگاه‌های مطمئن استفاده کنید</div>
+                                <div class="tip-desc">از حساب کاربری خود فقط در دستگاه‌های شخصی استفاده کنید.</div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
-                <div
-                    style="display: flex; gap: 1rem; align-items: center; justify-content: flex-start; flex-wrap: wrap;">
-                    <button type="submit" class="action-btn"
-                        style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600; padding: 0.6rem 2rem;">
-                        ذخیره تغییرات
-                    </button>
-                    <button type="button" class="action-btn" onclick="window.location.href='admin-dashboard.html'"
-                        style="padding: 0.6rem 1.5rem;">
-                        انصراف
-                    </button>
+            </div>
+
+            <!-- ===================== ردیف دوم: تغییر ایمیل + تغییر رمز عبور ===================== -->
+            <div class="settings-bottom-grid">
+
+                <!-- کارت تغییر ایمیل -->
+                <div class="card">
+                    <div class="settings-card-header">
+                        <div class="card-title">تغییر ایمیل</div>
+                        <div class="settings-card-subtitle">ایمیل حساب کاربری خود را تغییر دهید.</div>
+                    </div>
+
+                    <form method="post" action="#" id="emailSettingsForm" onsubmit="saveEmailSettings(event)">
+                        {% csrf_token %}
+
+                        <div class="settings-field">
+                            <label class="settings-label" for="currentEmail">ایمیل فعلی</label>
+                            <div class="settings-input-wrap">
+                                <input type="email" id="currentEmail" value="{{ request.user.email|default:'admin@elmvhonar.ir' }}" disabled />
+                                <span class="settings-input-icon">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6z"></path>
+                                        <path d="m22 6-10 7L2 6"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="settings-field">
+                            <label class="settings-label" for="newEmail">ایمیل جدید</label>
+                            <div class="settings-input-wrap">
+                                <input type="email" id="newEmail" name="new_email" placeholder="ایمیل جدید خود را وارد کنید" required />
+                                <span class="settings-input-icon">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6z"></path>
+                                        <path d="m22 6-10 7L2 6"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="settings-field">
+                            <label class="settings-label" for="newEmailConfirm">تایید ایمیل جدید</label>
+                            <div class="settings-input-wrap">
+                                <input type="email" id="newEmailConfirm" name="new_email_confirm" placeholder="ایمیل جدید را مجددا وارد کنید" required />
+                                <span class="settings-input-icon">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6z"></path>
+                                        <path d="m22 6-10 7L2 6"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="settings-submit-btn">
+                            ذخیره تغییرات ایمیل
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </form>
                 </div>
 
-            </form>
+                <!-- کارت تغییر رمز عبور -->
+                <div class="card">
+                    <div class="settings-card-header">
+                        <div class="card-title">تغییر رمز عبور</div>
+                        <div class="settings-card-subtitle">برای امنیت بیشتر، رمز عبور خود را به صورت منظم تغییر دهید.</div>
+                    </div>
+
+                    <form method="post" action="{% url 'dashboard:admin:security-edit' %}" id="settingsForm" onsubmit="saveSettings(event)">
+                        {% csrf_token %}
+
+                        <div class="settings-field">
+                            <label class="settings-label" for="currentPassword">رمز عبور فعلی</label>
+                            <div class="settings-input-wrap">
+                                {{ form.old_password}}
+                                <button type="button" class="settings-input-icon toggle-eye" onclick="toggleFieldVisibility('id_old_password', this)">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-field">
+                            <label class="settings-label" for="newPassword">رمز عبور جدید</label>
+                            <div class="settings-input-wrap">
+                                {{ form.new_password1 }}
+                                <button type="button" class="settings-input-icon toggle-eye" onclick="toggleFieldVisibility('id_new_password1', this)">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-field">
+                            <label class="settings-label" for="confirmPassword">تکرار رمز عبور جدید</label>
+                            <div class="settings-input-wrap">
+                                {{ form.new_password2 }}
+                                <button type="button" class="settings-input-icon toggle-eye" onclick="toggleFieldVisibility('id_new_password2', this)">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="settings-submit-btn">
+                            ذخیره تغییرات رمز عبور
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
         </div>
-    
+
+        <script>
+            function toggleFieldVisibility(inputId, btn) {
+                var input = document.getElementById(inputId);
+                if (!input) return;
+                input.type = input.type === 'password' ? 'text' : 'password';
+                btn.classList.toggle('is-visible');
+            }
+        </script>
 
 {% endblock content %}

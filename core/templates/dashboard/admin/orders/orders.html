@@ -1,110 +1,512 @@
 {% extends 'dashboard/admin/base.html' %}
+{% load static %}
+{% block title %}مدیریت سفارشات | علم و هنر{% endblock %}
 
+{% block extra_css %}
+
+{% endblock %}
 
 {% block content %}
 
-    <div class="topbar">
-      <div class="topbar-left">
-        <button type="button" class="menu-toggle" onclick="toggleSidebarMenu()" aria-label="Toggle Navigation Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
+  <!-- هدر صفحه -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">سفارشات</div>
+      <div class="page-breadcrumb">
+        <span class="current">سفارشات</span>
+        <span>‹</span>
+        <span>داشبورد</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI های سفارشات -->
+  <div class="kpi-grid kpi-grid-5">
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">کل سفارشات</div>
+        <div class="kpi-icon purple">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M4 6h10l-1 8.5a1.5 1.5 0 0 1-1.5 1.3H6.5A1.5 1.5 0 0 1 5 14.5L4 6z"/>
+            <path d="M6.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/>
           </svg>
-        </button>
-        <div>
-          <div class="topbar-breadcrumb">
-            <span>علم و هنر</span>
-            <span>›</span>
-            <span style="color:var(--clr-subtext);">سفارش‌ها</span>
-          </div>
-          <div class="topbar-title">مدیریت سفارش‌ها</div>
         </div>
       </div>
-      <div class="topbar-right">
-        <div class="topbar-search">
-          <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="7.5" cy="7.5" r="5.5" />
-            <path d="M11.5 11.5l4 4" />
-          </svg>
-          <input type="text" id="searchInput" placeholder="جستجو در سفارش‌ها..." />
-        </div>
-        <button class="notif-btn">
-          <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
-            <path d="M9 1a6 6 0 0 1 6 6v4l2 2H1l2-2V7a6 6 0 0 1 6-6z" />
-            <path d="M7 15a2 2 0 0 0 4 0" />
-          </svg>
-          <span class="notif-badge">۳</span>
-        </button>
+      <div class="kpi-value">۴۸۷</div>
+      <div class="kpi-value-label">سفارش</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۱۲٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
       </div>
     </div>
 
-    <div class="content">
-      <div class="card mb-md" style="margin-bottom: 1.5rem;">
-        <div class="card-header">
-          <div class="card-title">فیلترها</div>
-          <button class="card-action" onclick="resetFilters()">پاک کردن همه</button>
-        </div>
-        <div class="filters-body" style="padding: 1.2rem 1.5rem;">
-          <select id="statusFilter" class="action-btn filter-select wide">
-            <option value="">همه وضعیت‌ها</option>
-            <option value="success">ارسال شده</option>
-            <option value="warning">در حال پردازش</option>
-            <option value="danger">مرجوع شده</option>
-            <option value="neutral">در انتظار پرداخت</option>
-          </select>
-
-          <input type="date" id="dateFrom" class="action-btn filter-select">
-          <span style="color: var(--clr-muted);">تا</span>
-          <input type="date" id="dateTo" class="action-btn filter-select">
-
-          <button class="action-btn" onclick="filterOrders()"
-            style="background: var(--clr-gold); color: var(--clr-accent); font-weight: 600;">
-            اعمال فیلتر
-          </button>
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">سفارشات در حال پردازش</div>
+        <div class="kpi-icon blue">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M4.5 2.5h9M4.5 15.5h9M5.5 2.5c0 3 2 4.5 3.5 5.5-1.5 1-3.5 2.5-3.5 5.5M12.5 2.5c0 3-2 4.5-3.5 5.5 1.5 1 3.5 2.5 3.5 5.5"/>
+          </svg>
         </div>
       </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-eyebrow">لیست کامل</div>
-            <div class="card-title">سفارش‌ها</div>
-          </div>
-          <button class="card-action">صادر کردن اکسل</button>
-        </div>
-        <div class="table-wrap">
-          <table id="ordersTable">
-            <thead>
-              <tr>
-                <th>شماره سفارش</th>
-                <th>مشتری</th>
-                <th>محصولات</th>
-                <th style="text-align: left;">مبلغ کل</th>
-                <th>وضعیت</th>
-                <th>تاریخ</th>
-                <th style="width: 100px;">عملیات</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="order-id">#۱۰۰۴۲</span></td>
-                <td>
-                  <div class="customer-cell">
-                    <div class="customer-avatar-sm">ز</div>
-                    زهرا موسوی
-                  </div>
-                </td>
-                <td>دفتر یادداشت چرمی + قلم فواره</td>
-                <td style="text-align: left;">۸۶۰,۰۰۰ ت</td>
-                <td><span class="badge success">ارسال شد</span></td>
-                <td>۱۴۰۳/۰۹/۱۲</td>
-                <td><a href="{% url 'dashboard:admin:orders-detail' %}" class="action-btn" >جزئیات</a></td>
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+      <div class="kpi-value">۲۳۶</div>
+      <div class="kpi-value-label">سفارش</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۸٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
       </div>
     </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">سفارشات ارسال شده</div>
+        <div class="kpi-icon slate">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M16 2L2 8.5l6 2 2 6L16 2z"/>
+            <path d="M8 10.5L16 2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۱۸۷</div>
+      <div class="kpi-value-label">سفارش</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۱۵٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">سفارشات تحویل شده</div>
+        <div class="kpi-icon green">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="9" cy="9" r="7"/>
+            <path d="M5.5 9.2l2.3 2.3 4.7-5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۱۲۳</div>
+      <div class="kpi-value-label">سفارش</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta up">▲ ۲۰٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-label">سفارشات لغو شده</div>
+        <div class="kpi-icon red">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="9" cy="9" r="7"/>
+            <path d="M6.3 6.3l5.4 5.4M11.7 6.3l-5.4 5.4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="kpi-value">۱۸</div>
+      <div class="kpi-value-label">سفارش</div>
+      <div class="kpi-footer">
+        <span class="kpi-delta down">▼ ۵٪</span>
+        <span class="kpi-delta-label">نسبت به ماه قبل</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- نوار فیلتر و جستجو -->
+  <div class="filters-toolbar">
+
+    <button class="toolbar-date" type="button">
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+        <rect x="2" y="3.5" width="14" height="12" rx="2"/>
+        <path d="M2 7h14M6 2v3M12 2v3"/>
+      </svg>
+      ۱۴۰۳/۰۴/۰۱ - ۱۴۰۳/۰۴/۳۱
+    </button>
+
+    <div class="toolbar-select">
+      <select id="statusFilter">
+        <option value="">همه وضعیت‌ها</option>
+        <option value="shipped">ارسال شده</option>
+        <option value="processing">در حال پردازش</option>
+        <option value="cancelled">لغو شده</option>
+        <option value="delivered">تحویل شده</option>
+      </select>
+      <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7l4 4 4-4"/></svg>
+    </div>
+
+    <div class="toolbar-select">
+      <select id="paymentFilter">
+        <option value="">همه روش‌های پرداخت</option>
+        <option value="online">پرداخت آنلاین</option>
+        <option value="cod">پرداخت در محل</option>
+      </select>
+      <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7l4 4 4-4"/></svg>
+    </div>
+
+    <div class="toolbar-search">
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+        <circle cx="7.5" cy="7.5" r="5.5"/>
+        <path d="M11.5 11.5l4 4"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="جستجو بر اساس شماره سفارش، نام مشتری، تلفن...">
+    </div>
+
+    <button class="toolbar-filter-btn" type="button" onclick="filterOrders()">
+      فیلتر
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M2.5 3.5h13L10.5 9v5l-3 1.5V9L2.5 3.5z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- کارت اصلی جدول -->
+  <div class="card orders-card">
+
+    <!-- تب‌های وضعیت -->
+    <div class="order-tabs">
+      <button class="order-tab active" type="button">همه سفارشات <span>۴۸۷</span></button>
+      <button class="order-tab" type="button">در حال پردازش <span>۲۳۶</span></button>
+      <button class="order-tab" type="button">ارسال شده <span>۱۸۷</span></button>
+      <button class="order-tab" type="button">تحویل شده <span>۱۲۳</span></button>
+      <button class="order-tab" type="button">لغو شده <span>۱۸</span></button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th>شماره سفارش</th>
+            <th>مشتری</th>
+            <th>محصولات</th>
+            <th>مبلغ</th>
+            <th>روش پرداخت</th>
+            <th>وضعیت</th>
+            <th>تاریخ سفارش</th>
+            <th style="width:60px;">عملیات</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td><span class="order-id">#۱۴۳۸۷</span></td>
+            <td>
+              <div class="customer-cell">
+                <img class="customer-avatar-img" src="https://i.pravatar.cc/64?img=12" alt="علی محمدی">
+                <div>
+                  <div class="customer-name">علی محمدی</div>
+                  <div class="customer-phone">۰۹۱۲ ۳۴۵ ۶۷۸۹</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="product-thumbs">
+                <img src="https://picsum.photos/seed/ord1a/60/60" alt="">
+                <img src="https://picsum.photos/seed/ord1b/60/60" alt="">
+                <span class="thumb-more">+۲</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-cell">
+                <div class="amount-value">۲,۴۵۰,۰۰۰</div>
+                <div class="amount-unit">تومان</div>
+              </div>
+            </td>
+            <td>
+              <div class="payment-cell">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="4" width="15" height="10.5" rx="1.6"/><path d="M1.5 7h15"/></svg>
+                پرداخت آنلاین
+              </div>
+            </td>
+            <td><span class="status-pill delivered">تحویل شده</span></td>
+            <td>
+              <div class="date-cell">
+                <div>۱۴۰۳/۰۴/۳۰</div>
+                <div class="date-time">۱۶:۳۵</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="9" r="1.5"/><circle cx="9" cy="14" r="1.5"/></svg>
+                </button>
+                <div class="row-actions-menu">
+                  <a href="{% url 'dashboard:admin:orders-detail' %}">مشاهده جزئیات</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="order-id">#۱۴۳۸۶</span></td>
+            <td>
+              <div class="customer-cell">
+                <img class="customer-avatar-img" src="https://i.pravatar.cc/64?img=47" alt="سارا رحیمی">
+                <div>
+                  <div class="customer-name">سارا رحیمی</div>
+                  <div class="customer-phone">۰۹۳۵ ۲۳۱ ۶۷۸۹</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="product-thumbs">
+                <img src="https://picsum.photos/seed/ord2a/60/60" alt="">
+                <span class="thumb-more">+۱</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-cell">
+                <div class="amount-value">۸۷۰,۰۰۰</div>
+                <div class="amount-unit">تومان</div>
+              </div>
+            </td>
+            <td>
+              <div class="payment-cell">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1.5 12V7l2-3.5h6l1.5 3.5h4a1.5 1.5 0 0 1 1.5 1.5V12"/><circle cx="5.5" cy="14" r="1.6"/><circle cx="12.5" cy="14" r="1.6"/></svg>
+                پرداخت در محل
+              </div>
+            </td>
+            <td><span class="status-pill shipped">ارسال شده</span></td>
+            <td>
+              <div class="date-cell">
+                <div>۱۴۰۳/۰۴/۳۰</div>
+                <div class="date-time">۱۳:۱۰</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="9" r="1.5"/><circle cx="9" cy="14" r="1.5"/></svg>
+                </button>
+                <div class="row-actions-menu">
+                  <a href="{% url 'dashboard:admin:orders-detail' %}">مشاهده جزئیات</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="order-id">#۱۴۳۸۵</span></td>
+            <td>
+              <div class="customer-cell">
+                <img class="customer-avatar-img" src="https://i.pravatar.cc/64?img=33" alt="رضا نوروزی">
+                <div>
+                  <div class="customer-name">رضا نوروزی</div>
+                  <div class="customer-phone">۰۹۱۵ ۵۶۷ ۸۹۰۱</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="product-thumbs">
+                <img src="https://picsum.photos/seed/ord3a/60/60" alt="">
+                <img src="https://picsum.photos/seed/ord3b/60/60" alt="">
+                <span class="thumb-more">+۳</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-cell">
+                <div class="amount-value">۳,۴۶۰,۰۰۰</div>
+                <div class="amount-unit">تومان</div>
+              </div>
+            </td>
+            <td>
+              <div class="payment-cell">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="4" width="15" height="10.5" rx="1.6"/><path d="M1.5 7h15"/></svg>
+                پرداخت آنلاین
+              </div>
+            </td>
+            <td><span class="status-pill processing">در حال پردازش</span></td>
+            <td>
+              <div class="date-cell">
+                <div>۱۴۰۳/۰۴/۳۰</div>
+                <div class="date-time">۱۱:۲۵</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="9" r="1.5"/><circle cx="9" cy="14" r="1.5"/></svg>
+                </button>
+                <div class="row-actions-menu">
+                  <a href="{% url 'dashboard:admin:orders-detail' %}">مشاهده جزئیات</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="order-id">#۱۴۳۸۴</span></td>
+            <td>
+              <div class="customer-cell">
+                <img class="customer-avatar-img" src="https://i.pravatar.cc/64?img=45" alt="مینا قاسمی">
+                <div>
+                  <div class="customer-name">مینا قاسمی</div>
+                  <div class="customer-phone">۰۹۰۱ ۱۲۳ ۴۵۶۷</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="product-thumbs">
+                <img src="https://picsum.photos/seed/ord4a/60/60" alt="">
+                <span class="thumb-more">+۲</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-cell">
+                <div class="amount-value">۱,۸۹۰,۰۰۰</div>
+                <div class="amount-unit">تومان</div>
+              </div>
+            </td>
+            <td>
+              <div class="payment-cell">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="4" width="15" height="10.5" rx="1.6"/><path d="M1.5 7h15"/></svg>
+                پرداخت آنلاین
+              </div>
+            </td>
+            <td><span class="status-pill processing">در حال پردازش</span></td>
+            <td>
+              <div class="date-cell">
+                <div>۱۴۰۳/۰۴/۳۰</div>
+                <div class="date-time">۰۹:۴۰</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="9" r="1.5"/><circle cx="9" cy="14" r="1.5"/></svg>
+                </button>
+                <div class="row-actions-menu">
+                  <a href="{% url 'dashboard:admin:orders-detail' %}">مشاهده جزئیات</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="order-id">#۱۴۳۸۳</span></td>
+            <td>
+              <div class="customer-cell">
+                <img class="customer-avatar-img" src="https://i.pravatar.cc/64?img=53" alt="حسین امیری">
+                <div>
+                  <div class="customer-name">حسین امیری</div>
+                  <div class="customer-phone">۰۹۳۷ ۷۸۹ ۰۱۲۳</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="product-thumbs">
+                <img src="https://picsum.photos/seed/ord5a/60/60" alt="">
+                <span class="thumb-more">+۱</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-cell">
+                <div class="amount-value">۴۵۰,۰۰۰</div>
+                <div class="amount-unit">تومان</div>
+              </div>
+            </td>
+            <td>
+              <div class="payment-cell">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1.5 12V7l2-3.5h6l1.5 3.5h4a1.5 1.5 0 0 1 1.5 1.5V12"/><circle cx="5.5" cy="14" r="1.6"/><circle cx="12.5" cy="14" r="1.6"/></svg>
+                پرداخت در محل
+              </div>
+            </td>
+            <td><span class="status-pill cancelled">لغو شده</span></td>
+            <td>
+              <div class="date-cell">
+                <div>۱۴۰۳/۰۴/۲۹</div>
+                <div class="date-time">۱۸:۱۰</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="9" r="1.5"/><circle cx="9" cy="14" r="1.5"/></svg>
+                </button>
+                <div class="row-actions-menu">
+                  <a href="{% url 'dashboard:admin:orders-detail' %}">مشاهده جزئیات</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="order-id">#۱۴۳۸۲</span></td>
+            <td>
+              <div class="customer-cell">
+                <img class="customer-avatar-img" src="https://i.pravatar.cc/64?img=29" alt="فاطمه مرادی">
+                <div>
+                  <div class="customer-name">فاطمه مرادی</div>
+                  <div class="customer-phone">۰۹۱۳ ۲۲۲ ۳۳۳۳</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="product-thumbs">
+                <img src="https://picsum.photos/seed/ord6a/60/60" alt="">
+                <span class="thumb-more">+۱</span>
+              </div>
+            </td>
+            <td>
+              <div class="amount-cell">
+                <div class="amount-value">۲,۹۸۰,۰۰۰</div>
+                <div class="amount-unit">تومان</div>
+              </div>
+            </td>
+            <td>
+              <div class="payment-cell">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="4" width="15" height="10.5" rx="1.6"/><path d="M1.5 7h15"/></svg>
+                پرداخت آنلاین
+              </div>
+            </td>
+            <td><span class="status-pill shipped">ارسال شده</span></td>
+            <td>
+              <div class="date-cell">
+                <div>۱۴۰۳/۰۴/۲۹</div>
+                <div class="date-time">۱۵:۰۰</div>
+              </div>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor"><circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="9" r="1.5"/><circle cx="9" cy="14" r="1.5"/></svg>
+                </button>
+                <div class="row-actions-menu">
+                  <a href="{% url 'dashboard:admin:orders-detail' %}">مشاهده جزئیات</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- فوتر جدول: صفحه‌بندی -->
+    <div class="table-footer">
+      <div class="pagination-info">نمایش تا ۱۰ سفارش از ۴۸۷ سفارش</div>
+
+      <div class="pagination-controls">
+        <button class="page-btn" type="button">قبلی</button>
+        <button class="page-btn active" type="button">۱</button>
+        <button class="page-btn" type="button">۲</button>
+        <button class="page-btn" type="button">۳</button>
+        <button class="page-btn" type="button">۴</button>
+        <span class="page-dots">...</span>
+        <button class="page-btn" type="button">بعدی</button>
+      </div>
+
+      <div class="toolbar-select per-page-select">
+        <select id="perPage">
+          <option>نمایش ۱۰ سفارش در هر صفحه</option>
+          <option>نمایش ۲۵ سفارش در هر صفحه</option>
+          <option>نمایش ۵۰ سفارش در هر صفحه</option>
+        </select>
+        <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 7l4 4 4-4"/></svg>
+      </div>
+    </div>
+
+  </div>
+
 {% endblock content %}

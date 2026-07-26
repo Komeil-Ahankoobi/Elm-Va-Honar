@@ -1,0 +1,123 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="topbar">
+    <div class="icon-group">
+        <button class="icon-btn">
+            <span class="badge">2</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.7 21a2 2 0 0 1-3.4 0" />
+            </svg>
+        </button>
+        <button class="icon-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2l1.5 5h9L18 2" />
+                <path d="M3.5 7h17l-1.6 12.1a2 2 0 0 1-2 1.9H7.1a2 2 0 0 1-2-1.9L3.5 7z" />
+                <circle cx="9.5" cy="12.5" r="0" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="user-chip">
+        <div class="user-meta">
+            <div class="name">علی عزیز</div>
+            <div class="greet">خوش آمدید</div>
+        </div>
+        <div class="avatar">ع</div>
+    </div>
+</div>
+
+
+<h2 class="page-title">مشخصات من</h2>
+<p class="page-sub">اطلاعات حساب کاربری خود را مشاهده و مدیریت کنید.</p>
+
+<div class="content-grid">
+
+    <!-- account info -->
+    <section class="card">
+        <h3 class="card-title">اطلاعات حساب کاربری</h3>
+
+        <div class="field">
+            <label>نام کاربری</label>
+            <div class="field-input">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                </svg>
+                <input type="text" value="{{ user.username }}" dir="ltr" style="text-align:center" readonly>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>ایمیل</label>
+            <div class="field-input">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="M3 7l9 6 9-6" />
+                </svg>
+                <input type="text" value="{{ user.email }}" dir="ltr" style="text-align:center" readonly>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>نام</label>
+            <div class="field-input">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                </svg>
+                <input type="text" value="{{ user.user_profile.first_name }}" dir="ltr" style="text-align:center" readonly>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>نام خانوادگی</label>
+            <div class="field-input">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4" />
+                    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                </svg>
+                <input type="text" value="{{ user.user_profile.last_name }}" dir="ltr" style="text-align:center" readonly>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>رمز عبور</label>
+            <div class="field-input password">
+                <button class="link-btn">تغییر رمز عبور</button>
+                <div class="pw-wrap">
+                    <input type="password" value="{{ user.password }}" dir="ltr" style="text-align: left;" readonly>
+
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="4" y="11" width="16" height="9" rx="2" />
+                        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="security-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l8 3v6c0 5-3.4 8.7-8 11-4.6-2.3-8-6-8-11V5l8-3z" />
+                <path d="M9 12l2 2 4-4" />
+            </svg>
+            اطلاعات شما محفوظ و امن است.
+        </div>
+    </section>
+
+    <!-- profile summary -->
+    <section class="card profile-card">
+        <div class="profile-avatar">ع</div>
+        <h3 class="profile-name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</h3>
+        <span class="role-pill">مشتری</span>
+        <div class="member-since">عضو از {{ user.user_profile.created_date|date:"d F Y" }}</div>
+
+
+    </section>
+</div>
+{% endblock %}

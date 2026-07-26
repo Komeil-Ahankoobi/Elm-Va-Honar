@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/order-checkout.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="checkout-page-wrapper">
+    <div class="container">
+
+        <!-- STEP INDICATOR -->
+        <ol class="checkout-stepper" aria-label="مراحل تسویه حساب">
+            <li class="step-item completed">
+                <span class="step-circle" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+                <span class="step-label">سبد خرید</span>
+            </li>
+
+            <li class="step-connector filled" aria-hidden="true"></li>
+
+            <li class="step-item active" aria-current="step">
+                <span class="step-circle">۲</span>
+                <span class="step-label">آدرس و ارسال</span>
+            </li>
+
+            <li class="step-connector" aria-hidden="true"></li>
+
+            <li class="step-item">
+                <span class="step-circle">۳</span>
+                <span class="step-label">پرداخت</span>
+            </li>
+        </ol>
+
+        <!-- MAIN GRID -->
+        <div class="checkout-grid">
+
+            <!-- ADDRESS SELECTION -->
+            <div class="address-section">
+                <h1 class="address-section-title">انتخاب آدرس ارسال</h1>
+                <p class="address-section-desc">لطفاً آدرس مورد نظر خود را برای ارسال سفارش انتخاب کنید.</p>
+
+                <form class="address-list" method="post" action="">
+                    {% csrf_token %}
+
+                    <!-- Address Card: Home (selected) -->
+                    <label class="address-card selected">
+                        <button type="button" class="address-card-menu" aria-label="گزینه‌های بیشتر">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="5" r="2"></circle>
+                                <circle cx="12" cy="12" r="2"></circle>
+                                <circle cx="12" cy="19" r="2"></circle>
+                            </svg>
+                        </button>
+
+                        <div class="address-card-body">
+                            <div class="address-card-top">
+
+                                <div class="address-text-block">
+                                    <p class="address-line">تهران، خیابان ولیعصر، بالاتر از میدان ونک، خیابان برزیل
+                                        شرقی، پلاک ۱۲، واحد ۳</p>
+                                    <p class="address-postal">کد پستی: ۱۲۳۴۵۶۷۸۹۰</p>
+                                </div>
+
+                                <div class="address-meta">
+                                    <div class="address-title-row">
+                                        <span class="address-radio">
+                                            <input type="radio" name="shipping_address" value="home" checked>
+                                            <span class="radio-dot"></span>
+                                        </span>
+                                        <span class="label">خانه</span>
+                                        <svg class="addr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M3 11.5 12 4l9 7.5"></path>
+                                            <path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="address-person">علی رضایی<br>۰۹۱۲ ۳۴۵ ۶۷۸۹</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Address Card: Work -->
+                    <label class="address-card">
+                        <button type="button" class="address-card-menu" aria-label="گزینه‌های بیشتر">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="5" r="2"></circle>
+                                <circle cx="12" cy="12" r="2"></circle>
+                                <circle cx="12" cy="19" r="2"></circle>
+                            </svg>
+                        </button>
+
+                        <div class="address-card-body">
+                            <div class="address-card-top">
+
+                                <div class="address-text-block">
+                                    <p class="address-line">تهران، خیابان سهروردی شمالی، نبش خیابان خرمشهر، پلاک ۸، طبقه
+                                        ۲، واحد ۵</p>
+                                    <p class="address-postal">کد پستی: ۹۸۷۶۵۴۳۲۱۰</p>
+                                </div>
+
+                                <div class="address-meta">
+                                    <div class="address-title-row">
+                                        <span class="address-radio">
+                                            <input type="radio" name="shipping_address" value="work">
+                                            <span class="radio-dot"></span>
+                                        </span>
+                                        <span class="label">محل کار</span>
+                                        <svg class="addr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+                                            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="address-person">علی رضایی<br>۰۹۱۲ ۳۴۵ ۶۷۸۹</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Address Card: Parents -->
+                    <label class="address-card">
+                        <button type="button" class="address-card-menu" aria-label="گزینه‌های بیشتر">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="5" r="2"></circle>
+                                <circle cx="12" cy="12" r="2"></circle>
+                                <circle cx="12" cy="19" r="2"></circle>
+                            </svg>
+                        </button>
+
+                        <div class="address-card-body">
+                            <div class="address-card-top">
+
+                                <div class="address-text-block">
+                                    <p class="address-line">اصفهان، خیابان آمادگاه، خیابان شهید مطهری، پلاک ۳۲، واحد ۱
+                                    </p>
+                                    <p class="address-postal">کد پستی: ۴۵۶۷۸۹۱۲۳۰</p>
+                                </div>
+
+                                <div class="address-meta">
+                                    <div class="address-title-row">
+                                        <span class="address-radio">
+                                            <input type="radio" name="shipping_address" value="parents">
+                                            <span class="radio-dot"></span>
+                                        </span>
+                                        <span class="label">آدرس والدین</span>
+                                        <svg class="addr-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M3 11.5 12 4l9 7.5"></path>
+                                            <path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="address-person">علی رضایی<br>۰۹۱۲ ۳۴۵ ۶۷۸۹</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </label>
+
+                    <button type="button" class="add-address-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        افزودن آدرس جدید
+                    </button>
+                </form>
+            </div>
+
+            <!-- ORDER SUMMARY -->
+            <aside class="order-summary-aside">
+                <div class="order-summary-card">
+                    <h2 class="order-summary-title">خلاصه سفارش</h2>
+
+                    <div class="summary-row">
+                        <span class="label">جمع کل کالاها</span>
+                        <span class="value">۱۲۰,۷۳۷ تومان</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">هزینه ارسال</span>
+                        <span class="value">۱۵,۰۰۰ تومان</span>
+                    </div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-total-row">
+                        <span class="summary-total-label">مجموع پرداختی</span>
+                        <span class="summary-total-value">{{ total_price|intcomma }} تومان</span>
+                    </div>
+
+                    <button type="submit" form="" class="checkout-pay-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        ادامه به پرداخت
+                    </button>
+
+                    <p class="secure-note">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        اطلاعات شما به‌صورت امن ذخیره می‌شود
+                    </p>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</section>
+{% endblock content %}
