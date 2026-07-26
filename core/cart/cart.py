@@ -17,7 +17,6 @@ class CartSession:
     def get_cart(self):
         return self._cart
 
-
     def get_total_quantity(self):
         total_quantity = 0
         for item in self.get_cart["items"]:

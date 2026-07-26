@@ -129,11 +129,11 @@ if (cartItemsEl) {
 
                 const subtotalEl = document.getElementById("sum-subtotal");
                 const totalSumEl = document.getElementById("sum-total");
-                const cartCountEl = document.getElementById("cart-count");
+                const cartCountEl = document.querySelector(".cart-count");
 
                 if (subtotalEl) subtotalEl.textContent = fmt(data.cart_total_price);
                 if (totalSumEl) totalSumEl.textContent = fmt(data.cart_total_price);
-                if (cartCountEl) cartCountEl.textContent = `سبد (${data.total_quantity})`;
+                if (cartCountEl) cartCountEl.textContent = `${data.total_quantity}`;
 
                 showToast(`"${name}" از سبد حذف شد`);
             }, 280);

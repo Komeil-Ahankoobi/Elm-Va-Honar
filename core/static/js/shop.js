@@ -11,6 +11,8 @@
 (function initScroll() {
     const header = document.getElementById("site-header");
     const backTop = document.getElementById("back-to-top");
+    if (!header || !backTop) return;
+
     let ticking = false;
 
     function onScroll() {
@@ -44,11 +46,13 @@
 })();
 
 (function initReveal() {
+    const targets = document.querySelectorAll(".reveal");
+    if (!targets.length) return;
+
     if (!("IntersectionObserver" in window)) {
-        document.querySelectorAll(".reveal").forEach((el) => el.classList.add("revealed"));
+        targets.forEach((el) => el.classList.add("revealed"));
         return;
     }
-    const targets = document.querySelectorAll(".reveal");
     targets.forEach((el, i) => {
         el.style.transitionDelay = (i % 3) * 80 + "ms";
     });
@@ -72,37 +76,42 @@ document.addEventListener("DOMContentLoaded", function () {
     const overlay = document.querySelector(".mobile-menu-overlay");
     const closeBtn = document.querySelector(".mobile-close-btn");
 
-    if (!toggleBtn || !menu) return;
+    if (toggleBtn && menu) {
+        function openMenu() {
+            menu.classList.add("open");
+            overlay?.classList.add("show");
+            toggleBtn.setAttribute("aria-expanded", "true");
+            document.body.style.overflow = "hidden";
+        }
 
-    function openMenu() {
-        menu.classList.add("open");
-        overlay.classList.add("show");
-        toggleBtn.setAttribute("aria-expanded", "true");
-        document.body.style.overflow = "hidden";
+        function closeMenu() {
+            menu.classList.remove("open");
+            overlay?.classList.remove("show");
+            toggleBtn.setAttribute("aria-expanded", "false");
+            document.body.style.overflow = "";
+        }
+
+        toggleBtn.addEventListener("click", () => {
+            menu.classList.contains("open") ? closeMenu() : openMenu();
+        });
+
+        closeBtn?.addEventListener("click", closeMenu);
+        overlay?.addEventListener("click", closeMenu);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && menu.classList.contains("open")) closeMenu();
+        });
+
+        menu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", closeMenu);
+        });
     }
 
-    function closeMenu() {
-        menu.classList.remove("open");
-        overlay.classList.remove("show");
-        toggleBtn.setAttribute("aria-expanded", "false");
-        document.body.style.overflow = "";
-    }
-
-    toggleBtn.addEventListener("click", () => {
-        menu.classList.contains("open") ? closeMenu() : openMenu();
-    });
-
-    closeBtn?.addEventListener("click", closeMenu);
-    overlay?.addEventListener("click", closeMenu);
-
-    // Escape key
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && menu.classList.contains("open")) closeMenu();
-    });
-
-    // Close on link click
-    menu.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
+    // --- Add to cart ---
+    document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            addToCart(btn.dataset.url, btn.dataset.productId);
+        });
     });
 });
 
@@ -132,13 +141,14 @@ function filterProducts(selectedElemnt) {
     window.location.href = newUrl;
 }
 
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(";").shift();
-    }
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+}
 
-    async function addToCart(url, product_id) {
+async function addToCart(url, product_id) {
+    try {
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -150,16 +160,19 @@ function filterProducts(selectedElemnt) {
             }),
         });
 
+        if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}`);
+        }
+
         const data = await response.json();
 
-        const cartCountEl = document.getElementById("cart-count");
-        if (cartCountEl){
-            cartCountEl.textContent = `سبد (${data.total_quantity})`
-        }
-    }
+        console.log(data);
 
-    document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            addToCart(btn.dataset.url, btn.dataset.productId);
-        });
-    });
+        const cartCountEl = document.querySelector(".cart-count");
+        if (cartCountEl) {
+            cartCountEl.textContent = `${data.total_quantity}`;
+        }
+    } catch (err) {
+        console.error("خطا در افزودن محصول به سبد خرید:", err);
+    }
+}

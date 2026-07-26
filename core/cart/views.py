@@ -6,6 +6,17 @@ import json
 from .utils import get_cart
 
 
+class SessionCartSummary(TemplateView):
+    template_name = "cart/cart-summary.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = get_cart(self.request)
+        context["cart_items"] = cart.get_cart_items()
+        return context
+    
+
+
 class SessionAddProduct(View):
 
     def post(self, request, *args, **kwargs):
@@ -18,15 +29,7 @@ class SessionAddProduct(View):
             'total_quantity': cart.get_total_quantity(),
         })
 
-
-class SessionCartSummary(TemplateView):
-    template_name = "cart/cart-summary.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        cart = get_cart(self.request)
-        context["cart_items"] = cart.get_cart_items()
-        return context
+    
 class UpdateCartQuantity(View):
 
     def post(self, request, *args, **kwargs):
@@ -61,7 +64,6 @@ class UpdateCartQuantity(View):
             'cart_total_price': cart.get_total_payment_amount(),
             'total_quantity': cart.get_total_quantity(),
         })
-
 
 
 class DeleteProduct(View):
