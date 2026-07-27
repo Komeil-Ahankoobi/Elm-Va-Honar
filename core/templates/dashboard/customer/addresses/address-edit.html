@@ -55,12 +55,12 @@
     <div class="form-field">
         <label for="city">شهر <span class="required">*</span></label>
         <div class="field-box select-box">
-            <select id="city" name="city" required>
+            <select name="city" required>
                 <option value="" selected disabled>انتخاب شهر</option>
-                <option value="tehran"{% if address.city == 'تهران' %}selected{% endif %}>تهران</option>
-                <option value="karaj"{% if address.city == 'کرج' %}selected{% endif %}>کرج</option>
-                <option value="mashhad"{% if address.city == 'مشهد' %}selected{% endif %}>مشهد</option>
-                <option value="isfahan"{% if address.city == 'اصفهان' %}selected{% endif %}>اصفهان</option>
+                <option value="tehran"{% if address.city == 'tehran' %}selected{% endif %}>تهران</option>
+                <option value="karaj"{% if address.city == 'karaj' %}selected{% endif %}>کرج</option>
+                <option value="mashhad"{% if address.city == 'mashhad' %}selected{% endif %}>مشهد</option>
+                <option value="isfahan"{% if address.city == 'isfahan' %}selected{% endif %}>اصفهان</option>
             </select>
             <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">
@@ -78,12 +78,12 @@
     <div class="form-field">
         <label for="state">استان <span class="required">*</span></label>
         <div class="field-box select-box">
-            <select id="state" name="state" required>
+            <select name="state" required>
                 <option value="" selected disabled>انتخاب استان</option>
-                <option value="tehran"{% if address.state == 'تهران' %}selected{% endif %}>تهران</option>
-                <option value="alborz"{% if address.state == 'البرز' %}selected{% endif %}>البرز</option>
-                <option value="razavi-khorasan"{% if address.state == 'خراسان رضوی' %}selected{% endif %}>خراسان رضوی</option>
-                <option value="isfahan"{% if address.state == 'اصفهان' %}selected{% endif %}>اصفهان</option>
+                <option value="tehran" {% if address.state == 'tehran' %}selected{% endif %}>تهران</option>
+                <option value="alborz" {% if address.state == 'alborz' %}selected{% endif %}>البرز</option>
+                <option value="razavi-khorasan" {% if address.state == 'razavi-khorasan' %}selected{% endif %}>خراسان رضوی</option>
+                <option value="isfahan" {% if address.state == 'isfahan' %}selected{% endif %}>اصفهان</option>
             </select>
             <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">

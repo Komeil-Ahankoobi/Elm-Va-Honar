@@ -50,7 +50,7 @@ class CustomerDashboardCreateAddressView(LoginRequiredMixin, HasCustomerAccessPe
     def form_valid(self, form):
         form.instance.user = self.request.user
         super().form_valid(form)
-        return redirect(reverse_lazy('dashboard:customer:address-edit', kwargs={'pk': form.instance.pk}))
+        return redirect(reverse_lazy('dashboard:customer:address-list'))
 
     def get_success_url(self):
         return reverse_lazy('dashboard:customer:address-list')
@@ -67,7 +67,7 @@ class CustomerDashboardEditAddressView(LoginRequiredMixin, HasCustomerAccessPerm
         return UserAddressModel.objects.filter(user=self.request.user)
 
     def get_success_url(self):
-        return reverse_lazy('dashboard:customer:address-edit', kwargs={'pk': self.get_object().pk})
+        return reverse_lazy('dashboard:customer:address-list')
 
 
 class CustomerDashboardDeleteAddressView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DeleteView):
@@ -95,7 +95,6 @@ class CustomerDashboardOrderView(LoginRequiredMixin, HasCustomerAccessPermission
     
     def get_queryset(self):
         return OrderModel.objects.filter(user=self.request.user)
-
 
 
 class CustomerDashboardOrderDetailView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DetailView):

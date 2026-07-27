@@ -1,6 +1,21 @@
 #!/bin/sh
 set -e
 
+echo "Waiting for database..."
+until python -c "
+import socket
+import sys
+
+try:
+    socket.create_connection(('${DB_HOST:-db}', ${DB_PORT:-5432}), timeout=2)
+except OSError:
+    sys.exit(1)
+"; do
+    echo "Database is unavailable - sleeping"
+    sleep 1
+done
+echo "Database is up!"
+
 echo "Applying database migrations..."
 python manage.py migrate --noinput
 
