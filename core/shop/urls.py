@@ -6,5 +6,5 @@ app_name = 'shop'
 
 urlpatterns = [
     path("", views.ShopProductView.as_view(), name="show-product-view"),
-    re_path(r"product/(?P<slug>[-\w]+)/detail/",views.ShopProductDetailView.as_view(),name="show-product-detail-view"),
+    re_path(r"^product/(?P<slug>[-\w]+)/$", views.ShopProductDetailView.as_view(), name="show-product-detail-view"),
 ]

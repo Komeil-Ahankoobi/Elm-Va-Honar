@@ -18,6 +18,25 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from shop.sitemaps import ProductSitemap, CategorySitemap
+from django.http import HttpResponse
+
+sitemaps = {
+    'products': ProductSitemap,
+    'categories': CategorySitemap,
+}
+
+def robots_txt(request):
+    content = """User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /cart/
+Disallow: /accounts/
+
+Sitemap: https://elmvhonar.ir/sitemap.xml
+"""
+    return HttpResponse(content, content_type="text/plain")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,7 +46,12 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('cart/', include('cart.urls')),
     path('order/', include('order.urls')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', robots_txt),
 ]
+
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -176,3 +176,15 @@ async function addToCart(url, product_id) {
         console.error("خطا در افزودن محصول به سبد خرید:", err);
     }
 }
+
+document.addEventListener('click', function (e) {
+    const card = e.target.closest('.product-card[data-href]');
+    if (!card) return;
+
+    
+    if (e.target.closest('.product-wishlist, .btn-add-to-cart, .btn-quick-view')) {
+        return;
+    }
+
+    window.location.href = card.dataset.href;
+});
