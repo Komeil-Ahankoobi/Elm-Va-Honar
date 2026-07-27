@@ -441,6 +441,15 @@ ul {
     transform: scale(1.05);
     transition: transform 6s ease;
 }
+.slide-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0; /* همون z-index ای که .slide-bg داشت رو بذار */
+}
 
 .slide.active .slide-bg {
     transform: scale(1);
