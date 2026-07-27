@@ -33,14 +33,14 @@ class CoponModel(models.Model):
     expiration_date = models.DateTimeField(null=True,blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-
+    
 
     @property
     def is_usage_limit_reached(self):
         return self.used_by.count() >= self.max_limit_usage
 
-    def can_be_used_by(self, user):
-        return user not in self.used_by.all() and not self.is_usage_limit_reached
+    def is_used_by(self, user):
+        return user in self.used_by.all()
 
     def __str__(self):
         return self.code
@@ -53,7 +53,7 @@ class OrderModel(models.Model):
     address = models.CharField(max_length=255)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
-    address = models.CharField(max_length=50)
+    zip_code = models.CharField(max_length=50)
 
     total_price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
 
@@ -76,6 +76,15 @@ class OrderModel(models.Model):
             "title":OrderStatusType(self.status).name,
             "label":OrderStatusType(self.status).label,
         }
+        
+    # def get_price(self):
+    #     if self.copon:
+    #         discount = Decimal(self.copon.discount_percent) / Decimal("100")
+    #         return round(self.total_price - (self.total_price * discount))
+    #     return self.total_price
+    
+    def calculate_total_price(self):
+        return sum(item.price * item.quantity for item in self.items.all())
 
     @property
     def is_successful(self):

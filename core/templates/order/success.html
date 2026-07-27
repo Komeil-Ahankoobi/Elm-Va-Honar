@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}سفارش با موفقیت ثبت شد | ElmvHonar{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/success.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="order-success-section">
+    <div class="container">
+
+        <!-- STEP INDICATOR -->
+        <ol class="checkout-stepper" aria-label="مراحل تسویه حساب">
+            <li class="step-item completed">
+                <span class="step-circle" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+                <span class="step-label">سبد خرید</span>
+            </li>
+
+            <li class="step-connector filled" aria-hidden="true"></li>
+
+            <li class="step-item active" aria-current="step">
+                <span class="step-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+                <span class="step-label">آدرس و ارسال</span>
+            </li>
+
+            <li class="step-connector filled" aria-hidden="true"></li>
+
+            <li class="step-item active" aria-current="step">
+                <span class="step-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+                <span class="step-label">پرداخت</span>
+            </li>
+        </ol>
+
+        <!-- Success Content -->
+        <div class="success-box">
+            <div class="success-icon-wrap">
+                <span class="deco-dot dot-1"></span>
+                <span class="deco-dot dot-2"></span>
+                <span class="deco-dot dot-3"></span>
+                <span class="deco-dot dot-4"></span>
+
+                <span class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+            </div>
+
+            <h1 class="success-title">سفارش شما با موفقیت ثبت شد</h1>
+            <p class="success-desc">
+                از خرید شما سپاسگزاریم. سفارش شما با موفقیت ثبت شد و در حال پردازش است.
+            </p>
+
+            <a href="{% url 'website:home' %}" class="btn-back-home">
+                بازگشت به صفحه اصلی
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endblock content %}

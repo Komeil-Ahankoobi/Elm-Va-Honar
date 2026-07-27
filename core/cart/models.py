@@ -10,6 +10,9 @@ class CartModel(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    def calculate_total_price(self):
+        return sum(item.product.get_price() * item.quantity for item in self.cart_items.all())
 
 
 class CartItemModel(models.Model):
