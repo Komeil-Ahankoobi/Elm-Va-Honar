@@ -1,15 +1,19 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from decimal import Decimal
+from django.db.models import Sum
 from django.contrib.auth.models import User
 
-from shop.models import ProductModel
+from shop.models import (
+    ProductModel,
+    ProductVarientModel,
+)
 
 # Create your models here.
 class OrderStatusType(models.IntegerChoices):
     pending = 1, 'در انتظار پرداخت'
-    succes = 2, 'موفقیت آمیز'
+    succes = 2, 'پرداخت شده'
     faild = 3, 'لغو شده'
+    complete = 4, 'ارسال شده'
 
 
 class UserAddressModel(models.Model):
@@ -86,6 +90,10 @@ class OrderModel(models.Model):
     def calculate_total_price(self):
         return sum(item.price * item.quantity for item in self.items.all())
 
+    def get_total_items_quantity(self):
+        result = self.items.aggregate(total=Sum("quantity"))
+        return result["total"] or 0
+
     @property
     def is_successful(self):
         return self.status == OrderStatusType.success.value
@@ -94,6 +102,10 @@ class OrderModel(models.Model):
 class OrderItemsModel(models.Model):
     order = models.ForeignKey(OrderModel, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT)
+    variant = models.ForeignKey(
+        ProductVarientModel, on_delete=models.SET_NULL,
+        null=True, blank=True
+    )
 
     quantity = models.PositiveIntegerField(default=0)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
@@ -102,4 +114,4 @@ class OrderItemsModel(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.product.title} - {self.order.id}'
+        return f'{self.product.title} - {self.variant.varient_type} - {self.order.id}'

@@ -1,360 +1,205 @@
 {% extends 'dashboard/admin/base.html' %}
+{% load humanize %}
+{% load jformat %}
 
 {% block title %}گزارش‌های کلی | علم و هنر{% endblock %}
 
 {% block content %}
 
-  <!-- هدر صفحه -->
-  <div class="page-header">
+<!-- هدر صفحه -->
+<div class="page-header">
     <div>
-      <div class="page-title">گزارش‌های کلی</div>
-      <div class="page-breadcrumb">
-        <span class="current">گزارش‌های کلی</span>
-        <span>‹</span>
-        <span>داشبورد</span>
-      </div>
+        <div class="page-title">گزارش‌های کلی</div>
+        <div class="page-breadcrumb">
+            <span class="current">گزارش‌های کلی</span>
+            <span>‹</span>
+            <span>داشبورد</span>
+        </div>
     </div>
 
     <button class="date-range-btn" type="button">
-      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-        <rect x="2" y="3.5" width="14" height="12" rx="2"/>
-        <path d="M2 7h14M6 2v3M12 2v3"/>
-      </svg>
-      بازه زمانی: <strong>۱۴۰۳/۰۴/۰۱ - ۱۴۰۳/۰۴/۳۱</strong>
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="2" y="3.5" width="14" height="12" rx="2" />
+            <path d="M2 7h14M6 2v3M12 2v3" />
+        </svg>
+        بازه زمانی: <strong>{{ current_month_name }}</strong>
     </button>
-  </div>
+</div>
 
-  <!-- KPI GRID -->
-  <div class="kpi-grid">
+<!-- KPI GRID -->
+<div class="kpi-grid">
 
     <div class="kpi-card">
-      <div class="kpi-header">
-        <div class="kpi-label">کل فروش</div>
-        <div class="kpi-icon purple">
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
-            <circle cx="9" cy="9" r="7"/>
-            <path d="M9 5.5v7M11.5 7.2c0-1-1-1.7-2.5-1.7s-2.3.8-2.3 1.6c0 2.1 4.8.9 4.8 3 0 .9-1 1.7-2.5 1.7s-2.5-.7-2.5-1.7"/>
-          </svg>
+        <div class="kpi-header">
+            <div class="kpi-label">کل فروش</div>
+            <div class="kpi-icon purple">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <circle cx="9" cy="9" r="7" />
+                    <path
+                        d="M9 5.5v7M11.5 7.2c0-1-1-1.7-2.5-1.7s-2.3.8-2.3 1.6c0 2.1 4.8.9 4.8 3 0 .9-1 1.7-2.5 1.7s-2.5-.7-2.5-1.7" />
+                </svg>
+            </div>
         </div>
-      </div>
-      <div class="kpi-value">۱۲,۴۵۰,۰۰۰</div>
-      <div class="kpi-value-label">تومان</div>
-      <div class="kpi-footer">
-        <span class="kpi-delta up">▲ ۲۳٪</span>
-        <span class="kpi-delta-label">نسبت به دوره قبل</span>
-      </div>
+        <div class="kpi-footer">
+            <div class="kpi-value">{{ total_sales|intcomma }}</div>
+            <div class="kpi-value-label">تومان</div>
+        </div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-header">
-        <div class="kpi-label">تعداد سفارشات</div>
-        <div class="kpi-icon blue">
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
-            <rect x="3" y="5" width="12" height="10" rx="1.6"/>
-            <path d="M6.5 5V4a2.5 2.5 0 0 1 5 0v1"/>
-          </svg>
+        <div class="kpi-header">
+            <div class="kpi-label">تعداد سفارشات</div>
+            <div class="kpi-icon blue">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <rect x="3" y="5" width="12" height="10" rx="1.6" />
+                    <path d="M6.5 5V4a2.5 2.5 0 0 1 5 0v1" />
+                </svg>
+            </div>
         </div>
-      </div>
-      <div class="kpi-value">۴۲۷</div>
-      <div class="kpi-value-label">سفارش</div>
-      <div class="kpi-footer">
-        <span class="kpi-delta up">▲ ۱۸٪</span>
-        <span class="kpi-delta-label">نسبت به دوره قبل</span>
-      </div>
+        <div class="kpi-footer">
+            <div class="kpi-value">{{ total_orders }}</div>
+            <div class="kpi-value-label">سفارش</div>
+        </div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-header">
-        <div class="kpi-label">تعداد مشتریان</div>
-        <div class="kpi-icon green">
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
-            <circle cx="9" cy="6" r="3.2"/>
-            <path d="M3 15c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6"/>
-          </svg>
+        <div class="kpi-header">
+            <div class="kpi-label">تعداد مشتریان</div>
+            <div class="kpi-icon green">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <circle cx="9" cy="6" r="3.2" />
+                    <path d="M3 15c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6" />
+                </svg>
+            </div>
         </div>
-      </div>
-      <div class="kpi-value">۲,۳۶۸</div>
-      <div class="kpi-value-label">مشتری</div>
-      <div class="kpi-footer">
-        <span class="kpi-delta up">▲ ۱۵٪</span>
-        <span class="kpi-delta-label">نسبت به دوره قبل</span>
-      </div>
+        <div class="kpi-footer">
+            <div class="kpi-value">{{ total_customers }}</div>
+            <div class="kpi-value-label">مشتری</div>
+        </div>
     </div>
 
     <div class="kpi-card">
-      <div class="kpi-header">
-        <div class="kpi-label">تعداد محصولات</div>
-        <div class="kpi-icon orange">
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
-            <path d="M9 2l6.5 3.5v7L9 16l-6.5-3.5v-7L9 2z"/>
-            <path d="M2.5 5.5L9 9l6.5-3.5M9 9v7"/>
-          </svg>
+        <div class="kpi-header">
+            <div class="kpi-label">تعداد محصولات</div>
+            <div class="kpi-icon orange">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                    <path d="M9 2l6.5 3.5v7L9 16l-6.5-3.5v-7L9 2z" />
+                    <path d="M2.5 5.5L9 9l6.5-3.5M9 9v7" />
+                </svg>
+            </div>
         </div>
-      </div>
-      <div class="kpi-value">۳۲۷</div>
-      <div class="kpi-value-label">محصول</div>
-      <div class="kpi-footer">
-        <span class="kpi-delta down">▼ ۹٪</span>
-        <span class="kpi-delta-label">نسبت به دوره قبل</span>
-      </div>
+        <div class="kpi-footer">
+            <div class="kpi-value">{{ total_products }}</div>
+            <div class="kpi-value-label">محصول</div>
+        </div>
     </div>
 
-  </div>
+</div>
 
-  <!-- ردیف دوم: نمودار فروش / وضعیت سفارشات / آخرین سفارش‌ها -->
-  <div class="dash-grid-2">
+<!-- ردیف دوم: نمودار فروش / وضعیت سفارشات / آخرین سفارش‌ها -->
+<div class="dash-grid-2">
 
     <!-- نمودار خطی فروش -->
     <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-eyebrow">روند فروش</div>
-          <div class="card-title">فروش ماهانه (تومان)</div>
+        <div class="card-header">
+            <div>
+                <div class="card-eyebrow">روند فروش</div>
+                <div class="card-title">فروش ماهانه (تومان)</div>
+            </div>
+            <div class="card-select">
+                ماهانه
+                <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 7l4 4 4-4" />
+                </svg>
+            </div>
         </div>
-        <div class="card-select">
-          ماهانه
-          <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 7l4 4 4-4"/>
-          </svg>
-        </div>
-      </div>
 
-      <div class="line-chart-wrap">
-        <svg viewBox="0 0 480 200" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="salesFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <path d="M0,150 L80,120 L160,80 L240,105 L320,60 L400,75 L480,20 L480,200 L0,200 Z" fill="url(#salesFill)"/>
-          <path d="M0,150 L80,120 L160,80 L240,105 L320,60 L400,75 L480,20" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="480" cy="20" r="5" fill="#8b5cf6"/>
-        </svg>
-        <div class="line-chart-labels">
-          <span>فروردین</span>
-          <span>اردیبهشت</span>
-          <span>خرداد</span>
-          <span>تیر</span>
+        <div class="line-chart-wrap">
+            <svg viewBox="0 0 480 200" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="salesFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.35" />
+                        <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+                <path d="M0,150 L80,120 L160,80 L240,105 L320,60 L400,75 L480,20 L480,200 L0,200 Z"
+                    fill="url(#salesFill)" />
+                <path d="M0,150 L80,120 L160,80 L240,105 L320,60 L400,75 L480,20" fill="none" stroke="#8b5cf6"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="480" cy="20" r="5" fill="#8b5cf6" />
+            </svg>
+            <div class="line-chart-labels">
+                <span>فروردین</span>
+                <span>اردیبهشت</span>
+                <span>خرداد</span>
+                <span>تیر</span>
+            </div>
         </div>
-      </div>
     </div>
 
     <!-- درصد وضعیت سفارشات (دونات) -->
     <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-eyebrow">وضعیت</div>
-          <div class="card-title">درصد وضعیت سفارشات</div>
+        <div class="card-header">
+            <div>
+                <div class="card-eyebrow">وضعیت</div>
+                <div class="card-title">درصد وضعیت سفارشات</div>
+            </div>
         </div>
-      </div>
 
-      <div class="donut-wrap">
-        <div class="donut">
-          <div class="donut-center">
-            <div class="num">۴۲۷</div>
-            <div class="lbl">سفارش</div>
-          </div>
+        <div class="donut-wrap">
+            <div class="donut">
+                <div class="donut-center">
+                    <div class="num">۴۲۷</div>
+                    <div class="lbl">سفارش</div>
+                </div>
+            </div>
+            <div class="donut-legend">
+                <div class="legend-row"><span class="legend-dot purple"></span> تحویل شده — ۶۳٪</div>
+                <div class="legend-row"><span class="legend-dot blue"></span> در حال پردازش</div>
+                <div class="legend-row"><span class="legend-dot orange"></span> در انتظار پرداخت</div>
+                <div class="legend-row"><span class="legend-dot pink"></span> لغو شده</div>
+            </div>
         </div>
-        <div class="donut-legend">
-          <div class="legend-row"><span class="legend-dot purple"></span> تحویل شده — ۶۳٪</div>
-          <div class="legend-row"><span class="legend-dot blue"></span> در حال پردازش</div>
-          <div class="legend-row"><span class="legend-dot orange"></span> در انتظار پرداخت</div>
-          <div class="legend-row"><span class="legend-dot pink"></span> لغو شده</div>
-        </div>
-      </div>
     </div>
 
     <!-- آخرین سفارش‌ها -->
     <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-eyebrow">جدیدترین</div>
-          <div class="card-title">جدیدترین سفارشات</div>
-        </div>
-        <button class="card-action" type="button" onclick="window.location.href=`{% url 'dashboard:admin:orders' %}`">مشاهده همه</button>
-      </div>
-
-      <div class="order-feed">
-
-        <div class="order-feed-row">
-          <div class="order-feed-icon">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/></svg>
-          </div>
-          <div class="order-feed-body">
-            <div class="order-feed-top">
-              <span class="status-pill delivered">تحویل شده</span>
-              <span class="order-feed-id">سفارش #۱۲۴۸۷</span>
+        <div class="card-header">
+            <div>
+                <div class="card-eyebrow">جدیدترین</div>
+                <div class="card-title">جدیدترین سفارشات</div>
             </div>
-            <div class="order-feed-bottom">
-              <span class="order-feed-amount">۱,۲۴۰,۰۰۰ تومان</span>
-              <span class="order-feed-time">امروز، ۱۰:۴۵</span>
-            </div>
-          </div>
+            <button class="card-action" type="button"
+                onclick="window.location.href=`{% url 'dashboard:admin:orders' %}`">مشاهده همه</button>
         </div>
 
-        <div class="order-feed-row">
-          <div class="order-feed-icon">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/></svg>
-          </div>
-          <div class="order-feed-body">
-            <div class="order-feed-top">
-              <span class="status-pill processing">در حال پردازش</span>
-              <span class="order-feed-id">سفارش #۱۲۴۸۶</span>
+        <div class="order-feed">
+            {% for order in month_orders %}
+            <div class="order-feed-row">
+                <div class="order-feed-icon">
+                    <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                        stroke-width="1.6">
+                        <rect x="2.5" y="4" width="13" height="11" rx="1.6" />
+                    </svg>
+                </div>
+                <div class="order-feed-body">
+                    <div class="order-feed-top">
+                        <span class="status-pill {{ order.get_status.title }}">{{ order.get_status.label }}</span>
+                        <span class="order-feed-id">سفارش {{ order.id }}</span>
+                    </div>
+                    <div class="order-feed-bottom">
+                        <span class="order-feed-amount">{{ order.total_price|intcomma }} تومان</span>
+                        <span class="order-feed-time">{{ order.created_date|jformat:"%H:%M - %Y/%m/%d" }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="order-feed-bottom">
-              <span class="order-feed-amount">۸۷۰,۰۰۰ تومان</span>
-              <span class="order-feed-time">امروز، ۰۹:۱۵</span>
-            </div>
-          </div>
-        </div>
+            {% endfor %}
 
-        <div class="order-feed-row">
-          <div class="order-feed-icon">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/></svg>
-          </div>
-          <div class="order-feed-body">
-            <div class="order-feed-top">
-              <span class="status-pill pending">در انتظار پرداخت</span>
-              <span class="order-feed-id">سفارش #۱۲۴۸۵</span>
-            </div>
-            <div class="order-feed-bottom">
-              <span class="order-feed-amount">۳۴۰,۰۰۰ تومان</span>
-              <span class="order-feed-time">دیروز، ۲۲:۳۰</span>
-            </div>
-          </div>
-        </div>
 
-        <div class="order-feed-row">
-          <div class="order-feed-icon">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/></svg>
-          </div>
-          <div class="order-feed-body">
-            <div class="order-feed-top">
-              <span class="status-pill delivered">تحویل شده</span>
-              <span class="order-feed-id">سفارش #۱۲۴۸۴</span>
-            </div>
-            <div class="order-feed-bottom">
-              <span class="order-feed-amount">۱,۸۹۰,۰۰۰ تومان</span>
-              <span class="order-feed-time">دیروز، ۱۸:۲۰</span>
-            </div>
-          </div>
         </div>
-
-        <div class="order-feed-row">
-          <div class="order-feed-icon">
-            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4" width="13" height="11" rx="1.6"/></svg>
-          </div>
-          <div class="order-feed-body">
-            <div class="order-feed-top">
-              <span class="status-pill cancelled">لغو شده</span>
-              <span class="order-feed-id">سفارش #۱۲۴۸۳</span>
-            </div>
-            <div class="order-feed-bottom">
-              <span class="order-feed-amount">۴۵۰,۰۰۰ تومان</span>
-              <span class="order-feed-time">دیروز، ۱۷:۱۰</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
 
-  </div>
+</div>
 
-  <!-- ردیف سوم: دسته‌بندی‌ها / تعداد محصولات / اطلاعیه‌ها -->
-  <div class="dash-grid-3">
 
-    <!-- پرفروش‌ترین دسته‌بندی‌ها -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-eyebrow">فروش</div>
-          <div class="card-title">پرفروش‌ترین دسته‌بندی‌ها</div>
-        </div>
-        <button class="card-action" type="button">مشاهده همه</button>
-      </div>
-
-      <div class="category-list">
-        <div class="category-row">
-          <div class="category-row-top"><span>رنگ و نقاشی</span><span class="category-percent">۴۸٪</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:48%;"></div></div>
-        </div>
-        <div class="category-row">
-          <div class="category-row-top"><span>ابزار طراحی</span><span class="category-percent">۲۳٪</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:23%;"></div></div>
-        </div>
-        <div class="category-row">
-          <div class="category-row-top"><span>کاغذ و دفتر</span><span class="category-percent">۱۵٪</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:15%;"></div></div>
-        </div>
-        <div class="category-row">
-          <div class="category-row-top"><span>لوازم جانبی</span><span class="category-percent">۱۴٪</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:14%;"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- تعداد محصولات -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-eyebrow">موجودی</div>
-          <div class="card-title">تعداد محصولات</div>
-        </div>
-        <button class="card-action" type="button">مشاهده همه</button>
-      </div>
-
-      <div class="mini-stat-value">۳۲۷</div>
-      <div class="mini-stat-label">محصول</div>
-      <div class="mini-stat-delta"><span class="kpi-delta up">▲ ۹٪</span> <span class="kpi-delta-label">نسبت به دوره قبل</span></div>
-
-      <div class="mini-bars">
-        <div class="mini-bar-col"><div class="mini-bar" style="height:65%;"></div><span class="mini-bar-label">فروردین</span></div>
-        <div class="mini-bar-col"><div class="mini-bar" style="height:78%;"></div><span class="mini-bar-label">اردیبهشت</span></div>
-        <div class="mini-bar-col"><div class="mini-bar" style="height:78%;"></div><span class="mini-bar-label">خرداد</span></div>
-        <div class="mini-bar-col"><div class="mini-bar" style="height:100%;"></div><span class="mini-bar-label">تیر</span></div>
-      </div>
-    </div>
-
-    <!-- اطلاعیه‌ها و یادآوری‌ها -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <div class="card-eyebrow">پیگیری</div>
-          <div class="card-title">اطلاعیه‌ها و یادآوری‌ها</div>
-        </div>
-        <button class="card-action" type="button">مشاهده همه</button>
-      </div>
-
-      <div class="notice-list">
-        <div class="notice-row">
-          <span class="notice-dot purple"></span>
-          <div class="notice-body">
-            <div class="notice-title">موجودی محصولات کم است</div>
-            <div class="notice-desc">۵ محصول از موجودی انبار در حال اتمام است.</div>
-            <div class="notice-time">۲ ساعت پیش</div>
-          </div>
-        </div>
-        <div class="notice-row">
-          <span class="notice-dot orange"></span>
-          <div class="notice-body">
-            <div class="notice-title">سفارشات در انتظار بررسی</div>
-            <div class="notice-desc">۱۲ سفارش جدید نیاز به بررسی دارند.</div>
-            <div class="notice-time">۵ ساعت پیش</div>
-          </div>
-        </div>
-        <div class="notice-row">
-          <span class="notice-dot blue"></span>
-          <div class="notice-body">
-            <div class="notice-title">گزارش ماهانه</div>
-            <div class="notice-desc">گزارش ماهانه فروشگاه برای شما آماده شده است.</div>
-            <div class="notice-time">۱ روز پیش</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-{% endblock content %}  
+{% endblock content %}

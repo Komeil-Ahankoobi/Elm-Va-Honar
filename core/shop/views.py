@@ -26,7 +26,6 @@ class ShopProductView(ListView):
             ))
         )
         
-        
         if q := self.request.GET.get('q'):
             queryset = queryset.filter(title__icontains=q)        
         try:

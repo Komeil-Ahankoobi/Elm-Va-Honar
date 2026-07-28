@@ -1,10 +1,23 @@
 from django.contrib import admin
-from .models import ProductModel, ProductImageModel, ProductCategoryModel
+from .models import (
+    ProductModel, 
+    ProductImageModel, 
+    ProductCategoryModel,
+    ProductVarientModel,
+)
+
+
+    
+class ProductVarientInline(admin.TabularInline):
+    model = ProductVarientModel
+    extra = 0
+    fields = ['varient_type', 'color_code', 'number_code']
 
 
 @admin.register(ProductModel)
 class ProductModelAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "stock", "status","price", "image_alt_text", "meta_title", "meta_description")
+    inlines = [ProductVarientInline]
 
 @admin.register(ProductCategoryModel)
 class ProductCategoryModelAdmin(admin.ModelAdmin):
@@ -13,3 +26,4 @@ class ProductCategoryModelAdmin(admin.ModelAdmin):
 @admin.register(ProductImageModel)
 class ProductImageModelAdmin(admin.ModelAdmin):
     list_display = ("id", "file", "created_date")
+    

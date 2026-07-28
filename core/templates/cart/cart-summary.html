@@ -1,171 +1,190 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/cart-summary.css'%}">
 {% endblock extra_css %}
 
-{% load humanize %}
 {% block content %}
 
 <main class="cart-page">
-  <div class="container">
+    <div class="container">
 
-    <!-- STEP INDICATOR -->
-    <ol class="checkout-stepper2" aria-label="مراحل تسویه حساب">
-      <li class="step-item2 completed">
-        <span class="step-circle2" aria-hidden="true">
-          1
-        </span>
-        <span class="step-label2">سبد خرید</span>
-      </li>
+        <!-- STEP INDICATOR -->
+        <ol class="checkout-stepper2" aria-label="مراحل تسویه حساب">
+            <li class="step-item2 completed">
+                <span class="step-circle2" aria-hidden="true">
+                    1
+                </span>
+                <span class="step-label2">سبد خرید</span>
+            </li>
 
-      <li class="step-connector2" aria-hidden="true"></li>
+            <li class="step-connector2" aria-hidden="true"></li>
 
-      <li class="step-item2" aria-current="step">
-        <span class="step-circle2">۲</span>
-        <span class="step-label2">آدرس و ارسال</span>
-      </li>
+            <li class="step-item2" aria-current="step">
+                <span class="step-circle2">۲</span>
+                <span class="step-label2">آدرس و ارسال</span>
+            </li>
 
-      <li class="step-connector2" aria-hidden="true"></li>
+            <li class="step-connector2" aria-hidden="true"></li>
 
-      <li class="step-item2">
-        <span class="step-circle2">۳</span>
-        <span class="step-label2">پرداخت</span>
-      </li>
-    </ol>
+            <li class="step-item2">
+                <span class="step-circle2">۳</span>
+                <span class="step-label2">پرداخت</span>
+            </li>
+        </ol>
 
 
-    <!-- HEADER -->
-    <section class="cart-page-header">
-      <h1 class="cart-page-title">سبد خرید</h1>
-      <span class="cart-page-count">{{ cart.get_total_quantity }} کالا</span>
-    </section>
+        <!-- HEADER -->
+        <section class="cart-page-header">
+            <h1 class="cart-page-title">سبد خرید</h1>
+            <span class="cart-page-count">{{ cart.get_total_quantity }} کالا</span>
+        </section>
 
-    <div class="cart-layout">
+        <div class="cart-layout">
 
-      <!-- LEFT: ITEMS -->
-      <div class="cart-items-col">
+            <!-- LEFT: ITEMS -->
+            <div class="cart-items-col">
 
-        <div class="cart-list" id="cart-items">
-          {% for item in cart_items %}
-          <article class="cart-row" data-id="{{ item.product_id }}" data-price="{{ item.product_obj.get_price }}">
+                <div class="cart-list" id="cart-items">
+                    {% for item in cart_items %}
+                    <article class="cart-row" data-id="{{ item.product_id }}"
+                        data-variant-id="{{ item.variant_id|default_if_none:'' }}"
+                        data-price="{{ item.product_obj.get_price }}">
 
-            <div class="cart-row-thumb">
-              <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.title }}" />
+                        <div class="cart-row-thumb">
+                            <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.title }}" />
+                        </div>
+
+                        <div class="cart-row-info">
+                            <span class="cart-row-cat">
+                                {% for category in item.product_obj.category.all %}
+                                <a href="#">{{ category.title }}</a>{% if not forloop.last %}، {% endif %}
+                                {% endfor %}
+                            </span>
+                            <h3 class="cart-row-name">{{ item.product_obj.title }}</h3>
+                            {% if item.variant_obj %}
+                            <span class="cart-row-variant">
+                                {% if item.variant_obj.variant_type == "color" %}
+                                <span class="variant-swatch"
+                                    style="background-color: {{ item.variant_obj.color_code }};"></span>
+                                {{ item.variant_obj.label }}
+                                {% else %}
+                                شماره {{ item.variant_obj.number_code }}
+                                {% endif %}
+                            </span>
+                            {% endif %}
+                            <span class="cart-row-unit">{{ item.product_obj.get_price|intcomma }} تومان / عدد</span>
+                        </div>
+
+
+                        <div class="cart-row-qty">
+                            <div class="qty-stepper">
+                                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}"
+                                    data-action="dec" aria-label="کم کردن تعداد">−</button>
+                                <span class="qty-val">{{ item.quantity }}</span>
+                                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}"
+                                    data-action="inc" aria-label="زیاد کردن تعداد">+</button>
+                            </div>
+                            <button type="button" class="cart-row-remove" data-action="remove" aria-label="حذف از سبد">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="cart-row-total">
+                            {{ item.total_price|intcomma }} تومان
+                        </div>
+
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <!-- EMPTY STATE -->
+                <div class="cart-empty" id="cart-empty" style="{% if cart_items %}display:none;{% endif %}">
+                    <div class="cart-empty-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+                    </div>
+                    <p class="cart-empty-title">سبد خرید شما خالی است</p>
+                    <p class="cart-empty-sub">محصولات مورد علاقه‌تان را از فروشگاه اضافه کنید.</p>
+                    <a href="{% url 'shop:show-product-view' %}" class="btn-primary-gradient">مشاهده فروشگاه</a>
+                </div>
+
+                <!-- GIFT NOTE -->
+
+
             </div>
 
-            <div class="cart-row-info">
-              <span class="cart-row-cat">
-                {% for category in item.product_obj.category.all %}
-                <a href="#">{{ category.title }}</a>{% if not forloop.last %}، {% endif %}
-                {% endfor %}
-              </span>
-              <h3 class="cart-row-name">{{ item.product_obj.title }}</h3>
-              <span class="cart-row-unit">{{ item.product_obj.get_price|intcomma }} تومان / عدد</span>
-            </div>
+            <!-- RIGHT: SUMMARY -->
+            <aside class="cart-summary">
+                <h2 class="cart-summary-title">خلاصه سفارش</h2>
 
-            <div class="cart-row-qty">
-              <div class="qty-stepper">
-                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" data-action="dec"
-                  aria-label="کم کردن تعداد">−</button>
-                <span class="qty-val">{{ item.quantity }}</span>
-                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" data-action="inc"
-                  aria-label="زیاد کردن تعداد">+</button>
-              </div>
-              <button type="button" class="cart-row-remove" data-action="remove" aria-label="حذف از سبد">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                </svg>
-              </button>
-            </div>
+                <div class="cart-summary-rows">
+                    <div class="summary-row">
+                        <span>جمع کل</span>
+                        <span class="val" id="sum-subtotal">{{ cart.get_total_payment_amount|intcomma }} تومان</span>
+                    </div>
+                    <div class="summary-row muted">
+                        <span>هزینه ارسال</span>
+                        <span id="sum-shipping">در مرحله بعد محاسبه می‌شود</span>
+                    </div>
+                    <div class="summary-row discount-row" id="discount-row" style="display:none;">
+                        <span>تخفیف</span>
+                        <span class="val" id="sum-discount">−۰ تومان</span>
+                    </div>
+                </div>
 
-            <div class="cart-row-total">
-              {{ item.total_price|intcomma }} تومان
-            </div>
+                <div class="promo-box">
+                    <div class="promo-applied" id="promo-applied" style="display:none;">
+                        <span>کد <strong>QALAM10</strong> اعمال شد — ۱۰٪ تخفیف</span>
+                        <span class="promo-remove" id="promo-remove">حذف</span>
+                    </div>
+                </div>
 
-          </article>
-          {% endfor %}
+                <div class="cart-summary-divider"></div>
+
+                <div class="cart-summary-total">
+                    <span class="label">مجموع پرداختی</span>
+                    <span class="amount" id="sum-total">{{ cart.get_total_payment_amount|intcomma }} تومان</span>
+                </div>
+
+                <a href="{% url 'order:order-checkout' %}" type="button" class="btn-checkout" id="checkout-btn">
+                    ادامه به پرداخت
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </a>
+
+                <div class="secure-note">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    پرداخت امن و رمزگذاری‌شده
+                </div>
+
+                <div class="payment-badges">
+                    <span>شتاب</span>
+                    <span>ملت</span>
+                    <span>سامان</span>
+                    <span>زرین‌پال</span>
+                </div>
+            </aside>
+
         </div>
-
-        <!-- EMPTY STATE -->
-        <div class="cart-empty" id="cart-empty" style="{% if cart_items %}display:none;{% endif %}">
-          <div class="cart-empty-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
-            </svg>
-          </div>
-          <p class="cart-empty-title">سبد خرید شما خالی است</p>
-          <p class="cart-empty-sub">محصولات مورد علاقه‌تان را از فروشگاه اضافه کنید.</p>
-          <a href="{% url 'shop:show-product-view' %}" class="btn-primary-gradient">مشاهده فروشگاه</a>
-        </div>
-
-        <!-- GIFT NOTE -->
-
-
-      </div>
-
-      <!-- RIGHT: SUMMARY -->
-      <aside class="cart-summary">
-        <h2 class="cart-summary-title">خلاصه سفارش</h2>
-
-        <div class="cart-summary-rows">
-          <div class="summary-row">
-            <span>جمع کل</span>
-            <span class="val" id="sum-subtotal">{{ cart.get_total_payment_amount|intcomma }} تومان</span>
-          </div>
-          <div class="summary-row muted">
-            <span>هزینه ارسال</span>
-            <span id="sum-shipping">در مرحله بعد محاسبه می‌شود</span>
-          </div>
-          <div class="summary-row discount-row" id="discount-row" style="display:none;">
-            <span>تخفیف</span>
-            <span class="val" id="sum-discount">−۰ تومان</span>
-          </div>
-        </div>
-
-        <div class="promo-box">
-          <div class="promo-applied" id="promo-applied" style="display:none;">
-            <span>کد <strong>QALAM10</strong> اعمال شد — ۱۰٪ تخفیف</span>
-            <span class="promo-remove" id="promo-remove">حذف</span>
-          </div>
-        </div>
-
-        <div class="cart-summary-divider"></div>
-
-        <div class="cart-summary-total">
-          <span class="label">مجموع پرداختی</span>
-          <span class="amount" id="sum-total">{{ cart.get_total_payment_amount|intcomma }} تومان</span>
-        </div>
-
-        <a href="{% url 'order:order-checkout' %}" type="button" class="btn-checkout" id="checkout-btn">
-          ادامه به پرداخت
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </a>
-
-        <div class="secure-note">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          پرداخت امن و رمزگذاری‌شده
-        </div>
-
-        <div class="payment-badges">
-          <span>شتاب</span>
-          <span>ملت</span>
-          <span>سامان</span>
-          <span>زرین‌پال</span>
-        </div>
-      </aside>
-
     </div>
-  </div>
 
-  <div class="toast" id="toast"></div>
+    <div class="toast" id="toast"></div>
 </main>
 
 {% endblock content %}

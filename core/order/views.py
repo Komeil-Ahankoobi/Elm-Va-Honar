@@ -78,6 +78,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             OrderItemsModel.objects.create(
                 order=order,
                 product=item.product,
+                variant=item.variant,
                 quantity=item.quantity,
                 price=item.product.get_price(),
         )
