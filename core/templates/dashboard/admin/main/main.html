@@ -1,6 +1,7 @@
 {% extends 'dashboard/admin/base.html' %}
 {% load humanize %}
-{% load jformat %}
+{% load jalali_tags %}
+
 
 {% block title %}گزارش‌های کلی | علم و هنر{% endblock %}
 
@@ -189,7 +190,7 @@
                     </div>
                     <div class="order-feed-bottom">
                         <span class="order-feed-amount">{{ order.total_price|intcomma }} تومان</span>
-                        <span class="order-feed-time">{{ order.created_date|jformat:"%H:%M - %Y/%m/%d" }}</span>
+                        <span class="order-feed-time">{{ order.created_date|jalali_datetime }}</span>
                     </div>
                 </div>
             </div>

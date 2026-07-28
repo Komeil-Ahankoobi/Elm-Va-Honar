@@ -13,7 +13,6 @@ from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
-import jdatetime
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.models import User
@@ -22,6 +21,11 @@ from ..permissions import HasAdminAccessPermission
 from .forms import (
     AdminPasswordChangeForm,
     AdminProductDetailEditFrom,
+)
+from ..jalali_utils import (
+    PERSIAN_MONTH_NAMES_FA,
+    get_current_jalali_ymd,
+    jalali_month_start_to_aware_gregorian,
 )
 from shop.models import (
     ProductModel,
@@ -38,16 +42,10 @@ class AdminDashboardHomeView(HasAdminAccessPermission,TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        now = timezone.now()
-        today_jalai = jdatetime.datetime.fromgregorian(datetime=now)
 
-        today_start_jalali = today_jalai.replace(hour=0, minute=0, second=0, microsecond=0)
-        today_jalali = jdatetime.datetime.fromgregorian(datetime=now)
+        jy, jm, jd = get_current_jalali_ymd()
+        month_start = jalali_month_start_to_aware_gregorian(jy, jm)
 
-        month_start_jalali = today_start_jalali.replace(day=1)
-        month_start = self.to_aware_gregorian(month_start_jalali)
-        
         successful_orders = OrderModel.objects.filter(status=OrderStatusType.succes.value)
 
         
@@ -62,18 +60,12 @@ class AdminDashboardHomeView(HasAdminAccessPermission,TemplateView):
         context['total_products'] = ProductModel.objects.count()
         
         # context["today_jalali_full"] = today_jalali.strftime("%Y/%m/%d")
-        context["current_month_name"] = today_jalali.j_months_fa[today_jalali.month - 1]
+        context["current_month_name"] = PERSIAN_MONTH_NAMES_FA[jm - 1]
 
         # cancelled=>faild pending complete delivered=>succes
         
         
         return context
-
-    def to_aware_gregorian(self, jalali_dt):
-        gregorian_dt = jalali_dt.togregorian()
-        if timezone.is_naive(gregorian_dt):
-            gregorian_dt = timezone.make_aware(gregorian_dt)
-        return gregorian_dt
 
     def get_sales_sum(self, queryset, since=None):
         if since:
@@ -116,14 +108,9 @@ class AdminOrdersView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessa
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        now = timezone.now()
-        today_jalai = jdatetime.datetime.fromgregorian(datetime=now)
 
-        today_start_jalali = today_jalai.replace(hour=0, minute=0, second=0, microsecond=0)
-
-        month_start_jalali = today_start_jalali.replace(day=1)
-        month_start = self.to_aware_gregorian(month_start_jalali)
+        jy, jm, jd = get_current_jalali_ymd()
+        month_start = jalali_month_start_to_aware_gregorian(jy, jm)
         
         context["total_orders"] = OrderModel.objects.count()
         context["month_orders"] = OrderModel.objects.filter(created_date__gte=month_start)[:5]
@@ -134,12 +121,6 @@ class AdminOrdersView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessa
         context['faild_orders'] = OrderModel.objects.filter(status=OrderStatusType.faild.value).count()
 
         return context
-
-    def to_aware_gregorian(self, jalali_dt):    
-        gregorian_dt = jalali_dt.togregorian()
-        if timezone.is_naive(gregorian_dt):
-            gregorian_dt = timezone.make_aware(gregorian_dt)
-        return gregorian_dt
 
     def get_sales_sum(self, queryset, since=None):
         if since:
@@ -238,4 +219,3 @@ class AdminProductsDeleteView(LoginRequiredMixin, HasAdminAccessPermission, Dele
     
 class AdminCustomersView(TemplateView):
     template_name = 'dashboard/admin/customers/customers.html'
-
