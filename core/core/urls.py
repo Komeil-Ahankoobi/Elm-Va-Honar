@@ -19,25 +19,28 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from shop.sitemaps import ProductSitemap, CategorySitemap
+from shop.sitemaps import ProductSitemap, CategorySitemap, StaticViewSitemap
 from django.http import HttpResponse
 
 sitemaps = {
-    'products': ProductSitemap,
+    'static': StaticViewSitemap,
     'categories': CategorySitemap,
+    'products': ProductSitemap,
 }
 
 def robots_txt(request):
-    content = """User-agent: *
-Allow: /
-Disallow: /admin/
-Disallow: /cart/
-Disallow: /accounts/
+    sitemap_url = request.build_absolute_uri('/sitemap.xml')
+    content = f"""User-agent: *
+    Allow: /
+    Disallow: /admin/
+    Disallow: /cart/
+    Disallow: /accounts/
+    Disallow: /dashboard/
+    Disallow: /order/
 
-Sitemap: https://elmvhonar.ir/sitemap.xml
-"""
+    Sitemap: {sitemap_url}
+    """
     return HttpResponse(content, content_type="text/plain")
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
@@ -49,8 +52,6 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt),
 ]
-
-
 
 
 if settings.DEBUG:
