@@ -37,9 +37,13 @@ class ProductModel(models.Model):
     category = models.ManyToManyField(ProductCategoryModel)
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
+    
     image = models.ImageField(default="default/default.png", upload_to="product/img/")
-    image_alt_text = models.CharField(max_length=255, blank=True,
-        help_text="متن جایگزین تصویر برای سئو. مثلاً: خرید بوم نقاشی سایز A3")
+    image_alt_text = models.CharField(
+        max_length=255, blank=True,
+        help_text="متن جایگزین تصویر برای سئو. مثلاً: خرید بوم نقاشی سایز A3"
+    )
+    
     description = models.TextField()
     brief_description = models.TextField(null=True, blank=True)
 
@@ -91,3 +95,30 @@ class ProductImageModel(models.Model):
     
     class Meta:
         ordering = ["-created_date"]
+        
+        
+class VarientType(models.TextChoices):
+    color = 'color', ("رنگ")
+    number = 'number', ('شماره')
+
+
+class ProductVarientModel(models.Model):
+    product = models.ForeignKey(
+        ProductModel, on_delete=models.CASCADE, related_name='varients'
+    )
+    varient_type = models.CharField(
+        max_length=20, choices=VarientType.choices,
+        help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن"
+    )
+    color_code = models.CharField(
+        max_length=3, blank=True, null=True,
+        help_text="فقط برای نوع 'رنگ' پر کن. کد هگز، مثلاً 12"
+    )
+    number_code = models.CharField(
+        max_length=5, blank=True, null=True,
+        help_text="مثل 0000 یا 000 یا 00 یا 0 یا اعداد طبیعی مثل 16 و 15"
+    )
+    
+    
+    def __str__(self):
+        return f'{self.product.title} - {self.varient_type}'

@@ -64,3 +64,29 @@ data.forEach((d) => {
         }
     });
 })();
+
+function filterOrderStatus(selectedElement) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    const paramsName = selectedElement.name;
+    const paramsValue = selectedElement.value;
+
+    params.set(paramsName, paramsValue);
+
+    const newUrl = `${url.pathname}?${params.toString()}`;
+    window.location.href = newUrl;
+}
+
+function goToPage(event, pageNumber) {
+    event.preventDefault();
+
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    params.set("page", pageNumber);
+
+    const newUrl = `${url.pathname}?${params.toString()}`;
+
+    window.location.href = newUrl;
+}

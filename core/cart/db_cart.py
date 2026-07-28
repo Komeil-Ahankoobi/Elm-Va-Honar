@@ -16,14 +16,16 @@ class CartDB:
     def get_cart_items(self):
         cart_items = []
         self.total_payment_price = 0
-        for item in self.cart_obj.cart_items.select_related('product').all():
+        for item in self.cart_obj.cart_items.select_related('product', 'variant').all():
             price = item.quantity * item.product.get_price()
             self.total_payment_price += price
             cart_items.append({
                 "product_id": item.product_id,
+                "variant_id": item.variant_id,
                 "quantity": item.quantity,
                 "total_price": price,
                 "product_obj": item.product,
+                "varient_obj": item.variant,
             })
         return cart_items
 
@@ -31,10 +33,11 @@ class CartDB:
         self.get_cart_items()
         return self.total_payment_price
 
-    def add_product(self, product_id):
+    def add_product(self, product_id, variant_id=None):
         item, created = CartItemModel.objects.get_or_create(
             cart=self.cart_obj,
             product_id=product_id,
+            variant_id=variant_id,
             defaults={"quantity": 1}
         )
         if not created:
@@ -45,16 +48,16 @@ class CartDB:
         self.cart_obj.cart_items.all().delete()
 
 
-    def increase_quantity(self, product_id):
-        item = self.cart_obj.cart_items.get(product_id=product_id)
+    def increase_quantity(self, product_id, variant_id=None):
+        item = self.cart_obj.cart_items.get(product_id=product_id, variant_id=variant_id)
         item.quantity += 1
         item.save()
         
-    def decrease_quantity(self, product_id):
-        item = self.cart_obj.cart_items.get(product_id=product_id)
+    def decrease_quantity(self, product_id, variant_id):
+        item = self.cart_obj.cart_items.get(product_id=product_id, variant_id=variant_id)
         if item.quantity != 1:
             item.quantity -= 1
             item.save()
 
-    def delete_product(self, product_id):
-        self.cart_obj.cart_items.filter(product_id=product_id).delete()
+    def delete_product(self, product_id, variant_id):
+        self.cart_obj.cart_items.filter(product_id=product_id, variant_id=variant_id).delete()

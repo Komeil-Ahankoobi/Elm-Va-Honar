@@ -42,7 +42,7 @@ if (cartItemsEl) {
     }
 
     // درخواست افزایش/کاهش تعداد به سمت جنگو
-    async function updateQuantity(productId, action) {
+    async function updateQuantity(productId, variantId, action) {
         const response = await fetch("/cart/session/update-quantity/", {
             method: "POST",
             headers: {
@@ -51,6 +51,7 @@ if (cartItemsEl) {
             },
             body: JSON.stringify({
                 product_id: productId,
+                variant_id: variantId || null,
                 action: action,
             }),
         });
@@ -64,7 +65,7 @@ if (cartItemsEl) {
     }
 
     // درخواست حذف کامل محصول به سمت جنگو
-    async function deleteProduct(productId) {
+    async function deleteProduct(productId, variantId) {
         const response = await fetch("/cart/session/delete-product/", {
             method: "POST",
             headers: {
@@ -73,6 +74,7 @@ if (cartItemsEl) {
             },
             body: JSON.stringify({
                 product_id: productId,
+                variant_id: variantId || null,
             }),
         });
 
@@ -93,9 +95,10 @@ if (cartItemsEl) {
 
         const action = btn.dataset.action;
         const productId = item.dataset.id;
+        const variantId = item.dataset.variantId;
 
         if (action === "inc" || action === "dec") {
-            const data = await updateQuantity(productId, action);
+            const data = await updateQuantity(productId, variantId, action);
             if (!data) return;
 
             // آپدیت تعداد همین آیتم
@@ -119,7 +122,7 @@ if (cartItemsEl) {
             const nameEl = item.querySelector(".cart-row-name");
             const name = nameEl ? nameEl.textContent : "";
 
-            const data = await deleteProduct(productId);
+            const data = await deleteProduct(productId, variantId);
             if (!data) return;
 
             item.classList.add("removing");
