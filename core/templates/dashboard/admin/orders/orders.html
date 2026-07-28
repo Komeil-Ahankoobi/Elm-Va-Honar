@@ -1,7 +1,7 @@
 {% extends 'dashboard/admin/base.html' %}
 {% load static %}
 {% load humanize %}
-{% load jformat %}
+{% load jalali_tags %}
 
 
 {% block title %}مدیریت سفارشات | علم و هنر{% endblock %}
@@ -188,8 +188,8 @@
                     <td><span class="status-pill {{ order.get_status.title }}">{{ order.get_status.label }}</span></td>
                     <td>
                         <div class="date-cell">
-                            <div>{{ order.created_date|jformat:"%Y/%m/%d" }}</div>
-                            <div class="date-time">{{ order.created_date|jformat:"%H:%M" }}</div>
+                            <div>{{ order.created_date|jalali_date }}</div>
+                            <div class="date-time">{{ order.created_date|jalali_time }}</div>
                         </div>
                     </td>
                     <td>

@@ -7,7 +7,6 @@ python-decouple
 pillow
 faker
 jdatetime
-django-jalali
 
 # برای static files (چون ENABLE_WHITENOISE داری)
 whitenoise
