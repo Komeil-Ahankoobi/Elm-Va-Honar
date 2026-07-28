@@ -1,0 +1,225 @@
+/* ============================================================
+   ORDER SUCCESS PAGE
+   ============================================================ */
+
+.order-success-section {
+    padding-top: 140px;
+    padding-bottom: 4rem;
+    min-height: 70vh;
+}
+
+/* ------------------------------------------------------------
+   STEP INDICATOR
+   ------------------------------------------------------------ */
+.checkout-stepper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 3rem;
+    list-style: none;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 96px;
+}
+
+.step-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--bg-surface);
+    border: 2px solid var(--clr-input-border);
+    color: var(--clr-text-muted);
+    transition:
+        background var(--transition-base),
+        border-color var(--transition-base),
+        color var(--transition-base),
+        box-shadow var(--transition-base);
+}
+
+.step-item.completed .step-circle {
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    border-color: transparent;
+    color: #fff;
+}
+
+.step-item.active .step-circle {
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 0 0 5px rgba(168, 85, 247, 0.16);
+}
+
+.step-label {
+    font-size: 13px;
+    color: var(--clr-text-muted);
+    white-space: nowrap;
+    transition: color var(--transition-base);
+}
+
+.step-item.active .step-label,
+.step-item.completed .step-label {
+    color: var(--clr-text-main);
+    font-weight: 600;
+}
+
+.step-connector {
+    width: 90px;
+    height: 2px;
+    background: var(--clr-input-border);
+    margin-top: 21px;
+    border-radius: 2px;
+}
+
+.step-connector.filled {
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 100%);
+}
+
+@media (max-width: 600px) {
+    .step-connector {
+        width: 36px;
+    }
+    .step-item {
+        min-width: 60px;
+    }
+    .step-label {
+        font-size: 11px;
+    }
+}
+
+/* ---------- Success Box ---------- */
+.success-box {
+    max-width: 560px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.success-icon-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.12);
+    z-index: 2;
+}
+
+.success-icon svg {
+    width: 36px;
+    height: 36px;
+}
+
+.deco-dot {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.dot-1 {
+    width: 10px;
+    height: 10px;
+    background: var(--pastel-pink);
+    top: 8px;
+    right: 18px;
+}
+
+.dot-2 {
+    width: 6px;
+    height: 6px;
+    background: var(--pastel-sky);
+    top: 30px;
+    left: 6px;
+}
+
+.dot-3 {
+    width: 8px;
+    height: 8px;
+    background: var(--pastel-lavender);
+    bottom: 16px;
+    right: 4px;
+}
+
+.dot-4 {
+    width: 5px;
+    height: 5px;
+    background: var(--pastel-yellow);
+    bottom: 30px;
+    left: 22px;
+}
+
+.success-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #22c55e;
+    margin-bottom: 0.75rem;
+}
+
+.success-desc {
+    font-size: 0.95rem;
+    color: var(--clr-text-muted);
+    line-height: 1.9;
+    margin-bottom: 2.25rem;
+}
+
+.btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-dark);
+    color: var(--clr-text-main);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition:
+        background var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.btn-back-home svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-back-home:hover {
+    background: var(--bg-surface);
+    border-color: var(--pastel-lavender);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+    .checkout-steps {
+        gap: 0.4rem;
+    }
+
+    .step-line {
+        width: 50px;
+    }
+
+    .success-title {
+        font-size: 1.3rem;
+    }
+}

@@ -2,6 +2,7 @@ from django.db import models
 from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
+from django.urls import reverse
 
 
 class ProductStatusType(models.IntegerChoices):
@@ -25,6 +26,9 @@ class ProductCategoryModel(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('shop:show-product-view') + f'?category={self.slug}'
 
     def get_meta_title(self):
         return self.meta_title or self.title
@@ -58,6 +62,9 @@ class ProductModel(models.Model):
 
     class Meta:
         ordering = ["-created_date"]
+
+    def get_absolute_url(self):
+        return reverse('shop:show-product-detail-view', kwargs={'slug': self.slug})
 
     def get_price_rial(self):
         return self.get_price() * 10
