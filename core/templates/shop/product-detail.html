@@ -431,22 +431,62 @@
 
 
 {% block extra_js %}
-
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "{{ object.title|escapejs }}",
-  "image": "{{ object.image.url }}",
-  "description": "{{ object.get_meta_description|escapejs }}",
-  "offers": {
-    "@type": "Offer",
-    "url": "https://elmvhonar.ir/product/{{ object.slug }}/",
-    "priceCurrency": "IRR",
-    "price": "{{ object.get_price_rial }}",
-    "availability": "{% if object.stock > 0 %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
-  }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'website:home' %}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "فروشگاه",
+          "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'shop:show-product-view' %}"
+        }
+        {% if object.category.first %}
+        ,{
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ object.category.first.title|escapejs }}",
+          "item": "{{ request.scheme }}://{{ request.get_host }}{{ object.category.first.get_absolute_url }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "{{ object.title|escapejs }}"
+        }
+        {% else %}
+        ,{
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ object.title|escapejs }}"
+        }
+        {% endif %}
+      ]
+    },
+    {
+      "@type": "Product",
+      "name": "{{ object.title|escapejs }}",
+      {% if object.image %}
+      "image": "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}",
+      {% endif %}
+      "description": "{{ object.get_meta_description|escapejs }}",
+      "offers": {
+        "@type": "Offer",
+        "url": "{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}",
+        "priceCurrency": "IRR",
+        "price": "{{ object.get_price_rial }}",
+        "availability": "{% if object.stock > 0 %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+      }
+    }
+  ]
 }
 </script>
-
 {% endblock extra_js %}

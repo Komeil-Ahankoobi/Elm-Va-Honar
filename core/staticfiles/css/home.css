@@ -1,0 +1,1481 @@
+/* ============================================================
+   DARK PASTEL THEME VARIABLES
+   ============================================================ */
+:root {
+    /* Pastel Palette */
+    --pastel-pink: #f79ac3;
+    --pastel-lavender: #bbbcfb;
+    --pastel-sky: #8bd2dc;
+    --pastel-mint: #99c6d8;
+    --pastel-yellow: #ffd782;
+
+    /* Gradients */
+    --brand-gradient: linear-gradient(135deg, #f79ac3 0%, #bbbcfb 50%, #8bd2dc 100%);
+    --button-gradient: linear-gradient(135deg, #f79ac3 0%, #bbbcfb 100%);
+    --card-glow-gradient: linear-gradient(135deg, rgba(247, 154, 195, 0.15), rgba(187, 188, 251, 0.05));
+
+    /* Dark Theme Surfaces */
+    --bg-dark: #0f0f16;
+    --bg-surface: #161620;
+    --bg-surface-elevated: #242436;
+    --border-dark: rgba(255, 255, 255, 0.08);
+
+    /* Typography */
+    --clr-text-main: #f4f4f8;
+    --clr-text-muted: #a0a0b8;
+    --ff-body: "Vazirmatn", sans-serif;
+
+    /* Layout */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+    --transition-base: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    --clr-bg-header: #101016; /* بسیار تیره، نزدیک به مشکی */
+    --clr-text-main: #ffffff;
+    --clr-text-muted: #a0a0ab;
+    --clr-input-bg: #1a1a22;
+    --clr-input-border: #2a2a35;
+
+    /* گریدینت‌های دقیق لوگو و دکمه فعال */
+    --brand-gradient: linear-gradient(135deg, #b39ddb 0%, #f48fb1 50%, #ffab91 100%);
+    --active-gradient: linear-gradient(90deg, #f48fb1 0%, #ffab91 100%);
+
+    --pastel-pink: #f48fb1;
+
+    --font-family-main: "Vazirmatn", sans-serif; /* فرض بر استفاده از فونت استاندارد فارسی */
+    --transition-base: 0.25s ease-in-out;
+    --radius-md: 30px; /* برای نوار جستجو */
+    --radius-sm: 8px;
+}
+
+/* RESET */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.dark-pastel-theme {
+    background-color: var(--bg-dark);
+    color: var(--clr-text-main);
+    font-family: var(--ff-body);
+    direction: rtl;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-header * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.site-header ul {
+    list-style: none;
+}
+
+.site-header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Container width control */
+.container {
+    width: 100%;
+    max-width: 1440px; /* حداکثر عرض استاندارد دسکتاپ */
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+/* ============================================================
+   HEADER / NAVIGATION MAIN
+   ============================================================ */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: var(--clr-bg-header);
+    border-bottom: 1px solid var(--clr-input-border);
+    font-family: var(--font-family-main);
+    direction: rtl; /* داکیومنت فارسی */
+}
+
+.nav-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --------------------------------------------
+   TOP ROW: Actions | Search | Logo
+   -------------------------------------------- */
+.nav-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    gap: 30px;
+}
+
+/* --- Logo Section (Right) --- */
+.nav-logo {
+    grid-column: 3; /* قرارگیری در ستون سوم گرید */
+    justify-self: start; /* چسبیدن به سمت راست کانتینر */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-logo-img {
+    height: 60px; /* تنظیم عرض لوگو بر اساس تصویر */
+    width: auto;
+}
+
+.logo-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.nav-logo-name {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: sans-serif; /* فونت انگلیسی لوگو */
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.nav-logo-sub {
+    font-size: 14px;
+    color: var(--clr-text-muted);
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+/* --- Search Section (Center) --- */
+.nav-search {
+    grid-column: 2; /* ستون وسط */
+    width: 100%;
+    max-width: 600px; /* حداکثر عرض نوار جستجو */
+}
+
+.search-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-form input {
+    width: 100%;
+    height: 48px;
+    background-color: var(--clr-input-bg);
+    border: 1px solid var(--clr-input-border);
+    border-radius: var(--radius-md);
+    padding: 0 25px 0 60px; /* پدینگ بیشتر در چپ برای آیکون */
+    color: var(--clr-text-main);
+    font-size: 15px;
+    transition: border-color var(--transition-base);
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: var(--pastel-pink);
+}
+
+.search-form input::placeholder {
+    color: var(--clr-text-muted);
+    opacity: 0.8;
+}
+
+.search-btn {
+    position: absolute;
+    left: 20px; /* آیکون جستجو در سمت چپ */
+    background: none;
+    border: none;
+    color: var(--clr-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-base);
+}
+
+.search-btn:hover {
+    color: var(--clr-text-main);
+}
+
+/* --- Actions Section (Left) --- */
+.nav-actions {
+    grid-column: 1; /* ستون اول */
+    justify-self: end; /* چسبیدن به سمت چپ کانتینر */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-icon-btn {
+    color: var(--clr-text-muted);
+    transition: color var(--transition-base);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon-btn:hover {
+    color: var(--clr-text-main);
+}
+
+/* سبد خرید با شمارنده */
+.nav-cta-cart .cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* دکمه خروج متنی */
+.logout-form {
+    display: flex;
+}
+
+.logout-text-btn {
+    background: none;
+    border: none;
+    color: var(--clr-text-muted);
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color var(--transition-base);
+}
+
+.logout-text-btn:hover {
+    color: var(--pastel-pink);
+}
+
+.nav-mobile-toggle {
+    display: none; /* مخفی در دسکتاپ */
+}
+
+/* --------------------------------------------
+   BOTTOM ROW: Nav Links
+   -------------------------------------------- */
+.nav-bottom-row {
+    border-top: 1px solid var(--clr-input-border);
+    padding: 15px 0;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* مرکز‌چین کردن لینک‌ها */
+    gap: 2.5rem; /* فاصله بیشتر بین لینک‌ها شبیه نمونه */
+}
+
+.nav-links a {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--clr-text-muted);
+    transition: color var(--transition-base);
+    white-space: nowrap;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.nav-links a:hover {
+    color: var(--clr-text-main);
+}
+
+/* استایل لینک فعال با خط زیرین گریدینت */
+.nav-links a.active {
+    color: var(--clr-text-main);
+}
+
+.nav-links a.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    border-radius: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN (Mobile/Tablet)
+   ============================================================ */
+@media (max-width: 1024px) {
+    .nav-links {
+        gap: 1.5rem;
+    }
+    .nav-logo-img {
+        height: 50px;
+    }
+    .nav-logo-name {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-top-row {
+        grid-template-columns: auto 1fr; /* لوگو و همبرگر */
+        padding: 10px 0;
+        gap: 15px;
+    }
+
+    .nav-logo {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .nav-actions {
+        grid-column: 1;
+        justify-self: start;
+        gap: 15px;
+    }
+
+    /* مخفی کردن جستجو و پروفایل در ردیف اصلی موبایل (نیاز به منوی کشویی دارد) */
+    .nav-search,
+    .nav-profile-btn,
+    .logout-form,
+    .nav-wishlist {
+        display: none;
+    }
+
+    .nav-mobile-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--clr-text-main);
+        cursor: pointer;
+    }
+
+    /* مخفی کردن ردیف دوم لینک‌ها */
+    .nav-bottom-row {
+        display: none;
+    }
+}
+
+/* ============================================================
+   HERO SLIDER SECTION
+   ============================================================ */
+.hero-slider-section {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    min-height: 550px;
+    margin-top: 70px;
+    overflow: hidden;
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    z-index: 1;
+    transform: scale(1.05);
+    transition: transform 6s ease;
+}
+.slide-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0; /* همون z-index ای که .slide-bg داشت رو بذار */
+}
+
+.slide.active .slide-bg {
+    transform: scale(1);
+}
+
+/* لایه نیمه‌شفاف تیره روی عکس برای خوانا شدن متن‌ها */
+.slide-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(15, 15, 22, 0.4) 0%, rgba(15, 15, 22, 0.85) 100%);
+    z-index: 2;
+}
+
+.slide-content {
+    position: relative;
+    z-index: 3; /* متن‌ها بالای لایه تیره و عکس قرار بگیرند */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 3.5rem;
+    max-width: 750px;
+}
+
+.hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+}
+
+.highlight-pastel-pink {
+    color: var(--pastel-pink);
+}
+.highlight-pastel-purple {
+    color: var(--pastel-lavender);
+}
+.highlight-pastel-blue {
+    color: var(--pastel-sky);
+}
+
+.hero-tagline {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--clr-text-muted);
+    margin-bottom: 2rem;
+}
+
+.btn-primary-gradient {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    color: #0f0f16;
+    font-weight: 700;
+    padding: 0.9rem 2.2rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 25px rgba(187, 188, 251, 0.25);
+    transition:
+        transform var(--transition-base),
+        box-shadow var(--transition-base);
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(247, 154, 195, 0.4);
+}
+
+/* Slider Controls */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(27, 27, 40, 0.7);
+    border: 1px solid var(--border-dark);
+    color: var(--clr-text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.slider-arrow:hover {
+    background: var(--bg-surface-elevated);
+    border-color: var(--pastel-pink);
+    color: var(--pastel-pink);
+}
+
+.slider-arrow.prev {
+    right: 2rem;
+}
+.slider-arrow.next {
+    left: 2rem;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 0.6rem;
+}
+
+.slider-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition:
+        width var(--transition-base),
+        background var(--transition-base);
+}
+
+.slider-dots .dot.active {
+    width: 28px;
+    border-radius: 10px;
+    background: var(--brand-gradient);
+}
+
+/* ============================================================
+   SERVICES SECTION
+   ============================================================ */
+.service-highlights {
+    padding: 3rem 0;
+    background: var(--bg-dark);
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.service-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-md);
+    transition:
+        transform var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--pastel-mint);
+}
+
+.service-icon-wrap svg {
+    width: 24px;
+    height: 24px;
+}
+
+.service-text h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--clr-text-main);
+}
+
+.service-text p {
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+}
+
+/* ============================================================
+   CATEGORIES SECTION
+   ============================================================ */
+.section {
+    padding: 2rem 0;
+}
+
+.categorityyy {
+    background: var(--bg-surface);
+    border-radius: 20px;
+    padding: 2rem 1rem;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--clr-text-muted);
+    position: relative;
+}
+
+.view-all-link {
+    font-size: 0.9rem;
+    color: var(--pastel-sky);
+    transition: color var(--transition-base);
+}
+
+.view-all-link:hover {
+    color: var(--pastel-pink);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.category-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-md);
+    padding: 1.8rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition:
+        transform var(--transition-base),
+        border-color var(--transition-base),
+        box-shadow var(--transition-base);
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--pastel-lavender);
+    box-shadow: 0 8px 25px rgba(187, 188, 251, 0.15);
+}
+
+.card-icon-wrap {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(187, 188, 251, 0.1);
+    color: var(--pastel-lavender);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon-wrap svg {
+    width: 26px;
+    height: 26px;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.card-count {
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+}
+
+/* ============================================================
+   PRODUCTS SECTION
+   ============================================================ */
+.carousel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.productssss {
+    background: var(--bg-surface);
+    border-radius: 20px;
+    padding: 2rem 1rem;
+}
+
+/* ==========================================
+   Product Card Main Styling
+========================================== */
+
+
+.product-card {
+    background-color: #1a1829;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    direction: rtl;
+    text-align: right;
+}
+
+/* رفع مشکل مخفی بودن کارت‌ها */
+.product-card.reveal {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--pastel-lavender);
+    box-shadow: 0 8px 25px rgba(187, 188, 251, 0.15);
+}
+
+/* ==========================================
+   Card Content & Inner Layout
+========================================== */
+.product-img-wrap {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #252238;
+}
+
+.product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img-wrap img {
+    transform: scale(1.05);
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #e879f9;
+    color: #0f0c1b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    z-index: 2;
+}
+
+.product-wishlist {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 12, 27, 0.4);
+    backdrop-filter: blur(4px);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.product-wishlist:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ff4757;
+}
+
+.product-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 12px;
+}
+
+.product-name {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-body .x {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.75rem;
+}
+
+.product-category {
+    color: #a09cb0;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.product-rating .stars {
+    color: #ffb800;
+    font-size: 0.7rem;
+}
+
+.product-rating .count {
+    color: #a09cb0;
+    font-size: 0.7rem;
+    margin-right: 4px;
+}
+
+.product-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.product-price {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.btn-quick-view {
+    display: none;
+}
+
+/* دکمه افزودن به سبد */
+.btn-add-to-cart {
+    width: 100%;
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    background-size: 200% auto;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
+
+.btn-add-to-cart:hover {
+    background-position: right center;
+    opacity: 0.95;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+/* ---- Pagination ---- */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: var(--space-lg);
+}
+
+.page-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
+    color: var(--clr-subtext);
+    cursor: pointer;
+    background: var(--clr-card-bg);
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.page-btn:hover {
+    border-color: var(--clr-accent);
+    color: var(--clr-accent);
+}
+
+.page-btn.active {
+    background: var(--clr-accent);
+    border-color: var(--clr-accent);
+    color: var(--clr-base);
+}
+
+.page-btn.nav-arrow {
+    font-size: 0.7rem;
+}
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+.newsletter-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-lg);
+    padding: 3rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.newsletter-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-sub {
+    color: var(--clr-text-muted);
+    font-size: 0.9rem;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 0.75rem;
+    flex: 1;
+    max-width: 450px;
+}
+
+.newsletter-input {
+    flex: 1;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1rem;
+    color: var(--clr-text-main);
+    outline: none;
+}
+
+.newsletter-input:focus {
+    border-color: var(--pastel-sky);
+}
+
+.btn-newsletter {
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    border: none;
+    color: #0f0f16;
+    font-weight: 700;
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-dark);
+    padding: 3rem 0 2rem;
+    margin-top: 4rem;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.footer-brand-name {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: sans-serif; /* فونت انگلیسی لوگو */
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.footer-tagline {
+    color: var(--clr-text-muted);
+    font-size: 0.85rem;
+    line-height: 1.7;
+}
+
+.footer-col-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--pastel-mint);
+}
+
+.footer-links li {
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--clr-text-muted);
+}
+
+.footer-links a:hover {
+    color: var(--pastel-pink);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--border-dark);
+    padding-top: 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+}
+
+/* ============================================================
+   HERO SLIDER SECTION (CONTAINED & DUAL BUTTONS)
+   ============================================================ */
+.hero-section-wrapper {
+    padding-top: 100px;
+    padding-bottom: 2rem;
+}
+
+.hero-slider-section {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-dark);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    transition: transform 6s ease;
+}
+
+.slide.active .slide-bg {
+    transform: scale(1);
+}
+
+.slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 15, 22, 0.3) 0%, rgba(15, 15, 22, 0.85) 100%);
+}
+
+.slide-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 3.5rem;
+    max-width: 750px;
+}
+
+.hero-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: 1rem;
+}
+
+.hero-tagline {
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    color: var(--clr-text-muted);
+}
+
+/* Hero Action Bar (Below Slider) */
+
+.btn-secondary-outline {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    color: var(--clr-text-main);
+    font-weight: 600;
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius-md);
+    transition:
+        background var(--transition-base),
+        border-color var(--transition-base),
+        color var(--transition-base);
+}
+
+.btn-secondary-outline:hover {
+    background: var(--bg-surface-elevated);
+    border-color: var(--pastel-lavender);
+    color: var(--pastel-lavender);
+}
+
+/* Slider Arrow Controls */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(27, 27, 40, 0.7);
+    border: 1px solid var(--border-dark);
+    color: var(--clr-text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.slider-arrow:hover {
+    background: var(--bg-surface-elevated);
+    border-color: var(--pastel-pink);
+    color: var(--pastel-pink);
+}
+
+.slider-arrow.prev {
+    right: 1.5rem;
+}
+.slider-arrow.next {
+    left: 1.5rem;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 0.6rem;
+}
+
+.slider-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition:
+        width var(--transition-base),
+        background var(--transition-base);
+}
+
+.slider-dots .dot.active {
+    width: 28px;
+    border-radius: 10px;
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+}
+
+@media (max-width: 600px) {
+    .hero-slider-section {
+        height: 420px;
+    }
+    .slide-content {
+        padding: 0 1.5rem;
+    }
+    .btn-primary-gradient,
+    .btn-secondary-outline {
+        justify-content: center;
+    }
+}
+
+/* ============================================================
+   MOBILE MENU (DRAWER FROM RIGHT)
+   ============================================================ */
+
+/* Overlay نیمه‌شفاف تیره پشت منو */
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* کشوی منوی سمت راست (RTL) */
+.nav-mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -300px; /* مخفی در سمت راست خارج از کادر */
+    width: 280px;
+    height: 100vh;
+    background: #12121a; /* هماهنگ با تم تاریک */
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -8px 0 25px rgba(0, 0, 0, 0.6);
+}
+
+/* حالت باز شده کشو */
+.nav-mobile-menu.active {
+    transform: translateX(-300px); /* کشیده شدن به داخل از سمت راست */
+}
+
+.nav-mobile-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-close-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+}
+
+.nav-mobile-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-mobile-menu a {
+    color: #c5c5d6;
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-mobile-menu a:hover {
+    color: #f79ac3;
+}
+
+/* ============================================================
+   RESPONSIVE MEDIA QUERIES (MOBILE)
+   ============================================================ */
+
+@media (max-width: 768px) {
+    /* 1. Navbar Adjustments */
+    .nav-links {
+        display: none; /* مخفی کردن لینک‌های دسکتاپ */
+    }
+
+    .nav-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    /* 2. Hero Slider Responsive Fixes */
+    .hero-slider-section {
+        height: 380px !important; /* ارتفاع متناسب با صفحه گوشی */
+        border-radius: 16px;
+        margin-top: 1rem;
+    }
+
+    .slide-content {
+        padding: 0 1.25rem !important;
+        text-align: center;
+        align-items: center !important;
+    }
+
+    .hero-title {
+        font-size: 1.5rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .hero-tagline {
+        font-size: 0.88rem !important;
+        margin-top: 0.5rem;
+    }
+
+    .slider-arrow {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    /* 3. Footer Responsive Layout */
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr !important; /* تمام بخش‌های فوتر زیر هم قرار می‌گیرند */
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .footer-brand-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    .footer-tagline {
+        max-width: 100%;
+        margin: 0.5rem auto 0;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .footer-links {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .footer-bottom {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: center;
+        font-size: 0.85rem;
+    }
+}
+
+.service-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.service-icon-wrap {
+    width: 105px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.service-icon-wrap img {
+    width: 120px;
+    height: 150px;
+}
+
+.service-icon-wrap svg {
+    width: 100%;
+    height: 70px;
+    margin-bottom: 0.5rem;
+}
+
+.service-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.service-text h3 {
+    margin: 0;
+}
+
+.service-text p {
+    margin: 0;
+}
