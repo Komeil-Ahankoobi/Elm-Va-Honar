@@ -112,11 +112,11 @@
 <div class="filters-toolbar">
     <div class="toolbar-select">
         <select id="statusFilter" name="order-status" onchange="filterOrderStatus(this)">
-            <option value="all">همه وضعیت‌ها</option>
-            <option value="complete">ارسال شده</option>
-            <option value="pending">در حال پرداخت</option>
-            <option value="succes">پرداخت شده</option>
-            <option value="faild">لغو شده</option>
+            <option value="all" {% if order_filter == 'all' %}selected{% endif %}>همه وضعیت‌ها</option>
+            <option value="complete" {% if order_filter == 'complete' %}selected{% endif %}>ارسال شده</option>
+            <option value="pending" {% if order_filter == 'pending' %}selected{% endif %}>در حال پرداخت</option>
+            <option value="succes" {% if order_filter == 'succes' %}selected{% endif %}>پرداخت شده</option>
+            <option value="faild" {% if order_filter == 'faild' %}selected{% endif %}>لغو شده</option>
         </select>
         <svg width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 7l4 4 4-4" />
@@ -129,14 +129,52 @@
                 <circle cx="7.5" cy="7.5" r="5.5" />
                 <path d="M11.5 11.5l4 4" />
             </svg>
-            <input type="text" name="q" id="searchInput" placeholder="جستجو بر اساس شماره سفارش، نام مشتری، تلفن...">
+            <input type="text" name="q" id="searchInput" placeholder="جستجو بر  نام مشتری...">
         </div>
-        <button class="toolbar-filter-btn" type="submit" onclick="filterOrders()">
+        <div class="toolbar-search">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                <circle cx="7.5" cy="7.5" r="5.5" />
+                <path d="M11.5 11.5l4 4" />
+            </svg>
+            <input type="text" name="q" id="searchInput" placeholder="جستجو بر نام خانوادگی مشتری...">
+        </div>
+
+
+        <!-- فیلتر ماه شمسی -->
+        <div class="toolbar-select">
+            <select name="jalali_month">
+                <option value="">همه ماه‌ها</option>
+                {% for m_num, m_name in jalali_months %}
+                <option value="{{ m_num }}" {% if selected_jalali_month == m_num|stringformat:"s" %}selected{% endif %}>{{ m_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- فیلتر سال شمسی -->
+        <div class="toolbar-select">
+            <select name="jalali_year">
+                <option value="">همه سال‌ها</option>
+                {% for y in jalali_years %}
+                <option value="{{ y }}" {% if selected_jalali_year == y|stringformat:"s" %}selected{% endif %}>{{ y }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+
+        <button class="toolbar-filter-btn" type="submit">
             فیلتر
             <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
                 <path d="M2.5 3.5h13L10.5 9v5l-3 1.5V9L2.5 3.5z" />
             </svg>
         </button>
+        <button type="button" class="toolbar-filter-btn" onclick="removeFilters()">
+            حذف فیلتر
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M2.5 3.5h13L10.5 9v5l-3 1.5V9L2.5 3.5z" />
+            </svg>
+        </button>        
     </form>
 </div>
 
@@ -193,18 +231,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="row-actions">
-                            <button class="dots-btn" type="button" aria-label="عملیات بیشتر">
-                                <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor">
-                                    <circle cx="9" cy="4" r="1.5" />
-                                    <circle cx="9" cy="9" r="1.5" />
-                                    <circle cx="9" cy="14" r="1.5" />
-                                </svg>
-                            </button>
-                            <div class="row-actions-menu">
-                                <a href="{% url 'dashboard:admin:orders-detail' pk=order.id %}">مشاهده جزئیات</a>
-                            </div>
-                        </div>
+                        <a class="dots-btn" href="{% url 'dashboard:admin:orders-detail' pk=order.id %}">مشاهده جزئیات</a>
                     </td>
                 </tr>
                 {% endfor %}

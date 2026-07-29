@@ -442,6 +442,7 @@ button {
     position: relative;
     display: inline-flex;
     align-items: center;
+    
 }
 
 .sort-select {
@@ -1067,11 +1068,11 @@ button {
 }
 
 .shop-dark-theme .product-rating .stars {
-    color: var(--clr-gold);
+    color: var(--pastel-mint);
 }
 
 .shop-dark-theme .product-rating .count {
-    color: var(--clr-muted);
+    color: var(--pastel-mint);
 }
 
 .shop-dark-theme .product-price {

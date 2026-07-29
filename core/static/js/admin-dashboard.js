@@ -75,6 +75,7 @@ function filterOrderStatus(selectedElement) {
     params.set(paramsName, paramsValue);
 
     const newUrl = `${url.pathname}?${params.toString()}`;
+
     window.location.href = newUrl;
 }
 
@@ -87,6 +88,14 @@ function goToPage(event, pageNumber) {
     params.set("page", pageNumber);
 
     const newUrl = `${url.pathname}?${params.toString()}`;
+
+    window.location.href = newUrl;
+}
+
+function removeFilters() {
+    const url = new URL(window.location.href);
+
+    const newUrl = `${url.pathname}`;
 
     window.location.href = newUrl;
 }
