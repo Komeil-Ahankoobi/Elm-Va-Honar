@@ -16,6 +16,8 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.db.models import ProtectedError
 
 from ..permissions import HasAdminAccessPermission
 from .forms import (
@@ -26,10 +28,12 @@ from ..jalali_utils import (
     PERSIAN_MONTH_NAMES_FA,
     get_current_jalali_ymd,
     jalali_month_start_to_aware_gregorian,
+    jalali_month_range_to_aware_gregorian,
 )
 from shop.models import (
     ProductModel,
-    ProductCategoryModel
+    ProductCategoryModel,
+    ProductStatusType
 )
 from order.models import (
     OrderModel,
@@ -89,9 +93,9 @@ class AdminOrdersView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessa
     def get_queryset(self):
         queryset = OrderModel.objects.all()
         
-        # if q := self.request.GET.get('q'):
-        #     queryset = queryset.filter()
-
+        if q:= self.request.GET.get('q'):
+            queryset = queryset.filter(user__user_profile__last_name__icontains=q)
+        
         order_status = self.request.GET.get('order-status')
         if order_status == 'complete':
             queryset = queryset.filter(status=OrderStatusType.complete.value)
@@ -103,6 +107,27 @@ class AdminOrdersView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessa
             queryset = queryset.filter(status=OrderStatusType.faild.value)
         if order_status == 'all':
             pass
+        
+        
+        jalali_year = self.request.GET.get('jalali_year')
+        jalali_month = self.request.GET.get('jalali_month')
+
+        if jalali_year and jalali_month:
+            try:
+                jy = int(jalali_year)
+                jm = int(jalali_month)
+                start, end = jalali_month_range_to_aware_gregorian(jy, jm)
+                queryset = queryset.filter(created_date__gte=start, created_date__lt=end)
+            except (ValueError, TypeError):
+                pass
+        elif jalali_year:
+            try:
+                jy = int(jalali_year)
+                start = jalali_month_start_to_aware_gregorian(jy, 1)
+                end = jalali_month_start_to_aware_gregorian(jy + 1, 1)
+                queryset = queryset.filter(created_date__gte=start, created_date__lt=end)
+            except (ValueError, TypeError):
+                pass
 
         return queryset
     
@@ -120,6 +145,15 @@ class AdminOrdersView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessa
         context['complete_orders'] = OrderModel.objects.filter(status=OrderStatusType.complete.value).count()
         context['faild_orders'] = OrderModel.objects.filter(status=OrderStatusType.faild.value).count()
 
+        order_status = self.request.GET.get('order-status')
+        context['order_filter'] = order_status
+        
+        context['jalali_months'] = list(enumerate(PERSIAN_MONTH_NAMES_FA, start=1))
+        context['jalali_years'] = range(jy - 5, jy + 1)   # ۵ سال اخیر تا سال جاری
+
+        context['selected_jalali_year'] = self.request.GET.get('jalali_year', '')
+        context['selected_jalali_month'] = self.request.GET.get('jalali_month', '')
+
         return context
 
     def get_sales_sum(self, queryset, since=None):
@@ -132,11 +166,14 @@ class AdminOrdersView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessa
 class AdminOrdersDetailView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, DetailView):
     template_name = 'dashboard/admin/orders/orders-detail.html'
     queryset = OrderModel.objects.all()
+    context_object_name = 'order'
+    
+    
 
 class AdminProductsListView(LoginRequiredMixin, HasAdminAccessPermission, ListView):
     template_name = 'dashboard/admin/products/products.html'
     context_object_name = "products"
-    paginate_by = 9
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = ProductModel.objects.all().annotate(
@@ -175,11 +212,16 @@ class AdminProductsListView(LoginRequiredMixin, HasAdminAccessPermission, ListVi
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_product'] = self.object_list.count()
-        context['categories'] = ProductCategoryModel.objects.all()
-        
-        context['filter_by'] = self.request.GET.get('filter-by')
+        context['total_products'] = ProductModel.objects.count()
+        context['published_products'] = ProductModel.objects.filter(status=ProductStatusType.publish.value).count()
+        context['drafted_products'] = ProductModel.objects.filter(status=ProductStatusType.draft.value).count()
 
+        context['total_categories'] = ProductCategoryModel.objects.count()
+
+        total_price_of_products = sum(product.price for product in ProductModel.objects.all())
+        
+        context['total_price_of_products'] = total_price_of_products    
+        
         return context
 
 
@@ -213,8 +255,16 @@ class AdminProductsDeleteView(LoginRequiredMixin, HasAdminAccessPermission, Dele
     queryset = ProductModel.objects.all()
     
     def form_valid(self, form):
-        messages.success(self.request, 'محصول با موفقیت حذف شد')
-        return super().form_valid(form)
+            try:
+                self.object.delete()
+                messages.success(self.request, 'محصول با موفقیت حذف شد')
+                return redirect(self.success_url)
+            except ProtectedError:
+                messages.error(
+                    self.request, 
+                    'این محصول قابل حذف نیست، چون قبلاً در یک یا چند سفارش استفاده شده است.'
+                )
+                return redirect(self.success_url)
     
     
 class AdminCustomersView(TemplateView):

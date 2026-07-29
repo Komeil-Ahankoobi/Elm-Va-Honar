@@ -1,325 +1,184 @@
 {% extends 'dashboard/admin/base.html' %}
 {% load static %}
+{% load humanize %}
+{% load jalali_tags %}
+
 
 {% block title %}جزئیات سفارش | علم و هنر{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'dashboard/admin/css/orders-detail.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard/admin/css/orders-detail.css' %}">
 {% endblock %}
 
 {% block content %}
 
-  <!-- هدر صفحه -->
-  <div class="page-header">
+<!-- هدر صفحه -->
+<div class="page-header">
     <div>
-      <div class="page-title">جزئیات سفارش</div>
-      <div class="page-breadcrumb">
-        <span>سفارشات</span>
-        <span>‹</span>
-        <span class="current">جزئیات سفارش</span>
-      </div>
+        <div class="page-title">جزئیات سفارش</div>
+        <div class="page-breadcrumb">
+            <span>سفارشات</span>
+            <span>‹</span>
+            <span class="current">جزئیات سفارش</span>
+        </div>
     </div>
 
     <button class="toolbar-filters-toggle" type="button" onclick="window.history.back()">
-      بازگشت به سفارشات
-      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M11 4l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+        بازگشت به سفارشات
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M11 4l-5 5 5 5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
     </button>
-  </div>
+</div>
 
-  <!-- نوار خلاصه سفارش (وضعیت، شماره، تاریخ، پرداخت، ارسال، مبلغ) -->
-  <div class="card order-strip-card">
+<!-- نوار خلاصه سفارش (وضعیت، شماره، تاریخ، پرداخت، ارسال، مبلغ) -->
+<div class="card order-strip-card">
 
     <div class="order-strip-cell">
-      <div class="order-strip-label">وضعیت سفارش</div>
-      <span class="status-pill processing order-strip-status">در حال پردازش</span>
-      <div class="order-strip-sub">سفارش شما در حال بررسی و آماده‌سازی برای ارسال می‌باشد.</div>
+        <div class="order-strip-label">وضعیت سفارش</div>
+        <span class="status-pill {{ order.get_status.title }} order-strip-status">{{ order.get_status.label }}</span>
     </div>
 
     <div class="order-strip-cell">
-      <div class="order-strip-label">شماره سفارش</div>
-      <div class="order-strip-value">#۱۴۳۸۶</div>
+        <div class="order-strip-label">شماره سفارش</div>
+        <div class="order-strip-value">{{ order.id }}</div>
     </div>
 
     <div class="order-strip-cell">
-      <div class="order-strip-label">تاریخ ثبت سفارش</div>
-      <div class="order-strip-value">۱۴۰۳/۰۴/۳۰</div>
-      <div class="order-strip-sub">۱۱:۲۵</div>
+        <div class="order-strip-label">تاریخ ثبت سفارش</div>
+        <div class="order-strip-value">{{ order.created_date|jalali_date }}</div>
+        <div class="order-strip-sub">{{ order.created_date|jalali_time }}</div>
     </div>
 
-    <div class="order-strip-cell">
-      <div class="order-strip-label">روش پرداخت</div>
-      <div class="order-strip-value">پرداخت آنلاین</div>
-      <div class="order-strip-sub">(زرین‌پال)</div>
-    </div>
 
     <div class="order-strip-cell">
-      <div class="order-strip-label">روش ارسال</div>
-      <div class="order-strip-value">پست پیشتاز</div>
-      <div class="order-strip-sub">۳ تا ۵ روز کاری</div>
+        <div class="order-strip-label">روش ارسال</div>
+        <div class="order-strip-value">پست پستکس (Posttex)</div>
+        <div class="order-strip-sub">۳ تا ۵ روز کاری</div>
     </div>
 
     <div class="order-strip-amount">
-      <div class="amount-label">مبلغ کل سفارش</div>
-      <div class="amount-value-lg">۲,۴۶۰,۰۰۰</div>
-      <div class="order-strip-sub">تومان</div>
-      <button class="add-product-btn" type="button" onclick="viewInvoice('#۱۴۳۸۶')">
-        دریافت فاکتور
-        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
-          <path d="M9 2v9.5M5.5 8l3.5 3.5L12.5 8"/>
-          <path d="M3 14.5h12"/>
-        </svg>
-      </button>
+        <button class="add-product-btn" type="button" onclick="viewInvoice('#۱۴۳۸۶')">
+            دریافت فاکتور
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M9 2v9.5M5.5 8l3.5 3.5L12.5 8" />
+                <path d="M3 14.5h12" />
+            </svg>
+        </button>
     </div>
 
-  </div>
+</div>
 
-  <!-- سه ستون: اطلاعات مشتری/تاریخچه — محصولات — خلاصه هزینه/پشتیبانی -->
-  <div class="detail-columns">
+<!-- سه ستون: اطلاعات مشتری/تاریخچه — محصولات — خلاصه هزینه/پشتیبانی -->
+<div class="detail-columns">
 
     <!-- ستون راست: اطلاعات مشتری + تاریخچه وضعیت -->
-    <div class="detail-col">
+    <div class="detail-col detail-col-main">
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">اطلاعات مشتری</div>
-          <div class="card-icon-corner">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-              <circle cx="9" cy="6.5" r="3"/>
-              <path d="M3 15c0-3 2.7-5.2 6-5.2s6 2.2 6 5.2"/>
-            </svg>
-          </div>
-        </div>
-
-        <div class="info-row">
-          <span class="info-label">نام و نام خانوادگی</span>
-          <span class="info-value">علی محمدی</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">شماره تماس</span>
-          <span class="info-value">۰۹۱۲ ۳۴۵ ۶۷۸۹</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">ایمیل</span>
-          <span class="info-value">ali.mohamadi@gmail.com</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">آدرس</span>
-          <span class="info-value">تهران، خیابان ولیعصر، بالاتر از پارک وی، کوچه هنر، پلاک ۱۳، واحد ۴</span>
-        </div>
-        <div class="info-row">
-          <span class="info-label">کد پستی</span>
-          <span class="info-value">۱۲۳۴۵۶۷۸۹۰</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">وضعیت و تاریخچه سفارش</div>
-        </div>
-
-        <div class="timeline">
-
-          <div class="timeline-item">
-            <div class="timeline-icon-wrap">
-              <div class="timeline-icon orange">
-                <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <circle cx="9" cy="9" r="2.4"/>
-                  <path d="M9 1.5v2M9 14.5v2M2.6 9h2M13.4 9h2M4.4 4.4l1.4 1.4M12.2 12.2l1.4 1.4M13.6 4.4l-1.4 1.4M5.8 12.2l-1.4 1.4"/>
-                </svg>
-              </div>
-              <span class="timeline-connector"></span>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">اطلاعات مشتری</div>
+                <div class="card-icon-corner">
+                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                        stroke-width="1.6">
+                        <circle cx="9" cy="6.5" r="3" />
+                        <path d="M3 15c0-3 2.7-5.2 6-5.2s6 2.2 6 5.2" />
+                    </svg>
+                </div>
             </div>
-            <div class="timeline-body">
-              <div class="timeline-date">۱۴۰۳/۰۴/۳۰ - ۱۱:۳۰</div>
-              <div class="timeline-title orange">در حال پردازش</div>
-              <div class="timeline-desc">سفارش شما در حال بررسی و آماده‌سازی می‌باشد.</div>
-            </div>
-          </div>
 
-          <div class="timeline-item">
-            <div class="timeline-icon-wrap">
-              <div class="timeline-icon green">
-                <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M4.5 9.2l2.6 2.6 6.4-6.6"/>
-                </svg>
-              </div>
-              <span class="timeline-connector"></span>
+            <div class="info-row">
+                <span class="info-label">نام و نام خانوادگی</span>
+                <span class="info-value">{{ order.user.user_profile.get_fullname }}</span>
             </div>
-            <div class="timeline-body">
-              <div class="timeline-date">۱۴۰۳/۰۴/۳۰ - ۱۱:۲۵</div>
-              <div class="timeline-title">پرداخت تایید شد</div>
-              <div class="timeline-desc">پرداخت سفارش با موفقیت انجام شد.</div>
+            <div class="info-row">
+                <span class="info-label">شماره تماس</span>
+                <span class="info-value">{{ order.user.user_profile.phone_number }}</span>
             </div>
-          </div>
-
-          <div class="timeline-item last">
-            <div class="timeline-icon-wrap">
-              <div class="timeline-icon blue">
-                <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <path d="M4 6h10l-1 8.5a1.5 1.5 0 0 1-1.5 1.3H6.5A1.5 1.5 0 0 1 5 14.5L4 6z"/>
-                  <path d="M6.5 6V4.5a2.5 2.5 0 0 1 5 0V6"/>
-                </svg>
-              </div>
+            <div class="info-row">
+                <span class="info-label">ایمیل</span>
+                {% if order.user.email %}
+                <span class="info-value">{{ order.user.email }}</span>
+                {% else %}
+                <span class="info-value">-</span>
+                {% endif %}
             </div>
-            <div class="timeline-body">
-              <div class="timeline-date">۱۴۰۳/۰۴/۳۰ - ۱۱:۲۵</div>
-              <div class="timeline-title">سفارش ثبت شد</div>
-              <div class="timeline-desc">سفارش شما با موفقیت ثبت شد.</div>
+            <div class="info-row">
+                <span class="info-label">آدرس</span>
+                <span class="info-value">{{ order.address }}</span>
             </div>
-          </div>
-
+            <div class="info-row">
+                <span class="info-label">کد پستی</span>
+                <span class="info-value">{{ order.zip_code }}</span>
+            </div>
         </div>
-      </div>
-
-    </div>
-
-    <!-- ستون میانی: محصولات سفارش -->
-    <div class="detail-col">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">محصولات سفارش</div>
-          <span class="card-count-pill">۴ محصول</span>
-        </div>
-
-        <div class="order-product-list">
-
-          <div class="order-product-row">
-            <div class="order-product-main">
-              <div class="order-product-thumb">
-                <img src="https://picsum.photos/seed/det1/80/80" alt="">
-              </div>
-              <div>
-                <div class="order-product-title">ست رنگ اکریلیک ۲۴ رنگی</div>
-                <div class="order-product-meta">تعداد: ۱ عدد</div>
-              </div>
-            </div>
-            <div class="order-product-price">۶۵۰,۰۰۰ تومان</div>
-          </div>
-
-          <div class="order-product-row">
-            <div class="order-product-main">
-              <div class="order-product-thumb">
-                <img src="https://picsum.photos/seed/det2/80/80" alt="">
-              </div>
-              <div>
-                <div class="order-product-title">پالت رنگ چوبی بیضی</div>
-                <div class="order-product-meta">تعداد: ۱ عدد</div>
-              </div>
-            </div>
-            <div class="order-product-price">۱۸۰,۰۰۰ تومان</div>
-          </div>
-
-          <div class="order-product-row">
-            <div class="order-product-main">
-              <div class="order-product-thumb">
-                <img src="https://picsum.photos/seed/det3/80/80" alt="">
-              </div>
-              <div>
-                <div class="order-product-title">قلم موی سر تخت ۶ عددی</div>
-                <div class="order-product-meta">تعداد: ۱ عدد</div>
-              </div>
-            </div>
-            <div class="order-product-price">۳۲۰,۰۰۰ تومان</div>
-          </div>
-
-          <div class="order-product-row">
-            <div class="order-product-main">
-              <div class="order-product-thumb">
-                <img src="https://picsum.photos/seed/det4/80/80" alt="">
-              </div>
-              <div>
-                <div class="order-product-title">دفتر طراحی ۸۰ برگ</div>
-                <div class="order-product-meta">تعداد: ۲ عدد</div>
-              </div>
-            </div>
-            <div class="order-product-price">۱,۰۵۰,۰۰۰ تومان</div>
-          </div>
-
-        </div>
-
-        <button class="view-more-btn" type="button">
-          مشاهده محصولات بیشتر
-          <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M1.5 9S4.5 3.5 9 3.5 16.5 9 16.5 9 13.5 14.5 9 14.5 1.5 9 1.5 9z"/>
-            <circle cx="9" cy="9" r="2.3"/>
-          </svg>
-        </button>
-      </div>
     </div>
 
     <!-- ستون چپ: خلاصه هزینه‌ها + پشتیبانی -->
-    <div class="detail-col">
+    <div class="detail-col detail-col-side">
 
-      <div class="card">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">خلاصه هزینه‌ها</div>
+            </div>
+
+            <div class="cost-row">
+                <span>مجموع قیمت محصولات</span>
+                <span>{{ order.calculate_total_price|intcomma }} تومان</span>
+            </div>
+            <div class="cost-row discount">
+                <span>تخفیف</span>
+                <span>{{ order.get_discount_price|intcomma }} تومان</span>
+            </div>
+            <div class="cost-row">
+                <span>هزینه ارسال</span>
+                <span>15,000 تومان</span>
+            </div>
+
+            <div class="cost-total-row">
+                <span class="cost-total-label">مبلغ کل</span>
+                <div class="cost-total-value-wrap">
+                    <span class="cost-total-unit">تومان</span>
+                    <span class="cost-total-value">{{ order.total_price|intcomma }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ستون میانی: محصولات سفارش -->
+<div class="detail-col">
+    <div class="card">
         <div class="card-header">
-          <div class="card-title">خلاصه هزینه‌ها</div>
+            <div class="card-title">محصولات سفارش</div>
+            <span class="card-count-pill">{{ order.get_total_items_quantity }} محصول</span>
         </div>
 
-        <div class="cost-row">
-          <span>مجموع قیمت محصولات</span>
-          <span>۲,۲۰۰,۰۰۰ تومان</span>
-        </div>
-        <div class="cost-row discount">
-          <span>تخفیف</span>
-          <span>- ۱۵۰,۰۰۰ تومان</span>
-        </div>
-        <div class="cost-row">
-          <span>هزینه ارسال</span>
-          <span>۷۰,۰۰۰ تومان</span>
-        </div>
-        <div class="cost-row">
-          <span>مالیات (۹٪)</span>
-          <span>۳۴۰,۰۰۰ تومان</span>
-        </div>
+        <div class="order-product-list">
+            {% for item in order.items.all %}
+            <div class="order-product-row">
+                <div class="order-product-main">
+                    <div class="order-product-thumb">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor"
+                            stroke-width="1.6">
+                            <path d="M9 2l6.5 3.5v7L9 16l-6.5-3.5v-7L9 2z"></path>
+                            <path d="M2.5 5.5L9 9l6.5-3.5M9 9v7"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="order-product-title">{{ item.product.title }}</div>
+                        <div class="order-product-meta">تعداد: {{ item.quantity }} عدد</div>
+                    </div>
+                </div>
+                <div>
 
-        <div class="cost-total-row">
-          <span class="cost-total-label">مبلغ کل</span>
-          <div class="cost-total-value-wrap">
-            <span class="cost-total-unit">تومان</span>
-            <span class="cost-total-value">۲,۴۶۰,۰۰۰</span>
-          </div>
+                    <div class="order-product-price">هر عدد</div>
+                    <div class="order-product-meta">{{ item.product.price|intcomma }} تومان</div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-      </div>
-
-      <div class="card support-card">
-        <div class="support-card-icon">
-          <svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M3 10V8.5a6 6 0 0 1 12 0V10"/>
-            <rect x="2" y="10" width="3.5" height="4.5" rx="1.2"/>
-            <rect x="12.5" y="10" width="3.5" height="4.5" rx="1.2"/>
-          </svg>
-        </div>
-        <div class="support-card-title">به کمک نیاز دارید؟</div>
-        <div class="support-card-desc">در صورت نیاز به راهنمایی با پشتیبانی تماس بگیرید.</div>
-        <button class="add-product-btn full-width" type="button">
-          تماس با پشتیبانی
-          <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M3 10V8.5a6 6 0 0 1 12 0V10"/>
-            <rect x="2" y="10" width="3.5" height="4.5" rx="1.2"/>
-            <rect x="12.5" y="10" width="3.5" height="4.5" rx="1.2"/>
-          </svg>
-        </button>
-      </div>
-
     </div>
-
-  </div>
-
-  <!-- یادداشت مدیر -->
-  <div class="card admin-note-card">
-    <div class="card-header">
-      <div class="card-title">یادداشت مدیر</div>
-      <button class="card-icon-corner" type="button" aria-label="ویرایش یادداشت">
-        <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M11.5 2.5l4 4L6 16H2v-4l9.5-9.5z"/>
-        </svg>
-      </button>
-    </div>
-    <div class="admin-note-box">
-      سفارش در اولویت عادی قرار دارد و تا امروز ارسال آماده خواهد شد.
-    </div>
-  </div>
+</div>
 
 {% endblock content %}

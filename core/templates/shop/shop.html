@@ -61,7 +61,6 @@
                 <div>
 
                     <div class="shop-toolbar">
-                        <p class="shop-count"><strong>{{total_product}}</strong> محصول</p>
                         <div class="sort-select-wrap">
                             <select class="sort-select" name="filter-by" onchange="filterProducts(this)">
                                 <option value="">مرتب‌سازی</option>
@@ -101,8 +100,12 @@
                                         {{ cat.title }}{% if not forloop.last %}، {% endif %}
                                         {% endfor %}
                                     </p>
-                                    <div class="product-rating"><span class="stars">★★★★★</span><span
-                                            class="count">(۱۲۸)</span>
+                                    <div class="product-rating">
+                                        [
+                                        <span class="stars">موجودی</span>
+                                        <span class="count">{{ product.stock }}</span>
+                                        ]
+
                                     </div>
                                 </div>
                                 <div class="product-meta">
@@ -113,7 +116,7 @@
                                 </div>
                                 <button type="button" class="btn-add-to-cart" 
                                     aria-label="افزودن {{ product.title }} به سبد خرید"
-                                    data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}">
+                                    data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}" data-stock="{{ product.stock }}">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2" aria-hidden="true">
                                         <circle cx="9" cy="21" r="1" />

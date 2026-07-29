@@ -9,34 +9,49 @@
 {% block content %}
 <section class="checkout-page-wrapper">
     <div class="container">
+        <div class="cart-notice-wrapper">
 
-        <!-- STEP INDICATOR -->
-        <ol class="checkout-stepper" aria-label="مراحل تسویه حساب">
-            <li class="step-item completed">
-                <span class="step-circle" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                </span>
-                <span class="step-label">سبد خرید</span>
-            </li>
+            <div class="cart-notice">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                    </path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>در صورت پرداخت هزینه سفارش و منصرف شدن از خرید ، بخشی از مبلغ به‌عنوان کارمزد کسر شده و مابقی عودت
+                    داده
+                    می‌شود.</span>
+            </div>
 
-            <li class="step-connector filled" aria-hidden="true"></li>
 
-            <li class="step-item active" aria-current="step">
-                <span class="step-circle">۲</span>
-                <span class="step-label">آدرس و ارسال</span>
-            </li>
+            <!-- STEP INDICATOR -->
+            <ol class="checkout-stepper" aria-label="مراحل تسویه حساب">
+                <li class="step-item completed">
+                    <span class="step-circle" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                    <span class="step-label">سبد خرید</span>
+                </li>
 
-            <li class="step-connector" aria-hidden="true"></li>
+                <li class="step-connector filled" aria-hidden="true"></li>
 
-            <li class="step-item">
-                <span class="step-circle">۳</span>
-                <span class="step-label">پرداخت</span>
-            </li>
-        </ol>
+                <li class="step-item active" aria-current="step">
+                    <span class="step-circle">۲</span>
+                    <span class="step-label">آدرس و ارسال</span>
+                </li>
 
+                <li class="step-connector" aria-hidden="true"></li>
+
+                <li class="step-item">
+                    <span class="step-circle">۳</span>
+                    <span class="step-label">پرداخت</span>
+                </li>
+            </ol>
+        </div>
         <!-- MAIN GRID -->
         <div class="checkout-grid">
 
@@ -107,7 +122,8 @@
                     </div>
 
                     <div class="promo-row" id="promo-row">
-                        <input type="text" class="promo-input" name="copon" id="promo-input" placeholder="کد تخفیف یا کارت هدیه" form="order-form"/>
+                        <input type="text" class="promo-input" name="copon" id="promo-input"
+                            placeholder="کد تخفیف یا کارت هدیه" form="order-form" />
                         <button data-url="{% url 'order:validate-copon' %}" data-csrf="{{ csrf_token }}" type="button"
                             class="promo-apply" id="promo-apply" form="order-form">اعمال
                         </button>

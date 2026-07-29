@@ -99,6 +99,27 @@ def jalali_month_start_to_aware_gregorian(jy, jm):
     return naive_dt
 
 
+def jalali_next_ym(jy, jm):
+    """ماه شمسی بعدی را برمی‌گرداند -> (jy, jm)"""
+    if jm == 12:
+        return jy + 1, 1
+    return jy, jm + 1
+
+
+def jalali_month_range_to_aware_gregorian(jy, jm):
+    """
+    بازه‌ی یک ماه شمسی را به دو datetime آگاه میلادی برمی‌گرداند -> (start, end)
+    start شامل اولین روز همان ماه است و end اولین روز ماه بعدی (exclusive).
+    برای فیلتر کوئری این‌طور استفاده شود:
+        created_date__gte=start, created_date__lt=end
+    """
+    start = jalali_month_start_to_aware_gregorian(jy, jm)
+    next_jy, next_jm = jalali_next_ym(jy, jm)
+    end = jalali_month_start_to_aware_gregorian(next_jy, next_jm)
+    return start, end
+
+
+
 def to_local(value):
     """اگر datetime آگاه باشد، به زمان محلی تبدیل می‌کند؛ در غیر این صورت همان مقدار را برمی‌گرداند"""
     if value and timezone.is_aware(value):
@@ -129,3 +150,6 @@ def format_jalali_datetime(value):
     if not local_dt:
         return ''
     return f'{format_jalali_time(local_dt)} - {format_jalali_date(local_dt)}'
+
+
+

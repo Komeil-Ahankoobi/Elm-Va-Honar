@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='ProductVarientModel',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('varient_type', models.CharField(choices=[('color', 'رنگ'), ('number', 'شماره')], help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره\u200cس (مثل قلمو) 'شماره' انتخاب کن", max_length=20)),
+                ('variant_type', models.CharField(choices=[('color', 'رنگ'), ('number', 'شماره')], help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره\u200cس (مثل قلمو) 'شماره' انتخاب کن", max_length=20)),
                 ('color_code', models.CharField(blank=True, help_text="فقط برای نوع 'رنگ' پر کن. کد هگز، مثلاً 12", max_length=3, null=True)),
                 ('number_code', models.CharField(blank=True, help_text='مثل 0000 یا 000 یا 00 یا 0 یا اعداد طبیعی مثل 16 و 15', max_length=5, null=True)),
                 ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='varients', to='shop.productmodel')),

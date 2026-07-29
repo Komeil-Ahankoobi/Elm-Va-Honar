@@ -113,7 +113,7 @@ class ProductVarientModel(models.Model):
     product = models.ForeignKey(
         ProductModel, on_delete=models.CASCADE, related_name='varients'
     )
-    varient_type = models.CharField(
+    variant_type = models.CharField(
         max_length=20, choices=VarientType.choices,
         help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن"
     )
@@ -128,4 +128,4 @@ class ProductVarientModel(models.Model):
     
     
     def __str__(self):
-        return f'{self.product.title} - {self.varient_type}'
+        return f'{self.product.title} - {self.variant_type}'
