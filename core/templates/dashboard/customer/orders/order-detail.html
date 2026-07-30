@@ -1,6 +1,7 @@
 {% extends 'dashboard/customer/base.html' %}
 {% load static %}
-
+{% load humanize %}
+{% load jalali_tags %}
 {% block content %}
 
 
@@ -55,12 +56,12 @@
             </svg>
             تاریخ ثبت
         </span>
-        <span class="col-value">{{ order.created_at|date:"Y/m/d" }} - {{ order.created_at|date:"H:i" }}</span>
+        <span class="col-value">{{ order.created_date|jalali_time }} - {{ order.created_date|jalali_date }}  </span>
     </div>
     <div class="summary-col">
         <span class="col-label">وضعیت سفارش</span>
         <span class="status-pill status-{{ order.status }}">
-            <span class="dot"></span>
+            
             {{ order.get_status_display }}
         </span>
     </div>
@@ -72,7 +73,7 @@
             </svg>
             روش پرداخت
         </span>
-        <span class="col-value">{{ order.get_payment_method_display }}</span>
+        <span class="col-value">زرین پال</span>
     </div>
     <div class="summary-col total-col">
         <span class="col-label">
@@ -82,7 +83,7 @@
             </svg>
             مبلغ کل سفارش
         </span>
-        <span class="col-value">{{ order.total_price }} <span class="currency">تومان</span></span>
+        <span class="col-value">{{ order.total_price|intcomma }} <span class="currency">تومان</span></span>
     </div>
 </section>
 
@@ -100,19 +101,19 @@
 
         <div class="info-block">
             <span class="info-label">نام گیرنده:</span>
-            <span class="info-value">{{ order.address.full_name }}</span>
+            <span class="info-value">{{ order.user.first_name }} {{order.user.last_name}}</span>
         </div>
         <div class="info-block">
             <span class="info-label">شماره تماس:</span>
-            <span class="info-value" dir="ltr">{{ order.address.phone_number }}</span>
+            <span class="info-value" dir="ltr">{{ order.user.user_profile.phone_number }}</span>
         </div>
         <div class="info-block">
             <span class="info-label">آدرس:</span>
-            <span class="info-value">{{ order.address.address }}</span>
+            <span class="info-value">{{ order.address}}</span>
         </div>
         <div class="info-block">
             <span class="info-label">کد پستی:</span>
-            <span class="info-value" dir="ltr">{{ order.address.zip_code }}</span>
+            <span class="info-value" dir="ltr">{{ order.zip_code }}</span>
         </div>
     </section>
 
@@ -142,9 +143,9 @@
                         <span class="product-code">کد محصول: {{ item.product.id }}</span>
                     </div>
                 </div>
-                <span class="col-unit-price">{{ item.unit_price }} <span class="currency">تومان</span></span>
+                <span class="col-unit-price">{{ item.unit_price|intcomma }} <span class="currency">تومان</span></span>
                 <span class="col-qty">{{ item.quantity }}</span>
-                <span class="col-total">{{ item.total_price }} <span class="currency">تومان</span></span>
+                <span class="col-total">{{ item.total_price|intcomma }} <span class="currency">تومان</span></span>
             </div>
             {% endfor %}
         </div>
@@ -179,12 +180,12 @@
 
     <section class="card price-summary-card">
         <div class="price-row">
-            <span class="price-label">جمع محصولات</span>
-            <span class="price-value">{{ order.items_total }} <span class="currency">تومان</span></span>
+            <span class="price-label">جمع قیمت محصولات</span>
+            <span class="price-value">{{ order.total_price|intcomma }} <span class="currency">تومان</span></span>
         </div>
         <div class="price-row">
             <span class="price-label">هزینه ارسال</span>
-            <span class="price-value">{{ order.shipping_cost }} <span class="currency">تومان</span></span>
+            <span class="price-value">{{ total_tax|intcomma }} <span class="currency">تومان</span></span>
         </div>
         {% if order.discount_amount %}
         <div class="price-row">
@@ -195,83 +196,10 @@
         <div class="price-divider"></div>
         <div class="price-row total">
             <span class="price-label">مبلغ کل</span>
-            <span class="price-value">{{ order.total_price }} <span class="currency">تومان</span></span>
+            <span class="price-value">{{ total_basket_price|intcomma }} <span class="currency">تومان</span></span>
         </div>
     </section>
-
-    <section class="card status-timeline-card">
-        <h3 class="card-title">وضعیت سفارش</h3>
-
-        <div class="status-timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <span class="timeline-date">{{ order.created_at|date:"Y/m/d - H:i" }}</span>
-                    <span class="timeline-title">ثبت سفارش</span>
-                    <span class="timeline-desc">سفارش شما با موفقیت ثبت شد.</span>
-                </div>
-                <div class="timeline-icon-col">
-                    <div class="timeline-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </div>
-                    <div class="timeline-line"></div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <span class="timeline-date">{{ order.paid_at|date:"Y/m/d - H:i" }}</span>
-                    <span class="timeline-title">پرداخت تایید شد</span>
-                    <span class="timeline-desc">پرداخت سفارش شما با موفقیت تایید شد.</span>
-                </div>
-                <div class="timeline-icon-col">
-                    <div class="timeline-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </div>
-                    <div class="timeline-line"></div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <span class="timeline-date">{{ order.processing_at|date:"Y/m/d - H:i" }}</span>
-                    <span class="timeline-title">در حال آماده‌سازی</span>
-                    <span class="timeline-desc">سفارش شما در حال آماده‌سازی می‌باشد.</span>
-                </div>
-                <div class="timeline-icon-col">
-                    <div class="timeline-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                    </div>
-                    <div class="timeline-line"></div>
-                </div>
-            </div>
-
-            <div class="timeline-item delivered">
-                <div class="timeline-content">
-                    <span class="timeline-date">{{ order.delivered_at|date:"Y/m/d - H:i" }}</span>
-                    <span class="timeline-title">تحویل شده</span>
-                    <span class="timeline-desc">سفارش شما با موفقیت تحویل داده شد.</span>
-                </div>
-                <div class="timeline-icon-col">
-                    <div class="timeline-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M21 8l-9-5-9 5 9 5 9-5z" />
-                            <path d="M3 8v8l9 5 9-5V8" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 </div>
 
 <script>

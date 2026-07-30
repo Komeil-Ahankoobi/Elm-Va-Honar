@@ -1197,10 +1197,9 @@ body {
 
 .status-pill {
     display: inline-flex;
-    align-items: center;
+    align-items: end;
     gap: 8px;
     width: fit-content;
-    padding: 7px 16px;
     border-radius: 999px;
     font-size: 13px;
     font-weight: 700;
@@ -1453,23 +1452,26 @@ body {
 .btn-back:hover svg {
     stroke: var(--purple-1);
 }
-
 .order-summary-bar {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     padding: 22px 26px;
     margin-bottom: 22px;
+    direction: rtl;
 }
 
 .summary-col {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
+
     gap: 10px;
     padding-left: 24px;
     border-left: 1px solid var(--border-soft);
+    text-align: right;
 }
 
 .summary-col:last-child,
@@ -1481,27 +1483,32 @@ body {
 .summary-col .col-label {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 6px;
     font-size: 12.5px;
     color: var(--text-2);
     white-space: nowrap;
+    width: 100%;
 }
+
+.summary-col .col-value {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-0);
+    white-space: nowrap;
+    width: 100%;
+}
+
 
 .summary-col .col-label svg {
     width: 14px;
     height: 14px;
     stroke: var(--purple-1);
     flex-shrink: 0;
-}
-
-.summary-col .col-value {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-0);
-    white-space: nowrap;
 }
 
 .summary-col .currency {
@@ -1535,10 +1542,11 @@ body {
 
 .order-detail-row-1 {
     grid-template-columns: 340px 1fr;
+    align-items: stretch;
 }
 
 .order-detail-row-2 {
-    grid-template-columns: 340px 330px 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 .card-title-row {
@@ -1580,6 +1588,7 @@ body {
     font-weight: 600;
     color: var(--text-0);
     line-height: 1.8;
+    text-align: left;
 }
 
 .products-table {

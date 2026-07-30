@@ -73,6 +73,9 @@ class ProductModel(models.Model):
     def get_price_rial(self):
         return self.get_price() * 10
 
+    def get_real_price(self):
+        return self.price
+
     def __str__(self):
         return self.title
 

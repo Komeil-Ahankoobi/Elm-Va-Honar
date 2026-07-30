@@ -166,7 +166,6 @@ async function addToCart(url, product_id) {
 
         const data = await response.json();
 
-        console.log(data);
 
         const cartCountEl = document.querySelector(".cart-count");
         if (cartCountEl) {
