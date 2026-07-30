@@ -122,6 +122,15 @@ class OrderItemsModel(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
-def __str__(self):
-    variant_part = self.variant.varient_type if self.variant else 'بدون وریانت'
-    return f'{self.product.title} - {variant_part} - {self.order.id}'
+    @property
+    def unit_price(self):
+        return self.price
+
+    @property
+    def total_price(self):
+        return self.price * self.quantity
+
+
+    def __str__(self):
+        variant_part = self.variant.varient_type if self.variant else 'بدون وریانت'
+        return f'{self.product.title} - {variant_part} - {self.order.id}'

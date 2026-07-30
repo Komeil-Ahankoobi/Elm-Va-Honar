@@ -17,7 +17,8 @@ from django.contrib.auth.views import PasswordChangeView
 from ..permissions import HasCustomerAccessPermission
 from order.models import (
     UserAddressModel,
-    OrderModel
+    OrderModel,
+    OrderItemsModel
 )
 from .forms import (
     UserAddressForm,
@@ -99,6 +100,21 @@ class CustomerDashboardOrderView(LoginRequiredMixin, HasCustomerAccessPermission
 
 class CustomerDashboardOrderDetailView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DetailView):
     template_name = 'dashboard/customer/orders/order-detail.html'
-    
+    context_object_name = "order"
+
     def get_queryset(self):
         return OrderModel.objects.filter(user=self.request.user)
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        order = self.object  # همون Order که DetailView پیدا کرده
+        items = order.items.all()  # همون related_name که تو مدل OrderItemsModel داری
+
+        order_items_total= sum(item.total_price for item in items)
+        total_tax = round(order_items_total * 10 / 100)
+        context["total_tax"] = total_tax
+        context["total_basket_price"] = order_items_total + total_tax
+        return context
+        
