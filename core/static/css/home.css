@@ -76,13 +76,6 @@ ul {
     list-style: none;
 }
 
-.container {
-    width: 100%;
-    max-width: 1400px;
-    margin-inline: auto;
-    padding-inline: 1.5rem;
-}
-
 .flex-between {
     display: flex;
     align-items: center;
@@ -107,7 +100,7 @@ ul {
 /* Container width control */
 .container {
     width: 100%;
-    max-width: 1440px; /* حداکثر عرض استاندارد دسکتاپ */
+    max-width: 1350px; /* حداکثر عرض استاندارد دسکتاپ */
     margin-right: auto;
     margin-left: auto;
     padding-right: 20px;
@@ -662,7 +655,8 @@ ul {
 
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
+    justify-content: center;
     gap: 1.25rem;
     margin-top: 2rem;
 }
@@ -721,7 +715,8 @@ ul {
    ============================================================ */
 .carousel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 260px));
+    justify-content: center;
     gap: 1.5rem;
     margin-top: 2rem;
 }

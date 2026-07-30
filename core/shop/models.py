@@ -113,6 +113,7 @@ class ProductVarientModel(models.Model):
     product = models.ForeignKey(
         ProductModel, on_delete=models.CASCADE, related_name='varients'
     )
+
     variant_type = models.CharField(
         max_length=20, choices=VarientType.choices,
         help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن"
