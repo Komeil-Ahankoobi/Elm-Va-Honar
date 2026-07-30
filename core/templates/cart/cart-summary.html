@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
- 
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/cart-summary.css'%}">
@@ -67,8 +67,7 @@
                     {% for item in cart_items %}
                     <article class="cart-row" data-id="{{ item.product_id }}"
                         data-variant-id="{{ item.variant_id|default_if_none:'' }}"
-                        data-price="{{ item.product_obj.get_price }}"
-                        data-stock="{{ item.product_obj.stock }}">
+                        data-price="{{ item.product_obj.get_price }}" data-stock="{{ item.product_obj.stock }}">
 
                         <div class="cart-row-thumb">
                             <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.title }}" />
@@ -98,11 +97,12 @@
 
                         <div class="cart-row-qty">
                             <div class="qty-stepper">
-                                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}" 
+                                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}"
                                     data-action="dec" aria-label="کم کردن تعداد">−</button>
                                 <span class="qty-val">{{ item.quantity }}</span>
-                                <button type="button" class="qty-btn www" data-url="{% url 'cart:update-quantity' %}" data-stock="{{ item.product_obj.stock }}"
-                                    data-action="inc" aria-label="زیاد کردن تعداد">+</button>
+                                <button type="button" class="qty-btn www" data-url="{% url 'cart:update-quantity' %}"
+                                    data-stock="{{ item.product_obj.stock }}" data-action="inc"
+                                    aria-label="زیاد کردن تعداد">+</button>
                             </div>
                             <button type="button" class="cart-row-remove" data-action="remove" aria-label="حذف از سبد">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -203,5 +203,8 @@
 
     <div class="toast" id="toast"></div>
 </main>
+
+<script src="{% static 'js/bag.js' %}"></script>
+
 
 {% endblock content %}
