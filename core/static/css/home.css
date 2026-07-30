@@ -45,7 +45,7 @@
 
     --font-family-main: "Vazirmatn", sans-serif; /* فرض بر استفاده از فونت استاندارد فارسی */
     --transition-base: 0.25s ease-in-out;
-    --radius-md: 30px; /* برای نوار جستجو */
+    --radius-md: 20px; /* برای نوار جستجو */
     --radius-sm: 8px;
 }
 
@@ -397,7 +397,6 @@ ul {
     width: 100%;
     height: 85vh;
     min-height: 550px;
-    margin-top: 70px;
     overflow: hidden;
 }
 
@@ -715,7 +714,7 @@ ul {
    ============================================================ */
 .carousel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 260px));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
     justify-content: center;
     gap: 1.5rem;
     margin-top: 2rem;
@@ -730,7 +729,6 @@ ul {
 /* ==========================================
    Product Card Main Styling
 ========================================== */
-
 
 .product-card {
     background-color: #1a1829;
@@ -1105,6 +1103,16 @@ ul {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
+/* تبلت: هدر کوتاه‌تر می‌شود، پس فاصله‌ی بالا و ارتفاع اسلایدر هم باید کم شود */
+@media (max-width: 1024px) {
+    .hero-section-wrapper {
+        padding-top: 88px;
+    }
+    .hero-slider-section {
+        height: 440px;
+    }
+}
+
 .slider-container {
     position: relative;
     width: 100%;
@@ -1350,6 +1358,97 @@ ul {
     color: #f79ac3;
 }
 
+/* اجازه اسکرول داخلی بده تا با اضافه شدن آیتم‌های بیشتر، در گوشی‌های کوچک سرریز نشود */
+.nav-mobile-menu {
+    overflow-y: auto;
+}
+
+/* جستجو داخل منوی موبایل */
+.mobile-menu-search {
+    margin-bottom: 1.5rem;
+}
+
+.mobile-menu-search .search-form input {
+    width: 100%;
+    height: 44px;
+    background-color: var(--clr-input-bg);
+    border: 1px solid var(--clr-input-border);
+    border-radius: var(--radius-sm);
+    padding: 0 20px 0 44px;
+    color: var(--clr-text-main);
+    font-size: 14px;
+}
+
+.mobile-menu-search .search-form input:focus {
+    outline: none;
+    border-color: var(--pastel-pink);
+}
+
+.mobile-menu-search .search-btn {
+    left: 14px;
+}
+
+/* خط جداکننده بین لینک‌های اصلی و بخش حساب کاربری */
+.mobile-menu-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 1.5rem 0;
+}
+
+/* لینک‌های ردیف حساب کاربری/سبد خرید (با آیکون) */
+.mobile-link-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    width: 100%;
+}
+
+.mobile-link-with-icon svg {
+    flex-shrink: 0;
+    color: var(--clr-text-muted);
+}
+
+.mobile-link-with-icon:hover svg {
+    color: #f79ac3;
+}
+
+.mobile-cart-badge {
+    margin-right: auto;
+    background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* دکمه خروج شبیه بقیه لینک‌ها ظاهر شود، نه شبیه یک دکمه فرم */
+.mobile-logout-form {
+    width: 100%;
+}
+
+.mobile-logout-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #c5c5d6;
+    font-size: 1.05rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: right;
+}
+
+.mobile-logout-btn:hover {
+    color: #f79ac3;
+}
+
 /* ============================================================
    RESPONSIVE MEDIA QUERIES (MOBILE)
    ============================================================ */
@@ -1434,12 +1533,6 @@ ul {
     }
 }
 
-.service-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
 .service-icon-wrap {
     width: 105px;
     height: 72px;
@@ -1473,4 +1566,42 @@ ul {
 
 .service-text p {
     margin: 0;
+}
+
+.social-icons {
+    display: flex;
+    gap: 8px;
+    margin-top: 1.5rem;
+    direction: ltr; /* ترتیب چپ‌به‌راست ثابت بمونه برای آیکون‌ها */
+    justify-content: space-evenly;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transition: all 0.25s ease;
+    cursor: initial;
+}
+
+.social-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.social-icon:hover {
+    background: linear-gradient(135deg, #7c3aed, #c026d3);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+.aa {
+    margin-bottom: 1rem;
 }

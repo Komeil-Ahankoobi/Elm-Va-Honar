@@ -14,22 +14,22 @@
 
                 <!-- Slide 1 -->
                 <div class="slide active">
-                    <img src="{% static 'images/slider1.jpeg' %}" 
-                        alt="بنر اصلی فروشگاه علم و هنر" 
-                        class="slide-bg-img" 
+                    <img src="{% static 'images/slider1.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر" class="slide-bg-img"
                         fetchpriority="high">
                     <div class="slide-overlay"></div>
                 </div>
 
                 <!-- Slide 2 -->
                 <div class="slide">
-                    <div class="slide-bg" style="background-image: url('{% static "images/slider2.jpeg" %}');"></div>
+                    <img src="{% static 'images/slider2.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر" class="slide-bg-img"
+                        fetchpriority="high">
                     <div class="slide-overlay"></div>
                 </div>
 
                 <!-- Slide 3 -->
                 <div class="slide">
-                    <div class="slide-bg" style="background-image: url('{% static "images/slider3.jpeg" %}');"></div>
+                    <img src="{% static 'images/slider3.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر" class="slide-bg-img"
+                        fetchpriority="high">
                     <div class="slide-overlay"></div>
                 </div>
 
@@ -184,6 +184,20 @@
         </header>
 
         <div class="category-grid" id="category-grid">
+
+            <article class="category-card">
+                <div class="card-icon-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                        <line x1="9" y1="9" x2="9.01" y2="9" />
+                        <line x1="15" y1="9" x2="15.01" y2="9" />
+                    </svg>
+                </div>
+                <h3 class="card-title">یوروپن</h3>
+                <span class="card-count">(۱۲۲)</span>
+            </article>
+
             <article class="category-card">
                 <div class="card-icon-wrap">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -207,8 +221,6 @@
                 <span class="card-count">(۱۵۶)</span>
             </article>
 
-            
-
             <article class="category-card">
                 <div class="card-icon-wrap">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -231,7 +243,7 @@
                 <h3 class="card-title">خطاطی و خوشنویسی</h3>
                 <span class="card-count">(۴۵)</span>
             </article>
-            
+
             <article class="category-card">
                 <div class="card-icon-wrap">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -295,7 +307,7 @@
                             <circle cx="20" cy="21" r="1" />
                             <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
                         </svg>
-                        <span>افزودن به سبد</span>
+                        <span>مشاهده</span>
                     </button>
                 </div>
             </article>
@@ -336,7 +348,7 @@
                             <circle cx="20" cy="21" r="1" />
                             <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
                         </svg>
-                        <span>افزودن به سبد</span>
+                        <span>مشاهده</span>
                     </button>
                 </div>
             </article>
@@ -377,7 +389,7 @@
                             <circle cx="20" cy="21" r="1" />
                             <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
                         </svg>
-                        <span>افزودن به سبد</span>
+                        <span>مشاهده</span>
                     </button>
                 </div>
             </article>
@@ -418,7 +430,7 @@
                             <circle cx="20" cy="21" r="1" />
                             <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
                         </svg>
-                        <span>افزودن به سبد</span>
+                        <span>مشاهده</span>
                     </button>
                 </div>
             </article>
@@ -436,7 +448,7 @@
             <p class="newsletter-sub">با عضویت در خبرنامه، هیچ فرصتی را از دست ندهید.</p>
         </div>
         <form class="newsletter-form" onsubmit="event.preventDefault();">
-            <input type="email" class="newsletter-input" placeholder="ایمیل خود را وارد کنید..." required>
+            <input type="text" class="newsletter-input" placeholder="شماره تلفن خود را وارد کنید..." required>
             <button type="submit" class="btn-newsletter">عضویت</button>
         </form>
     </div>
