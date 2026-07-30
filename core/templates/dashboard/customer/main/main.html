@@ -4,18 +4,6 @@
 {% load jalali_tags %}
 
 {% block content %}
-<div class="topbar">
-    <div class="user-chip">
-        <div class="user-meta">
-            <div class="name">{{user.first_name}} {{user.last_name}}</div>
-            <div class="greet">خوش آمدید</div>
-        </div>
-        {% if user.user_profile %}
-            <div class="avatar">{{ user.user_profile.get_first_word_of_name }}</div>
-        {% endif %}
-    </div>
-</div>
-
 
 <h2 class="page-title">مشخصات من</h2>
 <p class="page-sub">اطلاعات حساب کاربری خود را مشاهده و مدیریت کنید.</p>
@@ -73,7 +61,7 @@
         <div class="field">
             <label>رمز عبور</label>
             <div class="field-input password">
-                <button class="link-btn">تغییر رمز عبور</button>
+                <a href="{% url 'dashboard:customer:setting' %}" class="link-btn">تغییر رمز عبور</a>
                 <div class="pw-wrap">
                     <input type="password" value="{{ user.password }}" dir="ltr" style="text-align: left;" readonly>
 
