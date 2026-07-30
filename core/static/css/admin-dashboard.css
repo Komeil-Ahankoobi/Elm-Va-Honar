@@ -1366,7 +1366,7 @@ td {
 .product-cell {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 12px;
 }
 
@@ -2250,10 +2250,10 @@ td {
 /* ---------- سه‌ستونی جزئیات سفارش ---------- */
 .detail-columns {
     display: grid;
-    grid-template-columns: 1fr 1.25fr 1fr;
+    grid-template-columns: 4fr 2fr 0fr;
     gap: 18px;
-    align-items: start;
     margin-bottom: 18px;
+    align-items: center;
 }
 
 .detail-col {
@@ -2398,12 +2398,11 @@ td {
 .order-product-main {
     display: flex;
     align-items: center;
-    gap: 12px;
     min-width: 0;
 }
 
 .order-product-thumb {
-    width: 48px;
+    width: 25px;
     height: 48px;
     border-radius: var(--radius-sm);
     overflow: hidden;
@@ -2453,7 +2452,7 @@ td {
     align-items: center;
     justify-content: space-between;
     font-size: 12.5px;
-    padding: 9px 0;
+    padding: 11.5px 0;
     color: var(--clr-text);
 }
 

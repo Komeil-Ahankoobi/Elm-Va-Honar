@@ -2,17 +2,19 @@
 
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}فروشگاه نوشت افزار علم و هنر{% endblock title %}</title>
-    <meta name="description" content="{% block meta_description %}لوازم‌التحریر و ابزار هنری ممتاز با بهترین کیفیت.{% endblock meta_description %}" />
-    <meta name="enamad" content="53417095" />
-    <link rel="stylesheet" href="{% static 'css/home.css'%}">   
+    <meta name="description"
+        content="{% block meta_description %}لوازم‌التحریر و ابزار هنری ممتاز با بهترین کیفیت.{% endblock meta_description %}" />
+
+    <link rel="stylesheet" href="{% static 'css/home.css'%}">
     <link rel="stylesheet" href="{% static 'css/fonts.css'%}">
     <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
     <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
-    
+
     {% block extra_css %}{% endblock extra_css %}
     {% block extra_css_no_compress %}{% endblock extra_css_no_compress %}
 </head>
@@ -34,7 +36,7 @@
 
                     <!-- Search Bar (مرکز - جدید) -->
                     <div class="nav-search">
-                        <form action="" method="get" class="search-form">
+                        <form method="get" class="search-form">
                             <input type="text" name="q" placeholder="محصول یا هنرمند..." aria-label="جستجو">
                             <button type="submit" class="search-btn">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -64,7 +66,7 @@
                             </svg>
                         </a>
                         {% else %}
-                        <a href="{% url 'accounts:login' %}" type="submit" class="logout-text-btn">ورود</a  >
+                        <a href="{% url 'accounts:login' %}" type="submit" class="logout-text-btn">ورود</a>
 
                         <a href="{% url 'accounts:login' %}" class="nav-icon-btn nav-profile-btn"
                             aria-label="ورود / ثبت‌نام">
@@ -76,8 +78,9 @@
                         </a>
                         {% endif %}
 
-        <!-- Cart CTA -->
-                        <a href="{% url 'cart:session-cart-summary' %}" class="nav-icon-btn nav-cta-cart" aria-label="باز کردن سبد خرید">
+                        <!-- Cart CTA -->
+                        <a href="{% url 'cart:session-cart-summary' %}" class="nav-icon-btn nav-cta-cart"
+                            aria-label="باز کردن سبد خرید">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="1.5">
                                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -101,9 +104,9 @@
 
                 <div class="nav-bottom-row">
                     <ul class="nav-links" role="list">
-                        <li><a href="{% url 'website:home' %}">خانه</a></li>
-                        <li><a href="{% url 'shop:show-product-view' %}" class="active">فروشگاه</a></li>
-                        <li><a href="{% url 'website:about' %}">درباره ما</a></li>
+                        <li><a href="{% url 'website:home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>خانه</a></li>
+                        <li><a href="{% url 'shop:show-product-view' %}" {% if request.resolver_match.url_name == 'show-product-view' %}class="active"{% endif %}>فروشگاه</a></li>
+                        <li><a href="{% url 'website:about' %}" {% if request.resolver_match.url_name == 'about' %}class="active"{% endif %}>درباره ما</a></li>
                         <li><a href="#">رنگ‌ها</a></li>
                         <li><a href="#">ابزار طراحی</a></li>
                         <li><a href="#">کاغذ و بوم</a></li>

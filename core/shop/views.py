@@ -55,7 +55,7 @@ class ShopProductView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_product'] = self.object_list.count()
+        context['total_product'] = ProductModel.objects.count()
         context['categories'] = ProductCategoryModel.objects.all()
         
         context['filter_by'] = self.request.GET.get('filter-by')

@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from decimal import Decimal
+from django.utils import timezone
 
 from shop.models import (
     ProductModel,
@@ -64,7 +66,7 @@ class OrderModel(models.Model):
     copon = models.ForeignKey(CoponModel, on_delete=models.PROTECT, null=True, blank=True, related_name='copon')
     status = models.IntegerField(choices=OrderStatusType.choices, default=OrderStatusType.pending.value)
 
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -93,10 +95,17 @@ class OrderModel(models.Model):
     def get_total_items_quantity(self):
         result = self.items.aggregate(total=Sum("quantity"))
         return result["total"] or 0
+    
+    @property
+    def get_discount_price(self):
+        if not self.copon:
+            return 0
+        discount = Decimal(self.copon.discount_percent) / Decimal("100")
+        return round(self.calculate_total_price() * discount)
 
     @property
     def is_successful(self):
-        return self.status == OrderStatusType.success.value
+        return self.status == OrderStatusType.succes.value
 
 
 class OrderItemsModel(models.Model):
@@ -110,8 +119,9 @@ class OrderItemsModel(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
 
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f'{self.product.title} - {self.variant.varient_type} - {self.order.id}'
+def __str__(self):
+    variant_part = self.variant.varient_type if self.variant else 'بدون وریانت'
+    return f'{self.product.title} - {variant_part} - {self.order.id}'

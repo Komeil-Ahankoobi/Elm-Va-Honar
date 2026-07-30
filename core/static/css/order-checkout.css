@@ -444,3 +444,48 @@
         max-width: none;
     }
 }
+
+/* ------------------------------------------------------------
+   CART NOTICE (warning next to stepper)
+   ------------------------------------------------------------ */
+.cart-notice-wrapper {
+    position: relative;
+}
+
+.cart-notice {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    max-width: 300px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    line-height: 1.7;
+}
+
+.cart-notice svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #fbbf24;
+}
+
+@media (max-width: 1200px) {
+    .cart-notice {
+        max-width: 240px;
+        font-size: 0.72rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .cart-notice {
+        position: static;
+        max-width: 100%;
+        margin-bottom: 1.5rem;
+    }
+}
