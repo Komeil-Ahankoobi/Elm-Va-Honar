@@ -1,5 +1,6 @@
 {% extends 'dashboard/admin/base.html' %}
 {% load humanize %}
+{% load jalali_tags %}
 
 {% block title %}مدیریت محصولات | علم و هنر{% endblock %}
 
@@ -206,8 +207,8 @@
                     {% endif %}
                     <td>
                         <div class="date-cell">
-                            <div>{{ product.created_date|naturalday }}</div>
-                            <div class="date-time">{{ product.created_date|date:"H:i" }}</div>
+                            <div>{{ product.created_date|jalali_date }}</div>
+                            <div class="date-time">{{ product.created_date|jalali_time }}</div>
                         </div>
                     </td>
                     <td>

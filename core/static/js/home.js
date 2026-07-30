@@ -248,36 +248,39 @@ document.addEventListener("DOMContentLoaded", function () {
     const overlay = document.querySelector(".mobile-menu-overlay");
     const closeBtn = document.querySelector(".mobile-close-btn");
 
-    if (!toggleBtn || !menu) return;
+    if (!toggleBtn || !menu || !overlay) return;
 
+    // نکته: کلاس "active" همانی است که در CSS برای نمایش/مخفی کردن
+    // منو و overlay استفاده شده — استفاده از کلاس دیگری (open/show)
+    // باعث می‌شد جاوااسکریپت اجرا شود ولی هیچ افکتی روی صفحه نبیندازد.
     function openMenu() {
-        menu.classList.add("open");
-        overlay.classList.add("show");
+        menu.classList.add("active");
+        overlay.classList.add("active");
         toggleBtn.setAttribute("aria-expanded", "true");
         document.body.style.overflow = "hidden";
     }
 
     function closeMenu() {
-        menu.classList.remove("open");
-        overlay.classList.remove("show");
+        menu.classList.remove("active");
+        overlay.classList.remove("active");
         toggleBtn.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "";
     }
 
     toggleBtn.addEventListener("click", () => {
-        menu.classList.contains("open") ? closeMenu() : openMenu();
+        menu.classList.contains("active") ? closeMenu() : openMenu();
     });
 
     closeBtn?.addEventListener("click", closeMenu);
-    overlay?.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
 
     // Escape key
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && menu.classList.contains("open")) closeMenu();
+        if (e.key === "Escape" && menu.classList.contains("active")) closeMenu();
     });
 
-    // Close on link click
-    menu.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
+    // Close on link/button click inside the drawer (login, logout, cart, nav links...)
+    menu.querySelectorAll("a, button").forEach((el) => {
+        el.addEventListener("click", closeMenu);
     });
 });
