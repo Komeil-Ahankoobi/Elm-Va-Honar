@@ -20,6 +20,9 @@ class Profile(models.Model):
         if self.first_name or self.last_name:
             return self.first_name + " " + self.last_name
         return "کاربر جدید"
+
+    def get_first_word_of_name(self):
+        return self.first_name[0:1]
     
 @receiver(post_save,sender=User)
 def create_profile(sender,instance,created,**kwargs):
