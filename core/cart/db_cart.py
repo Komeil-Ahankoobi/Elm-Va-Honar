@@ -25,7 +25,7 @@ class CartDB:
                 "quantity": item.quantity,
                 "total_price": price,
                 "product_obj": item.product,
-                "varient_obj": item.variant,
+                "variant_obj": item.variant,
             })
         return cart_items
 

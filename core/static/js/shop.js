@@ -148,6 +148,9 @@ function getCookie(name) {
 }
 
 async function addToCart(url, product_id) {
+    const variantInput = document.getElementById("selected-variant-id");
+    const variant_id = variantInput && variantInput.value ? variantInput.value : null;
+
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -157,9 +160,9 @@ async function addToCart(url, product_id) {
             },
             body: JSON.stringify({
                 product_id: product_id,
+                variant_id: variant_id,
             }),
-        });
-
+        }); 
         if (!response.ok) {
             throw new Error(`Server responded with status ${response.status}`);
         }
@@ -186,4 +189,34 @@ document.addEventListener('click', function (e) {
     }
 
     window.location.href = card.dataset.href;
+});
+
+
+(function initColorPalette() {
+    const palette = document.getElementById("pd-color-palette");
+    if (!palette) return;
+
+    const hiddenInput = document.getElementById("selected-variant-id");
+    const nameEl = document.getElementById("pd-color-selected-name");
+
+    palette.querySelectorAll(".pd-color-swatch").forEach((swatch) => {
+        swatch.addEventListener("click", () => {
+            palette.querySelectorAll(".pd-color-swatch").forEach((s) => s.classList.remove("active"));
+            swatch.classList.add("active");
+            hiddenInput.value = swatch.dataset.variantId;
+            if (nameEl) nameEl.textContent = swatch.dataset.colorName || ("#" + swatch.dataset.colorCode);
+        });
+    });
+})();   
+
+addBtn.addEventListener("click", () => {
+    const palette = document.getElementById("pd-color-palette");
+    if (palette) {
+        const selected = document.getElementById("selected-variant-id").value;
+        if (!selected) {
+            showToast("لطفاً یک رنگ را انتخاب کنید");
+            return;
+        }
+    }
+    addToCart(addBtn.dataset.url, addBtn.dataset.productId);
 });
