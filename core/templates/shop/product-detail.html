@@ -13,23 +13,23 @@
 
 {% block content %}
 
-    <div class="breadcrumb-strip">
-      <div class="container">
-        <nav class="breadcrumb" aria-label="مسیر ناوبری">
-          <a href="{% url 'website:home' %}">خانه</a>
-          <span class="sep">/</span>
-          <a href="{% url 'shop:show-product-view' %}">فروشگاه</a>
-          <span class="sep">/</span>
-          <a href="shop.html">
-            {% for category in object.category.all %}
-            {{ category.title }}{% if not forloop.last %}، {% endif %}
-            {% endfor %}
-          </a>
-          <span class="sep">/</span>
-          <span class="current">{{ object.title }}</span>
-        </nav>
-      </div>
-    </div>
+<div class="breadcrumb-strip">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="مسیر ناوبری">
+      <a href="{% url 'website:home' %}">خانه</a>
+      <span class="sep">/</span>
+      <a href="{% url 'shop:show-product-view' %}">فروشگاه</a>
+      <span class="sep">/</span>
+      <a href="shop.html">
+        {% for category in object.category.all %}
+        {{ category.title }}{% if not forloop.last %}، {% endif %}
+        {% endfor %}
+      </a>
+      <span class="sep">/</span>
+      <span class="current">{{ object.title }}</span>
+    </nav>
+  </div>
+</div>
 
 <section class="product-detail">
   <div class="container">
@@ -110,21 +110,10 @@
           {% endfor %}
         </p>
 
-            <h1 class="pd-title">{{ object.title }}</h1>
+        <h1 class="pd-title">{{ object.title }}</h1>
 
-            <p class="pd-description">{{ object.description }}</p>
-            
-            {% if object.discount_percent %}
-            <div class="pd-price-row">
-              <span class="pd-discount-badge">{{object.discount_percent}}٪</span>
-              <span class="pd-price">{{ object.get_price|intcomma }} تومان</span>
-              <span class="pd-price-old">{{ object.get_real_price|intcomma }}تومان</span>
-            </div>
-            {% else %}
-            <div class="pd-price-row">
-              <span class="pd-price">{{ object.get_price|intcomma }} تومان</span>
-            </div>
-            {% endif %}
+        <p class="pd-description">{{ object.description }}</p>
+
 
             <div class="pd-purchase-row">
               <button type="button" class="btn-add-to-cart btn-primary" 
@@ -140,6 +129,7 @@
               افزودن به سبد خرید
             </button>
             </div>
+
 
         <div class="pd-trust-grid">
           <div class="pd-trust-item">

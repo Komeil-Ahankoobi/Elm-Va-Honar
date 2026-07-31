@@ -58,6 +58,10 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body.dark-pastel-theme {
     background-color: var(--bg-dark);
     color: var(--clr-text-main);
@@ -1089,7 +1093,7 @@ ul {
    HERO SLIDER SECTION (CONTAINED & DUAL BUTTONS)
    ============================================================ */
 .hero-section-wrapper {
-    padding-top: 100px;
+    padding-top: 165px;
     padding-bottom: 2rem;
 }
 
@@ -1604,4 +1608,13 @@ ul {
 
 .aa {
     margin-bottom: 1rem;
+}
+
+@media (max-width: 400px) {
+    .section-title {
+        font-size: 1.2rem;
+    }
+    .view-all-link {
+        font-size: 0.7rem;
+    }
 }

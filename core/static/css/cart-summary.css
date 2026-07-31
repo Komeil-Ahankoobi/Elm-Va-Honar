@@ -2,6 +2,10 @@
    CART PAGE — ElmvHonar Dark Pastel Theme
    ============================================================ */
 
+html {
+    scroll-behavior: smooth;
+}
+
 .cart-page {
     padding-top: 130px;
     padding-bottom: 6rem;

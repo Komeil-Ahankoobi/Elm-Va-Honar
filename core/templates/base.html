@@ -107,9 +107,7 @@
                         <li><a href="{% url 'website:home' %}" {% if request.resolver_match.url_name == 'home' %}class="active" {% endif %}>خانه</a></li>
                         <li><a href="{% url 'shop:show-product-view' %}" {% if  request.resolver_match.url_name == 'show-product-view' %}class="active" {% endif %}>فروشگاه</a></li>
                         <li><a href="{% url 'website:about' %}" {% if request.resolver_match.url_name == 'about' %}class="active" {% endif %}>درباره ما</a></li>
-                        <li><a href="#">رنگ‌ها</a></li>
-                        <li><a href="#">ابزار طراحی</a></li>
-                        <li><a href="#">کاغذ و بوم</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">سوالات متدوال و قوانین</a></li>
                     </ul>
                 </div> <!-- end .nav-bottom-row -->
 
@@ -142,9 +140,7 @@
             <li><a href="{% url 'website:home' %}" {% if request.resolver_match.url_name == 'home' %}class="active" {% endif %}>خانه</a></li>
             <li><a href="{% url 'shop:show-product-view' %}" {% if request.resolver_match.url_name == 'show-product-view' %}class="active" {% endif %}>فروشگاه</a></li>
             <li><a href="{% url 'website:about' %}" {% if request.resolver_match.url_name == 'about' %}class="active" {% endif %}>درباره ما</a></li>
-            <li><a href="#">رنگ‌ها</a></li>
-            <li><a href="#">ابزار طراحی</a></li>
-            <li><a href="#">کاغذ و بوم</a></li>
+            <li><a href="{% url 'website:rule_qu' %}">سوالات متدوال و قوانین</a></li>
         </ul>
 
         <div class="mobile-menu-divider"></div>
@@ -221,7 +217,7 @@
                         <li>پاساژ بوستان مهر 1</li>
                         <li>info@elmvhonar.ir</li>
                         <li>026-33218734</li>
-                        <li>0919- 9949819</li>
+                        <li>9949819 - 0919</li>
                     </ul>
                 </div>
 
@@ -314,6 +310,7 @@
     <script src="{% static 'js/home.js' %}" defer></script>
 
     <script src="{% static 'js/bag.js' %}" defer></script>
+
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
     {% include 'messages.html' %}
 
