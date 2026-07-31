@@ -83,15 +83,14 @@
                             {% if item.variant_obj %}
                             <span class="cart-row-variant">
                                 {% if item.variant_obj.variant_type == "color" %}
-                                <span class="variant-swatch"
-                                    style="background-color: {{ item.variant_obj.color_code }};"></span>
-                                {{ item.variant_obj.label }}
+                                <span class="variant-swatch" style="background-color: #{{ item.variant_obj.get_hex_color }};"></span>
+                                <span class="variant-name">{{ item.variant_obj.get_color_display_name }}</span>
                                 {% else %}
-                                شماره {{ item.variant_obj.number_code }}
+                                <span class="variant-name">شماره {{ item.variant_obj.number_code }}</span>
                                 {% endif %}
                             </span>
                             {% endif %}
-                            <span class="cart-row-unit">{{ item.product_obj.get_price|intcomma }} تومان / عدد</span>
+                            <span class="cart-row-unit">{{ item.product_obj.get_price|intcomma }} تومان / هر عدد</span>
                         </div>
 
 

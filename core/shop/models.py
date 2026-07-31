@@ -5,6 +5,9 @@ from django.conf import settings
 from django.urls import reverse
 
 
+from .colors import VISTA_ACRYLIC_COLORS
+
+
 class ProductStatusType(models.IntegerChoices):
     publish = 1 ,("نمایش")
     draft = 2 ,("عدم نمایش")
@@ -95,6 +98,12 @@ class ProductModel(models.Model):
 
     def get_image_alt(self):
         return self.image_alt_text or self.title
+
+    def get_color_variants(self):
+        return self.varients.filter(variant_type=VarientType.color)
+
+    def has_color_variants(self):
+        return self.varients.filter(variant_type=VarientType.color).exists()
     
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")
@@ -133,3 +142,16 @@ class ProductVarientModel(models.Model):
     
     def __str__(self):
         return f'{self.product.title} - {self.variant_type}'
+
+
+    def get_hex_color(self):
+        code = (self.color_code or "").strip().lstrip("#")
+        if code in VISTA_ACRYLIC_COLORS:
+            return VISTA_ACRYLIC_COLORS[code][1]
+        return code or "cccccc"
+
+    def get_color_display_name(self):
+        code = (self.color_code or "").strip()
+        if code in VISTA_ACRYLIC_COLORS:
+            return VISTA_ACRYLIC_COLORS[code][0]
+        return code

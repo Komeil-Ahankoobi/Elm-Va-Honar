@@ -127,13 +127,6 @@
             {% endif %}
 
             <div class="pd-purchase-row">
-              <div class="pd-qty">
-                <button type="button" class="qty-btn" data-product-id="{{ object.id }}" data-url="{% url 'cart:update-quantity' %}" 
-                  data-action="dec" aria-label="کم کردن تعداد">−</button>
-                <span class="pd-qty-value">۱</span>
-                <button type="button" class="qty-btn www" data-product-id="{{ object.id }}" data-url="{% url 'cart:update-quantity' %}" data-stock="{{ object.product_obj.stock }}"
-                  data-action="inc" aria-label="زیاد کردن تعداد">+</button>
-              </div>
               <button type="button" class="btn-add-to-cart btn-primary" 
                     aria-label="افزودن {{ object.title }} به سبد خرید"
                     data-url="{% url 'cart:session-add-product' %}" 
@@ -147,14 +140,6 @@
               افزودن به سبد خرید
             </button>
             </div>
-
-        <button type="button" class="btn-ghost-full">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            aria-hidden="true">
-            <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
-          </svg>
-          خرید سریع
-        </button>
 
         <div class="pd-trust-grid">
           <div class="pd-trust-item">
@@ -204,41 +189,19 @@
 <!-- TABS -->
 <section class="pd-tabs-section" aria-label="اطلاعات تکمیلی محصول">
   <div class="container">
-    <input type="radio" name="pd-tab" id="pd-tab-desc" class="pd-tab-radio" checked>
-    <input type="radio" name="pd-tab" id="pd-tab-specs" class="pd-tab-radio">
-    <input type="radio" name="pd-tab" id="pd-tab-faq" class="pd-tab-radio">
-    <input type="radio" name="pd-tab" id="pd-tab-reviews" class="pd-tab-radio">
+    <input type="radio" name="pd-tab" id="pd-tab-specs" class="pd-tab-radio" checked>
+    {% if object.has_color_variants %}
+    <input type="radio" name="pd-tab" id="pd-tab-colors" class="pd-tab-radio">
+    {% endif %}
 
     <div class="pd-tabs-nav">
-      <label for="pd-tab-reviews" class="pd-tab-label">نظرات کاربران (۱۲۸)</label>
-      <label for="pd-tab-faq" class="pd-tab-label">سوالات متداول</label>
+      {% if object.has_color_variants %}
+      <label for="pd-tab-colors" class="pd-tab-label">انتخاب رنگ‌ها</label>
+      {% endif %}
       <label for="pd-tab-specs" class="pd-tab-label">مشخصات فنی</label>
-      <label for="pd-tab-desc" class="pd-tab-label">توضیحات محصول</label>
     </div>
 
     <div class="pd-tabs-panels">
-      <div class="pd-tab-panel pd-panel-desc">
-        <div class="pd-desc-grid">
-          <div class="pd-spec-table">
-            <div class="pd-spec-row"><span>برند:</span><span>Mont Marte</span></div>
-            <div class="pd-spec-row"><span>تعداد رنگ:</span><span>۲۴</span></div>
-            <div class="pd-spec-row"><span>نوع رنگ:</span><span>اکریلیک</span></div>
-            <div class="pd-spec-row"><span>حجم هر تیوب:</span><span>12ml</span></div>
-            <div class="pd-spec-row"><span>کشور سازنده:</span><span>چین</span></div>
-            <div class="pd-spec-row"><span>وزن محصول:</span><span>۵۴۰ گرم</span></div>
-          </div>
-          <div class="pd-desc-text">
-            <p>{{ object.description }}</p>
-            <ul class="pd-desc-list">
-              <li>۲۴ رنگ متنوع و زنده</li>
-              <li>پوشش‌دهی بالا و خشک شدن سریع</li>
-              <li>قابل استفاده روی بوم، چوب، کاغذ، پارچه و ...</li>
-              <li>رنگدانه‌های غنی و با کیفیت</li>
-              <li>مقاوم در برابر نور و تغییر رنگ</li>
-            </ul>
-          </div>
-        </div>
-      </div>
 
       <div class="pd-tab-panel pd-panel-specs">
         <div class="pd-spec-table pd-spec-table-full">
@@ -252,136 +215,52 @@
         </div>
       </div>
 
-      <div class="pd-tab-panel pd-panel-faq">
-        <div class="pd-faq-item">
-          <p class="pd-faq-q">آیا این رنگ‌ها روی بوم هم قابل استفاده هستند؟</p>
-          <p class="pd-faq-a">بله، این ست برای نقاشی روی بوم، کاغذ، چوب و سطوح مختلف مناسب است.</p>
+      {% if object.has_color_variants %}
+      <div class="pd-tab-panel pd-panel-colors">
+        <div class="pd-color-select-header">
+          <span class="pd-color-select-label">انتخاب رنگ:</span>
+          <span class="pd-color-selected-name" id="pd-color-selected-name">—</span>
         </div>
-        <div class="pd-faq-item">
-          <p class="pd-faq-q">مدت زمان خشک شدن رنگ‌ها چقدر است؟</p>
-          <p class="pd-faq-a">رنگ‌ها به سرعت و معمولاً در کمتر از یک ساعت خشک می‌شوند.</p>
-        </div>
-      </div>
 
-      <div class="pd-tab-panel pd-panel-reviews">
-        <p class="pd-panel-reviews-hint">خلاصه دیدگاه کاربران و امتیازها را در بخش «بررسی و نظرات کاربران» در پایین صفحه
-          مشاهده کنید.</p>
+       <div class="pd-color-palette" id="pd-color-palette">
+          {% for variant in object.get_color_variants %}
+          <div class="pd-color-item">
+            <button type="button"
+                    class="pd-color-swatch"
+                    style="background-color: #{{ variant.get_hex_color }};"
+                    data-variant-id="{{ variant.id }}"
+                    data-color-code="{{ variant.get_hex_color }}"
+                    data-color-name="{{ variant.get_color_display_name }}"
+                    aria-label="انتخاب رنگ {{ variant.get_color_display_name }}">
+              <svg class="pd-color-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </button>
+            <span class="pd-color-swatch-label">{{ variant.get_color_display_name }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        <input type="hidden" id="selected-variant-id" value="">
       </div>
+      {% endif %}
+
     </div>
   </div>
-</section>
-
-<!-- REVIEWS -->
-<section class="pd-reviews-section" id="reviews">
-  <div class="container">
-    <h2 class="pd-section-title">بررسی و نظرات کاربران</h2>
-
-    <div class="pd-reviews-layout">
-      <div class="pd-reviews-summary">
-        <p class="pd-reviews-summary-title">امتیاز مشتریان</p>
-        <div class="pd-reviews-score-num">۴.۵</div>
-        <div class="stars">★★★★★</div>
-        <p class="pd-reviews-count">بر اساس ۱۳۸ نظر</p>
-
-        <div class="pd-reviews-bars">
-          <div class="pd-reviews-bar-row"><span>۵ ستاره</span>
-            <div class="pd-reviews-bar-track">
-              <div class="pd-reviews-bar-fill" style="width:78%;"></div>
-            </div>
-            <span>(۱۰۸)</span>
-          </div>
-          <div class="pd-reviews-bar-row"><span>۴ ستاره</span>
-            <div class="pd-reviews-bar-track">
-              <div class="pd-reviews-bar-fill" style="width:10%;"></div>
-            </div>
-            <span>(۱۴)</span>
-          </div>
-          <div class="pd-reviews-bar-row"><span>۳ ستاره</span>
-            <div class="pd-reviews-bar-track">
-              <div class="pd-reviews-bar-fill" style="width:3%;"></div>
-            </div>
-            <span>(۴)</span>
-          </div>
-          <div class="pd-reviews-bar-row"><span>۲ ستاره</span>
-            <div class="pd-reviews-bar-track">
-              <div class="pd-reviews-bar-fill" style="width:1%;"></div>
-            </div>
-            <span>(۱)</span>
-          </div>
-          <div class="pd-reviews-bar-row"><span>۱ ستاره</span>
-            <div class="pd-reviews-bar-track">
-              <div class="pd-reviews-bar-fill" style="width:1%;"></div>
-            </div>
-            <span>(۱)</span>
-          </div>
-        </div>
-
-        <button type="button" class="btn-outline-full">مشاهده همه نظرات</button>
-      </div>
-
-      <div class="pd-reviews-list">
-        <article class="pd-review-card">
-          <div class="pd-review-top">
-            <img class="pd-review-avatar" src="https://i.pravatar.cc/80?img=47" alt="نگار محمدی " />
-            <div class="pd-review-meta">
-              <p class="pd-review-name">نگار محمدی <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg></p>
-              <div class="stars">★★★★★</div>
-            </div>
-          </div>
-          <p class="pd-review-body">کیفیت رنگدانه‌ها واقعاً عالیه و پوشش‌دهی هم خیلی خوب بود. بسته‌بندی هم خیلی سریع به
-            دستم رسید.</p>
-        </article>
-
-        <article class="pd-review-card">
-          <div class="pd-review-top">
-            <img class="pd-review-avatar" src="https://i.pravatar.cc/80?img=12" alt="امیرحسین رضایی " />
-            <div class="pd-review-meta">
-              <p class="pd-review-name">امیرحسین رضایی <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg></p>
-              <div class="stars">★★★★★</div>
-            </div>
-          </div>
-          <p class="pd-review-body">رنگ‌ها زنده و غلیظ هستند، برای کارهای هنری حرفه‌ای واقعاً پیشنهاد می‌کنم.</p>
-        </article>
-
-        <article class="pd-review-card">
-          <div class="pd-review-top">
-            <img class="pd-review-avatar" src="https://i.pravatar.cc/80?img=32" alt="سارا یوسفی " />
-            <div class="pd-review-meta">
-              <p class="pd-review-name">سارا یوسفی <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M20 6L9 17l-5-5" />
-                </svg></p>
-              <div class="stars">★★★★☆</div>
-            </div>
-          </div>
-          <p class="pd-review-body">کیفیت خوب و در حد قیمت‌شه، نسبت به کیفیتش قیمت مناسبی داره.</p>
-        </article>
-
-        <button type="button" class="btn-outline-full">مشاهده همه نظرات</button>
-      </div>
-    </div>
-  </div>
-</section>
+</section>  
 
 <!-- RELATED PRODUCTS -->
 <section class="pd-related-section">
   <div class="container">
     <div class="pd-related-header">
-      <a href="shop.html" class="pd-related-viewall">مشاهده همه</a>
+      <a href="{% url 'shop:show-product-view' %}" class="pd-related-viewall">مشاهده همه محصولات</a>
       <h2 class="pd-section-title">محصولات مرتبط</h2>
     </div>
 
-    <div class="pd-related-carousel">
-      <button type="button" class="pd-related-arrow pd-related-arrow-prev" aria-label="محصول قبلی">‹</button>
 
       <div class="pd-related-track">
-        <article class="product-card">
+        {% for product in related_products %}
+        <article class="product-card" data-href="{{ product.get_absolute_url }}">
           <div class="product-img-wrap">
             <button type="button" class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -390,15 +269,20 @@
                   d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
               </svg>
             </button>
-            <img src="https://picsum.photos/seed/brushset1/500/400" alt="ست ۱۰ عددی قلم‌مو سرکج" loading="lazy" />
+            <img src="{{ product.image.url }}" alt="{{ product.get_image_alt }}" loading="lazy" />
           </div>
           <div class="product-body">
-            <h3 class="product-name">ست ۱۰ عددی قلم‌مو سرکج</h3>
+            <h3 class="product-name">{{ product.title }}</h3>
             <div class="product-meta">
-              <span class="product-price">۱۳۵,۰۰۰ تومان</span>
+              <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
             </div>
-            <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۶۴)</span></div>
-            <button type="button" class="btn-add-to-cart">
+            <div class="product-rating">
+              <span class="stars">
+                <p>موجودی [ {{product.stock}} ] </p>
+              </span>
+            </div>
+            <button type="button" class="btn-add-to-cart" data-url="{% url 'cart:session-add-product' %}"
+              data-product-id="{{ product.id }}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 aria-hidden="true">
                 <circle cx="9" cy="21" r="1" />
@@ -409,108 +293,18 @@
             </button>
           </div>
         </article>
-
-        <article class="product-card">
-          <div class="product-img-wrap">
-            <button type="button" class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <path
-                  d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-              </svg>
-            </button>
-            <img src="https://picsum.photos/seed/acrylicset12/500/400" alt="ست رنگ اکریلیک ۱۲ رنگی" loading="lazy" />
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">ست رنگ اکریلیک ۱۲ رنگی</h3>
-            <div class="product-meta">
-              <span class="product-price">۱۳۵,۰۰۰ تومان</span>
-            </div>
-            <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۴۸)</span></div>
-            <button type="button" class="btn-add-to-cart">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
-              <span>افزودن به سبد</span>
-            </button>
-          </div>
-        </article>
-
-        <article class="product-card">
-          <div class="product-img-wrap">
-            <button type="button" class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <path
-                  d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-              </svg>
-            </button>
-            <img src="https://picsum.photos/seed/canvaspaper1/500/400" alt="بوم نقاشی پنجره‌ای ۳۸×۴۵" loading="lazy" />
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">بوم نقاشی پنجره‌ای ۳۸×۴۵</h3>
-            <div class="product-meta">
-              <span class="product-price">۹۵,۰۰۰ تومان</span>
-            </div>
-            <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۳۶)</span></div>
-            <button type="button" class="btn-add-to-cart">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
-              <span>افزودن به سبد</span>
-            </button>
-          </div>
-        </article>
-
-        <article class="product-card">
-          <div class="product-img-wrap">
-            <button type="button" class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <path
-                  d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-              </svg>
-            </button>
-            <img src="https://picsum.photos/seed/paletteart1/500/400" alt="پالت رنگ چوبی بیضی" loading="lazy" />
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">پالت رنگ چوبی بیضی</h3>
-            <div class="product-meta">
-              <span class="product-price">۸۵,۰۰۰ تومان</span>
-            </div>
-            <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۲۷)</span></div>
-            <button type="button" class="btn-add-to-cart">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
-              <span>افزودن به سبد</span>
-            </button>
-          </div>
-        </article>
-      </div>
-
-      <button type="button" class="pd-related-arrow pd-related-arrow-next" aria-label="محصول بعدی">›</button>
+        {% endfor %}
     </div>
   </div>
 </section>
 
-
-<script src="{% static 'js/product-detail.js' %}"></script>
 
 {% endblock content %}
 
 
 {% block extra_js %}
 
+<script src="{% static 'js/shop.js' %}"></script>
 
 
 <script type="application/ld+json">

@@ -67,3 +67,16 @@ class ShopProductDetailView(DetailView):
     template_name = "shop/product-detail.html"
     queryset = ProductModel.objects.filter(
         status=ProductStatusType.publish.value) 
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        product = self.object
+        related_products = ProductModel.objects.filter(
+            status=ProductStatusType.publish.value,
+            category__in=product.category.all()
+        ).exclude(id=product.id).distinct()[:4]
+
+        context["related_products"] = related_products
+        return context
