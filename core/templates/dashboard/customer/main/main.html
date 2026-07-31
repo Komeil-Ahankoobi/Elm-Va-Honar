@@ -10,6 +10,14 @@
 
 <div class="content-grid">
 
+    <!-- profile summary -->
+    <section class="card profile-card">
+        <div class="profile-avatar">ع</div>
+        <h3 class="profile-name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</h3>
+        <span class="role-pill">مشتری</span>
+        <div class="member-since">عضو از {{ user.user_profile.created_date|jalali_date}}</div>
+    </section>
+    
     <!-- account info -->
     <section class="card">
         <h3 class="card-title">اطلاعات حساب کاربری</h3>
@@ -43,7 +51,8 @@
                     <circle cx="12" cy="8" r="4" />
                     <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
                 </svg>
-                <input type="text" value="{{ user.user_profile.first_name }}" dir="ltr" style="text-align:center" readonly>
+                <input type="text" value="{{ user.user_profile.first_name }}" dir="ltr" style="text-align:center"
+                    readonly>
             </div>
         </div>
 
@@ -54,7 +63,8 @@
                     <circle cx="12" cy="8" r="4" />
                     <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
                 </svg>
-                <input type="text" value="{{ user.user_profile.last_name }}" dir="ltr" style="text-align:center" readonly>
+                <input type="text" value="{{ user.user_profile.last_name }}" dir="ltr" style="text-align:center"
+                    readonly>
             </div>
         </div>
 
@@ -84,14 +94,5 @@
         </div>
     </section>
 
-    <!-- profile summary -->
-    <section class="card profile-card">
-        <div class="profile-avatar">ع</div>
-        <h3 class="profile-name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</h3>
-        <span class="role-pill">مشتری</span>
-        <div class="member-since">عضو از {{ user.user_profile.created_date|jalali_date}}</div>
-
-
-    </section>
 </div>
 {% endblock %}

@@ -1,0 +1,244 @@
+/* ===== FAQ & Rules page — scoped, self-contained styles ===== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+.faqr-page {
+    --faqr-bg-1: #141019;
+    --faqr-bg-2: #181320;
+    --faqr-panel: #171220;
+    --faqr-border: #2a2333;
+    --faqr-border-soft: #251f2e;
+    --faqr-text-0: #f4f2f7;
+    --faqr-text-1: #c9c4d4;
+    --faqr-text-2: #8b849a;
+    --faqr-purple-1: #a970ff;
+    --faqr-purple-2: #8b5cf6;
+    --faqr-radius-lg: 16px;
+    --faqr-radius-md: 12px;
+
+    padding: 105px 0 70px;
+}
+
+.faqr-page .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.faqr-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--faqr-text-2);
+    margin-bottom: 22px;
+}
+
+.faqr-breadcrumb a {
+    color: var(--faqr-text-2);
+    text-decoration: none;
+}
+
+.faqr-breadcrumb a:hover {
+    color: var(--faqr-purple-1);
+}
+
+.faqr-breadcrumb-sep {
+    color: var(--faqr-border);
+}
+
+.faqr-header {
+    margin-bottom: 28px;
+}
+
+.faqr-header h1 {
+    margin: 0 0 10px;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--faqr-text-0);
+}
+
+.faqr-header p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--faqr-text-2);
+    line-height: 1.9;
+}
+
+/* ===== Tabs ===== */
+.faqr-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--faqr-border-soft);
+}
+
+.faqr-tab {
+    padding: 12px 22px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--faqr-text-2);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition:
+        color 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.faqr-tab:hover {
+    color: var(--faqr-text-0);
+}
+
+.faqr-tab:target,
+.faqr-tab:focus {
+    color: var(--faqr-purple-1);
+    border-color: var(--faqr-purple-2);
+}
+
+/* ===== Card wrapper ===== */
+.faqr-card {
+    background: var(--faqr-panel);
+    border: 1px solid var(--faqr-border-soft);
+    border-radius: var(--faqr-radius-lg);
+    padding: 30px;
+    margin-bottom: 26px;
+    scroll-margin-top: 24px;
+}
+
+.faqr-card-head {
+    margin-bottom: 22px;
+}
+
+.faqr-card-head h2 {
+    margin: 0 0 8px;
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--faqr-text-0);
+}
+
+.faqr-card-head p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--faqr-text-2);
+}
+
+/* ===== FAQ accordion (native <details>/<summary>, no JS needed) ===== */
+.faqr-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faqr-item {
+    background: var(--faqr-bg-2);
+    border: 1px solid var(--faqr-border-soft);
+    border-radius: var(--faqr-radius-md);
+    overflow: hidden;
+}
+
+.faqr-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--faqr-text-0);
+}
+
+.faqr-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faqr-item summary svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--faqr-purple-1);
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+
+.faqr-item[open] summary svg {
+    transform: rotate(180deg);
+}
+
+.faqr-answer {
+    padding: 0 18px 18px;
+    margin-top: -4px;
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--faqr-text-2);
+}
+
+.faqr-answer p {
+    margin: 0;
+}
+
+/* ===== Rules list ===== */
+.faqr-rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.faqr-rules li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.faqr-rule-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.18);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--faqr-purple-1);
+}
+
+.faqr-rule-body h3 {
+    margin: 0 0 6px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--faqr-text-0);
+}
+
+.faqr-rule-body p {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--faqr-text-2);
+    line-height: 1.9;
+}
+
+@media (max-width: 720px) {
+    .faqr-page {
+        padding: 26px 0 50px;
+    }
+
+    .faqr-card {
+        padding: 20px;
+    }
+
+    .faqr-tabs {
+        overflow-x: auto;
+    }
+
+    .faqr-tab {
+        white-space: nowrap;
+        padding: 10px 16px;
+    }
+}

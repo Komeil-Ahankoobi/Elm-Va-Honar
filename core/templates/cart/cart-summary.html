@@ -204,7 +204,11 @@
     <div class="toast" id="toast"></div>
 </main>
 
-<script src="{% static 'js/bag.js' %}"></script>
+
 
 
 {% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/bag.js' %}"></script>
+{% endblock extra_js %}
