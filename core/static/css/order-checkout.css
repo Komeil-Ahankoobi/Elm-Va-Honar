@@ -3,6 +3,10 @@
    Extends the dark-pastel theme defined in home.css
    ============================================================ */
 
+html {
+    scroll-behavior: smooth;
+}
+
 .checkout-page-wrapper {
     padding-top: 150px;
     padding-bottom: 4rem;

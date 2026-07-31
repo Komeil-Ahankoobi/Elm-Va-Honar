@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}سوالات متداول و قوانین | ElmvHonar{% endblock title %}
+
+{% block meta_description %}
+پاسخ سوالات پرتکرار مشتریان و قوانین خرید، ارسال و مرجوعی فروشگاه ElmvHonar.
+{% endblock meta_description %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/rule_qu.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="faqr-page">
+    <div class="container">
+
+        <div class="faqr-breadcrumb">
+            <a href="{% url 'website:home' %}">خانه</a>
+            <span class="faqr-breadcrumb-sep">‹</span>
+            <span>سوالات متداول و قوانین</span>
+        </div>
+
+        <header class="faqr-header">
+            <h1>سوالات متداول و قوانین</h1>
+            <p>پیش از خرید، پاسخ سوال‌های پرتکرار و قوانین استفاده از خدمات ElmvHonar را اینجا بخوانید.</p>
+        </header>
+
+        <nav class="faqr-tabs" aria-label="بخش‌های صفحه">
+            <a href="#faq" class="faqr-tab">سوالات متداول</a>
+            <a href="#rules" class="faqr-tab">قوانین</a>
+        </nav>
+
+        <!-- ===================== سوالات متداول ===================== -->
+        <section id="faq" class="faqr-card">
+            <div class="faqr-card-head">
+                <h2>سوالات متداول</h2>
+                <p>این متن‌ها فعلاً نمونه هستند و بعداً با محتوای نهایی جایگزین می‌شوند.</p>
+            </div>
+
+            <div class="faqr-accordion">
+                <details class="faqr-item" open>
+                    <summary>
+                        <span>سفارش من چند روز دیگر به دستم می‌رسد؟</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faqr-answer">
+                        <p>این یک متن نمونه است. معمولاً ارسال سفارش‌ها بین ۲ تا ۵ روز کاری، بسته به شهر مقصد، زمان
+                            می‌برد. این بخش بعداً با متن نهایی جایگزین خواهد شد.</p>
+                    </div>
+                </details>
+
+                <details class="faqr-item">
+                    <summary>
+                        <span>آیا امکان مرجوع کردن کالا وجود دارد؟</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faqr-answer">
+                        <p>این یک متن نمونه است. جزئیات مربوط به شرایط و مهلت مرجوعی کالا در این قسمت قرار خواهد
+                            گرفت.</p>
+                    </div>
+                </details>
+
+                <details class="faqr-item">
+                    <summary>
+                        <span>روش‌های پرداخت شامل چه مواردی می‌شود؟</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faqr-answer">
+                        <p>این یک متن نمونه است. اینجا روش‌های پرداخت آنلاین و در محل تشریح می‌شود.</p>
+                    </div>
+                </details>
+
+                <details class="faqr-item">
+                    <summary>
+                        <span>چگونه می‌توانم وضعیت سفارشم را پیگیری کنم؟</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </summary>
+                    <div class="faqr-answer">
+                        <p>این یک متن نمونه است. از بخش «سفارش‌های من» در پنل کاربری می‌توانید وضعیت سفارش را ببینید.
+                        </p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- ===================== قوانین ===================== -->
+        <section id="rules" class="faqr-card">
+            <div class="faqr-card-head">
+                <h2>قوانین</h2>
+                <p>این متن‌ها فعلاً نمونه هستند و بعداً با محتوای نهایی جایگزین می‌شوند.</p>
+            </div>
+
+            <ol class="faqr-rules">
+                <li>
+                    <span class="faqr-rule-num">۱</span>
+                    <div class="faqr-rule-body">
+                        <h3>ثبت سفارش</h3>
+                        <p>این یک متن نمونه است. توضیحات مربوط به نحوه‌ی ثبت و تایید سفارش در این قسمت قرار می‌گیرد.
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <span class="faqr-rule-num">۲</span>
+                    <div class="faqr-rule-body">
+                        <h3>ارسال و تحویل</h3>
+                        <p>این یک متن نمونه است. قوانین مربوط به زمان و نحوه‌ی ارسال کالا اینجا نوشته می‌شود.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="faqr-rule-num">۳</span>
+                    <div class="faqr-rule-body">
+                        <h3>مرجوعی و بازگشت وجه</h3>
+                        <p>این یک متن نمونه است. شرایط مرجوع کردن کالا و بازگشت وجه در این بخش شرح داده می‌شود.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="faqr-rule-num">۴</span>
+                    <div class="faqr-rule-body">
+                        <h3>حریم خصوصی</h3>
+                        <p>این یک متن نمونه است. نحوه‌ی جمع‌آوری و استفاده از اطلاعات کاربران اینجا توضیح داده می‌شود.
+                        </p>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+    </div>
+</section>
+{% endblock content %}

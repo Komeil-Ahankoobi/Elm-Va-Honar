@@ -13,23 +13,23 @@
 
 {% block content %}
 
-    <div class="breadcrumb-strip">
-      <div class="container">
-        <nav class="breadcrumb" aria-label="مسیر ناوبری">
-          <a href="{% url 'website:home' %}">خانه</a>
-          <span class="sep">/</span>
-          <a href="{% url 'shop:show-product-view' %}">فروشگاه</a>
-          <span class="sep">/</span>
-          <a href="shop.html">
-            {% for category in object.category.all %}
-            {{ category.title }}{% if not forloop.last %}، {% endif %}
-            {% endfor %}
-          </a>
-          <span class="sep">/</span>
-          <span class="current">{{ object.title }}</span>
-        </nav>
-      </div>
-    </div>
+<div class="breadcrumb-strip">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="مسیر ناوبری">
+      <a href="{% url 'website:home' %}">خانه</a>
+      <span class="sep">/</span>
+      <a href="{% url 'shop:show-product-view' %}">فروشگاه</a>
+      <span class="sep">/</span>
+      <a href="shop.html">
+        {% for category in object.category.all %}
+        {{ category.title }}{% if not forloop.last %}، {% endif %}
+        {% endfor %}
+      </a>
+      <span class="sep">/</span>
+      <span class="current">{{ object.title }}</span>
+    </nav>
+  </div>
+</div>
 
 <section class="product-detail">
   <div class="container">
@@ -110,43 +110,43 @@
           {% endfor %}
         </p>
 
-            <h1 class="pd-title">{{ object.title }}</h1>
+        <h1 class="pd-title">{{ object.title }}</h1>
 
-            <p class="pd-description">{{ object.description }}</p>
-            
-            {% if object.discount_percent %}
-            <div class="pd-price-row">
-              <span class="pd-discount-badge">{{object.discount_percent}}٪</span>
-              <span class="pd-price">{{ object.get_price|intcomma }} تومان</span>
-              <span class="pd-price-old">{{ object.get_real_price|intcomma }}تومان</span>
-            </div>
-            {% else %}
-            <div class="pd-price-row">
-              <span class="pd-price">{{ object.get_price|intcomma }} تومان</span>
-            </div>
-            {% endif %}
+        <p class="pd-description">{{ object.description }}</p>
 
-            <div class="pd-purchase-row">
-              <div class="pd-qty">
-                <button type="button" class="qty-btn" data-product-id="{{ object.id }}" data-url="{% url 'cart:update-quantity' %}" 
-                  data-action="dec" aria-label="کم کردن تعداد">−</button>
-                <span class="pd-qty-value">۱</span>
-                <button type="button" class="qty-btn www" data-product-id="{{ object.id }}" data-url="{% url 'cart:update-quantity' %}" data-stock="{{ object.product_obj.stock }}"
-                  data-action="inc" aria-label="زیاد کردن تعداد">+</button>
-              </div>
-              <button type="button" class="btn-add-to-cart btn-primary" 
-                    aria-label="افزودن {{ object.title }} به سبد خرید"
-                    data-url="{% url 'cart:session-add-product' %}" 
-                    data-product-id="{{ object.id }}" 
-                    data-stock="{{ object.stock }}">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
-              افزودن به سبد خرید
-            </button>
-            </div>
+        {% if object.discount_percent %}
+        <div class="pd-price-row">
+          <span class="pd-discount-badge">{{object.discount_percent}}٪</span>
+          <span class="pd-price">{{ object.get_price|intcomma }} تومان</span>
+          <span class="pd-price-old">{{ object.get_real_price|intcomma }}تومان</span>
+        </div>
+        {% else %}
+        <div class="pd-price-row">
+          <span class="pd-price">{{ object.get_price|intcomma }} تومان</span>
+        </div>
+        {% endif %}
+
+        <div class="pd-purchase-row">
+          <div class="pd-qty">
+            <button type="button" class="qty-btn" data-product-id="{{ object.id }}"
+              data-url="{% url 'cart:update-quantity' %}" data-action="dec" aria-label="کم کردن تعداد">−</button>
+            <span class="pd-qty-value">۱</span>
+            <button type="button" class="qty-btn www" data-product-id="{{ object.id }}"
+              data-url="{% url 'cart:update-quantity' %}" data-stock="{{ object.product_obj.stock }}" data-action="inc"
+              aria-label="زیاد کردن تعداد">+</button>
+          </div>
+          <button type="button" class="btn-add-to-cart btn-primary" aria-label="افزودن {{ object.title }} به سبد خرید"
+            data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ object.id }}"
+            data-stock="{{ object.stock }}">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
+            </svg>
+            افزودن به سبد خرید
+          </button>
+        </div>
 
         <button type="button" class="btn-ghost-full">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -504,14 +504,14 @@
 </section>
 
 
-<script src="{% static 'js/product-detail.js' %}"></script>
+
 
 {% endblock content %}
 
 
 {% block extra_js %}
 
-
+<script src="{% static 'js/shop.js' %}"></script>
 
 <script type="application/ld+json">
 {
