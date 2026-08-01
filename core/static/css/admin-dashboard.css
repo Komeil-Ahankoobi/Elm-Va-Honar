@@ -2667,3 +2667,106 @@ td {
         text-align: right;
     }
 }
+
+.Exl-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--clr-purple);
+    color: var(--text-1);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.hh {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.gg {
+    margin-bottom: 1rem;
+}
+/* ============================================================
+   MOBILE ONLY (<700px) — disable hover/transition/animation
+   Desktop behavior everywhere above stays completely untouched.
+   NOTE: .row-actions:hover .row-actions-menu was left alone —
+   that's the functional open/close mechanism for the ⋮ menu,
+   not a decorative effect.
+   ============================================================ */
+@media (max-width: 700px) {
+    .menu-toggle-btn,
+    .sidebar-overlay,
+    .sidebar,
+    .nav-item,
+    .logout-btn,
+    .icon-btn,
+    .settings-input-wrap input,
+    .settings-submit-btn,
+    .form-field-block input,
+    .form-field-block select,
+    .form-field-block textarea,
+    .switch .track,
+    .switch .track::before,
+    .Exl-btn {
+        transition: none;
+    }
+
+    .menu-toggle-btn:hover {
+        border-color: var(--clr-border);
+    }
+    .nav-item:hover {
+        background: transparent;
+        color: var(--clr-subtext);
+    }
+    .logout-btn:hover {
+        background: var(--clr-purple);
+        color: var(--text-1);
+    }
+    .logout-btn:hover svg {
+        stroke: var(--text-2);
+    }
+    .icon-btn:hover {
+        color: var(--clr-subtext);
+        border-color: var(--clr-border);
+    }
+    .dots-btn:hover {
+        color: var(--clr-subtext);
+    }
+    .row-actions-menu a:hover {
+        background: transparent;
+    }
+    .settings-input-icon.toggle-eye:hover {
+        color: var(--clr-subtext);
+    }
+    .settings-submit-btn:hover {
+        opacity: 1;
+    }
+    .icon-danger-btn:hover {
+        background: rgba(244, 84, 140, 0.14);
+    }
+    .editor-tool-btn:hover {
+        background: transparent;
+        color: var(--clr-subtext);
+    }
+    .feature-remove-btn:hover {
+        background: rgba(244, 84, 140, 0.14);
+    }
+    .image-remove-btn:hover {
+        background: rgba(244, 84, 140, 0.9);
+    }
+    .gallery-thumb-add:hover {
+        border-color: var(--clr-border);
+        color: var(--clr-subtext);
+    }
+}

@@ -13,12 +13,17 @@ from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
-from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.db.models import ProtectedError
+from django.http import HttpResponse
+from django.views import View
+import openpyxl
+from openpyxl.styles import Font
 
+
+from website.models import NewsLetterModel
 from ..permissions import HasAdminAccessPermission
 from .forms import (
     AdminPasswordChangeForm,
@@ -269,3 +274,39 @@ class AdminProductsDeleteView(LoginRequiredMixin, HasAdminAccessPermission, Dele
     
 class AdminCustomersView(TemplateView):
     template_name = 'dashboard/admin/customers/customers.html'
+    
+    
+
+class NewsletterExportView(LoginRequiredMixin, HasAdminAccessPermission, View):
+    def get(self, request, *args, **kwargs):
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        sheet.title = "خبرنامه"
+
+        # هدر ستون‌ها
+        sheet['A1'] = 'ردیف'
+        sheet['B1'] = 'شماره تلفن'
+        sheet['A1'].font = Font(bold=True)
+        sheet['B1'].font = Font(bold=True)
+
+        # داده‌ها
+        queryset = NewsLetterModel.objects.all().order_by('id')
+        for row_num, entry in enumerate(queryset, start=2):
+            sheet.cell(row=row_num, column=1, value=row_num - 1)
+            sheet.cell(row=row_num, column=2, value=entry.phone_number)
+
+        # عرض ستون‌ها رو کمی بزرگ‌تر می‌کنیم
+        sheet.column_dimensions['A'].width = 10
+        sheet.column_dimensions['B'].width = 20
+
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="newsletter_subscribers.xlsx"'
+        workbook.save(response)
+        return response    
+    
+    
+    
+    
+    

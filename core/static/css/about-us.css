@@ -444,3 +444,35 @@ html {
         grid-template-columns: repeat(1, 1fr);
     }
 }
+
+/* ============================================================
+   MOBILE ONLY (<700px) — disable hover/transition/animation
+   Desktop behavior above stays completely untouched.
+   ============================================================ */
+@media (max-width: 700px) {
+    .breadcrumb a,
+    .team-card,
+    .team-photo img,
+    .team-social a {
+        transition: none;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--clr-text-muted);
+    }
+
+    .team-card:hover {
+        transform: none;
+        border-color: var(--border-dark);
+        box-shadow: none;
+    }
+
+    .team-card:hover .team-photo img {
+        transform: none;
+    }
+
+    .team-social a:hover {
+        color: var(--clr-text-muted);
+        border-color: var(--border-dark);
+    }
+}

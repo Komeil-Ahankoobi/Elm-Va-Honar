@@ -427,7 +427,9 @@ html {
     border-radius: 10px;
     cursor: pointer;
     font-family: inherit;
-    transition: all 0.2s ease;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
 .promo-apply:hover {
@@ -711,4 +713,35 @@ html {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+/* ============================================================
+   MOBILE ONLY (<700px) — turn off the couple of effects that
+   actually cost repaint/composite performance on phones
+   (box-shadow / transform+shadow hover-lifts). Everything else
+   in this file is cheap (opacity/transform/simple color) and
+   left alone on purpose. Desktop is fully unaffected.
+   ============================================================ */
+@media (max-width: 700px) {
+    .cart-row,
+    .btn-checkout,
+    .promo-apply {
+        transition: none;
+    }
+
+    .cart-row:hover {
+        border-color: var(--border-dark);
+        box-shadow: none;
+    }
+
+    .btn-checkout:hover {
+        transform: none;
+        box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
+        opacity: 1;
+    }
+
+    .promo-apply:hover {
+        background: rgba(187, 188, 251, 0.1);
+        color: var(--pastel-lavender);
+    }
 }

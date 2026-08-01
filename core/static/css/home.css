@@ -752,7 +752,10 @@ ul {
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     direction: rtl;
     text-align: right;
@@ -823,7 +826,9 @@ ul {
     justify-content: center;
     color: #ffffff;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
     z-index: 2;
 }
 
@@ -917,7 +922,10 @@ ul {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.3s ease;
+    transition:
+        background-position 0.3s ease,
+        opacity 0.3s ease,
+        box-shadow 0.3s ease;
     margin-top: auto;
 }
 
@@ -1600,7 +1608,11 @@ ul {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
-    transition: all 0.25s ease;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
     cursor: initial;
 }
 
@@ -1643,17 +1655,58 @@ ul {
     }
 }
 
-
 @media (max-width: 360px) {
-
     .newsletter-card form {
         width: 100%;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
-        
     }
 }
 
+/* ============================================================
+   MOBILE ONLY (<700px) — turn off the transform+box-shadow
+   hover-lifts that repeat across product/category grids and
+   genuinely cost repaint on phones. Cheap color/background/
+   border-color feedback is kept where it existed. Desktop is
+   fully unaffected.
+   ============================================================ */
+@media (max-width: 700px) {
+    .btn-primary-gradient,
+    .category-card,
+    .product-card,
+    .btn-add-to-cart,
+    .social-icon {
+        transition: none;
+    }
 
+    .btn-primary-gradient:hover {
+        transform: none;
+        box-shadow: 0 8px 25px rgba(187, 188, 251, 0.25);
+    }
 
+    .category-card:hover {
+        transform: none;
+        border-color: var(--pastel-lavender);
+        box-shadow: none;
+    }
+
+    .product-card:hover {
+        transform: none;
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-add-to-cart:hover {
+        background-position: right center;
+        opacity: 0.95;
+        box-shadow: none;
+    }
+
+    .social-icon:hover {
+        background: linear-gradient(135deg, #7c3aed, #c026d3);
+        border-color: transparent;
+        transform: none;
+        box-shadow: none;
+    }
+}

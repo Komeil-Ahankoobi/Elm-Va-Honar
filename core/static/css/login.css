@@ -644,3 +644,20 @@ a {
         gap: 0.75rem;
     }
 }
+
+/* ============================================================
+   MOBILE ONLY (<700px) — the login button's hover-lift combines
+   transform + a large-blur box-shadow, which is the one genuinely
+   costly effect in this file. Neutralized here only; desktop is
+   fully unaffected.
+   ============================================================ */
+@media (max-width: 700px) {
+    .btn-primary {
+        transition: none;
+    }
+
+    .btn-primary:hover {
+        transform: none;
+        box-shadow: 0 8px 25px rgba(187, 188, 251, 0.2);
+    }
+}
