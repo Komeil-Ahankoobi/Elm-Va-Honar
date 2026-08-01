@@ -132,5 +132,5 @@ class OrderItemsModel(models.Model):
 
 
     def __str__(self):
-        variant_part = self.variant.varient_type if self.variant else 'بدون وریانت'
+        variant_part = self.variant.variant_type if self.variant else 'بدون وریانت'
         return f'{self.product.title} - {variant_part} - {self.order.id}'

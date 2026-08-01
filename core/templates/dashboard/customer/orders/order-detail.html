@@ -140,6 +140,16 @@
                     <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="product-thumb">
                     <div class="product-meta">
                         <span class="product-name">{{ item.product.title }}</span>
+                        {% if item.variant %}
+                        <span class="product-variant">
+                            {% if item.variant.variant_type == "color" %}
+                            <span class="variant-swatch" style="background-color: #{{ item.variant.get_hex_color }};"></span>
+                            <span class="variant-name">{{ item.variant.get_color_display_name }}</span>
+                            {% else %}
+                            <span class="variant-name">شماره {{ item.variant.number_code }}</span>
+                            {% endif %}
+                        </span>
+                        {% endif %}
                         <span class="product-code">کد محصول: {{ item.product.id }}</span>
                     </div>
                 </div>

@@ -109,8 +109,8 @@ class CustomerDashboardOrderDetailView(LoginRequiredMixin, HasCustomerAccessPerm
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        order = self.object  # همون Order که DetailView پیدا کرده
-        items = order.items.all()  # همون related_name که تو مدل OrderItemsModel داری
+        order = self.object 
+        items = order.items.all()  
 
         order_items_total= sum(item.total_price for item in items)
         total_tax = round(order_items_total * 10 / 100)
