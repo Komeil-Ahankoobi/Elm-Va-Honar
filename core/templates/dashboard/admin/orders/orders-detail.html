@@ -167,6 +167,16 @@
                     </div>
                     <div>
                         <div class="order-product-title">{{ item.product.title }}</div>
+                        {% if item.variant %}
+                        <div class="order-product-variant">
+                            {% if item.variant.variant_type == "color" %}
+                            <span class="variant-swatch" style="background-color: #{{ item.variant.get_hex_color }};"></span>
+                            <span class="variant-name">{{ item.variant.get_color_display_name }}</span>
+                            {% else %}
+                            <span class="variant-name">شماره {{ item.variant.number_code }}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
                         <div class="order-product-meta">تعداد: {{ item.quantity }} عدد</div>
                     </div>
                 </div>

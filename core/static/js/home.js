@@ -21,6 +21,8 @@
     el.textContent = now.toLocaleDateString("en-GB", opts);
 })();
 
+
+
 /* ----------------------------------------------------------
        2. SCROLL LISTENERS — header shadow + back-to-top
        Uses a single rAF-throttled scroll handler for 60fps.
