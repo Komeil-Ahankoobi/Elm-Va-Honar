@@ -560,3 +560,19 @@ html {
         height: 25px;
     }
 }
+
+/* ============================================================
+   MOBILE ONLY (<700px) — neutralize the pay button's
+   transform+box-shadow hover-lift, the one genuinely costly
+   effect in this file. Desktop is fully unaffected.
+   ============================================================ */
+@media (max-width: 700px) {
+    .checkout-pay-btn {
+        transition: none;
+    }
+
+    .checkout-pay-btn:hover {
+        transform: none;
+        box-shadow: 0 8px 25px rgba(187, 188, 251, 0.2);
+    }
+}

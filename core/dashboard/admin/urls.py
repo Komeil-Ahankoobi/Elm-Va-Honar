@@ -18,4 +18,6 @@ urlpatterns = [
     path('products/<int:pk>/delete', views.AdminProductsDeleteView.as_view(), name='product-delete'), 
     
     path("customers/", views.AdminCustomersView.as_view(), name="customers"),
+    
+    path('newsletter/export/', views.NewsletterExportView.as_view(), name='newsletter-export'),
 ]

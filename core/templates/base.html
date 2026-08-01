@@ -224,10 +224,10 @@
                 <div>
                     <p class="footer-col-title">پشتیبانی</p>
                     <ul class="footer-links">
-                        <li><a href="{% url 'website:about' %}">داستان ما</a></li>
-                        <li><a href="#">ارسال و مرجوعی</a></li>
-                        <li><a href="#">سوالات متداول</a></li>
-                        <li><a href="#">تماس با ما</a></li>
+                        <li><a href="{% url 'website:about' %}">درباره ما</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">ارسال و مرجوعی</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">سوالات متداول</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">قوانین</a></li>
                     </ul>
                 </div>
 
@@ -235,10 +235,10 @@
                 <div>
                     <p class="footer-col-title">فروشگاه</p>
                     <ul class="footer-links">
-                        <li><a href="#">دفتر و کاغذ</a></li>
-                        <li><a href="#">قلم و آبرنگ</a></li>
-                        <li><a href="#">رنگ آکریلیک</a></li>
-                        <li><a href="#">لوازم طراحی</a></li>
+                        <li><a href="{% url 'shop:show-product-view' %}?category=کاغذ">کاعذ و بوم</a></li>
+                        <li><a href="{% url 'shop:show-product-view' %}?category=یوروپن">یوروپن</a></li>
+                        <li><a href="{% url 'shop:show-product-view' %}?category=رنگ">رنگ اکرلیک</a></li>
+                        <li><a href="{% url 'shop:show-product-view' %}?category=ابزار">ابزار نقاشی و طراحی</a></li>
                     </ul>
                 </div>
 
