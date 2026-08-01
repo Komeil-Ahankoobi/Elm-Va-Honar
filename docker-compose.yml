@@ -33,10 +33,11 @@ services:
                     time.sleep(1)
             '; python manage.py runserver 0.0.0.0:8000 "
 
+
         volumes:
             - ./core:/usr/src/app
         ports:
-            - "9567:8000"
+            - "9999:8000"
         environment:
             - SECRET_KEY=test
             - DEBUG=True
