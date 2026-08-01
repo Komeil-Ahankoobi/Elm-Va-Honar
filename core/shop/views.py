@@ -49,6 +49,9 @@ class ShopProductView(ListView):
             queryset = queryset.order_by('-final_price')        
         elif filter_by == 'new':
             queryset = queryset.order_by('-created_date')
+            
+        if category := self.request.GET.get('category'):
+            queryset = queryset.filter(category__title__icontains=category)
         
         
         return queryset

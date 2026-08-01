@@ -400,12 +400,6 @@ html {
     font-weight: 700;
 }
 
-/* Promo */
-.promo-row {
-    display: flex;
-    gap: 0.5rem;
-}
-
 .promo-input {
     flex: 1;
     background: var(--clr-input-bg);
