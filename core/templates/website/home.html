@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
 <!-- ============================================================
@@ -280,17 +281,18 @@
     <div class="container productssss">
         <header class="section-header flex-between">
             <div>
-                <h2 class="section-title">پیشنهادات ویژه</h2>
+                <h2 class="section-title">محصولات اخیر</h2>
             </div>
             <a href="{% url 'shop:show-product-view' %}" class="view-all-link">مشاهده همه ←</a>
         </header>
 
         <div class="carousel-grid">
+            {% for product in four_product %}
             <!-- Product 1 -->
             <article class="product-card reveal" role="listitem">
                 <a href="" class="product-card-overlay-link" aria-label="مشاهده {{ product.title }}"></a>
                 <div class="product-img-wrap">
-                    <img src="{% static 'images/product.png' %}" alt="دفتر آلداین — رنگ توتون" loading="eager"
+                    <img src="{{ product.image.url }}" alt="دفتر آلداین — رنگ توتون" loading="eager"
                         fetchpriority="high" width="600" height="520" />
                     <span class="product-badge">جدید</span>
                     <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
@@ -302,20 +304,23 @@
                     </button>
                 </div>
                 <div class="product-body">
-                    <h3 class="product-name">ست قلم‌مو خری رها</h3>
+                    <h3 class="product-name">{{ product.title }}</h3>
                     <div class="x">
                         <p class="product-category">
-                            رنگ، دفتر
+                            {% for cat in product.category.all %}
+                            {{ cat.title }}{% if not forloop.last %}، {% endif %}
+                            {% endfor %}
                         </p>
-                        <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۱۲۸)</span>
+                        <div class="product-rating">
+                            <span class="count">موجودی : {{ product.stock }}</span>
                         </div>
                     </div>
                     <div class="product-meta">
-                        <span class="product-price">212,000 تومان</span>
+                        <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
                         <a class="btn-quick-view" href="" aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
                     </div>
-                    <button type="button" class="btn-add-to-cart" aria-label="افزودن به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}" data-product-id="">
+                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-to-cart"
+                        aria-label="مشاهده">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" aria-hidden="true">
                             <circle cx="9" cy="21" r="1" />
@@ -323,132 +328,10 @@
                             <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
                         </svg>
                         <span>مشاهده</span>
-                    </button>
+                    </a>
                 </div>
             </article>
-
-            <!-- Product 2 -->
-            <article class="product-card reveal" role="listitem">
-                <a href="" class="product-card-overlay-link" aria-label="مشاهده {{ product.title }}"></a>
-                <div class="product-img-wrap">
-                    <img src="{% static 'images/product.png' %}" alt="دفتر آلداین — رنگ توتون" loading="eager"
-                        fetchpriority="high" width="600" height="520" />
-                    <span class="product-badge">جدید</span>
-                    <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <path
-                                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">ست قلم‌مو خری رها</h3>
-                    <div class="x">
-                        <p class="product-category">
-                            رنگ، دفتر
-                        </p>
-                        <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۱۲۸)</span>
-                        </div>
-                    </div>
-                    <div class="product-meta">
-                        <span class="product-price">212,000 تومان</span>
-                        <a class="btn-quick-view" href="" aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
-                    </div>
-                    <button type="button" class="btn-add-to-cart" aria-label="افزودن به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}" data-product-id="">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <circle cx="9" cy="21" r="1" />
-                            <circle cx="20" cy="21" r="1" />
-                            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-                        </svg>
-                        <span>مشاهده</span>
-                    </button>
-                </div>
-            </article>
-
-            <!-- Product 3 -->
-            <article class="product-card reveal" role="listitem">
-                <a href="" class="product-card-overlay-link" aria-label="مشاهده {{ product.title }}"></a>
-                <div class="product-img-wrap">
-                    <img src="{% static 'images/product.png' %}" alt="دفتر آلداین — رنگ توتون" loading="eager"
-                        fetchpriority="high" width="600" height="520" />
-                    <span class="product-badge">جدید</span>
-                    <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <path
-                                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">ست قلم‌مو خری رها</h3>
-                    <div class="x">
-                        <p class="product-category">
-                            رنگ، دفتر
-                        </p>
-                        <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۱۲۸)</span>
-                        </div>
-                    </div>
-                    <div class="product-meta">
-                        <span class="product-price">212,000 تومان</span>
-                        <a class="btn-quick-view" href="" aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
-                    </div>
-                    <button type="button" class="btn-add-to-cart" aria-label="افزودن به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}" data-product-id="">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <circle cx="9" cy="21" r="1" />
-                            <circle cx="20" cy="21" r="1" />
-                            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-                        </svg>
-                        <span>مشاهده</span>
-                    </button>
-                </div>
-            </article>
-
-            <!-- Product 4 -->
-            <article class="product-card reveal" role="listitem">
-                <a href="" class="product-card-overlay-link" aria-label="مشاهده {{ product.title }}"></a>
-                <div class="product-img-wrap">
-                    <img src="{% static 'images/product.png' %}" alt="دفتر آلداین — رنگ توتون" loading="eager"
-                        fetchpriority="high" width="600" height="520" />
-                    <span class="product-badge">جدید</span>
-                    <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <path
-                                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">ست قلم‌مو خری رها</h3>
-                    <div class="x">
-                        <p class="product-category">
-                            رنگ، دفتر
-                        </p>
-                        <div class="product-rating"><span class="stars">★★★★★</span><span class="count">(۱۲۸)</span>
-                        </div>
-                    </div>
-                    <div class="product-meta">
-                        <span class="product-price">212,000 تومان</span>
-                        <a class="btn-quick-view" href="" aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
-                    </div>
-                    <button type="button" class="btn-add-to-cart" aria-label="افزودن به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}" data-product-id="">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <circle cx="9" cy="21" r="1" />
-                            <circle cx="20" cy="21" r="1" />
-                            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-                        </svg>
-                        <span>مشاهده</span>
-                    </button>
-                </div>
-            </article>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -462,8 +345,10 @@
             <h2 class="newsletter-title">از جدیدترین محصولات و تخفیف‌ها باخبر شوید!</h2>
             <p class="newsletter-sub">با عضویت در خبرنامه، هیچ فرصتی را از دست ندهید.</p>
         </div>
-        <form class="newsletter-form" onsubmit="event.preventDefault();">
-            <input type="text" class="newsletter-input" placeholder="شماره تلفن خود را وارد کنید..." required>
+        <form class="newsletter-form" method="post" action="{% url 'website:home' %}">
+            {% csrf_token %}
+            <input name="phone_number" type="text" class="newsletter-input" placeholder="شماره تلفن خود را وارد کنید..."
+                required>
             <button type="submit" class="btn-newsletter">عضویت</button>
         </form>
     </div>
