@@ -1710,3 +1710,539 @@ ul {
         box-shadow: none;
     }
 }
+
+/* ----------------------------------------------------- */
+
+.art-hero {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1233 0%, #100c1f 60%, #0b0912 100%);
+    padding: 56px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 32px;
+    min-height: 420px;
+}
+.art-hero::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    left: -80px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+    pointer-events: none;
+}
+.art-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -140px;
+    right: -60px;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(109, 40, 217, 0.22) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-copy {
+    position: relative;
+    z-index: 2;
+}
+.eyebrow {
+    display: inline-block;
+    color: #c4b5fd;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    background: rgba(168, 85, 247, 0.12);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+}
+.hero-copy h1 {
+    color: #f5f3ff;
+    font-size: clamp(30px, 3.4vw, 46px);
+    line-height: 1.4;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+}
+.hero-copy h1 span {
+    background: linear-gradient(90deg, #c4b5fd, #a855f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.hero-copy p {
+    color: #b9acd4;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 2;
+    margin-bottom: 30px;
+    max-width: 480px;
+}
+.hero-cta {
+    display: inline-block;
+    background: linear-gradient(90deg, #a855f7, #6d28d9);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 34px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hero-art {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+}
+.hero-art svg {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+}
+
+/* ============ NARRATIVE ANIMATION ============
+   Story: palette fades in -> brush dips into a well, tip visibly
+   changes color -> brush travels and hovers over the canvas ->
+   writes "E" then "H" stroke by stroke, each stroke drawing in
+   sync with the brush hovering over it -> a sparkle marks the
+   finished piece -> brush lifts and returns, cycle repeats.
+================================================= */
+
+.palette-shape,
+.canvas-shape {
+    opacity: 0;
+    animation: fade-in 0.8s ease forwards;
+}
+.canvas-shape {
+    animation-delay: 0.15s;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Brush: absolute coordinates, origin (0,0) of the group IS the bristle
+   tip / contact point — so every translate() below is literally where
+   the tip touches. This is what fixes the "floating/unclear" brush bug. */
+.brush-group {
+    animation: brush-journey 8s ease-in-out infinite;
+}
+.brush-handle {
+    fill: #c9a06a;
+}
+.brush-ferrule {
+    fill: #8a8a9a;
+}
+.bristle-tip {
+    fill: #6b6b7a;
+    animation: pick-up-color 8s steps(1) infinite;
+}
+
+@keyframes brush-journey {
+    0% {
+        transform: translate(92px, 196px) rotate(18deg);
+    }
+    9% {
+        transform: translate(70px, 222px) rotate(-6deg);
+    }
+    13% {
+        transform: translate(55px, 240px) rotate(-10deg);
+    } /* dip */
+    17% {
+        transform: translate(70px, 222px) rotate(-4deg);
+    }
+    23% {
+        transform: translate(92px, 196px) rotate(18deg);
+    }
+    30% {
+        transform: translate(150px, 120px) rotate(-14deg);
+    }
+    36% {
+        transform: translate(190px, 96px) rotate(-8deg);
+    } /* touch: E top */
+    40% {
+        transform: translate(178px, 120px) rotate(-6deg);
+    } /* E vertical */
+    45% {
+        transform: translate(196px, 96px) rotate(-4deg);
+    } /* E top arm */
+    50% {
+        transform: translate(190px, 142px) rotate(-6deg);
+    } /* E middle arm */
+    56% {
+        transform: translate(196px, 190px) rotate(-8deg);
+    } /* E bottom arm */
+    62% {
+        transform: translate(210px, 150px) rotate(-4deg);
+    }
+    66% {
+        transform: translate(225px, 96px) rotate(-6deg);
+    } /* touch: H */
+    70% {
+        transform: translate(225px, 150px) rotate(-4deg);
+    } /* H left vertical */
+    77% {
+        transform: translate(242px, 142px) rotate(-2deg);
+    } /* H crossbar */
+    83% {
+        transform: translate(258px, 96px) rotate(4deg);
+    } /* touch: H right */
+    90% {
+        transform: translate(258px, 150px) rotate(2deg);
+    } /* H right vertical */
+    94% {
+        transform: translate(258px, 80px) rotate(10deg);
+    } /* lift off */
+    100% {
+        transform: translate(92px, 196px) rotate(18deg);
+    }
+}
+
+@keyframes pick-up-color {
+    0%,
+    11% {
+        fill: #6b6b7a;
+    }
+    13% {
+        fill: #e9d5ff;
+    }
+    96% {
+        fill: #e9d5ff;
+    }
+    100% {
+        fill: #6b6b7a;
+    }
+}
+
+.well-ripple {
+    opacity: 0;
+    animation: ripple 8s ease infinite;
+}
+@keyframes ripple {
+    0%,
+    10% {
+        opacity: 0;
+    }
+    13% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    20% {
+        opacity: 0;
+        transform: scale(1.6);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* letter strokes: each is a straight segment revealed via stroke-dashoffset,
+   timed to when the brush is hovering over that exact segment above */
+.letter-stroke {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 8;
+    opacity: 0;
+}
+
+.e-vertical {
+    stroke-dasharray: 95;
+    stroke-dashoffset: 95;
+    stroke: #5b40ad;
+    animation: reveal-e-vertical 8s ease-in-out infinite;
+}
+.e-top {
+    stroke-dasharray: 33;
+    stroke-dashoffset: 33;
+    stroke: #5b40ad;
+    animation: reveal-e-top 8s ease-in-out infinite;
+}
+.e-middle {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    stroke: #5b40ad;
+    animation: reveal-e-middle 8s ease-in-out infinite;
+}
+.e-bottom {
+    stroke-dasharray: 33;
+    stroke-dashoffset: 33;
+    stroke: #5b40ad;
+    animation: reveal-e-bottom 8s ease-in-out infinite;
+}
+.h-left {
+    stroke-dasharray: 95;
+    stroke-dashoffset: 95;
+    stroke: #1a1233;
+    animation: reveal-h-left 8s ease-in-out infinite;
+}
+.h-crossbar {
+    stroke-dasharray: 33;
+    stroke-dashoffset: 33;
+    stroke: #1a1233;
+    animation: reveal-h-crossbar 8s ease-in-out infinite;
+}
+.h-right {
+    stroke-dasharray: 95;
+    stroke-dashoffset: 95;
+    stroke: #1a1233;
+    animation: reveal-h-right 8s ease-in-out infinite;
+}
+
+@keyframes reveal-e-vertical {
+    0%,
+    34% {
+        opacity: 0;
+        stroke-dashoffset: 95;
+    }
+    36% {
+        opacity: 1;
+    }
+    41% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 95;
+    }
+}
+@keyframes reveal-e-top {
+    0%,
+    42% {
+        opacity: 0;
+        stroke-dashoffset: 33;
+    }
+    44% {
+        opacity: 1;
+    }
+    47% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 33;
+    }
+}
+@keyframes reveal-e-middle {
+    0%,
+    47% {
+        opacity: 0;
+        stroke-dashoffset: 24;
+    }
+    49% {
+        opacity: 1;
+    }
+    52% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 24;
+    }
+}
+@keyframes reveal-e-bottom {
+    0%,
+    53% {
+        opacity: 0;
+        stroke-dashoffset: 33;
+    }
+    55% {
+        opacity: 1;
+    }
+    58% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 33;
+    }
+}
+@keyframes reveal-h-left {
+    0%,
+    65% {
+        opacity: 0;
+        stroke-dashoffset: 95;
+    }
+    67% {
+        opacity: 1;
+    }
+    73% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 95;
+    }
+}
+@keyframes reveal-h-crossbar {
+    0%,
+    74% {
+        opacity: 0;
+        stroke-dashoffset: 33;
+    }
+    76% {
+        opacity: 1;
+    }
+    79% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 33;
+    }
+}
+@keyframes reveal-h-right {
+    0%,
+    81% {
+        opacity: 0;
+        stroke-dashoffset: 95;
+    }
+    83% {
+        opacity: 1;
+    }
+    89% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+    }
+    98%,
+    100% {
+        opacity: 0;
+        stroke-dashoffset: 95;
+    }
+}
+
+.finish-sparkle {
+    opacity: 0;
+    animation: sparkle-pop 8s ease infinite;
+}
+@keyframes sparkle-pop {
+    0%,
+    88% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    91% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+    94% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    97% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* paused via JS (pause-offscreen.js) when the hero scrolls out of the viewport */
+.art-hero.anim-paused .brush-group,
+.art-hero.anim-paused .bristle-tip,
+.art-hero.anim-paused .letter-stroke,
+.art-hero.anim-paused .finish-sparkle,
+.art-hero.anim-paused .well-ripple {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .brush-group,
+    .bristle-tip,
+    .letter-stroke,
+    .finish-sparkle,
+    .well-ripple {
+        animation: none !important;
+    }
+    .letter-stroke {
+        opacity: 1 !important;
+        stroke-dashoffset: 0 !important;
+    }
+    .finish-sparkle {
+        opacity: 1 !important;
+    }
+}
+
+/* ============ RESPONSIVE — layout only, the art needs no separate sizes ============ */
+@media (max-width: 900px) {
+    .art-hero {
+        grid-template-columns: 1fr;
+        padding: 40px 24px;
+        text-align: center;
+    }
+    .hero-copy p {
+        margin-inline: auto;
+    }
+    .hero-art {
+        order: -1;
+    }
+    .hero-art svg {
+        max-width: 300px;
+    }
+}
+@media (max-width: 480px) {
+    .hero-copy h1 {
+        font-size: 24px;
+    }
+    .hero-copy p {
+        font-size: 15px;
+    }
+}
