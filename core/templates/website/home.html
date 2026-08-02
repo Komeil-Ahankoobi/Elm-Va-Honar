@@ -9,56 +9,61 @@
 <section class="hero-section-wrapper" aria-label="خوش آمدید به علم و هنر">
     <div class="container">
 
-        <div class="art-hero">
+        <!-- Slider Box (Contained Width) -->
+        <div class="hero-slider-section" id="hero">
+            <div class="slider-container">
 
-            <div class="hero-copy">
-                <span class="eyebrow">فروشگاه علم و هنر</span>
-                <h1>هر هنرمند،<br><span>بهترین ابزار</span> را می‌خواهد</h1>
-                <p>با بهترین لوازم هنری، خلاقیت خود را بدون مرز خلق کنید.</p>
-                <a href="{% url 'shop:show-product-view' %}" class="hero-cta">مشاهده محصولات</a>
+                <!-- Slide 1 -->
+                <div class="slide active">
+                    <picture>
+                        <source media="(max-width: 440px)" srcset="{% static 'images/slider1-res.png' %}">
+                        <img src="{% static 'images/slider1.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
+                            class="slide-bg-img" fetchpriority="high">
+                    </picture>
+                    <div class="slide-overlay"></div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <picture>
+                        <source media="(max-width: 440px)" srcset="{% static 'images/slider2-res.png' %}">
+                        <img src="{% static 'images/slider2.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
+                            class="slide-bg-img" fetchpriority="high">
+                    </picture>
+                    <div class="slide-overlay"></div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <picture>
+                        <source media="(max-width: 440px)" srcset="{% static 'images/slider3-res.png' %}">
+                        <img src="{% static 'images/slider3.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
+                            class="slide-bg-img" fetchpriority="high">
+                    </picture>
+                    <div class="slide-overlay"></div>
+                </div>
+
+                <!-- Slider Arrow Controls -->
+                <button class="slider-arrow prev" id="slider-prev" aria-label="اسلاید قبلی">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+                <button class="slider-arrow next" id="slider-next" aria-label="اسلاید بعدی">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+
+                </button>
+
+                <!-- Slider Dots -->
+                <div class="slider-dots" id="slider-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                </div>
+
             </div>
-
-            <div class="hero-art">
-                <svg viewBox="0 0 400 340" role="img" aria-label="تصویرسازی متحرک قلم‌مویی که روی بوم EH می‌نویسد">
-                    <title>قلم‌مو در حال نوشتن EH</title>
-
-                    <!-- canvas -->
-                    <rect class="canvas-shape" x="150" y="70" width="150" height="150" rx="8" fill="#f5f1ea"
-                        stroke="#3a3350" stroke-width="2" />
-
-                    <!-- letters written on the canvas -->
-                    <line class="letter-stroke e-vertical" x1="178" y1="95" x2="178" y2="190" />
-                    <line class="letter-stroke e-top" x1="178" y1="95" x2="211" y2="95" />
-                    <line class="letter-stroke e-middle" x1="178" y1="142" x2="202" y2="142" />
-                    <line class="letter-stroke e-bottom" x1="178" y1="190" x2="211" y2="190" />
-
-                    <line class="letter-stroke h-left" x1="225" y1="95" x2="225" y2="190" />
-                    <line class="letter-stroke h-crossbar" x1="225" y1="142" x2="258" y2="142" />
-                    <line class="letter-stroke h-right" x1="258" y1="95" x2="258" y2="190" />
-
-                    <g class="finish-sparkle" transform="translate(270,88)">
-                        <path d="M0 -10 L2.5 -2.5 L10 0 L2.5 2.5 L0 10 L-2.5 2.5 L-10 0 L-2.5 -2.5 Z" fill="#f0abfc" />
-                    </g>
-
-                    <!-- palette -->
-                    <ellipse class="palette-shape" cx="90" cy="255" rx="80" ry="50" fill="#241a3d" stroke="#a855f7"
-                        stroke-width="2" />
-                    <ellipse cx="112" cy="270" rx="20" ry="13" fill="#0b0912" />
-                    <circle cx="55" cy="238" r="9" fill="#c4b5fd" />
-                    <circle class="well-ripple" cx="55" cy="238" r="9" fill="none" stroke="#c4b5fd" stroke-width="2" />
-                    <circle cx="80" cy="222" r="9" fill="#a855f7" />
-                    <circle cx="110" cy="220" r="9" fill="#f0abfc" />
-                    <circle cx="135" cy="235" r="9" fill="#8b5cf6" />
-
-                    <!-- brush: local origin (0,0) IS the bristle tip / contact point -->
-                    <g class="brush-group">
-                        <rect class="brush-handle" x="-8" y="-160" width="16" height="118" rx="5" />
-                        <rect class="brush-ferrule" x="-10" y="-44" width="20" height="18" rx="3" />
-                        <path class="bristle-tip" d="M-9,-26 C-9,-14 -4,-4 0,2 C4,-4 9,-14 9,-26 Z" />
-                    </g>
-                </svg>
-            </div>
-
         </div>
     </div>
 </section>
@@ -342,4 +347,56 @@
         </form>
     </div>
 </section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.hero-slider-section .slide');
+        const dots = document.querySelectorAll('#slider-dots .dot');
+        const prevBtn = document.getElementById('slider-prev');
+        const nextBtn = document.getElementById('slider-next');
+        let currentIndex = 0;
+        let timer = null;
+
+        function goToSlide(index) {
+            slides[currentIndex].classList.remove('active');
+            dots[currentIndex].classList.remove('active');
+            currentIndex = (index + slides.length) % slides.length;
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        }
+
+        function startAutoSlide() {
+            stopAutoSlide();
+            timer = setInterval(() => {
+                goToSlide(currentIndex + 1);
+            }, 5000);
+        }
+
+        function stopAutoSlide() {
+            if (timer) clearInterval(timer);
+        }
+
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => {
+                goToSlide(currentIndex - 1);
+                startAutoSlide();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                goToSlide(currentIndex + 1);
+                startAutoSlide();
+            });
+        }
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                goToSlide(idx);
+                startAutoSlide();
+            });
+        });
+
+        startAutoSlide();
+    });
+</script>
 {% endblock content %}
