@@ -32,13 +32,16 @@ class CartSession:
         self.total_payment_price = 0
         for item in cart_items:
             product_obj = ProductModel.objects.get(id=item["product_id"], status=ProductStatusType.publish.value)
-            price = item["quantity"] * product_obj.get_price()
+            item["product_obj"] = product_obj
+
+            variant_id = item.get('variant_id')
+            variant_obj = ProductVarientModel.objects.filter(id=variant_id).first() if variant_id else None
+            item["variant_obj"] = variant_obj
+
+            unit_price = variant_obj.get_price() if variant_obj else product_obj.get_price()
+            price = item["quantity"] * unit_price
             item["total_price"] = price
             self.total_payment_price += price
-            item["product_obj"] = product_obj
-            
-            variant_id = item.get('variant_id')
-            item["variant_obj"] = ProductVarientModel.objects.filter(id=variant_id).first() if variant_id else None
         return cart_items
 
     def get_total_payment_amount(self):

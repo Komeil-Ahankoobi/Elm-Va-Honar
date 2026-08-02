@@ -104,6 +104,14 @@ class ProductModel(models.Model):
 
     def has_color_variants(self):
         return self.varients.filter(variant_type=VarientType.color).exists()
+
+    def get_number_variants(self):
+            return self.varients.filter(variant_type=VarientType.number)
+    
+    def has_number_variants(self):
+        return self.varients.filter(variant_type=VarientType.number).exists()
+    
+    
     
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")
@@ -138,11 +146,14 @@ class ProductVarientModel(models.Model):
         max_length=5, blank=True, null=True,
         help_text="مثل 0000 یا 000 یا 00 یا 0 یا اعداد طبیعی مثل 16 و 15"
     )
-    
-    
+    price = models.DecimalField(
+        max_digits=10, decimal_places=0, null=True, blank=True,
+        help_text="فقط اگه این شماره/سایز قیمتش با قیمت پایه محصول فرق داره پر کن. خالی بمونه یعنی از قیمت محصول استفاده میشه."
+    )
+
+
     def __str__(self):
         return f'{self.product.title} - {self.variant_type}'
-
 
     def get_hex_color(self):
         code = (self.color_code or "").strip().lstrip("#")
@@ -155,3 +166,10 @@ class ProductVarientModel(models.Model):
         if code in VISTA_ACRYLIC_COLORS:
             return VISTA_ACRYLIC_COLORS[code][0]
         return code
+
+    def get_price(self):
+        base_price = self.price if self.price is not None else self.product.price
+        discount_amount = base_price * Decimal(self.product.discount_percent) / Decimal(100)
+        return round(base_price - discount_amount)
+
+    

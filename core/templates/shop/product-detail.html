@@ -15,6 +15,7 @@
 
 <div class="breadcrumb-strip">
   <div class="container">
+    <div class="toast" id="toast"></div>
     <nav class="breadcrumb" aria-label="مسیر ناوبری">
       <a href="{% url 'website:home' %}">خانه</a>
       <span class="sep">/</span>
@@ -114,6 +115,24 @@
 
         <p class="pd-description">{{ object.description }}</p>
 
+          <div class="pd-price-row" id="pd-price-row">
+            {% if object.discount_percent > 0 %}
+            <span class="pd-discount-badge" id="pd-discount-badge">٪{{ object.discount_percent }} تخفیف</span>
+            <span class="pd-price" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
+            <span class="pd-price-old" id="pd-price-old">{{ object.price|intcomma }} تومان</span>
+            {% else %}
+            <span class="pd-price" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
+            {% endif %}
+          </div>
+
+          <div class="pd-stock-row">
+            <span class="pd-stock-dot"></span>
+            {% if object.stock > 0 %}
+            موجود در انبار ({{ object.stock }} عدد)
+            {% else %}
+            ناموجود
+            {% endif %}
+          </div>
 
             <div class="pd-purchase-row">
               <button type="button" class="btn-add-to-cart btn-primary" 
@@ -183,10 +202,16 @@
     {% if object.has_color_variants %}
     <input type="radio" name="pd-tab" id="pd-tab-colors" class="pd-tab-radio">
     {% endif %}
+    {% if object.has_number_variants %}
+    <input type="radio" name="pd-tab" id="pd-tab-sizes" class="pd-tab-radio">
+    {% endif %}
 
     <div class="pd-tabs-nav">
       {% if object.has_color_variants %}
       <label for="pd-tab-colors" class="pd-tab-label">انتخاب رنگ‌ها</label>
+      {% endif %}
+      {% if object.has_number_variants %}
+      <label for="pd-tab-sizes" class="pd-tab-label">انتخاب سایز قلمو</label>
       {% endif %}
       <label for="pd-tab-specs" class="pd-tab-label">مشخصات فنی</label>
     </div>
@@ -208,7 +233,7 @@
       {% if object.has_color_variants %}
       <div class="pd-tab-panel pd-panel-colors">
         <div class="pd-color-select-header">
-          <span class="pd-color-select-label">انتخاب رنگ:</span>
+          <span class="pd-color-select-label">انتخاب رنگ</span>
           <span class="pd-color-selected-name" id="pd-color-selected-name">—</span>
         </div>
 
@@ -216,12 +241,14 @@
           {% for variant in object.get_color_variants %}
           <div class="pd-color-item">
             <button type="button"
-                    class="pd-color-swatch"
-                    style="background-color: #{{ variant.get_hex_color }};"
-                    data-variant-id="{{ variant.id }}"
-                    data-color-code="{{ variant.get_hex_color }}"
-                    data-color-name="{{ variant.get_color_display_name }}"
-                    aria-label="انتخاب رنگ {{ variant.get_color_display_name }}">
+              class="pd-color-swatch"
+              style="background-color: #{{ variant.get_hex_color }};"
+              data-variant-id="{{ variant.id }}"
+              data-color-code="{{ variant.get_hex_color }}"
+              data-color-name="{{ variant.get_color_display_name }}"
+              data-price="{{ variant.get_price }}"
+              data-price-old="{{ variant.price|default:object.price }}"
+              aria-label="انتخاب رنگ {{ variant.get_color_display_name }}">
               <svg class="pd-color-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="3" aria-hidden="true">
                 <path d="M20 6L9 17l-5-5" />
@@ -235,9 +262,41 @@
       </div>
       {% endif %}
 
+      {% if object.has_number_variants %}
+      <div class="pd-tab-panel pd-panel-sizes">
+        <div class="pd-color-select-header">
+          <span class="pd-color-select-label">انتخاب سایز قلمو</span>
+          <span class="pd-color-selected-name" id="pd-size-selected-name">—</span>
+        </div>
+
+        <div class="pd-color-palette" id="pd-size-palette">
+          {% for variant in object.get_number_variants %}
+          <div class="pd-color-item">
+            <button type="button"
+              class="pd-color-swatch pd-size-swatch"
+              data-variant-id="{{ variant.id }}"
+              data-size-code="{{ variant.number_code }}"
+              data-price="{{ variant.get_price }}"
+              data-price-old="{{ variant.price|default:object.price }}"
+              aria-label="انتخاب سایز {{ variant.number_code }}">
+              <svg class="pd-color-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </button>
+            <span class="pd-color-swatch-label">شماره {{ variant.number_code }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% if not object.has_color_variants %}
+        <input type="hidden" id="selected-variant-id" value="">
+        {% endif %}
+      </div>
+      {% endif %}
+
     </div>
   </div>
-</section>  
+</section>
 
 <!-- RELATED PRODUCTS -->
 <section class="pd-related-section">

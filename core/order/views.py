@@ -75,13 +75,14 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         
     def create_order_items(self, cart, order):
         for item in cart.cart_items.all():
+            unit_price = item.variant.get_price() if item.variant else item.product.get_price()
             OrderItemsModel.objects.create(
                 order=order,
                 product=item.product,
                 variant=item.variant,
                 quantity=item.quantity,
-                price=item.product.get_price(),
-        )
+                price=unit_price,
+            )
     
     def clear_cart(self, cart):
         cart.cart_items.all().delete()

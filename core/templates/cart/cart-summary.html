@@ -66,57 +66,62 @@
                 <div class="cart-list" id="cart-items">
                     {% for item in cart_items %}
                     <article class="cart-row" data-id="{{ item.product_id }}"
-                        data-variant-id="{{ item.variant_id|default_if_none:'' }}"
-                        data-price="{{ item.product_obj.get_price }}" data-stock="{{ item.product_obj.stock }}">
+                    data-variant-id="{{ item.variant_id|default_if_none:'' }}"
+                    data-price="{% if item.variant_obj %}{{ item.variant_obj.get_price }}{% else %}{{ item.product_obj.get_price }}{% endif %}"
+                    data-stock="{{ item.product_obj.stock }}">
 
-                        <div class="cart-row-thumb">
-                            <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.title }}" />
-                        </div>
+                    <div class="cart-row-thumb">
+                        <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.title }}" />
+                    </div>
 
-                        <div class="cart-row-info">
-                            <span class="cart-row-cat">
-                                {% for category in item.product_obj.category.all %}
-                                <a href="#">{{ category.title }}</a>{% if not forloop.last %}، {% endif %}
-                                {% endfor %}
-                            </span>
-                            <h3 class="cart-row-name">{{ item.product_obj.title }}</h3>
-                            {% if item.variant_obj %}
-                            <span class="cart-row-variant">
-                                {% if item.variant_obj.variant_type == "color" %}
-                                <span class="variant-swatch" style="background-color: #{{ item.variant_obj.get_hex_color }};"></span>
-                                <span class="variant-name">{{ item.variant_obj.get_color_display_name }}</span>
-                                {% else %}
-                                <span class="variant-name">شماره {{ item.variant_obj.number_code }}</span>
-                                {% endif %}
-                            </span>
+                    <div class="cart-row-info">
+                        <span class="cart-row-cat">
+                            {% for category in item.product_obj.category.all %}
+                            <a href="#">{{ category.title }}</a>{% if not forloop.last %}، {% endif %}
+                            {% endfor %}
+                        </span>
+                        <h3 class="cart-row-name">{{ item.product_obj.title }}</h3>
+                        {% if item.variant_obj %}
+                        <span class="cart-row-variant">
+                            {% if item.variant_obj.variant_type == "color" %}
+                            <span class="variant-swatch" style="background-color: #{{ item.variant_obj.get_hex_color }};"></span>
+                            <span class="variant-name">{{ item.variant_obj.get_color_display_name }}</span>
+                            {% else %}
+                            <span class="variant-name">شماره {{ item.variant_obj.number_code }}</span>
                             {% endif %}
-                            <span class="cart-row-unit">{{ item.product_obj.get_price|intcomma }} تومان / هر عدد</span>
+                        </span>
+                        {% endif %}
+                        {% if item.variant_obj %}
+                        <span class="cart-row-unit">{{ item.variant_obj.get_price|intcomma }} تومان / هر عدد</span>
+                        {% else %}
+                        <span class="cart-row-unit">{{ item.product_obj.get_price|intcomma }} تومان / هر عدد</span>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="cart-row-qty">
+                        <div class="qty-stepper">
+                            <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}"
+                                data-action="dec" aria-label="کم کردن تعداد">−</button>
+                            <span class="qty-val">{{ item.quantity }}</span>
+                            <button type="button" class="qty-btn www" data-url="{% url 'cart:update-quantity' %}"
+                                data-stock="{{ item.product_obj.stock }}" data-action="inc"
+                                aria-label="زیاد کردن تعداد">+</button>
                         </div>
+                        <button type="button" class="cart-row-remove" data-action="remove" aria-label="حذف از سبد">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            </svg>
+                        </button>
+                    </div>
 
+                    <div class="cart-row-total">
+                        {{ item.total_price|intcomma }} تومان
+                    </div>
 
-                        <div class="cart-row-qty">
-                            <div class="qty-stepper">
-                                <button type="button" class="qty-btn" data-url="{% url 'cart:update-quantity' %}"
-                                    data-action="dec" aria-label="کم کردن تعداد">−</button>
-                                <span class="qty-val">{{ item.quantity }}</span>
-                                <button type="button" class="qty-btn www" data-url="{% url 'cart:update-quantity' %}"
-                                    data-stock="{{ item.product_obj.stock }}" data-action="inc"
-                                    aria-label="زیاد کردن تعداد">+</button>
-                            </div>
-                            <button type="button" class="cart-row-remove" data-action="remove" aria-label="حذف از سبد">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="cart-row-total">
-                            {{ item.total_price|intcomma }} تومان
-                        </div>
-
-                    </article>
+                </article>
                     {% endfor %}
                 </div>
 
