@@ -339,61 +339,6 @@ ul {
 }
 
 /* ============================================================
-   RESPONSIVE DESIGN (Mobile/Tablet)
-   ============================================================ */
-@media (max-width: 1024px) {
-    .nav-links {
-        gap: 1.5rem;
-    }
-    .nav-logo-img {
-        height: 50px;
-    }
-    .nav-logo-name {
-        font-size: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-top-row {
-        grid-template-columns: auto 1fr; /* لوگو و همبرگر */
-        padding: 10px 0;
-        gap: 15px;
-    }
-
-    .nav-logo {
-        grid-column: 2;
-        justify-self: end;
-    }
-
-    .nav-actions {
-        grid-column: 1;
-        justify-self: start;
-        gap: 15px;
-    }
-
-    /* مخفی کردن جستجو و پروفایل در ردیف اصلی موبایل (نیاز به منوی کشویی دارد) */
-    .nav-search,
-    .nav-profile-btn,
-    .logout-form,
-    .nav-wishlist {
-        display: none;
-    }
-
-    .nav-mobile-toggle {
-        display: block;
-        background: none;
-        border: none;
-        color: var(--clr-text-main);
-        cursor: pointer;
-    }
-
-    /* مخفی کردن ردیف دوم لینک‌ها */
-    .nav-bottom-row {
-        display: none;
-    }
-}
-
-/* ============================================================
    HERO SLIDER SECTION
    ============================================================ */
 .hero-slider-section {
@@ -1053,18 +998,6 @@ ul {
     margin-bottom: 3rem;
 }
 
-@media (max-width: 900px) {
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 500px) {
-    .footer-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 .footer-brand-name {
     font-size: 24px;
     font-weight: 700;
@@ -1122,16 +1055,6 @@ ul {
     overflow: hidden;
     border: 1px solid var(--border-dark);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-}
-
-/* تبلت: هدر کوتاه‌تر می‌شود، پس فاصله‌ی بالا و ارتفاع اسلایدر هم باید کم شود */
-@media (max-width: 1024px) {
-    .hero-section-wrapper {
-        padding-top: 88px;
-    }
-    .hero-slider-section {
-        height: 440px;
-    }
 }
 
 .slider-container {
@@ -1280,19 +1203,6 @@ ul {
     width: 28px;
     border-radius: 10px;
     background: linear-gradient(270deg, #e879f9 0%, #a855f7 50%, #6366f1 100%);
-}
-
-@media (max-width: 600px) {
-    .hero-slider-section {
-        height: 420px;
-    }
-    .slide-content {
-        padding: 0 1.5rem;
-    }
-    .btn-primary-gradient,
-    .btn-secondary-outline {
-        justify-content: center;
-    }
 }
 
 /* ============================================================
@@ -1471,90 +1381,6 @@ ul {
     color: #f79ac3;
 }
 
-/* ============================================================
-   RESPONSIVE MEDIA QUERIES (MOBILE)
-   ============================================================ */
-
-@media (max-width: 768px) {
-    /* 1. Navbar Adjustments */
-    .nav-links {
-        display: none; /* مخفی کردن لینک‌های دسکتاپ */
-    }
-
-    .nav-mobile-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-    }
-
-    /* 2. Hero Slider Responsive Fixes */
-    .hero-slider-section {
-        height: 380px !important; /* ارتفاع متناسب با صفحه گوشی */
-        border-radius: 16px;
-        margin-top: 1rem;
-    }
-
-    .slide-content {
-        padding: 0 1.25rem !important;
-        text-align: center;
-        align-items: center !important;
-    }
-
-    .hero-title {
-        font-size: 1.5rem !important;
-        line-height: 1.4 !important;
-    }
-
-    .hero-tagline {
-        font-size: 0.88rem !important;
-        margin-top: 0.5rem;
-    }
-
-    .slider-arrow {
-        width: 36px !important;
-        height: 36px !important;
-    }
-
-    /* 3. Footer Responsive Layout */
-    .footer-grid {
-        display: grid;
-        grid-template-columns: 1fr !important; /* تمام بخش‌های فوتر زیر هم قرار می‌گیرند */
-        gap: 2rem;
-        text-align: center;
-    }
-
-    .footer-brand-name {
-        font-size: 1.3rem;
-        font-weight: 700;
-    }
-
-    .footer-tagline {
-        max-width: 100%;
-        margin: 0.5rem auto 0;
-        font-size: 0.9rem;
-        line-height: 1.6;
-    }
-
-    .footer-links {
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-    }
-
-    .footer-bottom {
-        margin-top: 2rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        text-align: center;
-        font-size: 0.85rem;
-    }
-}
-
 .service-icon-wrap {
     width: 105px;
     height: 72px;
@@ -1708,5 +1534,188 @@ ul {
         border-color: transparent;
         transform: none;
         box-shadow: none;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN (Mobile/Tablet)
+   ============================================================ */
+@media (max-width: 1024px) {
+    .nav-links {
+        gap: 1.5rem;
+    }
+    .nav-logo-img {
+        height: 50px;
+    }
+    .nav-logo-name {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-top-row {
+        grid-template-columns: auto 1fr; /* لوگو و همبرگر */
+        padding: 10px 0;
+        gap: 15px;
+    }
+
+    .nav-logo {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .nav-actions {
+        grid-column: 1;
+        justify-self: start;
+        gap: 15px;
+    }
+
+    /* مخفی کردن جستجو و پروفایل در ردیف اصلی موبایل (نیاز به منوی کشویی دارد) */
+    .nav-search,
+    .nav-profile-btn,
+    .logout-form,
+    .nav-wishlist {
+        display: none;
+    }
+
+    .nav-mobile-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--clr-text-main);
+        cursor: pointer;
+    }
+
+    /* مخفی کردن ردیف دوم لینک‌ها */
+    .nav-bottom-row {
+        display: none;
+    }
+    .hero-section-wrapper {
+        padding-top: 80px;
+    }
+}
+
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* تبلت: هدر کوتاه‌تر می‌شود، پس فاصله‌ی بالا و ارتفاع اسلایدر هم باید کم شود */
+@media (max-width: 1024px) {
+    /* .hero-section-wrapper {
+        padding-top: 165px;
+    } */
+    .hero-slider-section {
+        height: 440px;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-slider-section {
+        height: 420px;
+    }
+    .slide-content {
+        padding: 0 1.5rem;
+    }
+    .btn-primary-gradient,
+    .btn-secondary-outline {
+        justify-content: center;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE MEDIA QUERIES (MOBILE)
+   ============================================================ */
+
+@media (max-width: 768px) {
+    /* 1. Navbar Adjustments */
+    .nav-links {
+        display: none; /* مخفی کردن لینک‌های دسکتاپ */
+    }
+
+    .nav-mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    /* 2. Hero Slider Responsive Fixes */
+    .hero-slider-section {
+        height: 380px !important; /* ارتفاع متناسب با صفحه گوشی */
+        border-radius: 16px;
+        margin-top: 1rem;
+    }
+
+    .slide-content {
+        padding: 0 1.25rem !important;
+        text-align: center;
+        align-items: center !important;
+    }
+
+    .hero-title {
+        font-size: 1.5rem !important;
+        line-height: 1.4 !important;
+    }
+
+    .hero-tagline {
+        font-size: 0.88rem !important;
+        margin-top: 0.5rem;
+    }
+
+    .slider-arrow {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    /* 3. Footer Responsive Layout */
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr !important; /* تمام بخش‌های فوتر زیر هم قرار می‌گیرند */
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .footer-brand-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    .footer-tagline {
+        max-width: 100%;
+        margin: 0.5rem auto 0;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .footer-links {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .footer-bottom {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: center;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 452px) {
+    .category-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
     }
 }

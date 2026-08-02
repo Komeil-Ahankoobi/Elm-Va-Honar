@@ -21,8 +21,6 @@
     el.textContent = now.toLocaleDateString("en-GB", opts);
 })();
 
-
-
 /* ----------------------------------------------------------
        2. SCROLL LISTENERS — header shadow + back-to-top
        Uses a single rAF-throttled scroll handler for 60fps.
@@ -285,4 +283,18 @@ document.addEventListener("DOMContentLoaded", function () {
     menu.querySelectorAll("a, button").forEach((el) => {
         el.addEventListener("click", closeMenu);
     });
+
+    const heroArt = document.querySelector(".art-hero");
+    if (!heroArt) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                heroArt.classList.toggle("anim-paused", !entry.isIntersecting);
+            });
+        },
+        { threshold: 0.1 },
+    );
+
+    observer.observe(heroArt);
 });

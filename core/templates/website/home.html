@@ -4,7 +4,7 @@
 
 {% block content %}
 <!-- ============================================================
-       HERO SLIDER SECTION (CONTAINED WIDTH & DARK PASTEL THEME)
+       HERO SECTION (ANIMATED SVG ILLUSTRATION, DARK PASTEL THEME)
        ============================================================ -->
 <section class="hero-section-wrapper" aria-label="خوش آمدید به علم و هنر">
     <div class="container">
@@ -16,9 +16,7 @@
                 <!-- Slide 1 -->
                 <div class="slide active">
                     <picture>
-                        <source media="(max-width: 390px)" srcset="{% static 'images/slider1-res.png' %}">
-                        <source media="(max-width: 680px)" srcset="{% static 'images/slider1-tablet-res.png' %}">
-                        <source media="(max-width: 1024px)" srcset="{% static 'images/slider1-tablet.png' %}">
+                        <source media="(max-width: 440px)" srcset="{% static 'images/slider1-res.png' %}">
                         <img src="{% static 'images/slider1.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
                             class="slide-bg-img" fetchpriority="high">
                     </picture>
@@ -28,9 +26,7 @@
                 <!-- Slide 2 -->
                 <div class="slide">
                     <picture>
-                        <source media="(max-width: 390px)" srcset="{% static 'images/slider2-res.png' %}">
-                        <source media="(max-width: 680px)" srcset="{% static 'images/slider3-tablet-res.png' %}">
-                        <source media="(max-width: 1024px)" srcset="{% static 'images/slider2-tablet.jpg' %}">
+                        <source media="(max-width: 440px)" srcset="{% static 'images/slider2-res.png' %}">
                         <img src="{% static 'images/slider2.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
                             class="slide-bg-img" fetchpriority="high">
                     </picture>
@@ -40,9 +36,7 @@
                 <!-- Slide 3 -->
                 <div class="slide">
                     <picture>
-                        <source media="(max-width: 390px)" srcset="{% static 'images/slider3-res.png' %}">
-                        <source media="(max-width: 680px)" srcset="{% static 'images/slider3-tablet-res.png' %}">
-                        <source media="(max-width: 1024px)" srcset="{% static 'images/slider3-tablet.jpg' %}">
+                        <source media="(max-width: 440px)" srcset="{% static 'images/slider3-res.png' %}">
                         <img src="{% static 'images/slider3.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
                             class="slide-bg-img" fetchpriority="high">
                     </picture>
@@ -353,9 +347,8 @@
         </form>
     </div>
 </section>
-{% endblock content %}
 
-{% block extra_js %}
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const slides = document.querySelectorAll('.hero-slider-section .slide');
@@ -406,4 +399,4 @@
         startAutoSlide();
     });
 </script>
-{% endblock extra_js %}
+{% endblock content %}
