@@ -15,7 +15,7 @@ class SessionCartSummary(TemplateView):
         context["cart_items"] = cart.get_cart_items()
         return context
     
-
+    
 
 class SessionAddProduct(View):
 

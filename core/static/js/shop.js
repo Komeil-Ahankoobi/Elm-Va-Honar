@@ -1,5 +1,23 @@
 "use strict";
 
+function formatPrice(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function showToast(message) {
+    const toastEl = document.getElementById("toast");
+    if (!toastEl) {
+        alert(message);
+        return;
+    }
+    toastEl.textContent = message;
+    toastEl.classList.add("show");
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(() => {
+        toastEl.classList.remove("show");
+    }, 2500);
+}
+
 (function initDate() {
     const el = document.getElementById("live-date");
     if (!el) return;
@@ -29,6 +47,33 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     backTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 })();
+
+function formatPrice(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function updatePriceDisplay(swatch) {
+    const priceEl = document.getElementById("pd-price");
+    const priceOldEl = document.getElementById("pd-price-old");
+    const badgeEl = document.getElementById("pd-discount-badge");
+    if (!priceEl) return;
+
+    const price = Number(swatch.dataset.price);
+    const priceOld = Number(swatch.dataset.priceOld);
+
+    priceEl.textContent = formatPrice(price) + " تومان";
+
+    if (priceOldEl) {
+        if (priceOld > price) {
+            priceOldEl.textContent = formatPrice(priceOld) + " تومان";
+            priceOldEl.style.display = "";
+            if (badgeEl) badgeEl.style.display = "";
+        } else {
+            priceOldEl.style.display = "none";
+            if (badgeEl) badgeEl.style.display = "none";
+        }
+    }
+}
 
 (function initFilters() {
     document.querySelectorAll(".filter-option").forEach((opt) => {
@@ -110,6 +155,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- Add to cart ---
     document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
         btn.addEventListener("click", () => {
+            const colorPalette = document.getElementById("pd-color-palette");
+            const sizePalette = document.getElementById("pd-size-palette");
+
+            if (colorPalette || sizePalette) {
+                const selectedInput = document.getElementById("selected-variant-id");
+                if (selectedInput && !selectedInput.value) {
+                    const message = colorPalette ? "لطفاً یک رنگ را انتخاب کنید" : "لطفاً یک سایز را انتخاب کنید";
+                    showToast(message);
+                    return;
+                }
+            }
             addToCart(btn.dataset.url, btn.dataset.productId);
         });
     });
@@ -169,7 +225,6 @@ async function addToCart(url, product_id) {
 
         const data = await response.json();
 
-
         const cartCountEl = document.querySelector(".cart-count");
         if (cartCountEl) {
             cartCountEl.textContent = `${data.total_quantity}`;
@@ -205,18 +260,25 @@ document.addEventListener('click', function (e) {
             swatch.classList.add("active");
             hiddenInput.value = swatch.dataset.variantId;
             if (nameEl) nameEl.textContent = swatch.dataset.colorName || ("#" + swatch.dataset.colorCode);
+            updatePriceDisplay(swatch);
         });
     });
-})();   
+})();
 
-addBtn.addEventListener("click", () => {
-    const palette = document.getElementById("pd-color-palette");
-    if (palette) {
-        const selected = document.getElementById("selected-variant-id").value;
-        if (!selected) {
-            showToast("لطفاً یک رنگ را انتخاب کنید");
-            return;
-        }
-    }
-    addToCart(addBtn.dataset.url, addBtn.dataset.productId);
-});
+(function initSizePalette() {
+    const palette = document.getElementById("pd-size-palette");
+    if (!palette) return;
+
+    const hiddenInput = document.getElementById("selected-variant-id");
+    const nameEl = document.getElementById("pd-size-selected-name");
+
+    palette.querySelectorAll(".pd-color-swatch").forEach((swatch) => {
+        swatch.addEventListener("click", () => {
+            palette.querySelectorAll(".pd-color-swatch").forEach((s) => s.classList.remove("active"));
+            swatch.classList.add("active");
+            hiddenInput.value = swatch.dataset.variantId;
+            if (nameEl) nameEl.textContent = "شماره " + swatch.dataset.sizeCode;
+            updatePriceDisplay(swatch);
+        });
+    });
+})();

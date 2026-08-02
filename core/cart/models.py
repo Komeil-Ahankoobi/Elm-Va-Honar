@@ -14,7 +14,10 @@ class CartModel(models.Model):
         return self.user.username
     
     def calculate_total_price(self):
-        return sum(item.product.get_price() * item.quantity for item in self.cart_items.all())
+        return sum(
+            (item.variant.get_price() if item.variant else item.product.get_price()) * item.quantity
+            for item in self.cart_items.all()
+        )
 
 
 class CartItemModel(models.Model):

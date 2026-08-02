@@ -37,7 +37,7 @@
                     <!-- Search Bar (مرکز - جدید) -->
                     <div class="nav-search">
                         <form method="get" class="search-form" action="{% url 'shop:show-product-view' %}">
-                            <input type="text" name="q" placeholder="محصول یا هنرمند..." aria-label="جستجو">
+                            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="محصول یا هنرمند..." aria-label="جستجو">
                             <button type="submit" class="search-btn">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
