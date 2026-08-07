@@ -30,21 +30,6 @@
     backTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 })();
 
-(function initFilters() {
-    document.querySelectorAll(".filter-option").forEach((opt) => {
-        opt.addEventListener("click", () => {
-            opt.parentElement.querySelectorAll(".filter-option").forEach((o) => o.classList.remove("active"));
-            opt.classList.add("active");
-        });
-    });
-    document.querySelectorAll(".filter-swatch").forEach((sw) => {
-        sw.addEventListener("click", () => {
-            document.querySelectorAll(".filter-swatch").forEach((s) => s.classList.remove("active"));
-            sw.classList.add("active");
-        });
-    });
-})();
-
 (function initReveal() {
     const targets = document.querySelectorAll(".reveal");
     if (!targets.length) return;
@@ -107,26 +92,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // --- Add to cart ---
-    document.querySelectorAll(".btn-add-to-cart").forEach((btn) => {
+    // --- Add to cart (لیست محصولات، جزئیات محصول، محصولات مرتبط) ---
+    document.querySelectorAll(".btn-add-cart, .btn-add-to-cart, .btn-card-add").forEach((btn) => {
         btn.addEventListener("click", () => {
+            // اگر این دکمه همون دکمه‌ی اصلی افزودن به سبد در صفحه جزئیات محصول باشه
+            // و محصول رنگ‌بندی داشته باشه، اول باید یک رنگ انتخاب شده باشه
+            const palette = document.getElementById("pd-color-palette");
+            if (btn.classList.contains("btn-add-to-cart") && palette) {
+                const selectedVariant = document.getElementById("selected-variant-id")?.value;
+                if (!selectedVariant) {
+                    showToast("لطفاً یک رنگ را انتخاب کنید");
+                    return;
+                }
+            }
             addToCart(btn.dataset.url, btn.dataset.productId);
         });
     });
 });
-
-function goToPage(event, pageNumber) {
-    event.preventDefault();
-
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    params.set("page", pageNumber);
-
-    const newUrl = `${url.pathname}?${params.toString()}`;
-
-    window.location.href = newUrl;
-}
 
 function filterProducts(selectedElemnt) {
     const url = new URL(window.location.href);
@@ -162,13 +144,13 @@ async function addToCart(url, product_id) {
                 product_id: product_id,
                 variant_id: variant_id,
             }),
-        }); 
+        });
+
         if (!response.ok) {
             throw new Error(`Server responded with status ${response.status}`);
         }
 
         const data = await response.json();
-
 
         const cartCountEl = document.querySelector(".cart-count");
         if (cartCountEl) {
@@ -179,19 +161,24 @@ async function addToCart(url, product_id) {
     }
 }
 
-document.addEventListener('click', function (e) {
-    const card = e.target.closest('.product-card[data-href]');
+// --- کلیک روی کارت محصول (لیست محصولات و محصولات مرتبط) ---
+// با کلیک روی هرجای کارت به صفحه محصول می‌ره، به جز دکمه‌های افزودن به سبد / علاقه‌مندی
+document.addEventListener("click", function (e) {
+    const card = e.target.closest(".product-card[data-href], .related-card[data-href]");
     if (!card) return;
 
-    
-    if (e.target.closest('.product-wishlist, .btn-add-to-cart, .btn-quick-view')) {
+    if (
+        e.target.closest(
+            ".wishlist-btn, .wishlist-icon-btn, .btn-wishlist, .btn-add-cart, .btn-add-to-cart, .btn-card-add",
+        )
+    ) {
         return;
     }
 
     window.location.href = card.dataset.href;
 });
 
-
+// --- پالت انتخاب رنگ در صفحه جزئیات محصول ---
 (function initColorPalette() {
     const palette = document.getElementById("pd-color-palette");
     if (!palette) return;
@@ -199,24 +186,73 @@ document.addEventListener('click', function (e) {
     const hiddenInput = document.getElementById("selected-variant-id");
     const nameEl = document.getElementById("pd-color-selected-name");
 
-    palette.querySelectorAll(".pd-color-swatch").forEach((swatch) => {
-        swatch.addEventListener("click", () => {
-            palette.querySelectorAll(".pd-color-swatch").forEach((s) => s.classList.remove("active"));
-            swatch.classList.add("active");
-            hiddenInput.value = swatch.dataset.variantId;
-            if (nameEl) nameEl.textContent = swatch.dataset.colorName || ("#" + swatch.dataset.colorCode);
+    palette.querySelectorAll(".dot").forEach((dot) => {
+        dot.addEventListener("click", () => {
+            palette.querySelectorAll(".dot").forEach((d) => d.classList.remove("active"));
+            dot.classList.add("active");
+            hiddenInput.value = dot.dataset.variantId;
+            if (nameEl) nameEl.textContent = dot.dataset.colorName || "#" + dot.dataset.colorCode;
         });
     });
-})();   
+})();
 
-addBtn.addEventListener("click", () => {
-    const palette = document.getElementById("pd-color-palette");
-    if (palette) {
-        const selected = document.getElementById("selected-variant-id").value;
-        if (!selected) {
-            showToast("لطفاً یک رنگ را انتخاب کنید");
-            return;
+// --- کنترل تعداد در صفحه جزئیات محصول ---
+(function initQuantityPicker() {
+    document.querySelectorAll(".qty-picker").forEach((picker) => {
+        const decreaseBtn = picker.querySelector(".qty-decrease");
+        const increaseBtn = picker.querySelector(".qty-increase");
+        const input = picker.querySelector(".qty-value");
+        if (!decreaseBtn || !increaseBtn || !input) return;
+
+        function toEnglishDigits(str) {
+            return str.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
         }
+
+        function getValue() {
+            const n = parseInt(toEnglishDigits(input.value), 10);
+            return isNaN(n) ? 1 : n;
+        }
+
+        decreaseBtn.addEventListener("click", () => {
+            const current = getValue();
+            if (current > 1) input.value = current - 1;
+        });
+
+        increaseBtn.addEventListener("click", () => {
+            input.value = getValue() + 1;
+        });
+    });
+})();
+
+// --- حفظ پارامترهای فیلتر (قیمت، جستجو، دسته‌بندی، مرتب‌سازی و ...) هنگام تغییر صفحه ---
+(function initPagination() {
+    const links = document.querySelectorAll(".pagination a.page-item");
+    if (!links.length) return;
+
+    links.forEach((link) => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // شماره صفحه‌ای که این لینک بهش اشاره می‌کنه
+            const linkUrl = new URL(link.href, window.location.origin);
+            const targetPage = linkUrl.searchParams.get("page");
+
+            // پارامترهای فعلی صفحه (فیلترها) رو نگه می‌داریم و فقط page رو عوض می‌کنیم
+            const currentParams = new URLSearchParams(window.location.search);
+            if (targetPage) {
+                currentParams.set("page", targetPage);
+            }
+
+            window.location.href = `${window.location.pathname}?${currentParams.toString()}`;
+        });
+    });
+})();
+
+// --- نمایش پیام کوتاه (در صورت نبود پیاده‌سازی toast در جای دیگری از پروژه) ---
+function showToast(message) {
+    if (typeof window.showToast === "function" && window.showToast !== showToast) {
+        window.showToast(message);
+        return;
     }
-    addToCart(addBtn.dataset.url, addBtn.dataset.productId);
-});
+    alert(message);
+}

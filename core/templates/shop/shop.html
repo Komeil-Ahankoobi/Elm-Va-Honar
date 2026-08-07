@@ -1,168 +1,166 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
+<!-- اگر این دو فونت/آیکون در base.html از قبل لود می‌شن، این دو خط رو حذف کنید -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="{% static 'css/shop.css' %}" />
+{% endblock extra_css %} {% block content %}
+<div class="container">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs"><a href="{% url 'website:home' %}">خانه</a> &gt; محصولات</div>
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/shop.css'%}">
-{% endblock extra_css %}
+    <h1 class="page-title">محصولات</h1>
+    <p class="page-subtitle">در این صفحه می‌توانید تمام محصولات ما را مشاهده و خریداری کنید.</p>
 
-{% load humanize %}
+    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px">
+        نمایش {{ page_obj.start_index }} تا {{ page_obj.end_index }} از {{ page_obj.paginator.count }} محصول
+    </div>
 
-{% block content %}
-
-<div class="shop-dark-theme">
-
-    <section class="page-header">
-        <nav class="breadcrumb" aria-label="مسیر ناوبری">
-            <a href="{% url 'website:home' %}">خانه</a>
-            <span>/</span>
-            <span href="shop.html" class="ff">همه محصولات</span>
-        </nav>
-        <h1 class="page-title">خرید از <em>مجموعه کامل</em></h1>
-        <p class="page-subtitle">هر دفتر، نوک قلم و شیشه مرکب — انتخاب‌شده برای میز متفکرانه.</p>
-    </section>
-
-
-    <section class="shop-section">
-        <div class="container">
-            <div class="shop-layout">
-
-                <!-- FILTER RAIL -->
-                <aside class="filter-rail" aria-label="فیلترهای محصول">
-
-                    <form method="get" class="filter-form">
-
-                        <div class="filter-group">
-                            <h3 class="filter-group-title">جستجوی</h3>
-                        </div>
-
-                        <div class="filter-group">
-                            <input type="text" name="q" class="filter-search-input" placeholder="جستجوی محصول..."
-                                value="{{ request.GET.q }}" aria-label="جستجوی محصول" />
-                        </div>
-
-                        <div class="filter-group">
-                            <h3 class="filter-group-title">قیمت</h3>
-                            <div class="price-inputs">
-                                <input type="number" name="min_price" class="price-input" placeholder="کمترین قیمت"
-                                    value="{{ request.GET.min_price }}" min="0" aria-label="کمترین قیمت" />
-                                <span class="price-input-sep">تا</span>
-                                <input type="number" name="max_price" class="price-input" placeholder="بیشترین قیمت"
-                                    value="{{ request.GET.max_price }}" min="0" aria-label="بیشترین قیمت" />
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-apply-filters">اعمال فیلتر</button>
-
-                    </form>
-
-                </aside>
-
-                <!-- PRODUCT GRID -->
-                <div>
-
-                    <div class="shop-toolbar">
-                        <div class="sort-select-wrap">
-                            <select class="sort-select" name="filter-by" onchange="filterProducts(this)">
-                                <option value="">مرتب‌سازی</option>
-                                <option value="cheep_to_exp" {% if filter_by == "cheep_to_exp" %}selected{% endif %}>
-                                    ارزان‌ترین
-                                    به گران‌ترین</option>
-                                <option value="exp_to_cheep" {% if filter_by == "exp_to_cheep" %}selected{% endif %}>
-                                    گران‌ترین به ارزان‌ترین
-                                </option>
-                                <option value="new" {% if filter_by == "new" %}selected{% endif %}>جدیدترین</option>
-                            </select>
-                        </div>
+    <!-- Layout Grid -->
+    <div class="layout">
+        <!-- RIGHT SIDEBAR -->
+        <aside class="sidebar">
+            <form method="get" class="filter-form">
+                <!-- Filter by Price -->
+                <div class="filter-card">
+                    <div class="filter-header">
+                        <span>فیلتر بر اساس قیمت</span>
+                        <i class="fa-solid fa-chevron-up"></i>
                     </div>
-
-                    <div class="product-grid2" id="product-grid" role="list" aria-label="محصولات">
-                        {% for product in products %}
-                        <article class="product-card reveal" role="listitem"
-                            data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}"
-                            style="cursor: pointer;">
-                            <div class="product-img-wrap">
-                                <img src="https://picsum.photos/seed/notebook1/600/520" alt="دفتر آلداین — رنگ توتون"
-                                    loading="eager" fetchpriority="high" width="600" height="520" />
-                                <span class="product-badge">جدید</span>
-                                <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" aria-hidden="true">
-                                        <path
-                                            d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="product-body">
-                                <h3 class="product-name">{{product.title}}</h3>
-                                <div class="x">
-                                    <p class="product-category">
-                                        {% for cat in product.category.all %}
-                                        {{ cat.title }}{% if not forloop.last %}، {% endif %}
-                                        {% endfor %}
-                                    </p>
-                                    <div class="product-rating">
-                                        [
-                                        <span class="stars">موجودی</span>
-                                        <span class="count">{{ product.stock }}</span>
-                                        ]
-
-                                    </div>
-                                </div>
-                                <div class="product-meta">
-                                    <span class="product-price">{{product.get_price|intcomma}} تومان</span>
-                                    <a class="btn-quick-view"
-                                        href="{% url 'shop:show-product-detail-view' slug=product.slug %}"
-                                        aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
-                                </div>
-                                <button type="button" class="btn-add-to-cart"
-                                    aria-label="افزودن {{ product.title }} به سبد خرید"
-                                    data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
-                                    data-stock="{{ product.stock }}">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" aria-hidden="true">
-                                        <circle cx="9" cy="21" r="1" />
-                                        <circle cx="20" cy="21" r="1" />
-                                        <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-                                    </svg>
-                                    <span>افزودن به سبد</span>
-                                </button>
-                            </div>
-                        </article>
-                        {% endfor %}
+                    <div class="price-input-group">
+                        <label>کمترین قیمت</label>
+                        <input
+                            type="number"
+                            name="min_price"
+                            placeholder="تومان"
+                            min="0"
+                            value="{{ request.GET.min_price }}" />
                     </div>
-                    <nav class="pagination" aria-label="صفحه‌بندی محصولات">
-                        {% if page_obj.has_other_pages %}
-                        {% if page_obj.has_previous %}
-                        <a class="page-btn nav-arrow" href="?page={{ page_obj.previous_page_number }}"
-                            aria-label="صفحه قبل" onclick="goToPage(event, `{{ page_obj.previous_page_number }}`)">→</a>
-                        {% endif %}
-
-                        {% for i in page_obj.paginator.page_range %}
-                        {% if page_obj.number == i %}
-                        <a class="page-btn active" href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
-                        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-btn"
-                            href="?page={{ i }}" onclick="goToPage(event, `{{ i }}`)">{{ i }}</a>
-                            {% endif %}
-                            {% endfor %}
-
-                            {% if page_obj.has_next %}
-                            <a class="page-btn nav-arrow" href="?page={{ page_obj.next_page_number }}"
-                                aria-label="صفحه بعد" onclick="goToPage(event, `{{ page_obj.next_page_number }}`)">←</a>
-                            {% endif %}
-                            {% endif %}
-                    </nav>
+                    <div class="price-input-group">
+                        <label>بیشترین قیمت</label>
+                        <input
+                            type="number"
+                            name="max_price"
+                            placeholder="تومان"
+                            min="0"
+                            value="{{ request.GET.max_price }}" />
+                    </div>
+                    <button type="submit" class="btn-filter">اعمال فیلتر</button>
                 </div>
+            </form>
+
+            <!-- Product Categories Accordion -->
+            <div class="filter-card">
+                <div class="filter-header">
+                    <span>دسته‌بندی محصولات</span>
+                    <i class="fa-solid fa-chevron-up"></i>
+                </div>
+                <ul class="category-list">
+                    {% for category in categories %}
+                    <li>
+                        <a href="?category={{ category.id }}">
+                            <span>{{ category.title }}</span>
+                        </a>
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
-        </div>
-    </section>
+        </aside>
+
+        <!-- LEFT MAIN PRODUCTS AREA -->
+        <main class="main-content">
+            <!-- Sorting Bar -->
+            <div class="products-header">
+                <div class="sort-search">
+                    <form method="get" class="inline-search">
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder="جستجوی محصول مورد نظر..."
+                            value="{{ request.GET.q }}" />
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                    <div class="sort-dropdown">
+                        <span>مرتب‌سازی بر اساس:</span>
+                        <select name="filter-by" onchange="filterProducts(this)">
+                            <option value="new" {% if filter_by == "new" %}selected{% endif %}>جدیدترین</option>
+                            <option value="cheep_to_exp" {% if filter_by == "cheep_to_exp" %}selected{% endif %}>
+                                ارزان‌ترین
+                            </option>
+                            <option value="exp_to_cheep" {% if filter_by == "exp_to_cheep" %}selected{% endif %}>
+                                گران‌ترین
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="product-grid">
+                {% for product in products %}
+                <div
+                    class="product-card reveal"
+                    style="cursor: pointer"
+                    data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                    <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <div class="product-img">
+                        <img
+                            src="https://picsum.photos/seed/{{ product.slug }}/300/300"
+                            alt="{{ product.title }}"
+                            loading="lazy" />
+                    </div>
+                    <div class="product-category">
+                        {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
+                    </div>
+                    <div class="product-title">{{ product.title }}</div>
+                    <div class="product-price">{{ product.get_price|intcomma }} تومان</div>
+                    <button
+                        type="button"
+                        class="btn-add-cart"
+                        aria-label="افزودن {{ product.title }} به سبد خرید"
+                        data-url="{% url 'cart:session-add-product' %}"
+                        data-product-id="{{ product.id }}"
+                        data-stock="{{ product.stock }}">
+                        <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                    </button>
+                </div>
+                {% empty %}
+                <p>محصولی یافت نشد.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="pagination" aria-label="صفحه‌بندی محصولات">
+                {% if page_obj.has_previous %}
+                <a class="page-item" href="?page=1" aria-label="صفحه اول" >&laquo;</a>
+                <a
+                    class="page-item page-item-nav"
+                    href="?page={{ page_obj.previous_page_number }}"
+                    aria-label="صفحه قبل">
+                    <span class="page-item-arrow">&lt;</span>
+                    <span class="page-item-label">قبلی</span>
+                </a>
+                {% endif %} {% for i in page_obj.paginator.page_range %} {% if page_obj.number == i %}
+                <div class="page-item active">{{ i }}</div>
+                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                <a class="page-item" href="?page={{ i }}">{{ i }}</a>
+                {% endif %} {% endfor %} {% if page_obj.has_next %}
+                <a class="page-item page-item-nav" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد">
+                    <span class="page-item-label">بعدی</span>
+                    <span class="page-item-arrow">&gt;</span>
+                </a>
+                <a class="page-item" href="?page={{ page_obj.paginator.num_pages }}" aria-label="صفحه آخر">&raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </main>
+    </div>
 </div>
 
-
-
-{% endblock content %}
-
-
-{% block extra_js %}
-
+{% endblock content %} {% block extra_js %}
 <script src="{% static 'js/shop.js' %}"></script>
 {% endblock extra_js %}

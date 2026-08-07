@@ -4,6 +4,7 @@ from .models import (
     ProductImageModel, 
     ProductCategoryModel,
     ProductVarientModel,
+    ProductBrandModel,
 )
 
 
@@ -21,6 +22,10 @@ class ProductModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductCategoryModel)
 class ProductCategoryModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "created_date", "meta_title", "meta_description")
+    
+@admin.register(ProductBrandModel)
+class ProductBrandModelModelAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "created_date", "meta_title", "meta_description")
 
 @admin.register(ProductImageModel)

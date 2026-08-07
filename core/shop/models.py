@@ -29,9 +29,11 @@ class ProductCategoryModel(models.Model):
 
     def __str__(self):
         return self.title
+    
 
     def get_absolute_url(self):
         return reverse('shop:show-product-view') + f'?category={self.slug}'
+
 
     def get_meta_title(self):
         return self.meta_title or self.title
@@ -40,8 +42,47 @@ class ProductCategoryModel(models.Model):
         return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
 
 
+class ProductBrandModel(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(allow_unicode=True, unique=True)
+
+    meta_title = models.CharField(max_length=70, blank=True,
+        help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
+    meta_description = models.CharField(max_length=160, blank=True,
+        help_text="توضیح کوتاه برای نتایج گوگل. حداکثر ۱۵۵-۱۶۰ کاراکتر.")
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_date"]
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('shop:show-product-view') + f'?brand={self.slug}'
+
+    def get_meta_title(self):
+        return self.meta_title or self.title
+
+    def get_meta_description(self):
+        return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
+
+
+
 class ProductModel(models.Model):
-    category = models.ManyToManyField(ProductCategoryModel)
+    category = models.ManyToManyField(
+        ProductCategoryModel,
+        related_name='products'
+    )
+    brand = models.ForeignKey(
+        ProductBrandModel,
+        on_delete=models.PROTECT,
+        related_name='products',
+        null=True, 
+        blank=True,
+    )
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
     

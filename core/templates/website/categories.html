@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/categories.css'%}">
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<section class="breadcrumb">
+    <a href="{% url 'website:home' %}">خانه</a>
+    <span>&gt;</span>
+    <span>دسته‌بندی‌ها</span>
+</section>
+
+<!-- Title -->
+<section class="page-header">
+    <h1>همه دسته‌بندی‌ها</h1>
+    <p>محصولات مورد نظر خود را از بین دسته‌بندی‌های متنوع ما پیدا کنید.</p>
+</section>
+
+<!-- Grid -->
+<section class="categories-grid">
+    {% for cat in object_list %}
+    <a href="{% url 'shop:show-product-view' %}?category={{ cat.id }}" class="category-card">
+        <div class="icon-wrapper">
+            <img src="assets/images/cat-paper.png" alt="دفتر و کاغذ">
+        </div>
+        <span class="category-title">{{ cat.title }}</span>
+        <span class="category-count">{{ cat.product_count }} محصول</span>
+    </a>
+    {% endfor %}
+</section>
+
+<!-- Contact CTA Banner -->
+<section class="cta-banner">
+    <div class="cta-content">
+        <svg class="cta-icon-svg" viewBox="0 0 24 24">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+            <path
+                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+            </path>
+        </svg>
+        <div class="cta-text">
+            <h4>به دنبال محصول خاصی هستید؟</h4>
+            <p>اگر در پیدا کردن محصول مورد نظر خود به کمک نیاز دارید، با ما تماس بگیرید.</p>
+        </div>
+    </div>
+    <a href="#" class="cta-btn">تماس با ما</a>
+</section>
+
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<section class="pagination" aria-label="صفحه‌بندی" dir="ltr">
+
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&lt; قبلی</a>
+    {% endif %}
+
+    {% for i in page_obj.paginator.page_range %}
+    {% if page_obj.number == i %}
+    <a href="?page={{ i }}" class="page-link active">{{ i }}</a>
+    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+        {% elif i == 1 or i == page_obj.paginator.num_pages %}
+        <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+        {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}
+        <span class="page-link page-link--dots">...</span>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="page-link">بعدی &gt;</a>
+        {% endif %}
+
+</section>
+{% endif %}
+
+
+{% endblock content %}

@@ -14,7 +14,7 @@ from django.views.generic import (
 class ShopProductView(ListView):
     template_name = "shop/shop.html"
     context_object_name = "products"
-    paginate_by = 6
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
@@ -51,7 +51,9 @@ class ShopProductView(ListView):
             queryset = queryset.order_by('-created_date')
             
         if category := self.request.GET.get('category'):
-            queryset = queryset.filter(category__title__icontains=category)
+            queryset = queryset.filter(category__id=category)         
+        if brand := self.request.GET.get('brand'):
+            queryset = queryset.filter(brand__id=brand)
         
         
         return queryset
@@ -59,8 +61,8 @@ class ShopProductView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_product'] = ProductModel.objects.count()
-        context['categories'] = ProductCategoryModel.objects.all()
-        
+        context['categories'] = ProductCategoryModel.objects.all()[:12]
+        context['avtive_page'] = 'show-product-view'
         context['filter_by'] = self.request.GET.get('filter-by')
 
         return context

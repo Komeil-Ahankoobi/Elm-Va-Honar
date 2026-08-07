@@ -1,358 +1,359 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/product-detail.css' %}" />
+{% endblock extra_css %} {% block title %} {{ object.get_meta_title }} {% endblock title %} {% block meta_description %}
+{{ object.get_meta_description }} {% endblock meta_description %} {% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumbs">
+        <a href="{% url 'website:home' %}">خانه</a> &gt; <a href="{% url 'shop:show-product-view' %}">محصولات</a> &gt;
+        {{ object.title }}
+    </div>
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/product-detail.css'%}">
-{% endblock extra_css %}
+    <!-- Product Header Title -->
+    <div class="product-header">
+        <h1>{{ object.title }}</h1>
+    </div>
 
+    <!-- Product Main Container -->
+    <div class="product-main">
+        <!-- LEFT COLUMN: ACTIONS & SPECS -->
+        <div class="buy-box">
+        <div class="price-area">
+            <div class="price-category-row">
+                <div class="price-box">
+                    <div class="price-value">قیمت</div>
+                    <div class="price-note">{{ object.get_price|intcomma }} تومان</div>
+                </div>
 
-{% load humanize %}
+                {% if object.category.all %}
+                <div class="category-box">
+                    <div class="price-value">دسته‌بندی</div>
+                    <div class="price-note">
+                        {% for category in object.category.all %}
+                        {{ category.title }}{% if not forloop.last %}، {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
 
-{% block title %}{{ object.get_meta_title }}{% endblock title %}
-{% block meta_description %}{{ object.get_meta_description }}{% endblock meta_description %}
+            {% if object.stock > 0 %}
+            <div class="stock-status">
+                <i class="fa-solid fa-check"></i>
+                موجود در انبار
+            </div>
+            {% else %}
+            <div class="stock-status stock-status-out">
+                <i class="fa-solid fa-xmark"></i>
+                ناموجود
+            </div>
+            {% endif %}
 
-{% block content %}
+            <p class="pd-description">{{ object.description }}</p>
 
-<div class="breadcrumb-strip">
-  <div class="container">
-    <nav class="breadcrumb" aria-label="مسیر ناوبری">
-      <a href="{% url 'website:home' %}">خانه</a>
-      <span class="sep">/</span>
-      <a href="{% url 'shop:show-product-view' %}">فروشگاه</a>
-      <span class="sep">/</span>
-      <a href="shop.html">
-        {% for category in object.category.all %}
-        {{ category.title }}{% if not forloop.last %}، {% endif %}
-        {% endfor %}
-      </a>
-      <span class="sep">/</span>
-      <span class="current">{{ object.title }}</span>
-    </nav>
-  </div>
+            {% if object.has_color_variants %}
+            <div class="color-selector">
+                <label>انتخاب رنگ: <span id="pd-color-selected-name">—</span></label>
+                <div class="color-dots" id="pd-color-palette">
+                    {% for variant in object.get_color_variants %}
+                    <button
+                        type="button"
+                        class="dot"
+                        style="background-color: #{{ variant.get_hex_color }};"
+                        data-variant-id="{{ variant.id }}"
+                        data-color-code="{{ variant.get_hex_color }}"
+                        data-color-name="{{ variant.get_color_display_name }}"
+                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}"></button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" id="selected-variant-id" value="" />
+            </div>
+            {% endif %}
+
+            <div class="quantity-control">
+                <span style="font-size: 12px; font-weight: bold">تعداد :</span>
+                <div class="qty-picker">
+                    <button type="button" class="qty-decrease">-</button>
+                    <input type="text" class="qty-value" value="۱" />
+                    <button type="button" class="qty-increase">+</button>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="btn-add-to-cart"
+                aria-label="افزودن {{ object.title }} به سبد خرید"
+                data-url="{% url 'cart:session-add-product' %}"
+                data-product-id="{{ object.id }}"
+                data-stock="{{ object.stock }}">
+                <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+            </button>
+
+            <button type="button" class="btn-wishlist" aria-label="افزودن {{ object.title }} به علاقه‌مندی">
+                <i class="fa-regular fa-heart"></i> افزودن به علاقه‌مندی
+            </button>
+
+            <div class="trust-badges">
+                <div class="badge-item">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <div class="badge-text">
+                        <strong>ارسال سریع</strong>
+                        <span>ارسال به سراسر کشور در کمترین زمان</span>
+                    </div>
+                </div>
+                <div class="badge-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <div class="badge-text">
+                        <strong>ضمانت اصالت کالا</strong>
+                        <span>تضمین کیفیت و اورجینال</span>
+                    </div>
+                </div>
+                <div class="badge-item">
+                    <i class="fa-solid fa-headset"></i>
+                    <div class="badge-text">
+                        <strong>پشتیبانی تخصصی</strong>
+                        <span>پشتیبانی همیشگی شما</span>
+                    </div>
+                </div>
+                <div class="badge-item">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <div class="badge-text">
+                        <strong>۷ روز ضمانت بازگشت</strong>
+                        <span>در صورت عدم رضایت</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: GALLERY (CSS-only switcher, no JS) -->
+        <div class="gallery-box">
+            <input type="radio" name="pd-thumb" id="pd-thumb-1" class="pd-thumb-radio" checked />
+            <input type="radio" name="pd-thumb" id="pd-thumb-2" class="pd-thumb-radio" />
+            <input type="radio" name="pd-thumb" id="pd-thumb-3" class="pd-thumb-radio" />
+            <input type="radio" name="pd-thumb" id="pd-thumb-4" class="pd-thumb-radio" />
+            <input type="radio" name="pd-thumb" id="pd-thumb-5" class="pd-thumb-radio" />
+
+            <div class="main-image-container">
+                <label class="nav-arrow left" for="pd-thumb-5" aria-label="تصویر قبلی">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </label>
+
+                <div class="pd-image-stack">
+                    <img
+                        class="pd-image pd-image-1"
+                        src="https://picsum.photos/seed/{{ object.slug }}-1/700/500"
+                        alt="{{ object.get_image_alt }} — نمای ۱" />
+                    <img
+                        class="pd-image pd-image-2"
+                        src="https://picsum.photos/seed/{{ object.slug }}-2/700/500"
+                        alt="{{ object.get_image_alt }} — نمای ۲"
+                        loading="lazy" />
+                    <img
+                        class="pd-image pd-image-3"
+                        src="https://picsum.photos/seed/{{ object.slug }}-3/700/500"
+                        alt="{{ object.get_image_alt }} — نمای ۳"
+                        loading="lazy" />
+                    <img
+                        class="pd-image pd-image-4"
+                        src="https://picsum.photos/seed/{{ object.slug }}-4/700/500"
+                        alt="{{ object.get_image_alt }} — نمای ۴"
+                        loading="lazy" />
+                    <img
+                        class="pd-image pd-image-5"
+                        src="https://picsum.photos/seed/{{ object.slug }}-5/700/500"
+                        alt="{{ object.get_image_alt }} — نمای ۵"
+                        loading="lazy" />
+                </div>
+
+                <label class="nav-arrow right" for="pd-thumb-1" aria-label="تصویر بعدی">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </label>
+
+                <button type="button" class="zoom-btn" aria-label="بزرگ‌نمایی تصویر">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+            <div class="thumbnail-list">
+                <label class="thumb-item" for="pd-thumb-1" aria-label="مشاهده تصویر ۱">
+                    <img
+                        src="https://picsum.photos/seed/{{ object.slug }}-1/160/160"
+                        alt="{{ object.get_image_alt }}" />
+                </label>
+                <label class="thumb-item" for="pd-thumb-2" aria-label="مشاهده تصویر ۲">
+                    <img
+                        src="https://picsum.photos/seed/{{ object.slug }}-2/160/160"
+                        alt="{{ object.get_image_alt }}"
+                        loading="lazy" />
+                </label>
+                <label class="thumb-item" for="pd-thumb-3" aria-label="مشاهده تصویر ۳">
+                    <img
+                        src="https://picsum.photos/seed/{{ object.slug }}-3/160/160"
+                        alt="{{ object.get_image_alt }}"
+                        loading="lazy" />
+                </label>
+                <label class="thumb-item" for="pd-thumb-4" aria-label="مشاهده تصویر ۴">
+                    <img
+                        src="https://picsum.photos/seed/{{ object.slug }}-4/160/160"
+                        alt="{{ object.get_image_alt }}"
+                        loading="lazy" />
+                </label>
+                <label class="thumb-item" for="pd-thumb-5" aria-label="مشاهده تصویر ۵">
+                    <img
+                        src="https://picsum.photos/seed/{{ object.slug }}-5/160/160"
+                        alt="{{ object.get_image_alt }}"
+                        loading="lazy" />
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS SECTION -->
+    <div class="tabs-container">
+        <div class="tabs-header">
+            <div class="tab-btn active">توضیحات محصول</div>
+            <div class="tab-btn">مشخصات فنی</div>
+        </div>
+
+        <div class="tabs-content">
+            <!-- Description Text (داده واقعی محصول) -->
+            <div class="tab-desc">
+                <p>{{ object.description }}</p>
+            </div>
+
+            <!-- Specs Table -->
+            <table class="specs-table">
+                <tr>
+                    <td>برند</td>
+                    <td><strong>Mont Marte</strong></td>
+                </tr>
+                <tr>
+                    <td>تعداد رنگ</td>
+                    <td>۲۴</td>
+                </tr>
+                <tr>
+                    <td>نوع رنگ</td>
+                    <td>اکریلیک</td>
+                </tr>
+                <tr>
+                    <td>حجم هر تیوب</td>
+                    <td>12ml</td>
+                </tr>
+                <tr>
+                    <td>کشور سازنده</td>
+                    <td>چین</td>
+                </tr>
+                <tr>
+                    <td>وزن محصول</td>
+                    <td>۵۴۰ گرم</td>
+                </tr>
+                <tr>
+                    <td>ابعاد بسته‌بندی</td>
+                    <td>۳۴.۵ × ۱۲ × ۴.۵ سانتی‌متر</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- RELATED PRODUCTS -->
+    <div class="related-section">
+        <div class="section-arrow left"><i class="fa-solid fa-chevron-left"></i></div>
+        <div class="section-arrow right"><i class="fa-solid fa-chevron-right"></i></div>
+
+        <div class="related-section-header">
+            <div class="section-title">محصولات مرتبط</div>
+            <a href="{% url 'shop:show-product-view' %}" class="related-viewall">مشاهده همه محصولات</a>
+        </div>
+
+        <div class="related-grid">
+            {% for product in related_products %}
+            <div class="related-card" style="cursor: pointer" data-href="{{ product.get_absolute_url }}">
+                <button type="button" class="wishlist-icon-btn" aria-label="افزودن به علاقه‌مندی">
+                    <i class="fa-regular fa-heart wishlist-icon"></i>
+                </button>
+                <div class="related-img">
+                    <img src="{{ product.image.url }}" alt="{{ product.get_image_alt }}" loading="lazy" />
+                </div>
+                <div class="related-cat">
+                    {% for cat in product.category.all %} {{ cat.title }}{% if not forloop.last %}، {% endif %} {% endfor %}
+                </div>
+                <div class="related-title">{{ product.title }}</div>
+                <div class="related-price">{{ product.get_price|intcomma }} تومان</div>
+                <button
+                    type="button"
+                    class="btn-card-add"
+                    aria-label="افزودن {{ product.title }} به سبد خرید"
+                    data-url="{% url 'cart:session-add-product' %}"
+                    data-product-id="{{ product.id }}">
+                    <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                </button>
+            </div>
+            {% empty %}
+            <p>محصول مرتبطی یافت نشد.</p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-
-<section class="product-detail">
-  <div class="container">
-    <div class="pd-layout">
-
-      <!-- GALLERY (CSS-only switcher, no JS) -->
-      <div class="pd-gallery">
-        <input type="radio" name="pd-thumb" id="pd-thumb-1" class="pd-thumb-radio" checked>
-        <input type="radio" name="pd-thumb" id="pd-thumb-2" class="pd-thumb-radio">
-        <input type="radio" name="pd-thumb" id="pd-thumb-3" class="pd-thumb-radio">
-        <input type="radio" name="pd-thumb" id="pd-thumb-4" class="pd-thumb-radio">
-        <input type="radio" name="pd-thumb" id="pd-thumb-5" class="pd-thumb-radio">
-
-        <div class="pd-main-image">
-          <button type="button" class="pd-zoom-btn" aria-label="بزرگ‌نمایی تصویر">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
-              <path d="M21 21l-4.3-4.3" />
-            </svg>
-          </button>
-          <div class="pd-image-stack">
-            <img class="pd-image pd-image-1" src="https://picsum.photos/seed/acrylicset1/900/900"
-              alt="{{ object.get_image_alt }} — نمای ۱" />
-            <img class="pd-image pd-image-2" src="https://picsum.photos/seed/acrylicset2/900/900"
-              alt="{{ object.get_image_alt }} — نمای ۲" loading="lazy" />
-            <img class="pd-image pd-image-3" src="https://picsum.photos/seed/acrylicset3/900/900"
-              alt="{{ object.get_image_alt }} — نمای ۳" loading="lazy" />
-            <img class="pd-image pd-image-4" src="https://picsum.photos/seed/acrylicset4/900/900"
-              alt="{{ object.get_image_alt }} — نمای ۴" loading="lazy" />
-            <img class="pd-image pd-image-5" src="https://picsum.photos/seed/acrylicset5/900/900"
-              alt="{{ object.get_image_alt }} — نمای ۵" loading="lazy" />
-          </div>
-        </div>
-
-        <div class="pd-thumbs">
-          <label class="pd-thumb-arrow pd-thumb-arrow-prev" for="pd-thumb-5" aria-label="تصویر قبلی">‹</label>
-          <div class="pd-thumbs-track">
-            <label class="pd-thumb" for="pd-thumb-1" aria-label="مشاهده تصویر ۱"><img
-                src="https://picsum.photos/seed/acrylicset1/200/200" alt="{{ object.get_image_alt }}" /></label>
-            <label class="pd-thumb" for="pd-thumb-2" aria-label="مشاهده تصویر ۲"><img
-                src="https://picsum.photos/seed/acrylicset2/200/200" alt="{{ object.get_image_alt }}" loading="lazy" /></label>
-            <label class="pd-thumb" for="pd-thumb-3" aria-label="مشاهده تصویر ۳"><img
-                src="https://picsum.photos/seed/acrylicset3/200/200" alt="{{ object.get_image_alt }}" loading="lazy" /></label>
-            <label class="pd-thumb" for="pd-thumb-4" aria-label="مشاهده تصویر ۴"><img
-                src="https://picsum.photos/seed/acrylicset4/200/200" alt="{{ object.get_image_alt }}" loading="lazy" /></label>
-            <label class="pd-thumb" for="pd-thumb-5" aria-label="مشاهده تصویر ۵"><img
-                src="https://picsum.photos/seed/acrylicset5/200/200" alt="{{ object.get_image_alt }}" loading="lazy" /></label>
-          </div>
-          <label class="pd-thumb-arrow pd-thumb-arrow-next" for="pd-thumb-1" aria-label="تصویر بعدی">›</label>
-        </div>
-      </div>
-
-      <!-- INFO -->
-      <div class="pd-info">
-        <div class="pd-top-actions">
-          <button type="button" class="pd-icon-btn" aria-label="افزودن به علاقه‌مندی">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              aria-hidden="true">
-              <path
-                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-            </svg>
-          </button>
-          <button type="button" class="pd-icon-btn" aria-label="اشتراک‌گذاری">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              aria-hidden="true">
-              <circle cx="18" cy="5" r="3" />
-              <circle cx="6" cy="12" r="3" />
-              <circle cx="18" cy="19" r="3" />
-              <path d="M8.6 13.5l6.8 3.9M15.4 6.6L8.6 10.5" />
-            </svg>
-          </button>
-        </div>
-
-        <p class="pd-category">
-          {% for category in object.category.all %}
-          {{ category.title }}{% if not forloop.last %}، {% endif %}
-          {% endfor %}
-        </p>
-
-        <h1 class="pd-title">{{ object.title }}</h1>
-
-        <p class="pd-description">{{ object.description }}</p>
-
-
-            <div class="pd-purchase-row">
-              <button type="button" class="btn-add-to-cart btn-primary" 
-                    aria-label="افزودن {{ object.title }} به سبد خرید"
-                    data-url="{% url 'cart:session-add-product' %}" 
-                    data-product-id="{{ object.id }}" 
-                    data-stock="{{ object.stock }}">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
-              افزودن به سبد خرید
-            </button>
-            </div>
-
-
-        <div class="pd-trust-grid">
-          <div class="pd-trust-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-              aria-hidden="true">
-              <path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" />
-              <path d="M9 12l2 2 4-4" />
-            </svg>
-            <span>ضمانت اصالت کالا</span>
-            <p>تضمین کیفیت محصولات</p>
-          </div>
-          <div class="pd-trust-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-              aria-hidden="true">
-              <path d="M16 3H1v13h15M16 8h4l3 3v5h-7V8z" />
-              <circle cx="5.5" cy="18.5" r="2.5" />
-              <circle cx="18.5" cy="18.5" r="2.5" />
-            </svg>
-            <span>ارسال سریع</span>
-            <p>ارسال به سراسر کشور در کمترین زمان</p>
-          </div>
-          <div class="pd-trust-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-              aria-hidden="true">
-              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-              <path d="M3 3v5h5" />
-            </svg>
-            <span>۷ روز ضمانت بازگشت</span>
-            <p>بازگشت کالا در صورت عدم رضایت</p>
-          </div>
-          <div class="pd-trust-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-              aria-hidden="true">
-              <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-              <path
-                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-            </svg>
-            <span>پشتیبانی ۲۴/۷</span>
-            <p>پشتیبانی همیشگی شما</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TABS -->
-<section class="pd-tabs-section" aria-label="اطلاعات تکمیلی محصول">
-  <div class="container">
-    <input type="radio" name="pd-tab" id="pd-tab-specs" class="pd-tab-radio" checked>
-    {% if object.has_color_variants %}
-    <input type="radio" name="pd-tab" id="pd-tab-colors" class="pd-tab-radio">
-    {% endif %}
-
-    <div class="pd-tabs-nav">
-      {% if object.has_color_variants %}
-      <label for="pd-tab-colors" class="pd-tab-label">انتخاب رنگ‌ها</label>
-      {% endif %}
-      <label for="pd-tab-specs" class="pd-tab-label">مشخصات فنی</label>
-    </div>
-
-    <div class="pd-tabs-panels">
-
-      <div class="pd-tab-panel pd-panel-specs">
-        <div class="pd-spec-table pd-spec-table-full">
-          <div class="pd-spec-row"><span>برند:</span><span>Mont Marte</span></div>
-          <div class="pd-spec-row"><span>تعداد رنگ:</span><span>۲۴</span></div>
-          <div class="pd-spec-row"><span>نوع رنگ:</span><span>اکریلیک</span></div>
-          <div class="pd-spec-row"><span>حجم هر تیوب:</span><span>12ml</span></div>
-          <div class="pd-spec-row"><span>کشور سازنده:</span><span>چین</span></div>
-          <div class="pd-spec-row"><span>وزن محصول:</span><span>۵۴۰ گرم</span></div>
-          <div class="pd-spec-row"><span>ابعاد بسته‌بندی:</span><span>۳۴.۵ × ۱۲ × ۴.۵ سانتی‌متر</span></div>
-        </div>
-      </div>
-
-      {% if object.has_color_variants %}
-      <div class="pd-tab-panel pd-panel-colors">
-        <div class="pd-color-select-header">
-          <span class="pd-color-select-label">انتخاب رنگ:</span>
-          <span class="pd-color-selected-name" id="pd-color-selected-name">—</span>
-        </div>
-
-       <div class="pd-color-palette" id="pd-color-palette">
-          {% for variant in object.get_color_variants %}
-          <div class="pd-color-item">
-            <button type="button"
-                    class="pd-color-swatch"
-                    style="background-color: #{{ variant.get_hex_color }};"
-                    data-variant-id="{{ variant.id }}"
-                    data-color-code="{{ variant.get_hex_color }}"
-                    data-color-name="{{ variant.get_color_display_name }}"
-                    aria-label="انتخاب رنگ {{ variant.get_color_display_name }}">
-              <svg class="pd-color-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="3" aria-hidden="true">
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-            </button>
-            <span class="pd-color-swatch-label">{{ variant.get_color_display_name }}</span>
-          </div>
-          {% endfor %}
-        </div>
-        <input type="hidden" id="selected-variant-id" value="">
-      </div>
-      {% endif %}
-
-    </div>
-  </div>
-</section>  
-
-<!-- RELATED PRODUCTS -->
-<section class="pd-related-section">
-  <div class="container">
-    <div class="pd-related-header">
-      <a href="{% url 'shop:show-product-view' %}" class="pd-related-viewall">مشاهده همه محصولات</a>
-      <h2 class="pd-section-title">محصولات مرتبط</h2>
-    </div>
-
-
-      <div class="pd-related-track">
-        {% for product in related_products %}
-        <article class="product-card" data-href="{{ product.get_absolute_url }}">
-          <div class="product-img-wrap">
-            <button type="button" class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <path
-                  d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-              </svg>
-            </button>
-            <img src="{{ product.image.url }}" alt="{{ product.get_image_alt }}" loading="lazy" />
-          </div>
-          <div class="product-body">
-            <h3 class="product-name">{{ product.title }}</h3>
-            <div class="product-meta">
-              <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
-            </div>
-            <div class="product-rating">
-              <span class="stars">
-                <p>موجودی [ {{product.stock}} ] </p>
-              </span>
-            </div>
-            <button type="button" class="btn-add-to-cart" data-url="{% url 'cart:session-add-product' %}"
-              data-product-id="{{ product.id }}">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
-              <span>افزودن به سبد</span>
-            </button>
-          </div>
-        </article>
-        {% endfor %}
-    </div>
-  </div>
-</section>
-
-
-{% endblock content %}
-
-
-{% block extra_js %}
-
+{% endblock content %} {% block extra_js %}
 <script src="{% static 'js/shop.js' %}"></script>
 
-
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
     {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
+      "@context": "https://schema.org",
+      "@graph": [
         {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "خانه",
-          "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'website:home' %}"
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "خانه",
+              "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'website:home' %}"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "فروشگاه",
+              "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'shop:show-product-view' %}"
+            }
+            {% if object.category.first %}
+            ,{
+              "@type": "ListItem",
+              "position": 3,
+              "name": "{{ object.category.first.title|escapejs }}",
+              "item": "{{ request.scheme }}://{{ request.get_host }}{{ object.category.first.get_absolute_url }}"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "{{ object.title|escapejs }}"
+            }
+            {% else %}
+            ,{
+              "@type": "ListItem",
+              "position": 3,
+              "name": "{{ object.title|escapejs }}"
+            }
+            {% endif %}
+          ]
         },
         {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "فروشگاه",
-          "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'shop:show-product-view' %}"
+          "@type": "Product",
+          "name": "{{ object.title|escapejs }}",
+          {% if object.image %}
+          "image": "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}",
+          {% endif %}
+          "description": "{{ object.get_meta_description|escapejs }}",
+          "offers": {
+            "@type": "Offer",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}",
+            "priceCurrency": "IRR",
+            "price": "{{ object.get_price_rial }}",
+            "availability": "{% if object.stock > 0 %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+          }
         }
-        {% if object.category.first %}
-        ,{
-          "@type": "ListItem",
-          "position": 3,
-          "name": "{{ object.category.first.title|escapejs }}",
-          "item": "{{ request.scheme }}://{{ request.get_host }}{{ object.category.first.get_absolute_url }}"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
-          "name": "{{ object.title|escapejs }}"
-        }
-        {% else %}
-        ,{
-          "@type": "ListItem",
-          "position": 3,
-          "name": "{{ object.title|escapejs }}"
-        }
-        {% endif %}
       ]
-    },
-    {
-      "@type": "Product",
-      "name": "{{ object.title|escapejs }}",
-      {% if object.image %}
-      "image": "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}",
-      {% endif %}
-      "description": "{{ object.get_meta_description|escapejs }}",
-      "offers": {
-        "@type": "Offer",
-        "url": "{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}",
-        "priceCurrency": "IRR",
-        "price": "{{ object.get_price_rial }}",
-        "availability": "{% if object.stock > 0 %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
-      }
     }
-  ]
-}
 </script>
 {% endblock extra_js %}

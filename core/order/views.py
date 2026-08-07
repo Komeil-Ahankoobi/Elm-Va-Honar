@@ -22,6 +22,9 @@ from .forms import OrderCheckoutForm
 from cart.models import CartModel
 from cart.cart import CartSession
 
+from cart.utils import get_cart
+
+
 # Create your views here.
 class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormView):
     template_name = 'order/order-checkout.html'
@@ -109,6 +112,13 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
      
 class OrderSuccessView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
     template_name = 'order/success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = get_cart(self.request)
+        context["cart_items"] = cart.get_cart_items() 
+        return context
+    
 
 
 class OrderFailedView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
