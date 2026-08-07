@@ -32,7 +32,7 @@
                         class="cart-row"
                         data-id="{{ item.product_id }}"
                         data-variant-id="{{ item.variant_id|default_if_none:'' }}"
-                        data-price="{{ item.product_obj.get_price }}"
+                        data-price="{% if item.variant_obj %}{{ item.variant_obj.get_price }}{% else %}{{ item.product_obj.get_price }}{% endif %}"
                         data-stock="{{ item.product_obj.stock }}">
                         <td>
                             <div class="product-cell">
@@ -60,7 +60,11 @@
                             </div>
                         </td>
                         <td>
+                            {% if item.variant_obj %}
+                            <span class="price-text">{{ item.variant_obj.get_price|intcomma }}</span>
+                            {% else %}
                             <span class="price-text">{{ item.product_obj.get_price|intcomma }}</span>
+                            {% endif %}
                             <span class="price-unit">تومان</span>
                         </td>
                         <td>

@@ -8,6 +8,24 @@
     el.textContent = now.toLocaleDateString("en-GB", opts);
 })();
 
+function formatPrice(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function updatePriceDisplay(el) {
+    const priceEl = document.getElementById("pd-price");
+    const specPriceEl = document.getElementById("spec-price-value");
+    if (el.dataset.price) {
+        const formatted = formatPrice(Number(el.dataset.price)) + " تومان";
+        if (priceEl) priceEl.textContent = formatted;
+        if (specPriceEl) specPriceEl.textContent = formatted;
+    }
+}
+function updateSpecVariantValue(text, targetId) {
+    const specVariantEl = document.getElementById(targetId);
+    if (specVariantEl) specVariantEl.textContent = text;
+}
+
 (function initScroll() {
     const header = document.getElementById("site-header");
     const backTop = document.getElementById("back-to-top");
@@ -95,13 +113,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- Add to cart (لیست محصولات، جزئیات محصول، محصولات مرتبط) ---
     document.querySelectorAll(".btn-add-cart, .btn-add-to-cart, .btn-card-add").forEach((btn) => {
         btn.addEventListener("click", () => {
-            // اگر این دکمه همون دکمه‌ی اصلی افزودن به سبد در صفحه جزئیات محصول باشه
-            // و محصول رنگ‌بندی داشته باشه، اول باید یک رنگ انتخاب شده باشه
-            const palette = document.getElementById("pd-color-palette");
-            if (btn.classList.contains("btn-add-to-cart") && palette) {
+            const colorPalette = document.getElementById("pd-color-palette");
+            const sizePalette = document.getElementById("pd-size-palette");
+            if (btn.classList.contains("btn-add-to-cart") && (colorPalette || sizePalette)) {
                 const selectedVariant = document.getElementById("selected-variant-id")?.value;
                 if (!selectedVariant) {
-                    showToast("لطفاً یک رنگ را انتخاب کنید");
+                    const message = colorPalette ? "لطفاً یک رنگ را انتخاب کنید" : "لطفاً یک سایز را انتخاب کنید";
+                    showToast(message);
                     return;
                 }
             }
@@ -109,6 +127,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+(function initProductTabs() {
+    const tabBtns = document.querySelectorAll(".tab-btn");
+    const tabPanes = document.querySelectorAll(".tab-pane");
+    if (!tabBtns.length || !tabPanes.length) return;
+
+    tabBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            tabBtns.forEach((b) => b.classList.remove("active"));
+            tabPanes.forEach((p) => p.classList.remove("active"));
+
+            btn.classList.add("active");
+            const target = document.querySelector(`[data-tab-content="${btn.dataset.tab}"]`);
+            if (target) target.classList.add("active");
+        });
+    });
+})();
 
 function filterProducts(selectedElemnt) {
     const url = new URL(window.location.href);
@@ -192,10 +227,30 @@ document.addEventListener("click", function (e) {
             dot.classList.add("active");
             hiddenInput.value = dot.dataset.variantId;
             if (nameEl) nameEl.textContent = dot.dataset.colorName || "#" + dot.dataset.colorCode;
+            updateSpecVariantValue(dot.dataset.colorName || "#" + dot.dataset.colorCode, "spec-color-value");
+            updatePriceDisplay(dot);
         });
     });
 })();
 
+(function initSizePalette() {
+    const palette = document.getElementById("pd-size-palette");
+    if (!palette) return;
+
+    const hiddenInput = document.getElementById("selected-variant-id");
+    const nameEl = document.getElementById("pd-size-selected-name");
+
+    palette.querySelectorAll(".dot").forEach((dot) => {
+        dot.addEventListener("click", () => {
+            palette.querySelectorAll(".dot").forEach((d) => d.classList.remove("active"));
+            dot.classList.add("active");
+            hiddenInput.value = dot.dataset.variantId;
+            if (nameEl) nameEl.textContent = "شماره " + dot.dataset.sizeCode;
+            updateSpecVariantValue("شماره " + dot.dataset.sizeCode, "spec-size-value");
+            updatePriceDisplay(dot);
+        });
+    });
+})();
 // --- کنترل تعداد در صفحه جزئیات محصول ---
 (function initQuantityPicker() {
     document.querySelectorAll(".qty-picker").forEach((picker) => {

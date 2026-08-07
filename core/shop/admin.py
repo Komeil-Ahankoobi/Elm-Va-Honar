@@ -12,7 +12,7 @@ from .models import (
 class ProductVarientInline(admin.TabularInline):
     model = ProductVarientModel
     extra = 0
-    fields = ['variant_type', 'color_code', 'number_code']
+    fields = ['variant_type', 'color_code', 'number_code', 'price']
 
 
 @admin.register(ProductModel)

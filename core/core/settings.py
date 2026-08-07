@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     "dashboard",
     'cart',
     'order',
-    'django_ckeditor_5',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +135,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = config("TIME_ZONE", default='UTC')
+
+SITE_ID = config("SITE_ID", cast=int, default=1)
 
 USE_I18N = True
 
