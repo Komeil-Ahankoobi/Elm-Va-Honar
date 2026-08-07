@@ -4,6 +4,7 @@ from .models import (
     ProductImageModel, 
     ProductCategoryModel,
     ProductVarientModel,
+    ProductBrandModel,
 )
 
 
@@ -11,7 +12,7 @@ from .models import (
 class ProductVarientInline(admin.TabularInline):
     model = ProductVarientModel
     extra = 0
-    fields = ['variant_type', 'color_code', 'number_code', 'price']
+    fields = ['variant_type', 'color_code', 'number_code']
 
 
 @admin.register(ProductModel)
@@ -21,6 +22,10 @@ class ProductModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductCategoryModel)
 class ProductCategoryModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "created_date", "meta_title", "meta_description")
+    
+@admin.register(ProductBrandModel)
+class ProductBrandModelModelAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "created_date", "meta_title", "meta_description")
 
 @admin.register(ProductImageModel)

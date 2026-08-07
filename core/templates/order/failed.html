@@ -1,75 +1,72 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %} {% block title %}سفارش ثبت نشد | ElmvHonar{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/failed.css' %}" />
+{% endblock extra_css %} {% block content %}
+<!-- MAIN CONTAINER -->
+<section class="container">
+    <!-- Cross Icon with dots -->
+    <div class="failed-icon-wrapper">
+        <div class="dot dot-1"></div>
+        <div class="dot dot-2"></div>
+        <div class="dot dot-3"></div>
+        <div class="dot dot-4"></div>
+        <div class="dot dot-5"></div>
+        <div class="dot dot-6"></div>
+        <div class="failed-circle">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+    </div>
 
-{% block title %}سفارش ثبت نشد | ElmvHonar{% endblock %}
+    <!-- Title & Subtitle -->
+    <h1 class="failed-title">پرداخت شما ناموفق بود!</h1>
+    <p class="failed-subtitle">
+        متأسفانه مشکلی در پردازش پرداخت شما رخ داد.<br />
+        لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.
+    </p>
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/failed.css' %}">
-{% endblock extra_css %}
+    <!-- Possible Reasons Box -->
+    <div class="reasons-box">
+        <div class="reasons-content">
+            <div class="reasons-title">دلایل احتمالی:</div>
 
-{% block content %}
-<section class="order-success-section">
-    <div class="container">
+            <div class="reasons-groups">
+                <div class="reasons-group">
+                    <div class="reasons-group-title"><i class="fa-solid fa-cart-shopping"></i> مربوط به سفارش</div>
+                    <ul class="reasons-list">
+                        <li>کد تخفیف اشتباه، منقضی‌شده یا غیرقابل استفاده وارد شده است.</li>
+                        <li>آدرس تحویل انتخاب نشده یا اطلاعات آن ناقص است.</li>
+                        <li>موجودی انبار یکی از کالاهای سبد خرید تمام شده است.</li>
+                        <li>سبد خرید شما خالی است یا در حین پرداخت تغییر کرده است.</li>
+                        <li>مبلغ نهایی سفارش با مبلغ تراکنش مطابقت ندارد.</li>
+                    </ul>
+                </div>
 
-        <!-- STEP INDICATOR -->
-        <ol class="checkout-stepper" aria-label="مراحل تسویه حساب">
-            <li class="step-item completed">
-                <span class="step-circle" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                </span>
-                <span class="step-label">سبد خرید</span>
-            </li>
-
-            <li class="step-connector filled" aria-hidden="true"></li>
-
-            <li class="step-item active" aria-current="step">
-                <span class="step-circle">۲</span>
-                <span class="step-label">آدرس و ارسال</span>
-            </li>
-
-            <li class="step-connector" aria-hidden="true"></li>
-
-            <li class="step-item">
-                <span class="step-circle">۳</span>
-                <span class="step-label">پرداخت</span>
-            </li>
-        </ol>
-
-        <!-- Failed Content -->
-        <div class="success-box">
-            <div class="success-icon-wrap">
-                <span class="deco-dot dot-1"></span>
-                <span class="deco-dot dot-2"></span>
-                <span class="deco-dot dot-3"></span>
-                <span class="deco-dot dot-4"></span>
-
-                <span class="success-icon error-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </span>
+                <div class="reasons-group">
+                    <div class="reasons-group-title"><i class="fa-solid fa-credit-card"></i> مربوط به پرداخت</div>
+                    <ul class="reasons-list">
+                        <li>اطلاعات کارت بانکی به درستی وارد نشده است.</li>
+                        <li>موجودی حساب کافی نیست.</li>
+                        <li>تراکنش توسط شما لغو شده یا مهلت پرداخت به پایان رسیده است.</li>
+                        <li>رمز دوم پویا یا کد CVV2 نادرست بوده است.</li>
+                        <li>درگاه پرداخت یا بانک صادرکننده کارت با مشکل مواجه شده است.</li>
+                    </ul>
+                </div>
             </div>
 
-            <h1 class="success-title error-title">سفارش شما ثبت نشد</h1>
-            <p class="success-desc">
-                متاسفانه در ثبت سفارش مشکلی پیش آمد. لطفاً دوباره تلاش کنید.
-            </p>
-
-            <a href="{% url 'website:home' %}" class="btn-back-home">
-                بازگشت به صفحه اصلی
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-            </a>
+            <div class="reasons-note">
+                <i class="fa-solid fa-circle-info"></i>
+                در صورت کسر وجه از حساب، مبلغ حداکثر تا ۷۲ ساعت آینده به‌صورت خودکار به حساب شما بازمی‌گردد.
+            </div>
         </div>
+    </div>
 
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{% url 'order:order-checkout' %}" class="btn btn-primary">
+            <i class="fa-solid fa-rotate-right"></i> تلاش مجدد
+        </a>
+        <a href="{% url 'cart:session-cart-summary' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-cart-shopping"></i> بازگشت به سبد خرید
+        </a>
     </div>
 </section>
 {% endblock content %}

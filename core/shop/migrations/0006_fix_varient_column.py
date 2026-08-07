@@ -9,7 +9,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL(
-            sql="ALTER TABLE shop_productvarientmodel RENAME COLUMN varient_type TO variant_type;",
-            reverse_sql="ALTER TABLE shop_productvarientmodel RENAME COLUMN variant_type TO varient_type;",
+            sql="""
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'shop_productvarientmodel'
+                    AND column_name = 'varient_type'
+                ) THEN
+                    ALTER TABLE shop_productvarientmodel
+                        RENAME COLUMN varient_type TO variant_type;
+                END IF;
+            END $$;
+            """,
+            reverse_sql=migrations.RunSQL.noop,
         ),
     ]
