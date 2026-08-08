@@ -151,6 +151,16 @@ class ProductModel(models.Model):
 
     def has_number_variants(self):
         return self.varients.filter(variant_type=VarientType.number).exists()
+
+    def has_variants(self):
+        return self.varients.exists()
+
+    def get_price_range(self):
+        variants = list(self.varients.all())
+        if not variants:
+            return None
+        prices = [v.get_price() for v in variants]
+        return min(prices), max(prices)
     
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")
