@@ -3,6 +3,24 @@
 from django.db import migrations, models
 
 
+def add_price_column(apps, schema_editor):
+    with schema_editor.connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT column_name FROM information_schema.columns
+            WHERE table_name='shop_productvarientmodel' AND column_name='price'
+        """)
+        if not cursor.fetchone():
+            schema_editor.execute(
+                'ALTER TABLE shop_productvarientmodel ADD COLUMN price numeric(10,0) NULL'
+            )
+
+
+def remove_price_column(apps, schema_editor):
+    schema_editor.execute(
+        'ALTER TABLE shop_productvarientmodel DROP COLUMN IF EXISTS price'
+    )
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,9 +28,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='productvarientmodel',
-            name='price',
-            field=models.DecimalField(blank=True, decimal_places=0, help_text='فقط اگه این شماره/سایز/رنگ قیمتش با قیمت پایه محصول فرق داره پر کن. خالی بمونه یعنی از قیمت محصول استفاده میشه.', max_digits=10, null=True),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.AddField(
+                    model_name='productvarientmodel',
+                    name='price',
+                    field=models.DecimalField(blank=True, decimal_places=0, help_text='فقط اگه این شماره/سایز/رنگ قیمتش با قیمت پایه محصول فرق داره پر کن. خالی بمونه یعنی از قیمت محصول استفاده میشه.', max_digits=10, null=True),
+                ),
+            ],
+            database_operations=[
+                migrations.RunPython(add_price_column, remove_price_column),
+            ],
         ),
     ]
