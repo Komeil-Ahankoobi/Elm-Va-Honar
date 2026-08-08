@@ -9,7 +9,6 @@
     <!-- Page Title -->
     <div class="page-title">
         <h1>سبد خرید شما</h1>
-        <p id="qu-title">{{ cart.get_total_quantity }} محصول در سبد خرید شما وجود دارد.</p>
     </div>
 
     <!-- Cart Main Content -->
@@ -117,18 +116,20 @@
             <!-- EMPTY STATE -->
             <div class="cart-empty" id="cart-empty" style="{% if cart_items %}display:none;{% endif %}">
                 <div class="cart-empty-icon">
-                    <i class="fa-solid fa-cart-shopping" style="font-size: 40px"></i>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
                 </div>
                 <p class="cart-empty-title">سبد خرید شما خالی است</p>
-                <p class="cart-empty-sub">محصولات مورد علاقه‌تان را از فروشگاه اضافه کنید.</p>
-                <a href="{% url 'shop:show-product-view' %}" class="btn-primary-gradient">مشاهده فروشگاه</a>
-            </div>
-
-            <div class="cart-actions-bottom">
-                <a href="{% url 'shop:show-product-view' %}" class="btn-continue">
-                    ادامه خرید <i class="fa-solid fa-arrow-left"></i>
+                <p class="cart-empty-desc">هنوز محصولی به سبد خریدتون اضافه نکردید.</p>
+                <a href="{% url 'shop:show-product-view' %}" class="cart-empty-btn">
+                    مشاهده محصولات <i class="fa-solid fa-arrow-left"></i>
                 </a>
             </div>
+
         </div>
 
         <!-- LEFT: Order Summary & Badges -->

@@ -163,6 +163,22 @@ function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
 }
+function updateCartBadge(count) {
+    document.querySelectorAll(".header__icon-btn--cart").forEach((cartBtn) => {
+        let badge = cartBtn.querySelector(".header__cart-badge");
+
+        if (count > 0) {
+            if (!badge) {
+                badge = document.createElement("span");
+                badge.className = "header__cart-badge";
+                cartBtn.appendChild(badge);
+            }
+            badge.textContent = count;
+        } else if (badge) {
+            badge.remove();
+        }
+    });
+}
 
 async function addToCart(url, product_id) {
     const variantInput = document.getElementById("selected-variant-id");
@@ -187,10 +203,8 @@ async function addToCart(url, product_id) {
 
         const data = await response.json();
 
-        const cartCountEl = document.querySelector(".cart-count");
-        if (cartCountEl) {
-            cartCountEl.textContent = `${data.total_quantity}`;
-        }
+        updateCartBadge(data.total_quantity);
+
     } catch (err) {
         console.error("خطا در افزودن محصول به سبد خرید:", err);
     }

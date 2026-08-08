@@ -287,6 +287,12 @@ button {
     color: rgba(255, 255, 255, 0.6);
 }
 
+.header__top form {
+    flex: 1;
+    max-width: 520px;
+    display: flex;
+}
+
 .header__search {
     flex: 1;
     max-width: 520px;

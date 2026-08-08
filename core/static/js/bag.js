@@ -2,6 +2,24 @@
 
 const cartItemsEl = document.getElementById("cart-items");
 
+// --- آپدیت بج تعداد آیکون سبد خرید در هدر (چه در صفحه اصلی، چه در بقیه صفحات) ---
+function updateCartBadge(count) {
+    document.querySelectorAll(".header__icon-btn--cart").forEach((cartBtn) => {
+        let badge = cartBtn.querySelector(".header__cart-badge");
+
+        if (count > 0) {
+            if (!badge) {
+                badge = document.createElement("span");
+                badge.className = "header__cart-badge";
+                cartBtn.appendChild(badge);
+            }
+            badge.textContent = count;
+        } else if (badge) {
+            badge.remove();
+        }
+    });
+}
+
 if (cartItemsEl) {
     const numFmt = (n) => new Intl.NumberFormat("en-US").format(n);
     const fmt = (n) => `${numFmt(n)} تومان`;
@@ -107,10 +125,10 @@ if (cartItemsEl) {
             if (qtyEl) qtyEl.textContent = data.quantity;
 
             const quEl = document.getElementById("p-quantity");
-            if (quEl) quEl.textContent = data.quantity + " عدد";
+            if (quEl) quEl.textContent = data.total_quantity + " عدد";
 
             const x = document.getElementById("qu-title");
-            if (x) x.textContent = data.quantity + " محصول در سبد خرید شما وجود دارد.";
+            if (x) x.textContent = data.total_quantity + " محصول در سبد خرید شما وجود دارد.";
 
             // آپدیت قیمت مجموع همین ردیف (بدون "تومان" چون کنارش span واحد جدا داره)
             const totalEl = row.querySelector(".cart-row-total");
@@ -124,6 +142,9 @@ if (cartItemsEl) {
             if (subtotalEl) subtotalEl.textContent = fmt(data.cart_total_price);
             if (totalSumEl) totalSumEl.textContent = fmt(data.cart_total_price);
             if (cartCountEl) cartCountEl.textContent = `سبد (${data.total_quantity})`;
+
+            // آپدیت بج آیکون سبد خرید در هدر
+            updateCartBadge(data.total_quantity);
         } else if (action === "remove") {
             const nameEl = row.querySelector(".cart-row-name");
             const name = nameEl ? nameEl.textContent.trim() : "";
@@ -139,10 +160,17 @@ if (cartItemsEl) {
                 const subtotalEl = document.getElementById("sum-subtotal");
                 const totalSumEl = document.getElementById("sum-total");
                 const cartCountEl = document.getElementById("cart-count");
+                const quEl = document.getElementById("p-quantity");
+                const x = document.getElementById("qu-title");
 
                 if (subtotalEl) subtotalEl.textContent = fmt(data.cart_total_price);
                 if (totalSumEl) totalSumEl.textContent = fmt(data.cart_total_price);
                 if (cartCountEl) cartCountEl.textContent = `سبد (${data.total_quantity})`;
+                if (quEl) quEl.textContent = data.total_quantity + " عدد";
+                if (x) x.textContent = data.total_quantity + " محصول در سبد خرید شما وجود دارد.";
+
+                // آپدیت بج آیکون سبد خرید در هدر
+                updateCartBadge(data.total_quantity);
 
                 showToast(`"${name}" از سبد حذف شد`);
             }, 280);

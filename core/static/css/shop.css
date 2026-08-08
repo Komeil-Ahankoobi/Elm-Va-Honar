@@ -255,9 +255,6 @@ a {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    transition:
-        transform 0.2s,
-        box-shadow 0.2s;
 }
 
 .product-card:hover {
@@ -314,12 +311,13 @@ a {
     margin-bottom: 12px;
 }
 
+/* ================= BUTTON ADD TO CART (FIXED) ================= */
 .btn-add-cart {
     width: 100%;
     background-color: var(--bg-dark);
     color: white;
     border: none;
-    padding: 8px;
+    padding: 8px 12px;
     border-radius: 4px;
     font-size: 11px;
     cursor: pointer;
@@ -328,10 +326,33 @@ a {
     justify-content: center;
     gap: 6px;
     transition: 0.2s;
+    font-family: var(--font-family);
+    font-weight: normal;
+    line-height: 1.4;
+    min-height: 36px;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-align: center;
 }
 
 .btn-add-cart:hover {
     background-color: var(--accent-green);
+}
+
+/* حذف استایل پیش‌فرض دکمه و لینک */
+button.btn-add-cart {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+a.btn-add-cart {
+    text-decoration: none;
+}
+
+/* اطمینان از یکسان بودن اندازه آیکون */
+.btn-add-cart i {
+    font-size: 11px;
+    line-height: 1;
 }
 
 /* ================= PAGINATION ================= */
@@ -341,7 +362,7 @@ a {
     justify-content: center;
     gap: 8px;
     margin-top: 30px;
-    direction: ltr; /* شماره صفحات چپ‌به‌راست نمایش داده بشه */
+    direction: ltr;
 }
 
 .page-item {
@@ -372,7 +393,6 @@ a {
     cursor: default;
 }
 
-/* دکمه‌های قبلی / بعدی: فلش + متن کنار هم */
 .page-item-nav {
     display: flex;
     align-items: center;
