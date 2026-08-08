@@ -93,10 +93,29 @@
                         <span class="header__cart-badge">{{ cart.get_total_quantity }}</span>
                         {% endif %}
                     </a>
+                    <button class="header__hamburger" id="navHamburger" aria-label="باز کردن منو" aria-expanded="false" aria-controls="mainNav">
+                        <span class="header__hamburger-line"></span>
+                        <span class="header__hamburger-line"></span>
+                        <span class="header__hamburger-line"></span>
+                    </button>
                 </div>
             </div>
 
-            <nav class="nav">
+            <div class="nav__overlay" id="navOverlay"></div>
+
+            <nav class="nav" id="mainNav">
+                <div class="nav__drawer-header">
+                    <div class="nav__drawer-logo">
+                        <span class="header__logo-symbol">EH</span>
+                        <span class="header__logo-title">ElmvHonar</span>
+                    </div>
+                    <button class="nav__close" id="navClose" aria-label="بستن منو">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
                 <div class="nav__container">
                     <ul class="nav__list">
 
@@ -790,6 +809,49 @@
     <script src="{% static 'js/home.js' %}"></script>
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
     <script src="{% static 'vendor/toastify/toastify-es.js' %}"></script>
+
+    <!-- Mobile off-canvas navigation toggle -->
+    <script>
+        (function () {
+            var hamburger = document.getElementById('navHamburger');
+            var nav = document.getElementById('mainNav');
+            var overlay = document.getElementById('navOverlay');
+            var closeBtn = document.getElementById('navClose');
+
+            if (!hamburger || !nav || !overlay) return;
+
+            function openNav() {
+                nav.classList.add('nav--open');
+                hamburger.classList.add('header__hamburger--active');
+                overlay.classList.add('nav__overlay--active');
+                document.body.classList.add('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'true');
+            }
+
+            function closeNav() {
+                nav.classList.remove('nav--open');
+                hamburger.classList.remove('header__hamburger--active');
+                overlay.classList.remove('nav__overlay--active');
+                document.body.classList.remove('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+
+            hamburger.addEventListener('click', function () {
+                if (nav.classList.contains('nav--open')) {
+                    closeNav();
+                } else {
+                    openNav();
+                }
+            });
+
+            overlay.addEventListener('click', closeNav);
+            if (closeBtn) closeBtn.addEventListener('click', closeNav);
+
+            nav.querySelectorAll('.nav__link').forEach(function (link) {
+                link.addEventListener('click', closeNav);
+            });
+        })();
+    </script>
 
     {% include 'messages.html' %}
 </body>
