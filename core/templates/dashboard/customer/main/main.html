@@ -12,7 +12,7 @@
 
     <!-- profile summary -->
     <section class="card profile-card">
-        <div class="profile-avatar">ع</div>
+        <div class="profile-avatar">{{user.user_profile.get_first_word_of_name}}</div>
         <h3 class="profile-name">{{ user.user_profile.first_name }} {{ user.user_profile.last_name }}</h3>
         <span class="role-pill">مشتری</span>
         <div class="member-since">عضو از {{ user.user_profile.created_date|jalali_date}}</div>
