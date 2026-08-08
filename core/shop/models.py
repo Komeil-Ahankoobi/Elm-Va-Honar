@@ -29,9 +29,11 @@ class ProductCategoryModel(models.Model):
 
     def __str__(self):
         return self.title
+    
 
     def get_absolute_url(self):
         return reverse('shop:show-product-view') + f'?category={self.slug}'
+
 
     def get_meta_title(self):
         return self.meta_title or self.title
@@ -40,8 +42,47 @@ class ProductCategoryModel(models.Model):
         return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
 
 
+class ProductBrandModel(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(allow_unicode=True, unique=True)
+
+    meta_title = models.CharField(max_length=70, blank=True,
+        help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
+    meta_description = models.CharField(max_length=160, blank=True,
+        help_text="توضیح کوتاه برای نتایج گوگل. حداکثر ۱۵۵-۱۶۰ کاراکتر.")
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_date"]
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('shop:show-product-view') + f'?brand={self.slug}'
+
+    def get_meta_title(self):
+        return self.meta_title or self.title
+
+    def get_meta_description(self):
+        return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
+
+
+
 class ProductModel(models.Model):
-    category = models.ManyToManyField(ProductCategoryModel)
+    category = models.ManyToManyField(
+        ProductCategoryModel,
+        related_name='products'
+    )
+    brand = models.ForeignKey(
+        ProductBrandModel,
+        on_delete=models.PROTECT,
+        related_name='products',
+        null=True, 
+        blank=True,
+    )
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
     
@@ -106,12 +147,10 @@ class ProductModel(models.Model):
         return self.varients.filter(variant_type=VarientType.color).exists()
 
     def get_number_variants(self):
-            return self.varients.filter(variant_type=VarientType.number)
-    
+        return self.varients.filter(variant_type=VarientType.number)
+
     def has_number_variants(self):
         return self.varients.filter(variant_type=VarientType.number).exists()
-    
-    
     
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")
@@ -148,12 +187,13 @@ class ProductVarientModel(models.Model):
     )
     price = models.DecimalField(
         max_digits=10, decimal_places=0, null=True, blank=True,
-        help_text="فقط اگه این شماره/سایز قیمتش با قیمت پایه محصول فرق داره پر کن. خالی بمونه یعنی از قیمت محصول استفاده میشه."
+        help_text="فقط اگه این شماره/سایز/رنگ قیمتش با قیمت پایه محصول فرق داره پر کن. خالی بمونه یعنی از قیمت محصول استفاده میشه."
     )
-
-
+    
+    
     def __str__(self):
         return f'{self.product.title} - {self.variant_type}'
+
 
     def get_hex_color(self):
         code = (self.color_code or "").strip().lstrip("#")
@@ -171,5 +211,3 @@ class ProductVarientModel(models.Model):
         base_price = self.price if self.price is not None else self.product.price
         discount_amount = base_price * Decimal(self.product.discount_percent) / Decimal(100)
         return round(base_price - discount_amount)
-
-    

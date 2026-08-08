@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% load static %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blog-post.css'%}" />
+{% endblock extra_css %} {% block content %}
+
+<!-- Breadcrumb -->
+<section class="breadcrumb">
+    <a href="{% url 'website:home' %}">خانه</a>
+    <span>&gt;</span>
+    <span>مجله علم و هنر</span>
+</section>
+
+<!-- Page Title -->
+<section class="blog-header">
+    <h1>مجله علم و هنر</h1>
+    <p>مقالات آموزشی، راهنماها، نکات کاربردی و معرفی محصولات هنری</p>
+</section>
+
+<!-- Search & Filter Toolbar -->
+<section class="blog-toolbar">
+    <div class="blog-search">
+        <input type="text" placeholder="جستجو در مقالات..." />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+    </div>
+
+    <div class="sort-select-wrapper">
+        <select class="sort-select">
+            <option>جدیدترین</option>
+            <option>محبوب‌ترین</option>
+            <option>پر بازدیدترین</option>
+        </select>
+    </div>
+</section>
+
+<!-- Articles Grid -->
+<section class="articles-grid">
+    {% for blog in object_list %}
+    <!-- Card 1 -->
+    <article class="article-card">
+        <a href="{% url 'website:blog-post-detail' pk=blog.id %}">
+            <div class="card-image">
+                <img src="assets/images/blog-1.jpg" alt="خودکارهای ژله‌ای" />
+                <span class="card-badge">معرفی محصول</span>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">{{ blog.title }}</h3>
+                <p class="card-excerpt">{{ blog.brief_description }}</p>
+                <div class="card-footer">
+                    <span>{{ blog.reading_time }} دقیقه</span>
+                    <span class="read-more">مشاهده مقاله +</span>
+                </div>
+            </div>
+        </a>
+    </article>
+    {% endfor %}
+</section>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<section class="pagination" aria-label="صفحه‌بندی" dir="ltr">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&lt; قبلی</a>
+    {% endif %} {% for i in page_obj.paginator.page_range %} {% if page_obj.number == i %}
+    <a href="?page={{ i }}" class="page-link active">{{ i }}</a>
+    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+    <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+    {% elif i == 1 or i == page_obj.paginator.num_pages %}
+    <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+    {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}
+    <span class="page-link page-link--dots">...</span>
+    {% endif %} {% endfor %} {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="page-link">بعدی &gt;</a>
+    {% endif %}
+</section>
+{% endif %}
+
+<!-- Newsletter Banner -->
+<section class="newsletter-banner">
+    <div class="newsletter-text">
+        <h3>از جدیدترین مقالات و آموزش‌ها باخبر شوید.</h3>
+        <p>با عضویت در خبرنامه، جدیدترین مقالات و تخفیف‌ها را دریافت کنید.</p>
+    </div>
+    <form class="newsletter-form" onsubmit="event.preventDefault()">
+        <input type="email" placeholder="ایمیل خود را وارد کنید..." />
+        <button type="submit">عضویت</button>
+    </form>
+</section>
+
+{% endblock content %}

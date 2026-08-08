@@ -4,36 +4,27 @@ services:
     db:
         image: postgres:15-alpine
         volumes:
-            - ./postgre/data:/var/lib/postgresql/data
+            - pgdata:/var/lib/postgresql/data
         environment:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
         restart: always
+        stop_grace_period: 60s
         ports:
             - 5841:5432
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres"]
-            interval: 10s
+            test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+            interval: 5s
             timeout: 5s
-            retries: 5
+            retries: 30
+            start_period: 60s
 
     backend:
         build:
             context: .
             dockerfile: dockerfiles/dev/django/Dockerfile
-        command: >
-            bash -c " python -c ' import socket, time while True:
-                try:
-                    s = socket.create_connection((\"db\", 5432), timeout=1)
-                    s.close()
-                    break
-                except OSError:
-                    print(\"Waiting for database...\")
-                    time.sleep(1)
-            '; python manage.py runserver 0.0.0.0:8000 "
-
-
+        command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"]
         volumes:
             - ./core:/usr/src/app
         ports:
@@ -46,3 +37,6 @@ services:
         depends_on:
             db:
                 condition: service_healthy
+
+volumes:
+    pgdata:

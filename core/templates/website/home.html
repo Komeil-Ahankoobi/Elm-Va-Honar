@@ -1,402 +1,796 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
 
-{% block content %}
-<!-- ============================================================
-       HERO SECTION (ANIMATED SVG ILLUSTRATION, DARK PASTEL THEME)
-       ============================================================ -->
-<section class="hero-section-wrapper" aria-label="خوش آمدید به علم و هنر">
-    <div class="container">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 
-        <!-- Slider Box (Contained Width) -->
-        <div class="hero-slider-section" id="hero">
-            <div class="slider-container">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>علم و هنر | ElmvHonar</title>
 
-                <!-- Slide 1 -->
-                <div class="slide active">
-                    <picture>
-                        <source media="(max-width: 440px)" srcset="{% static 'images/slider1-res.png' %}">
-                        <img src="{% static 'images/slider1.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
-                            class="slide-bg-img" fetchpriority="high">
-                    </picture>
-                    <div class="slide-overlay"></div>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet"
+        type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
+</head>
+
+<body>
+
+    <div class="hero-wrapper-card container">
+
+        <!-- Header -->
+        <header class="header header--dark">
+            <div class="header__top">
+                
+                <div class="header__logo-area">
+                    <a href="#" class="header__logo">
+                        <span class="header__logo-symbol">EH</span>
+                        <div class="header__logo-text">
+                            <span class="header__logo-title">ElmvHonar</span>
+                            <span class="header__logo-tagline">علم و هنر در کنار شما</span>
+                        </div>
+                    </a>
                 </div>
 
-                <!-- Slide 2 -->
-                <div class="slide">
-                    <picture>
-                        <source media="(max-width: 440px)" srcset="{% static 'images/slider2-res.png' %}">
-                        <img src="{% static 'images/slider2.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
-                            class="slide-bg-img" fetchpriority="high">
-                    </picture>
-                    <div class="slide-overlay"></div>
+                <form action="{% url 'shop:show-product-view' %}" method="get" class="header__search">
+                    <div class="header__search-select">
+                        <span>همه دسته‌ها</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </div>
+                    <input type="text" name="q" class="header__search-input" placeholder="جستجوی محصول...">
+                    <button class="header__search-btn" type="submit" aria-label="Search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                    </button>
+                </form>
+
+                <div class="header__user-actions">
+                    {% if request.user.is_authenticated %}
+                    <form action="{% url 'accounts:logout' %}" method="post" class="header__action-btn">
+                        {% csrf_token %}
+                        <button class="logout-btn" type="submit">خروج</button>
+                    </form>
+                    <a href="{% url 'dashboard:home' %}" class="header__icon-btn" aria-label="Wishlist">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'accounts:login' %}" class="header__action-btn">
+                        <span>ورود / ثبت‌نام</span>
+                    </a>
+                    <a href="{% url 'accounts:login' %}" class="header__icon-btn" aria-label="Wishlist">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'cart:session-cart-summary' %}" class="header__icon-btn header__icon-btn--cart"
+                        aria-label="Cart">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+                        {% if cart.get_total_quantity %}
+                        <span class="header__cart-badge">{{ cart.get_total_quantity }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <div class="nav__container">
+                    <ul class="nav__list">
+
+                        <li class="nav__item">
+                            <a href="{% url 'website:home' %}" class="nav__link nav__link--active">
+                                صفحه اصلی
+                            </a>
+                        </li>
+
+                        <li class="nav__item">
+                            <a href="{% url 'website:categories' %}"
+                                class="nav__link {% if  avtive_page == 'categories' %}nav__link--active{% endif %}">
+                                دسته‌بندی‌ها
+                            </a>
+                        </li>
+
+                        <li class="nav__item">
+                            <a href="{% url 'website:brands' %}"
+                                class="nav__link {% if  avtive_page == 'brands' %}nav__link--active{% endif %}">
+                                برندها
+                            </a>
+                        </li>
+
+                        <li class="nav__item">
+                            <a href="{% url 'shop:show-product-view' %}"
+                                class="nav__link {% if  avtive_page == 'show-product-view' %}nav__link--active{% endif %}">
+                                محصولات
+                            </a>
+                        </li>
+
+                        <li class="nav__item">
+                            <a href="{% url 'website:blog-post' %}"
+                                class="nav__link {% if  avtive_page == 'blog-post' %}nav__link--active{% endif %}">
+                                مجله علم و هنر
+                            </a>
+                        </li>
+
+                        <li class="nav__item">
+                            <a href="{% url 'website:about' %}"
+                                class="nav__link {% if  avtive_page == 'about' %}nav__link--active{% endif %}">
+                                درباره ما
+                            </a>
+                        </li>
+
+                        <li class="nav__item">
+                            <a href="{% url 'website:rule_qu' %}"
+                                class="nav__link {% if  avtive_page == 'rule_qu' %}nav__link--active{% endif %}">
+                                سوالات متداول و قوانین
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Hero Slider Section -->
+            <section class="hero">
+                <div class="hero__slider" id="heroSlider">
+                    {% for slide in hero_slides %}
+                    <div class="hero__slide{% if forloop.first %} hero__slide--active{% endif %}">
+                        <picture class="hero__slide-media">
+                            {% if slide.image_webp %}
+                            <source srcset="{{ slide.image_webp }}" type="image/webp">
+                            {% endif %}
+                            <img src="{% static slide.image %}" alt="{{ slide.title|striptags }}"
+                                class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {% else %}loading="lazy" {% endif %}>
+                        </picture>
+                        <div class="hero__content">
+                            <h1 class="hero__title"><span>{{ slide.title1 }}</span>{{ slide.title2 }}</h1>
+                            <p class="hero__subtitle">{{ slide.subtitle }}</p>
+                            <div class="hero__actions">
+                                <a href="{{ slide.primary_url|default:'#' }}" class="btn btn--primary">{{ slide.primary_text }}</a>
+                                <a href="{{ slide.secondary_url|default:'#' }}" class="btn btn--outline-light">{{ slide.secondary_text }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <button class="hero__arrow hero__arrow--prev" id="heroPrev" aria-label="Previous">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+
+                    <button class="hero__arrow hero__arrow--next" id="heroNext" aria-label="Next">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div class="hero__dots" id="heroDots">
+                        {% for slide in hero_slides %}
+                        <span class="hero__dot{% if forloop.first %} hero__dot--active{% endif %}"
+                            data-index="{{ forloop.counter0 }}"></span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Bar -->
+            <section class="features">
+                <div class="features__container">
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <rect x="1" y="3" width="15" height="13" />
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                                <circle cx="5.5" cy="18.5" r="2.5" />
+                                <circle cx="18.5" cy="18.5" r="2.5" />
+                            </svg>
+                        </div>
+                        <div class="feature-card__info">
+                            <h4 class="feature-card__title">ارسال سریع</h4>
+                            <p class="feature-card__desc">به سراسر کشور</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <div class="feature-card__info">
+                            <h4 class="feature-card__title">ضمانت اصالت کالا</h4>
+                            <p class="feature-card__desc">تضمین کیفیت و اورجینال</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                <line x1="12" y1="22.08" x2="12" y2="12" />
+                            </svg>
+                        </div>
+                        <div class="feature-card__info">
+                            <h4 class="feature-card__title">بسته‌بندی ایمن</h4>
+                            <p class="feature-card__desc">محافظت کامل از محصولات</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                        </div>
+                        <div class="feature-card__info">
+                            <h4 class="feature-card__title">پشتیبانی ۲۴/۷</h4>
+                            <p class="feature-card__desc">همیشه در کنار شما</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </div> <!-- End of hero-wrapper-card -->
+
+    <!-- Popular Categories Carousel Section -->
+    <section class="section categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-header__title">دسته‌بندی‌های محبوب</h2>
+                <a href="#" class="section-header__link">مشاهده همه</a>
+            </div>
+
+            <div class="categories-carousel">
+                <button class="carousel-arrow carousel-arrow--prev" id="catPrev" aria-label="Previous Category">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="categories-grid scroll-container" id="catGrid">
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">رنگ‌ها</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">قلم مو</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">دفتر و کاغذ</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">طراحی و گرافیک</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">هنرهای تجسمی</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">ابزار و تجهیزات</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">لوازم رنگی</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">پر فروش‌ها</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">خوشنویسی</span>
+                    </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
                 </div>
 
-                <!-- Slide 3 -->
-                <div class="slide">
-                    <picture>
-                        <source media="(max-width: 440px)" srcset="{% static 'images/slider3-res.png' %}">
-                        <img src="{% static 'images/slider3.jpeg' %}" alt="بنر اصلی فروشگاه علم و هنر"
-                            class="slide-bg-img" fetchpriority="high">
-                    </picture>
-                    <div class="slide-overlay"></div>
-                </div>
-
-                <!-- Slider Arrow Controls -->
-                <button class="slider-arrow prev" id="slider-prev" aria-label="اسلاید قبلی">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button class="carousel-arrow carousel-arrow--next" id="catNext" aria-label="Next Category">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 18l6-6-6-6" />
                     </svg>
                 </button>
-                <button class="slider-arrow next" id="slider-next" aria-label="اسلاید بعدی">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo Banners Grid -->
+    <section class="section promo-banners">
+        <div class="container">
+            <div class="promo-grid">
+                <div class="promo-card">
+                    <div class="placeholder-img placeholder-img--dark"></div>
+                    <div class="promo-card__content">
+                        <h3 class="promo-card__title">دفتر و کاغذ</h3>
+                        <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
+                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="placeholder-img placeholder-img--dark"></div>
+                    <div class="promo-card__content">
+                        <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
+                        <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
+                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <div class="placeholder-img placeholder-img--dark"></div>
+                    <div class="promo-card__content">
+                        <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
+                        <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
+                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers (Products Carousel) -->
+    <section class="section products-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-header__title-wrap">
+                    <h2 class="section-header__title">پیشنهادهای ویژه</h2>
+                    <div class="countdown-timer">
+                        <span>پایان پیشنهاد:</span>
+                        <span class="countdown-timer__time">۲۱ : ۴۵ : ۲۱</span>
+                    </div>
+                </div>
+                <a href="#" class="section-header__link">مشاهده همه</a>
+            </div>
+
+            <div class="products-carousel-wrap">
+                <button class="carousel-arrow carousel-arrow--prev" id="prodPrev" aria-label="Previous Product">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M15 18l-6-6 6-6" />
                     </svg>
-
                 </button>
 
-                <!-- Slider Dots -->
-                <div class="slider-dots" id="slider-dots">
-                    <span class="dot active" data-index="0"></span>
-                    <span class="dot" data-index="1"></span>
-                    <span class="dot" data-index="2"></span>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================================
-       SECTION 1.5: FEATURE HIGHLIGHTS / SERVICES
-       ============================================================ -->
-<section class="section service-highlights">
-    <div class="container">
-        <div class="service-grid">
-            <div class="service-card">
-                <div class="service-icon-wrap">
-                    <img src="{% static 'images/24.png' %}" alt="">
-                </div>
-                <div class="service-text">
-                    <h3>پشتیبانی ۲۴/۷</h3>
-                    <p>پاسخگوی شما در تمام روزهای هفته</p>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-                        <defs>
-                            <!-- تعریف گرادینت رنگی دقیقاً مشابه سایر آیکون‌ها -->
-                            <linearGradient id="boxGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#fbc2eb" />
-                                <stop offset="50%" stop-color="#a1c4fd" />
-                                <stop offset="100%" stop-color="#c2e9fb" />
-                            </linearGradient>
-                        </defs>
-
-                        <g stroke="url(#boxGradient)" stroke-width="2.5" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <!-- بدنه و خطوط اصلی جعبه -->
-                            <path d="M 50 22 L 82 37 L 50 52 L 18 37 Z" />
-                            <path d="M 18 37 L 18 70 L 50 85 L 82 70 L 82 37" />
-                            <path d="M 50 52 L 50 85" />
-
-                            <!-- روبان روی جعبه -->
-                            <path d="M 38 27.5 L 58 37 L 46 42.5 L 26 33 Z" />
-                            <path d="M 46 42.5 L 46 55 L 40 52 L 34 55 L 34 36.8" />
-                        </g>
-
-                        <!-- جرقه‌ها / ستاره‌های درخشان کنار جعبه -->
-                        <g fill="url(#boxGradient)">
-                            <!-- ستاره بزرگ بالا سمت چپ -->
-                            <path
-                                d="M 23 16 C 23 20 23 20 27 20 C 23 20 23 20 23 24 C 23 20 23 20 19 20 C 23 20 23 20 23 16 Z" />
-                            <!-- ستاره کوچک -->
-                            <path
-                                d="M 16 28 C 16 30 16 30 18 30 C 16 30 16 30 16 32 C 16 30 16 30 14 30 C 16 30 16 30 16 28 Z" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="service-text">
-                    <h3>بسته‌بندی ایمن</h3>
-                    <p>بسته‌بندی استاندارد و محافظت شده</p>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon-wrap">
-                    <img src="{% static 'images/service.png' %}" alt="">
-                </div>
-                <div class="service-text">
-                    <h3>ارسال سریع</h3>
-                    <p>ارسال به سراسر کشور در کوتاه‌ترین زمان</p>
-                </div>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-                        <defs>
-                            <!-- گرادینت اصلی برای سپر، تیک نازک و ستاره‌ها -->
-                            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#f8a5c2" />
-                                <stop offset="35%" stop-color="#c7acee" />
-                                <stop offset="70%" stop-color="#85a3f8" />
-                                <stop offset="100%" stop-color="#fbe8a6" />
-                            </linearGradient>
-                        </defs>
-
-                        <!-- ۱. بدنه سپر -->
-                        <path
-                            d="M 50 18 C 65 18 80 23 80 34 C 80 60 50 82 50 82 C 50 82 20 60 20 34 C 20 23 35 18 50 18 Z"
-                            stroke="url(#shieldGrad)" stroke-width="3.5" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round" />
-
-                        <!-- ۲. تیک نازک و ظریف (با stroke-width کمتر) -->
-                        <path d="M 35 46 L 45 56 L 65 34" stroke="url(#shieldGrad)" stroke-width="4.5" fill="none"
-                            stroke-linecap="round" stroke-linejoin="round" />
-
-                        <!-- ۳. ستاره‌های درخشان -->
-                        <g fill="url(#shieldGrad)">
-                            <!-- ستاره سمت چپ -->
-                            <path
-                                d="M 30 30 C 30 33 30 33 33 33 C 30 33 30 33 30 36 C 30 33 30 33 27 33 C 30 33 30 33 30 30 Z" />
-                            <!-- ستاره بالا -->
-                            <path
-                                d="M 38 23 C 38 25 38 25 40 25 C 38 25 38 25 38 27 C 38 25 38 25 36 25 C 38 25 38 25 38 23 Z" />
-                            <!-- ستاره سمت راست -->
-                            <path
-                                d="M 69 47 C 69 49 69 49 71 49 C 69 49 69 49 69 51 C 69 49 69 49 67 49 C 69 49 69 49 69 47 Z" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="service-text">
-                    <h3>ضمانت اصالت کالا</h3>
-                    <p>تضمین اصالت تمامی محصولات</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================================
-       SECTION 2: CATEGORY GRID
-       ============================================================ -->
-<section class="section categories" id="categories" aria-label="دسته بندی محصولات">
-    <div class="container categorityyy">
-        <header class="section-header flex-between">
-            <div>
-                <h2 class="section-title">دسته‌بندی محصولات</h2>
-            </div>
-            <a href="{% url 'shop:show-product-view' %}" class="view-all-link">مشاهده همه ←</a>
-        </header>
-
-        <div class="category-grid" id="category-grid">
-
-            <a href="{% url 'shop:show-product-view' %}?category=یوروپن" class="category-card">
-                <div class="card-icon-wrap">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                        <line x1="9" y1="9" x2="9.01" y2="9" />
-                        <line x1="15" y1="9" x2="15.01" y2="9" />
-                    </svg>
-                </div>
-                <h3 class="card-title">یوروپن</h3>
-                <span class="card-count">(۱۲۲)</span>
-            </a>
-
-            <a href="{% url 'shop:show-product-view' %}?category=رنگ" class="category-card">
-                <div class="card-icon-wrap">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                        <line x1="9" y1="9" x2="9.01" y2="9" />
-                        <line x1="15" y1="9" x2="15.01" y2="9" />
-                    </svg>
-                </div>
-                <h3 class="card-title">رنگ ها</h3>
-                <span class="card-count">(۱۲۲)</span>
-            </a>
-
-            <a href="{% url 'shop:show-product-view' %}?category=ابزار" class="category-card">
-                <div class="card-icon-wrap">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                    </svg>
-                </div>
-                <h3 class="card-title">ابزار نقاشی و طراحی</h3>
-                <span class="card-count">(۱۵۶)</span>
-            </a>
-
-            <a href="{% url 'shop:show-product-view' %}?category=کاغذ" class="category-card">
-                <div class="card-icon-wrap">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <path d="M3 9h18" />
-                        <path d="M9 21V9" />
-                    </svg>
-                </div>
-                <h3 class="card-title">کاغذ و بوم</h3>
-                <span class="card-count">(۶۴)</span>
-            </a>
-
-            <a href="{% url 'shop:show-product-view' %}?category=خطاطی" class="category-card">
-                <div class="card-icon-wrap">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                    </svg>
-                </div>
-                <h3 class="card-title">خطاطی و خوشنویسی</h3>
-                <span class="card-count">(۴۵)</span>
-            </a>
-
-            <a href="{% url 'shop:show-product-view' %}?category=سایر" class="category-card">
-                <div class="card-icon-wrap">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                        <path
-                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                    </svg>
-                </div>
-                <h3 class="card-title">سایر لوازم</h3>
-                <span class="card-count">(۸۵)</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- ============================================================
-       SECTION 3: FEATURED PRODUCTS / SPECIAL OFFERS
-       ============================================================ -->
-<section class="section products" id="products" aria-label="پیشنهادات ویژه">
-    <div class="container productssss">
-        <header class="section-header flex-between">
-            <div>
-                <h2 class="section-title">محصولات اخیر</h2>
-            </div>
-            <a href="{% url 'shop:show-product-view' %}" class="view-all-link">مشاهده همه ←</a>
-        </header>
-
-        <div class="carousel-grid">
-            {% for product in four_product %}
-            <!-- Product 1 -->
-            <article class="product-card reveal" role="listitem">
-                <a href="" class="product-card-overlay-link" aria-label="مشاهده {{ product.title }}"></a>
-                <div class="product-img-wrap">
-                    <img src="{{ product.image.url }}" alt="دفتر آلداین — رنگ توتون" loading="eager"
-                        fetchpriority="high" width="600" height="520" />
-                    <span class="product-badge">جدید</span>
-                    <button class="product-wishlist" aria-label="افزودن به علاقه‌مندی">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <path
-                                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="product-body">
-                    <h3 class="product-name">{{ product.title }}</h3>
-                    <div class="x">
-                        <p class="product-category">
-                            {% for cat in product.category.all %}
-                            {{ cat.title }}{% if not forloop.last %}، {% endif %}
-                            {% endfor %}
-                        </p>
-                        <div class="product-rating">
-                            <span class="count">موجودی : {{ product.stock }}</span>
+                <div class="products-grid scroll-container" id="prodGrid">
+                    <div class="product-card">
+                        <div class="product-card__badge">۱۳٪</div>
+                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                        <div class="product-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">زغال طراحی طبیعی H&B - 12 pcs</h3>
+                            <div class="product-card__price-area"><span class="product-card__price">۱۸۹,۰۰۰
+                                    تومان</span></div>
                         </div>
                     </div>
-                    <div class="product-meta">
-                        <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
-                        <a class="btn-quick-view" href="" aria-label="نمای سریع دفتر آلداین">نمای سریع</a>
+
+                    <div class="product-card">
+                        <div class="product-card__badge">۱۰٪</div>
+                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                        <div class="product-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">ماژیک طراحی مشکی پین‌تیل - ۸ عددی</h3>
+                            <div class="product-card__price-area"><span class="product-card__price">۳۴۰,۰۰۰
+                                    تومان</span></div>
+                        </div>
                     </div>
-                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-to-cart"
-                        aria-label="مشاهده">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" aria-hidden="true">
-                            <circle cx="9" cy="21" r="1" />
-                            <circle cx="20" cy="21" r="1" />
-                            <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-                        </svg>
-                        <span>مشاهده</span>
-                    </a>
+
+                    <div class="product-card">
+                        <div class="product-card__badge">۱۵٪</div>
+                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                        <div class="product-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">قلم مو گرد سر تخت عدد 6 - Roubloff</h3>
+                            <div class="product-card__price-area"><span class="product-card__price">۴۸۰,۰۰۰
+                                    تومان</span></div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-card__badge">۱۰٪</div>
+                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                        <div class="product-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">رنگ آکریلیک وستا ۱۲ رنگ Vesta - 75ml</h3>
+                            <div class="product-card__price-area"><span class="product-card__price">۱,۱۹۰,۰۰۰
+                                    تومان</span></div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-card__badge">۲۰٪</div>
+                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                        <div class="product-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">دفتر طراحی آبرنگ Fabriano - 300g/m²</h3>
+                            <div class="product-card__price-area"><span class="product-card__price">۵۹۰,۰۰۰
+                                    تومان</span></div>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <div class="product-card__badge">۱۵٪</div>
+                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                        <div class="product-card__img-wrap">
+                            <div class="placeholder-img"></div>
+                        </div>
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">ست مداد رنگی فابرکاستل Polychromos 120 مدل پک</h3>
+                            <div class="product-card__price-area"><span class="product-card__price">۴,۲۸۰,۰۰۰
+                                    تومان</span></div>
+                        </div>
+                    </div>
                 </div>
-            </article>
-            {% endfor %}
+
+                <button class="carousel-arrow carousel-arrow--next" id="prodNext" aria-label="Next Product">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ============================================================
-       NEWSLETTER STRIP
-       ============================================================ -->
-<section class="newsletter section" aria-label="عضویت در خبرنامه">
-    <div class="container newsletter-card">
-        <div class="newsletter-content">
-            <h2 class="newsletter-title">از جدیدترین محصولات و تخفیف‌ها باخبر شوید!</h2>
-            <p class="newsletter-sub">با عضویت در خبرنامه، هیچ فرصتی را از دست ندهید.</p>
+    <!-- Trusted Brands Continuous Ticker Section -->
+    <section class="section brands-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-header__title">برندهای معتبر</h2>
+                <a href="#" class="section-header__link">مشاهده همه</a>
+            </div>
+
+            <div class="brands-ticker">
+                <div class="brands-ticker__track">
+                    <!-- Duplicate list for seamless infinite loop -->
+                    <div class="brand-item"><span class="brand-item__text">FABER-CASTELL</span></div>
+                    <div class="brand-item"><span class="brand-item__text">WINSOR & NEWTON</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Canson</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Vesta</span></div>
+                    <div class="brand-item"><span class="brand-item__text">STAEDTLER</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Pentel</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
+
+                    <div class="brand-item"><span class="brand-item__text">FABER-CASTELL</span></div>
+                    <div class="brand-item"><span class="brand-item__text">WINSOR & NEWTON</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Canson</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Vesta</span></div>
+                    <div class="brand-item"><span class="brand-item__text">STAEDTLER</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Pentel</span></div>
+                    <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
+                </div>
+            </div>
         </div>
-        <form class="newsletter-form" method="post" action="{% url 'website:home' %}">
-            {% csrf_token %}
-            <input name="phone_number" type="text" class="newsletter-input" placeholder="شماره تلفن خود را وارد کنید..."
-                required>
-            <button type="submit" class="btn-newsletter">عضویت</button>
-        </form>
-    </div>
-</section>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="section blog-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-header__title">مجله علم و هنر</h2>
+                <a href="#" class="section-header__link">مشاهده همه</a>
+            </div>
+
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-card__img-wrap">
+                        <div class="placeholder-img"></div>
+                        <span class="blog-card__badge">آموزش</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h3 class="blog-card__title">راهنمای انتخاب قلم مو برای نقاشی آبرنگ</h3>
+                        <span class="blog-card__date">۱۴۰۲/۰۳/۱۰</span>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <div class="blog-card__img-wrap">
+                        <div class="placeholder-img"></div>
+                        <span class="blog-card__badge">تکنیک</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h3 class="blog-card__title">۵ تکنیک طراحی که باید امتحان کنید</h3>
+                        <span class="blog-card__date">۱۴۰۲/۰۳/۰۸</span>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <div class="blog-card__img-wrap">
+                        <div class="placeholder-img"></div>
+                        <span class="blog-card__badge">معرفی محصول</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h3 class="blog-card__title">بهترین کاغذ برای رنگ‌های آکریلیک</h3>
+                        <span class="blog-card__date">۱۴۰۲/۰۳/۰۵</span>
+                    </div>
+                </article>
+                <article class="blog-card">
+                    <div class="blog-card__img-wrap">
+                        <div class="placeholder-img"></div>
+                        <span class="blog-card__badge">الهام</span>
+                    </div>
+                    <div class="blog-card__content">
+                        <h3 class="blog-card__title">چگونه با ابزارهای ساده اثری ماندگار بسازیم؟</h3>
+                        <span class="blog-card__date">۱۴۰۲/۰۳/۰۱</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__main">
+                <div class="footer__col footer__col--brand">
+                    <div class="footer__logo">
+                        <span class="footer__logo-symbol">EH</span>
+                        <div class="footer__logo-text">
+                            <span class="footer__logo-title">ElmvHonar</span>
+                            <span class="footer__logo-tagline">علم و هنر در کنار شما</span>
+                        </div>
+                    </div>
+                    <h4 class="footer__title">درباره ما</h4>
+                    <p class="footer__desc">
+                        فروشگاه ElmvHonar مرجع تخصصی لوازم هنر و طراحی با هدف ارائه بهترین محصولات و تجربه خریدی لذت‌بخش
+                        برای هنرمندان و علاقه‌مندان به هنر.
+                    </p>
+                    <a href="#" class="footer__read-more">بیشتر درباره ما...</a>
+                </div>
+
+                <div class="footer__col">
+                    <h4 class="footer__title">دسترسی سریع</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">دسته‌بندی‌ها</a></li>
+                        <li><a href="#">برندها</a></li>
+                        <li><a href="#">جدیدترین‌ها</a></li>
+                        <li><a href="#">پیشنهاد ویژه</a></li>
+                        <li><a href="#">مجله علم و هنر</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__col">
+                    <h4 class="footer__title">خدمات مشتریان</h4>
+                    <ul class="footer__links">
+                        <li><a href="{% url 'website:rule_qu' %}">پرسش‌های متداول</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">رویه‌های ارسال</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">روش‌های پرداخت</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">بازگشت و مرجوعی</a></li>
+                        <li><a href="{% url 'website:rule_qu' %}">تماس با ما</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__col footer__col--newsletter">
+                    <h4 class="footer__title">با ما همراه باشید</h4>
+                    <div class="footer__socials">
+
+                        <a href="https://instagram.com/elmvhonar" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                            </svg>
+                        </a>
+
+                        <a href="https://t.me/elmvhonar" aria-label="Telegram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                        </a>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const slides = document.querySelectorAll('.hero-slider-section .slide');
-        const dots = document.querySelectorAll('#slider-dots .dot');
-        const prevBtn = document.getElementById('slider-prev');
-        const nextBtn = document.getElementById('slider-next');
-        let currentIndex = 0;
-        let timer = null;
+                        <!-- <a href="https://ble.ir/elmvhonar" class="social-icon" aria-label="بله">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 1000 999.72">
+                                <defs>
+                                    <linearGradient id="linear-gradient" x1="800.4" y1="93.39" x2="93.57" y2="800.23"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop offset="0" stop-color="#4cebb4" />
+                                        <stop offset="1" stop-color="#2e2e74" />
+                                    </linearGradient>
+                                </defs>
+                                <g id="File">
+                                    <g>
+                                        <path
+                                            d="M1010.36,547.36c-.73,17.77-2.6,36-6.85,53.41-1.54,16.48-6.36,32.54-10.76,48.52-5.14,19.5-12.48,38.33-19.9,57.17-6.77,15.66-14.35,30.91-22.26,46.08C942.92,766,934.93,779.2,926.29,792q-14.32,21-30.5,40.45c-11.18,13.13-22.68,26.09-35.15,37.92a503.68,503.68,0,0,1-51.3,43.55,453.44,453.44,0,0,1-48.44,31.56C742.06,956.74,722.16,966,702,974.6a548,548,0,0,1-65.89,21.86c-19.49,4.32-39,9.21-58.88,10.76-37,5.71-74.86,5.79-112.13,2.2-33.6-2.61-66.87-9.78-99.25-19.32l-.08-.58C210.19,944.18,82.32,816.07,34.94,661.2c-10.36-33.35-17.62-67.93-20.31-102.83-3.83-33.85-2-68-2.2-102q-.37-40.74-.08-81.64-.26-41.83,0-83.83c-.17-24-.08-47.95-.08-71.93s-.17-48.19.16-72.25c-.33-23.82-.08-47.63-.16-71.44-1.64-17.94,4.24-36.7,17.86-48.85C44.48,13.44,65.68,8.55,84,14.91c11.09,3.75,20.71,10.6,30.58,16.72,36,23.4,70.54,48.85,104.71,74.78a86.74,86.74,0,0,0,10.68-6.77A426.86,426.86,0,0,1,272.58,73.3a483.59,483.59,0,0,1,45.75-22.1c16.39-6.85,33.19-12.8,50.15-18.1,18.1-5,36.29-10.11,55-12.72a392.65,392.65,0,0,1,61.82-7.26,451.46,451.46,0,0,1,76.41,1.71A413.36,413.36,0,0,1,619,24c128.53,27,244.08,108.3,314.46,219a493,493,0,0,1,66.47,159.76c4.73,20.95,8.48,42.32,9.7,63.77A411.89,411.89,0,0,1,1010.36,547.36Z"
+                                            transform="translate(-12 -12.14)" fill="url(#linear-gradient)" />
+                                        <path
+                                            d="M705.69,273.2a107.59,107.59,0,0,1,62.37,1.3c25.62,9.82,46.29,29.94,57.5,54.9,8.34,22.86,9.31,48.42.91,71.44-6.06,16.2-16.76,30.09-29.4,41.74q-16.7,16.49-33.21,33.14c-11.79,11.79-23.64,23.5-35.33,35.35-11.3,11.28-22.62,22.49-33.85,33.81-12.32,12.34-24.68,24.61-36.95,37-14,14-28.06,27.94-42,42-13.24,13.29-26.55,26.49-39.8,39.78s-26.77,26.71-40.1,40.11c-12.27,11.85-23.51,24.94-37.35,35.06a106.69,106.69,0,0,1-57.95,16C417,753.28,393.79,744,376.87,727.33q-78.53-78.44-157-156.94c-12.82-12.66-21.38-29.07-26-46.38-4.75-23.86-1.94-49.51,10.31-70.75,9.37-16.54,23.79-29.65,40.19-39a107.52,107.52,0,0,1,57.86-9.73c21.38,3.21,42,13,56.91,28.76Q401.7,476,444.37,518.5c8.63-8.18,16.9-16.73,25.19-25.27q18-17.31,35.24-35.35c11.36-10.68,22.33-21.82,33.07-33.12,7.74-6.88,14.75-14.51,22.07-21.8,12-11.68,23.75-23.59,35.49-35.51,11.21-10.83,22.11-21.95,33.07-33,11.79-11.5,23.28-23.28,35-34.87a105.75,105.75,0,0,1,42.21-26.37Z"
+                                            transform="translate(-12 -12.14)" fill="#fff" />
+                                    </g>
+                                </g>
+                            </svg>
+                        </a>
 
-        function goToSlide(index) {
-            slides[currentIndex].classList.remove('active');
-            dots[currentIndex].classList.remove('active');
-            currentIndex = (index + slides.length) % slides.length;
-            slides[currentIndex].classList.add('active');
-            dots[currentIndex].classList.add('active');
-        }
+                        <a href="https://eitaa.com/elvmhonar" class="social-icon" aria-label="ایتا">
+                            <svg height="2500" viewBox="5.312 -.192 501.099 512.323" width="2500"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="m127.317 510.763a141.312 141.312 0 0 1 -49.749-17.707c-34.56-19.819-60.352-55.317-68.629-94.421-3.221-15.296-3.627-34.624-3.2-153.749.405-128.193.106-121.579 6.208-142.699 3.029-10.517 11.456-28.587 17.557-37.696 22.507-33.494 55.616-54.998 96.64-62.784 8.192-1.557 20.053-1.707 129.195-1.707 133.355 0 128.96-.192 150.741 6.699a145.216 145.216 0 0 1 92.032 89.259c7.04 19.989 7.381 23.189 7.872 75.84l.427 47.573-8.341 5.717c-11.904 8.128-27.52 22.613-49.408 45.867-25.216 26.795-50.688 51.627-63.616 62.016-27.925 22.421-53.504 35.221-79.488 39.765-13.525 2.347-35.883 1.429-49.109-2.027-11.797-3.072-11.029-3.584-15.488 9.899a135.573 135.573 0 0 0 -6.784 32.981l-.661 8.683-3.115-.64c-25.92-5.141-51.605-27.413-61.525-53.333a76.437 76.437 0 0 1 -5.547-26.005l-.341-7.253-6.592-6.059c-13.739-12.587-22.677-27.989-25.493-43.968-4.523-25.451 7.253-54.229 32.811-80.128 26.965-27.371 66.709-48.853 105.664-57.173 14.037-2.987 38.784-3.776 51.264-1.6 24.277 4.224 44.096 16.491 56.427 34.965 3.883 5.781 4.16 6.613 3.776 11.84a17.323 17.323 0 0 1 -3.904 10.517c-9.92 13.888-39.424 28.757-71.168 35.84-56 12.48-91.605-3.029-86.037-37.525.555-3.477.853-6.485.661-6.677-.683-.683-6.251 2.219-12.267 6.4-10.219 7.125-19.264 20.992-22.4 34.283-.768 3.328-1.067 8.661-.725 13.867.427 7.061 1.131 9.685 4.096 15.701 1.963 3.968 5.867 9.6 8.704 12.565l5.12 5.355-2.048 2.603a103.36 103.36 0 0 0 -14.443 25.963 77.547 77.547 0 0 0 -2.24 38.72c2.197 9.835 8.981 23.36 15.765 31.317 5.163 6.08 17.003 16.299 18.901 16.299.512 0 .939-1.024.939-2.261.021-4.907 3.925-20.757 6.955-28.309 9.024-22.571 28.821-41.813 60.16-58.453 5.227-2.773 20.309-10.027 33.536-16.149 29.013-13.44 44.864-21.653 53.568-27.84 25.088-17.771 40.597-44.053 45.653-77.333 1.835-12.16 1.835-34.859 0-47.083-7.851-52.011-46.827-87.381-102.784-93.227-62.4-6.549-141.824 41.664-190.763 115.776-23.808 36.053-39.893 76.053-46.656 116.117-2.624 15.531-3.605 44.373-1.984 58.667 4.117 36.352 17.536 65.664 40.597 88.661a139.328 139.328 0 0 0 39.893 28.011c50.517 24.107 106.453 24.64 155.627 1.515 21.248-10.005 42.112-25.515 64.491-48 21.76-21.867 36.48-40.107 76.629-95.104 22.187-30.357 39.765-50.517 48.469-55.573l3.2-1.835-.405 65.941c-.384 63.851-.469 66.283-2.624 75.968-12.8 57.131-54.187 98.901-110.827 111.829l-9.984 2.283-123.2.213c-100.992.171-124.8-.043-132.053-1.195z"
+                                    fill="#e37600" />
+                            </svg>
+                        </a> -->
 
-        function startAutoSlide() {
-            stopAutoSlide();
-            timer = setInterval(() => {
-                goToSlide(currentIndex + 1);
-            }, 5000);
-        }
+                    </div>
 
-        function stopAutoSlide() {
-            if (timer) clearInterval(timer);
-        }
+                    <h5 class="footer__subtitle">خبرنامه علم و هنر</h5>
+                    <p class="footer__subtext">جدیدترین‌ها و تخفیف‌ها را دریافت کنید</p>
 
-        if (prevBtn && nextBtn) {
-            prevBtn.addEventListener('click', () => {
-                goToSlide(currentIndex - 1);
-                startAutoSlide();
-            });
+                    <form method="post" action="{% url 'website:home' %}" class="footer__newsletter-form">
+                        {% csrf_token %}
+                        <input type="text" name="phone_number" placeholder="شماره تلفن خود را وارد کنید..." required>
+                        <button type="submit" aria-label="Subscribe">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13" />
+                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
 
-            nextBtn.addEventListener('click', () => {
-                goToSlide(currentIndex + 1);
-                startAutoSlide();
-            });
-        }
+            <div class="footer__trust-bar">
+                <div class="trust-item">
+                    <div class="trust-item__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                        </svg></div>
+                    <div class="trust-item__text"><strong>نماد اعتماد</strong></div>
+                </div>
 
-        dots.forEach((dot, idx) => {
-            dot.addEventListener('click', () => {
-                goToSlide(idx);
-                startAutoSlide();
-            });
-        });
+                <div class="trust-item">
+                    <div class="trust-item__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg></div>
+                    <div class="trust-item__text"><strong>ضمانت اصالت کالا</strong><span>تضمین کیفیت و اورجینال</span>
+                    </div>
+                </div>
 
-        startAutoSlide();
-    });
-</script>
-{% endblock content %}
+                <div class="trust-item">
+                    <div class="trust-item__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8">
+                            <polyline points="23 4 23 10 17 10" />
+                            <polyline points="1 20 1 14 7 14" />
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                        </svg></div>
+                    <div class="trust-item__text"><strong>۷ روز ضمانت بازگشت</strong><span>در صورت عدم رضایت</span>
+                    </div>
+                </div>
+
+                <div class="trust-item">
+                    <div class="trust-item__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg></div>
+                    <div class="trust-item__text">
+                        <strong>026-33218734</strong>
+                        <strong>0919-9949819</strong>
+                    </div>
+                </div>
+
+                <div class="trust-item">
+                    <div class="trust-item__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.8">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg></div>
+                    <div class="trust-item__text"><strong>info@elmvhonar.ir</strong><span>پاسخگویی در سریع‌ترین
+                            زمان</span></div>
+                </div>
+            </div>
+
+            <div class="footer__bottom">
+                <p>تمامی حقوق محفوظ است © 1405 - ElmvHonar</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/home.js' %}"></script>
+    <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
+    <script src="{% static 'vendor/toastify/toastify-es.js' %}"></script>
+
+    {% include 'messages.html' %}
+</body>
+
+</html>

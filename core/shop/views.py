@@ -1,20 +1,27 @@
-import re
-from django.db.models import Q,F, DecimalField, ExpressionWrapper
+from django.db.models import F, DecimalField, ExpressionWrapper, Q
 from django.db.models.functions import Round
-
-from shop.models import ProductModel, ProductStatusType, VarientType
-from shop.colors import VISTA_ACRYLIC_COLORS
 
 from .models import (
     ProductModel, 
     ProductStatusType,
-    ProductCategoryModel
+    ProductCategoryModel,
+    VarientType,
 )
+from .colors import VISTA_ACRYLIC_COLORS
 from django.views.generic import (
     ListView,
     DetailView
 )
 
+
+PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
+ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
+LATIN_DIGITS = "0123456789"
+
+SEARCH_STOPWORDS = {
+    "سایز", "شماره", "نمره", "نمبر", "کد",
+    "رنگ", "اکریلیک", "اکرلیک", "ویستا",
+}
 
 PERSIAN_COLOR_KEYWORDS = {
     "قرمز": ["red", "scarlet", "ruby", "wine"],
@@ -24,7 +31,7 @@ PERSIAN_COLOR_KEYWORDS = {
     "بنفش": ["purple", "violet", "dioxazine"],
     "صورتی": ["pink", "magenta", "rose"],
     "قهوه‌ای": ["brown", "umber", "sienna", "bronze", "copper", "cupreous", "fuscous"],
-    "مشکی": ["black", "silver", "dark"],
+    "مشکی": ["black"],
     "سفید": ["white", "titanium", "iridescent"],
     "نارنجی": ["orange"],
     "نقره‌ای": ["silver"],
@@ -36,21 +43,13 @@ PERSIAN_COLOR_KEYWORDS = {
 }
 
 
-PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
-ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
-LATIN_DIGITS = "0123456789"
-
-SEARCH_STOPWORDS = {
-    "سایز", "شماره", "نمره", "کد",
-    "رنگ", "اکریلیک", "اکرلیک", "ویستا" ,"وستا"
-}
-
 def normalize_digits(text):
     translation_table = str.maketrans(
         PERSIAN_DIGITS + ARABIC_DIGITS,
         LATIN_DIGITS + LATIN_DIGITS
     )
     return text.translate(translation_table)
+
 
 def get_matching_color_codes(word):
     """اگه کلمه فارسی یا انگلیسی مربوط به یه رنگ باشه، کدهای متناظرش رو برمی‌گردونه."""
@@ -64,10 +63,11 @@ def get_matching_color_codes(word):
                 break
     return codes
 
+
 class ShopProductView(ListView):
     template_name = "shop/shop.html"
     context_object_name = "products"
-    paginate_by = 6
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
@@ -78,7 +78,7 @@ class ShopProductView(ListView):
                  output_field=DecimalField()
             ))
         )
-
+        
         if q := self.request.GET.get('q'):
             q_normalized = normalize_digits(q)
             raw_tokens = q_normalized.split()
@@ -149,15 +149,18 @@ class ShopProductView(ListView):
             queryset = queryset.order_by('-created_date')
             
         if category := self.request.GET.get('category'):
-            queryset = queryset.filter(category__title__icontains=category)
+            queryset = queryset.filter(category__id=category)         
+        if brand := self.request.GET.get('brand'):
+            queryset = queryset.filter(brand__id=brand)
+        
         
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_product'] = ProductModel.objects.count()
-        context['categories'] = ProductCategoryModel.objects.all()
-        
+        context['categories'] = ProductCategoryModel.objects.all()[:12]
+        context['avtive_page'] = 'show-product-view'
         context['filter_by'] = self.request.GET.get('filter-by')
 
         return context
