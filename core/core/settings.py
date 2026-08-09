@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     "dashboard",
     'cart',
     'order',
-    'django_ckeditor_5',
 ]
 
 MIDDLEWARE = [
