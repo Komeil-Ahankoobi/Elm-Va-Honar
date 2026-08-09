@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/categories.css'%}">
+<link rel="stylesheet" href="{% static 'css/categories.css' %}">
 {% endblock extra_css %}
 
 
@@ -29,7 +29,9 @@
             <img src="assets/images/cat-paper.png" alt="دفتر و کاغذ">
         </div>
         <span class="category-title">{{ cat.title }}</span>
+        {% if request.user.is_staff %}
         <span class="category-count">{{ cat.product_count }} محصول</span>
+        {% endif %}
     </a>
     {% endfor %}
 </section>

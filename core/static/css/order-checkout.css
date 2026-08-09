@@ -28,133 +28,12 @@ a {
     color: inherit;
 }
 
-/* ================= HEADER ================= */
-header {
-    background-color: var(--bg-dark);
-    color: #ffffff;
-}
-
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 5%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo-box {
-    border: 1.5px solid #d4af37;
-    padding: 2px 8px;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: serif;
-    letter-spacing: 1px;
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-text strong {
-    font-size: 16px;
-    letter-spacing: 0.5px;
-}
-
-.logo-text span {
-    font-size: 11px;
-    color: #aaa;
-}
-
-.search-bar {
-    display: flex;
-    background: #ffffff;
-    border-radius: 20px;
-    overflow: hidden;
-    width: 45%;
-    max-width: 550px;
-}
-
-.search-bar select {
-    border: none;
-    padding: 8px 15px;
-    background: #f0f0f0;
-    font-size: 12px;
-    outline: none;
-    color: #444;
-    border-left: 1px solid #ddd;
-}
-
-.search-bar input {
-    border: none;
-    padding: 8px 15px;
+/* ================= CONTAINER & MAIN ================= */
+.container {
     width: 100%;
-    outline: none;
-    font-size: 12px;
-}
-
-.search-bar button {
-    border: none;
-    background: transparent;
-    padding: 0 15px;
-    cursor: pointer;
-    color: #555;
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    font-size: 13px;
-}
-
-.cart-icon {
-    position: relative;
-    font-size: 18px;
-}
-
-.cart-badge {
-    position: absolute;
-    top: -8px;
-    right: -10px;
-    background: #d97706;
-    color: white;
-    font-size: 10px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
-nav {
-    padding: 12px 5%;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    gap: 30px;
-    font-size: 13px;
-    justify-content: center;
-}
-
-nav ul li a {
-    color: #ccc;
-    transition: 0.2s;
-}
-
-nav ul li a:hover,
-nav ul li a.active {
-    color: #ffffff;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 20px;
 }
 
 .breadcrumbs {
@@ -268,7 +147,7 @@ nav ul li a.active {
     font-size: 12px;
     color: var(--text-muted);
     line-height: 1.8;
-    padding-right: 30px;
+    padding-left: 35px; /* ایجاد فضا برای دکمه رادیویی سمت چپ */
 }
 
 .address-radio {
@@ -284,7 +163,28 @@ nav ul li a.active {
     color: #1a382b;
 }
 
-/* LEFT COLUMN: ORDER SUMMARY */
+.add-address-btn {
+    border: 1.5px dashed #2b2b2b;
+    background: #ffffff;
+    width: fit-content;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.add-address-btn:hover {
+    background: #fafafa;
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+/* LEFT COLUMN: ORDER SUMMARY & SIDEBAR */
 .summary-sidebar {
     display: flex;
     flex-direction: column;
@@ -369,26 +269,57 @@ nav ul li a.active {
     flex: 1;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    padding: 8px 12px;
+    padding: 9px 12px;
     font-size: 11px;
     outline: none;
     background: #fafafa;
+    min-width: 0;
 }
 
 .coupon-form button {
     background-color: var(--accent-green);
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: 9px 14px;
     border-radius: 6px;
     font-size: 11px;
     font-weight: bold;
     cursor: pointer;
+    white-space: nowrap;
     transition: 0.2s;
 }
 
 .coupon-form button:hover {
     background-color: var(--accent-green-hover);
+}
+
+/* Refund Notice */
+.refund-notice {
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.refund-notice-icon {
+    color: #d97706;
+    font-size: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.refund-notice-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.refund-notice-text {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
 }
 
 /* Security Box */
@@ -399,12 +330,12 @@ nav ul li a.active {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 15px;
 }
 
 .security-box i {
     font-size: 22px;
     color: #1a382b;
+    flex-shrink: 0;
 }
 
 .security-text h5 {
@@ -436,7 +367,6 @@ nav ul li a.active {
     justify-content: center;
     gap: 8px;
     transition: 0.2s;
-    margin-bottom: 10px;
 }
 
 .btn-pay:hover {
@@ -456,149 +386,156 @@ nav ul li a.active {
     text-decoration: underline;
 }
 
-/* ================= FOOTER ================= */
-footer {
-    background-color: var(--bg-dark);
-    color: #a0a0a0;
-    padding-top: 40px;
-    margin-top: 60px;
-    font-size: 12px;
+/* ================= MEDIA QUERIES (RESPONSIVE) ================= */
+
+/* Tablet & Medium Screens (<= 992px) */
+@media (max-width: 992px) {
+    .checkout-grid {
+        grid-template-columns: 1fr; /* ستون‌ها روی هم قرار می‌گیرند */
+        gap: 20px;
+    }
+
+    .addresses-section {
+        order: 1; /* ابتدا لیست آدرس‌ها */
+    }
+
+    .summary-sidebar {
+        order: 2; /* خلاصه سفارش در ادامه */
+    }
 }
 
-.footer-top {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px 40px 20px;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
-    gap: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+/* Mobile Screens (<= 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 15px;
+    }
+
+    .page-title {
+        margin-bottom: 20px;
+    }
+
+    .page-title h1 {
+        font-size: 19px;
+    }
+
+    .section-heading {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .address-card {
+        padding: 15px;
+    }
+
+    .address-radio {
+        left: 15px;
+    }
+
+    .address-details {
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .summary-box {
+        padding: 18px;
+    }
+
+    .add-address-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
-.footer-col h4 {
-    color: #ffffff;
-    font-size: 13px;
-    margin-bottom: 15px;
-}
+/* Extra Small Mobile Screens (<= 360px) */
+@media (max-width: 360px) {
+    .container {
+        padding: 10px 10px;
+    }
 
-.footer-col p {
-    line-height: 1.8;
-    font-size: 11px;
-    margin-bottom: 15px;
-}
+    .page-title h1 {
+        font-size: 17px;
+    }
 
-.footer-links {
-    list-style: none;
-}
+    .page-title p {
+        font-size: 11px;
+    }
 
-.footer-links li {
-    margin-bottom: 8px;
-}
+    .address-card,
+    .summary-box,
+    .refund-notice,
+    .security-box {
+        padding: 12px;
+    }
 
-.footer-links a:hover {
-    color: #ffffff;
-}
+    .address-title {
+        font-size: 13px;
+    }
 
-.social-icons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+    .address-details {
+        font-size: 10.5px;
+        padding-left: 25px;
+    }
 
-.social-icons a {
-    color: white;
-    font-size: 13px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .address-radio {
+        left: 10px;
+        font-size: 14px;
+    }
 
-.newsletter-form {
-    display: flex;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-    overflow: hidden;
-}
+    .summary-title {
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
 
-.newsletter-form input {
-    border: none;
-    background: transparent;
-    padding: 8px 10px;
-    width: 100%;
-    font-size: 11px;
-    color: white;
-    outline: none;
-}
+    .summary-row,
+    .summary-total {
+        font-size: 11px;
+    }
 
-.newsletter-form button {
-    background: #ffffff;
-    border: none;
-    padding: 0 12px;
-    cursor: pointer;
-    color: #333;
-}
+    .summary-total .total-price {
+        font-size: 13px;
+    }
 
-.footer-features {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
+    /* فرم کد تخفیف در سایز ۳۶۰ پیکسل */
+    .coupon-form {
+        flex-direction: column;
+        gap: 6px;
+    }
 
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+    .coupon-form button {
+        width: 100%;
+        padding: 8px;
+    }
 
-.feature-item i {
-    font-size: 22px;
-    color: #ffffff;
-}
+    .btn-pay {
+        padding: 10px;
+        font-size: 12px;
+    }
 
-.feature-text div:first-child {
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 11px;
-}
+    .refund-notice {
+        gap: 8px;
+    }
 
-.feature-text div:last-child {
-    font-size: 10px;
-    color: #777;
-}
+    .refund-notice-icon {
+        font-size: 15px;
+    }
 
-.footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 10px;
-    color: #666;
-}
+    .refund-notice-title {
+        font-size: 11px;
+    }
 
-.btn-more-about {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #ffffff;
-    font-size: 11px;
-    margin-top: 5px;
-}
+    .refund-notice-text {
+        font-size: 10px;
+    }
 
-.add-address-btn {
-    border: 1.5px dashed #2b2b2b;
-    background: #ffffff;
-    width: fit-content;
-    border-radius: 10px;
-    padding: 15px;
-    font-size: 0.8rem;
+    .security-box i {
+        font-size: 18px;
+    }
+
+    .security-text h5 {
+        font-size: 10px;
+    }
+
+    .security-text p {
+        font-size: 9.5px;
+    }
 }
