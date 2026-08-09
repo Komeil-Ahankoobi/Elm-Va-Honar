@@ -116,7 +116,19 @@
                         {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
                     </div>
                     <div class="product-title">{{ product.title }}</div>
-                    <div class="product-price">{{ product.get_price|intcomma }} تومان</div>
+                    {% if product.has_variants %}
+                    {% with price_range=product.get_price_range %}
+                    <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
+                    {% endwith %}
+                    {% else %}
+                    <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
+                    {% endif %}
+
+                    {% if product.has_variants %}
+                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
+                        <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
+                    </a>
+                    {% else %}
                     <button
                         type="button"
                         class="btn-add-cart"
@@ -126,6 +138,7 @@
                         data-stock="{{ product.stock }}">
                         <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
                     </button>
+                    {% endif %}
                 </div>
                 {% empty %}
                 <p>محصولی یافت نشد.</p>

@@ -157,6 +157,32 @@ nav ul li a.active {
     color: #ffffff;
 }
 
+.cart-row-variant {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+    width: fit-content;
+}
+
+.variant-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+    flex-shrink: 0;
+}
+
+.variant-name {
+    font-size: 12px;
+    color: var(--text-muted, #6b6b7d);
+    line-height: 14px;
+}
+
 /* ================= CONTAINER ================= */
 
 .breadcrumbs {
@@ -621,4 +647,71 @@ footer {
     align-items: center;
     font-size: 10px;
     color: #666;
+}
+
+/* ================= CART EMPTY STATE ================= */
+.cart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.cart-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.cart-empty-icon i {
+    font-size: 34px;
+}
+
+.cart-empty-icon svg {
+    stroke: currentColor;
+}
+
+.cart-empty-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+.cart-empty-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 320px;
+    line-height: 1.8;
+    margin-bottom: 22px;
+}
+
+.cart-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--accent-green);
+    color: #ffffff;
+    padding: 11px 24px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.cart-empty-btn i {
+    font-size: 11px;
+}
+
+.cart-empty-btn:hover {
+    background-color: var(--accent-green-hover);
 }

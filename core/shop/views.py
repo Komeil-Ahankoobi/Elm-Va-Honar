@@ -1,15 +1,68 @@
-from django.db.models import F, DecimalField, ExpressionWrapper
+from django.db.models import F, DecimalField, ExpressionWrapper, Q
 from django.db.models.functions import Round
 
 from .models import (
     ProductModel, 
     ProductStatusType,
-    ProductCategoryModel
+    ProductCategoryModel,
+    VarientType,
 )
+from .colors import VISTA_ACRYLIC_COLORS
 from django.views.generic import (
     ListView,
     DetailView
 )
+
+
+PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
+ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
+LATIN_DIGITS = "0123456789"
+
+SEARCH_STOPWORDS = {
+    "سایز", "شماره", "نمره", "نمبر", "کد",
+    "رنگ", "اکریلیک", "اکرلیک", "ویستا",
+}
+
+PERSIAN_COLOR_KEYWORDS = {
+    "قرمز": ["red", "scarlet", "ruby", "wine"],
+    "آبی": ["blue", "cerulean", "cobalt", "turquoise", "ultramarine", "prussian", "phthalo"],
+    "زرد": ["yellow", "lemon", "ochre", "naples"],
+    "سبز": ["green", "viridian"],
+    "بنفش": ["purple", "violet", "dioxazine"],
+    "صورتی": ["pink", "magenta", "rose"],
+    "قهوه‌ای": ["brown", "umber", "sienna", "bronze", "copper", "cupreous", "fuscous"],
+    "مشکی": ["black"],
+    "سفید": ["white", "titanium", "iridescent"],
+    "نارنجی": ["orange"],
+    "نقره‌ای": ["silver"],
+    "طلایی": ["gold"],
+    "فسفری": ["fluorescent"],
+    "فلورسنت": ["fluorescent"],
+    "نئون": ["fluorescent"],
+    "خاکستری": ["silver"],
+}
+
+
+def normalize_digits(text):
+    translation_table = str.maketrans(
+        PERSIAN_DIGITS + ARABIC_DIGITS,
+        LATIN_DIGITS + LATIN_DIGITS
+    )
+    return text.translate(translation_table)
+
+
+def get_matching_color_codes(word):
+    """اگه کلمه فارسی یا انگلیسی مربوط به یه رنگ باشه، کدهای متناظرش رو برمی‌گردونه."""
+    keywords = PERSIAN_COLOR_KEYWORDS.get(word, [word.lower()])
+    codes = set()
+    for code, (name, hex_code) in VISTA_ACRYLIC_COLORS.items():
+        name_lower = name.lower()
+        for kw in keywords:
+            if kw.lower() in name_lower:
+                codes.add(code)
+                break
+    return codes
+
 
 class ShopProductView(ListView):
     template_name = "shop/shop.html"
@@ -27,7 +80,52 @@ class ShopProductView(ListView):
         )
         
         if q := self.request.GET.get('q'):
-            queryset = queryset.filter(title__icontains=q)        
+            q_normalized = normalize_digits(q)
+            raw_tokens = q_normalized.split()
+
+            numeric_tokens = [t for t in raw_tokens if t.isdigit()]
+            remaining_tokens = [
+                t for t in raw_tokens
+                if not t.isdigit() and t not in SEARCH_STOPWORDS
+            ]
+
+            color_codes = set()
+            title_tokens = []
+            for token in remaining_tokens:
+                matched_codes = get_matching_color_codes(token)
+                if matched_codes:
+                    color_codes |= matched_codes
+                else:
+                    title_tokens.append(token)
+
+            search_filter = Q(title__icontains=q)
+
+            variant_conditions = []
+            if numeric_tokens:
+                variant_conditions.append(
+                    Q(varients__variant_type=VarientType.number, varients__number_code__in=numeric_tokens)
+                )
+                variant_conditions.append(
+                    Q(varients__variant_type=VarientType.color, varients__color_code__in=numeric_tokens)
+                )
+            if color_codes:
+                variant_conditions.append(
+                    Q(varients__variant_type=VarientType.color, varients__color_code__in=color_codes)
+                )
+
+            if variant_conditions:
+                variant_match = variant_conditions[0]
+                for cond in variant_conditions[1:]:
+                    variant_match |= cond
+
+                title_match = Q()
+                for word in title_tokens:
+                    title_match &= Q(title__icontains=word)
+
+                search_filter |= (title_match & variant_match)
+
+            queryset = queryset.filter(search_filter).distinct()
+
         try:
             if min_price := self.request.GET.get('min_price'):
                 min_price = int(min_price)

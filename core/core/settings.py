@@ -136,6 +136,8 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = config("TIME_ZONE", default='UTC')
 
+SITE_ID = config("SITE_ID", cast=int, default=1)
+
 USE_I18N = True
 
 USE_TZ = True

@@ -22,7 +22,7 @@
             <div class="price-category-row">
                 <div class="price-box">
                     <div class="price-value">قیمت</div>
-                    <div class="price-note">{{ object.get_price|intcomma }} تومان</div>
+                    <div class="price-note" id="pd-price">{{ object.get_price|intcomma }} تومان</div>
                 </div>
 
                 {% if object.category.all %}
@@ -64,6 +64,7 @@
                         data-variant-id="{{ variant.id }}"
                         data-color-code="{{ variant.get_hex_color }}"
                         data-color-name="{{ variant.get_color_display_name }}"
+                        data-price="{{ variant.get_price }}"
                         aria-label="انتخاب رنگ {{ variant.get_color_display_name }}"></button>
                     {% endfor %}
                 </div>
@@ -71,14 +72,25 @@
             </div>
             {% endif %}
 
-            <div class="quantity-control">
-                <span style="font-size: 12px; font-weight: bold">تعداد :</span>
-                <div class="qty-picker">
-                    <button type="button" class="qty-decrease">-</button>
-                    <input type="text" class="qty-value" value="۱" />
-                    <button type="button" class="qty-increase">+</button>
+            {% if object.has_number_variants %}
+            <div class="color-selector">
+                <label>انتخاب سایز: <span id="pd-size-selected-name">—</span></label>
+                <div class="color-dots" id="pd-size-palette">
+                    {% for variant in object.get_number_variants %}
+                    <button
+                        type="button"
+                        class="dot size-dot"
+                        data-variant-id="{{ variant.id }}"
+                        data-size-code="{{ variant.number_code }}"
+                        data-price="{{ variant.get_price }}"
+                        aria-label="انتخاب سایز {{ variant.number_code }}">{{ variant.number_code }}</button>
+                    {% endfor %}
                 </div>
+                {% if not object.has_color_variants %}
+                <input type="hidden" id="selected-variant-id" value="" />
+                {% endif %}
             </div>
+            {% endif %}
 
             <button
                 type="button"
@@ -211,49 +223,47 @@
 
     <!-- TABS SECTION -->
     <div class="tabs-container">
-        <div class="tabs-header">
-            <div class="tab-btn active">توضیحات محصول</div>
-            <div class="tab-btn">مشخصات فنی</div>
+    <div class="tabs-header">
+        <div class="tab-btn active" data-tab="desc">توضیحات محصول</div>
+        <div class="tab-btn" data-tab="specs">مشخصات محصول</div>
+    </div>
+
+    <div class="tabs-content">
+        <!-- Description Text (داده واقعی محصول) -->
+        <div class="tab-pane tab-desc active" data-tab-content="desc">
+            {{ object.description|linebreaks }}
         </div>
 
-        <div class="tabs-content">
-            <!-- Description Text (داده واقعی محصول) -->
-            <div class="tab-desc">
-                <p>{{ object.description }}</p>
-            </div>
+        <!-- Specs Table -->
+        <table class="tab-pane specs-table" data-tab-content="specs">
+        <tr>
+            <td>نام محصول</td>
+            <td>{{ object.title }}</td>
+        </tr>
+        <tr>
+            <td>برند</td>
+            <td><strong>{{ object.brand }}</strong></td>
+        </tr>
+        {% if object.has_number_variants %}
+        <tr>
+            <td>سایز انتخابی</td>
+            <td id="spec-size-value">—</td>
+        </tr>
+        {% endif %}
+        {% if object.has_color_variants %}
+        <tr>
+            <td>رنگ انتخابی</td>
+            <td id="spec-color-value">—</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>قیمت</td>
+            <td id="spec-price-value">{{ object.get_price|intcomma }} تومان</td>
+        </tr>
+      
+    </table>
 
-            <!-- Specs Table -->
-            <table class="specs-table">
-                <tr>
-                    <td>برند</td>
-                    <td><strong>Mont Marte</strong></td>
-                </tr>
-                <tr>
-                    <td>تعداد رنگ</td>
-                    <td>۲۴</td>
-                </tr>
-                <tr>
-                    <td>نوع رنگ</td>
-                    <td>اکریلیک</td>
-                </tr>
-                <tr>
-                    <td>حجم هر تیوب</td>
-                    <td>12ml</td>
-                </tr>
-                <tr>
-                    <td>کشور سازنده</td>
-                    <td>چین</td>
-                </tr>
-                <tr>
-                    <td>وزن محصول</td>
-                    <td>۵۴۰ گرم</td>
-                </tr>
-                <tr>
-                    <td>ابعاد بسته‌بندی</td>
-                    <td>۳۴.۵ × ۱۲ × ۴.۵ سانتی‌متر</td>
-                </tr>
-            </table>
-        </div>
+    </div>
     </div>
 
     <!-- RELATED PRODUCTS -->

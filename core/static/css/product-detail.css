@@ -326,6 +326,30 @@ nav ul li a.active {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.dot.active {
+    outline: 2px solid #333;
+    outline-offset: 2px;
+}
+
+.size-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-main, #17171f);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.size-dot.active {
+    outline: 2px solid #333;
+    outline-offset: 2px;
+}
+
 .color-text {
     font-size: 11px;
     color: var(--text-muted);
@@ -565,9 +589,21 @@ nav ul li a.active {
 }
 
 .tabs-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    display: block;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .tab-desc p {
@@ -575,6 +611,20 @@ nav ul li a.active {
     line-height: 1.8;
     color: #444;
     margin-bottom: 15px;
+}
+
+.tab-desc {
+    font-size: 13px;
+    line-height: 2;
+    color: #444;
+}
+
+.tab-desc p {
+    margin-bottom: 16px;
+}
+
+.tab-desc p:last-child {
+    margin-bottom: 0;
 }
 
 .tab-desc ul {
