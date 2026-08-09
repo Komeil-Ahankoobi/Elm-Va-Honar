@@ -2,103 +2,57 @@
 {% load static %}
 {% load humanize %}
 {% load jalali_tags %}
+
+{% block title %}جزئیات سفارش #{{ order.id }} | ElmVHonar{% endblock %}
+
 {% block content %}
-
-
 <div class="breadcrumb">
     <a href="{% url 'dashboard:customer:order' %}">سفارش‌های من</a>
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="15 18 9 12 15 6" />
+        <polyline points="9 18 15 12 9 6" />
     </svg>
-    <span class="current">جزئیات سفارش</span>
+    <span class="current">جزئیات سفارش #{{ order.id }}</span>
 </div>
 
 <div class="page-header-row">
     <div class="page-title-row">
-        <h2 class="page-title">جزئیات سفارش</h2>
-        <div class="page-title-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 8l-9-5-9 5 9 5 9-5z" />
-                <path d="M3 8v8l9 5 9-5V8" />
-                <path d="M12 13v8" />
-            </svg>
-        </div>
+        <h2 class="page-title">جزئیات سفارش #{{ order.id }}</h2>
     </div>
     <a href="{% url 'dashboard:customer:order' %}" class="btn-back">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
         </svg>
         بازگشت
     </a>
 </div>
 
-<!-- order summary bar -->
-<section class="card order-summary-bar">
+<!-- Summary Bar -->
+<div class="card order-summary-bar">
     <div class="summary-col">
-        <span class="col-label">شماره سفارش</span>
-        <span class="col-value">
-            #{{ order.id }}
-            <button type="button" class="copy-btn" data-copy="{{ order.id }}" aria-label="کپی شماره سفارش">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                </svg>
-            </button>
-        </span>
-    </div>
-    <div class="summary-col">
-        <span class="col-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            تاریخ ثبت
-        </span>
-        <span class="col-value">{{ order.created_date|jalali_time }} - {{ order.created_date|jalali_date }}  </span>
+        <span class="col-label">تاریخ ثبت سفارش</span>
+        <span class="col-value">{{ order.created_date|jalali_date }}</span>
     </div>
     <div class="summary-col">
         <span class="col-label">وضعیت سفارش</span>
         <span class="status-pill status-{{ order.status }}">
-            
-            {{ order.get_status_display }}
+            <span class="dot"></span>
+            {{ order.get_status.label }}
         </span>
-    </div>
-    <div class="summary-col">
-        <span class="col-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2" />
-                <line x1="2" y1="10" x2="22" y2="10" />
-            </svg>
-            روش پرداخت
-        </span>
-        <span class="col-value">زرین پال</span>
     </div>
     <div class="summary-col total-col">
-        <span class="col-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
-                <path d="M19 13h2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-2a2 2 0 0 0 0 4Z" />
-            </svg>
-            مبلغ کل سفارش
-        </span>
-        <span class="col-value">{{ order.total_price|intcomma }} <span class="currency">تومان</span></span>
+        <span class="col-label">مبلغ کل سفارش</span>
+        <span class="col-value">{{ order.get_total_price|intcomma }} تومان</span>
     </div>
-</section>
+</div>
 
-<!-- order detail: main column (products + payment) + side column (shipping + summary) -->
 <div class="order-detail-grid">
 
+    <!-- Main Content: Products List -->
     <div class="order-main-col">
-
-        <section class="card products-card">
+        <section class="card">
             <div class="card-title-row">
-                <h3 class="card-title">محصولات سفارش</h3>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2l1.5 5h9L18 2" />
-                    <path d="M3.5 7h17l-1.6 12.1a2 2 0 0 1-2 1.9H7.1a2 2 0 0 1-2-1.9L3.5 7z" />
-                </svg>
+                <h3 class="card-title">اقلام سفارش</h3>
             </div>
 
             <div class="products-table">
@@ -106,112 +60,68 @@
                     <span class="col-product">محصول</span>
                     <span class="col-unit-price">قیمت واحد</span>
                     <span class="col-qty">تعداد</span>
-                    <span class="col-total">جمع</span>
+                    <span class="col-total">مبلغ کل</span>
                 </div>
 
-                {% for item in order.items.all %}
+                {% for item in order.order_items.all %}
                 <div class="product-row">
                     <div class="col-product">
+                        {% if item.product.image %}
                         <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="product-thumb">
+                        {% else %}
+                        <div class="product-thumb-placeholder"></div>
+                        {% endif %}
                         <div class="product-meta">
                             <span class="product-name">{{ item.product.title }}</span>
-                            {% if item.variant %}
-                            <span class="product-variant">
-                                {% if item.variant.variant_type == "color" %}
-                                <span class="variant-swatch" style="background-color: #{{ item.variant.get_hex_color }};"></span>
-                                <span class="variant-name">{{ item.variant.get_color_display_name }}</span>
-                                {% else %}
-                                <span class="variant-name">شماره {{ item.variant.number_code }}</span>
-                                {% endif %}
-                            </span>
-                            {% endif %}
-                            <span class="product-code">کد محصول: {{ item.product.id }}</span>
                         </div>
                     </div>
-                    <span class="col-unit-price">{{ item.unit_price|intcomma }} <span class="currency">تومان</span></span>
-                    <span class="col-qty">{{ item.quantity }}</span>
-                    <span class="col-total">{{ item.total_price|intcomma }} <span class="currency">تومان</span></span>
+                    <div class="col-unit-price" data-label="قیمت واحد:">
+                        {{ item.price|intcomma }} تومان
+                    </div>
+                    <div class="col-qty" data-label="تعداد:">
+                        {{ item.quantity }} عدد
+                    </div>
+                    <div class="col-total" data-label="جمع:">
+                        {{ item.get_total_price|intcomma }} تومان
+                    </div>
                 </div>
                 {% endfor %}
             </div>
         </section>
-
-        <section class="card payment-info-card">
-            <div class="card-title-row">
-                <h3 class="card-title">اطلاعات پرداخت</h3>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="5" width="20" height="14" rx="2" />
-                    <line x1="2" y1="10" x2="22" y2="10" />
-                </svg>
-            </div>
-
-            <div class="payment-row">
-                <span class="payment-label">روش پرداخت:</span>
-                <span class="payment-value">{{ order.payment.method_display }}</span>
-            </div>
-            <div class="payment-row">
-                <span class="payment-label">شماره تراکنش:</span>
-                <span class="payment-value" dir="ltr">{{ order.payment.transaction_id }}</span>
-            </div>
-            <div class="payment-row">
-                <span class="payment-label">تاریخ پرداخت:</span>
-                <span class="payment-value" dir="ltr">{{ order.payment.paid_at|date:"Y/m/d - H:i" }}</span>
-            </div>
-        </section>
-
     </div>
 
+    <!-- Side Content: Shipping & Payment Info -->
     <div class="order-side-col">
-
-        <section class="card shipping-info-card">
-            <div class="card-title-row">
-                <h3 class="card-title">اطلاعات ارسال</h3>
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z" />
-                    <circle cx="12" cy="10" r="2.5" />
-                </svg>
-            </div>
-
+        <!-- Shipping Address Card -->
+        <section class="card">
+            <h3 class="card-title">اطلاعات تحویل</h3>
             <div class="info-block">
-                <span class="info-label">نام گیرنده:</span>
-                <span class="info-value">{{ order.user.first_name }} {{order.user.last_name}}</span>
+                <span class="info-label">گیرنده:</span>
+                <span class="info-value">{{ order.user.user_profile.first_name }} {{ order.user.user_profile.last_name }}</span>
             </div>
             <div class="info-block">
-                <span class="info-label">شماره تماس:</span>
-                <span class="info-value" dir="ltr">{{ order.user.user_profile.phone_number }}</span>
-            </div>
-            <div class="info-block">
-                <span class="info-label">آدرس:</span>
-                <span class="info-value">{{ order.address}}</span>
+                <span class="info-label">نشانی ارسال:</span>
+                <span class="info-value">{{ order.address }}</span>
             </div>
             <div class="info-block">
                 <span class="info-label">کد پستی:</span>
-                <span class="info-value" dir="ltr">{{ order.zip_code }}</span>
+                <span class="info-value">{{ order.zip_code }}</span>
             </div>
         </section>
 
-        <section class="card price-summary-card">
+        <!-- Payment Breakdown Card -->
+        <section class="card">
+            <h3 class="card-title">خلاصه پرداخت</h3>
             <div class="price-row">
-                <span class="price-label">جمع قیمت محصولات</span>
-                <span class="price-value">{{ order.total_price|intcomma }} <span class="currency">تومان</span></span>
+                <span class="price-label">مبلغ کل کالاها:</span>
+                <span class="price-value">{{ order.get_total_price|intcomma }} تومان</span>
             </div>
-            <div class="price-row">
-                <span class="price-label">هزینه ارسال</span>
-                <span class="price-value">{{ total_tax|intcomma }} <span class="currency">تومان</span></span>
-            </div>
-            {% if order.discount_amount %}
-            <div class="price-row">
-                <span class="price-label">کد تخفیف ({{ order.discount_code }})</span>
-                <span class="price-value discount">-{{ order.discount_amount }} <span class="currency">تومان</span></span>
-            </div>
-            {% endif %}
             <div class="price-divider"></div>
             <div class="price-row total">
-                <span class="price-label">مبلغ کل</span>
-                <span class="price-value">{{ total_basket_price|intcomma }} <span class="currency">تومان</span></span>
+                <span class="price-label">مبلغ پرداختی:</span>
+                <span class="price-value">{{ order.get_total_price|intcomma }} تومان</span>
             </div>
         </section>
-
     </div>
 
 </div>

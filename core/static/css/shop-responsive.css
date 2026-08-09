@@ -1,0 +1,230 @@
+/* ==========================================================================
+   Shop Page Responsive Styles
+   File: static/css/shop-responsive.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Extra Large & Large Desktops (Max-width: 1400px & 1200px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1400px) {
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 16px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .layout {
+        grid-template-columns: 230px 1fr !important;
+        gap: 20px !important;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   2. Medium Screens & Laptops / Large Tablets (Max-width: 992px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+    .layout {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .sidebar {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15px !important;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   3. Tablets (Max-width: 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .sidebar {
+        grid-template-columns: 1fr !important;
+    }
+
+    .products-header {
+        padding: 12px !important;
+    }
+
+    .sort-search {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    .inline-search input {
+        width: 100% !important;
+    }
+
+    .sort-dropdown {
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
+    .sort-dropdown select {
+        flex: 1 !important;
+        max-width: 200px !important;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+
+    .product-card {
+        padding: 12px !important;
+        min-width: 0 !important; /* جلوگیری از بیرون زدگی محتوا */
+    }
+
+    .product-img {
+        height: 150px !important;
+    }
+
+    .product-title {
+        font-size: 11px !important;
+    }
+
+    .product-price {
+        font-size: 11px !important;
+    }
+
+    .pagination {
+        gap: 4px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .page-item {
+        min-width: 30px !important;
+        height: 30px !important;
+        font-size: 11px !important;
+        padding: 0 6px !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   4. Mobile Devices (Max-width: 480px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 18px !important;
+    }
+
+    .page-subtitle {
+        font-size: 11px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .product-card {
+        padding: 10px 8px !important;
+        min-width: 0 !important;
+    }
+
+    .product-img {
+        height: 130px !important;
+    }
+
+    .btn-add-cart {
+        font-size: 10px !important;
+        padding: 6px 4px !important;
+        min-height: 32px !important;
+    }
+
+    .page-item-label {
+        display: none !important;
+    }
+
+    .page-item-nav {
+        padding: 0 8px !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   5. Extra Small Mobile Devices (Below 400px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 400px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+    }
+
+    .product-card {
+        padding: 8px 6px !important;
+        min-width: 0 !important; /* حل مشکل قفل شدن عرض گرید */
+        overflow: hidden !important;
+    }
+
+    .wishlist-btn {
+        top: 6px !important;
+        right: 6px !important;
+        font-size: 12px !important;
+    }
+
+    .product-img {
+        height: 110px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .product-category {
+        font-size: 9px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .product-title {
+        font-size: 10px !important;
+        line-height: 1.3 !important;
+        height: 2.6em !important;
+        overflow: hidden !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+    }
+
+    .product-price {
+        font-size: 10px !important;
+        margin-bottom: 6px !important;
+    }
+
+    /* تنظیم دکمه جهت جلوگیری از شکستگی کادر در موبایل‌های کوچک */
+    .btn-add-cart {
+        font-size: 9px !important;
+        padding: 4px 2px !important;
+        gap: 2px !important;
+        min-height: 28px !important;
+        white-space: nowrap !important;
+        letter-spacing: -0.2px !important;
+    }
+
+    .btn-add-cart i {
+        font-size: 9px !important;
+    }
+
+    /* پجینیشن */
+    .pagination {
+        gap: 2px !important;
+    }
+
+    .page-item {
+        min-width: 24px !important;
+        height: 26px !important;
+        font-size: 10px !important;
+        padding: 0 3px !important;
+    }
+}
