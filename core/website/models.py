@@ -93,7 +93,6 @@ class BlogModel(models.Model):
         default=BlogStatusType.draft
     )
 
-    views = models.PositiveIntegerField(default=0)
 
     meta_title = models.CharField(max_length=70, blank=True)
     meta_description = models.CharField(max_length=160, blank=True)
@@ -106,3 +105,36 @@ class BlogModel(models.Model):
 
     def __str__(self):
         return self.title
+
+class BlogKeyPointModel(models.Model):
+    blog = models.ForeignKey(
+        BlogModel,
+        on_delete=models.CASCADE,
+        related_name="key_points"
+    )
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return self.title
+
+
+class BlogFAQModel(models.Model):
+    blog = models.ForeignKey(
+        BlogModel,
+        on_delete=models.CASCADE,
+        related_name="faqs"
+    )
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return self.question

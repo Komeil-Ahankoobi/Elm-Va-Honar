@@ -12,8 +12,9 @@ from shop.models import (
     ProductModel,
     ProductCategoryModel,
     ProductBrandModel,
+    
 )
-from .models import BlogModel
+from .models import BlogModel, BlogCategoryModel
 
 
 class HomeView(TemplateView):
@@ -108,13 +109,16 @@ class BlogPostView(ListView):
 
 class BlogPostDetailView(DetailView):
     template_name = 'website/blog-post-detail.html'
-    queryset = BlogModel.objects.all()
+    queryset = BlogModel.objects.select_related('category').prefetch_related('key_points', 'faqs', 'related_products')
+    context_object_name = "blog"
 
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['avtive_page'] = 'blog-post-detail'
+        context['sidebar_categories'] = BlogCategoryModel.objects.all()
+        context['related_posts'] = BlogModel.objects.filter(category=self.object.category).exclude(pk=self.object.pk)[:4]
         return context
 
     
