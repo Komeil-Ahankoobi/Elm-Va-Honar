@@ -28,20 +28,12 @@
                     </div>
                     <div class="price-input-group">
                         <label>کمترین قیمت</label>
-                        <input
-                            type="number"
-                            name="min_price"
-                            placeholder="تومان"
-                            min="0"
+                        <input type="number" name="min_price" placeholder="تومان" min="0"
                             value="{{ request.GET.min_price }}" />
                     </div>
                     <div class="price-input-group">
                         <label>بیشترین قیمت</label>
-                        <input
-                            type="number"
-                            name="max_price"
-                            placeholder="تومان"
-                            min="0"
+                        <input type="number" name="max_price" placeholder="تومان" min="0"
                             value="{{ request.GET.max_price }}" />
                     </div>
                     <button type="submit" class="btn-filter">اعمال فیلتر</button>
@@ -56,12 +48,12 @@
                 </div>
                 <ul class="category-list">
                     {% for category in categories %}
-                    <li>
-                        <a href="?category={{ category.id }}">
+                    <a href="?category={{ category.id }}">
+                        <li>
                             <span>{{ category.title }}</span>
-                        </a>
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </li>
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </li>
+                    </a>
                     {% endfor %}
                 </ul>
             </div>
@@ -73,10 +65,7 @@
             <div class="products-header">
                 <div class="sort-search">
                     <form method="get" class="inline-search">
-                        <input
-                            type="text"
-                            name="q"
-                            placeholder="جستجوی محصول مورد نظر..."
+                        <input type="text" name="q" placeholder="جستجوی محصول مورد نظر..."
                             value="{{ request.GET.q }}" />
                         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
@@ -99,17 +88,13 @@
             <!-- Products Grid -->
             <div class="products-grid" id="product-grid">
                 {% for product in products %}
-                <div
-                    class="product-card reveal"
-                    style="cursor: pointer"
+                <div class="product-card reveal" style="cursor: pointer"
                     data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
                     <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
                         <i class="fa-regular fa-heart"></i>
                     </button>
                     <div class="product-img">
-                        <img
-                            src="https://picsum.photos/seed/{{ product.slug }}/300/300"
-                            alt="{{ product.title }}"
+                        <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
                             loading="lazy" />
                     </div>
                     <div class="product-category">
@@ -129,12 +114,8 @@
                         <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
                     </a>
                     {% else %}
-                    <button
-                        type="button"
-                        class="btn-add-cart"
-                        aria-label="افزودن {{ product.title }} به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}"
-                        data-product-id="{{ product.id }}"
+                    <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
+                        data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
                         data-stock="{{ product.stock }}">
                         <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
                     </button>
@@ -149,25 +130,25 @@
             {% if page_obj.has_other_pages %}
             <div class="pagination" aria-label="صفحه‌بندی محصولات">
                 {% if page_obj.has_previous %}
-                <a class="page-item" href="?page=1" aria-label="صفحه اول" >&laquo;</a>
-                <a
-                    class="page-item page-item-nav"
-                    href="?page={{ page_obj.previous_page_number }}"
+                <a class="page-item" href="?page=1" aria-label="صفحه اول">&laquo;</a>
+                <a class="page-item page-item-nav" href="?page={{ page_obj.previous_page_number }}"
                     aria-label="صفحه قبل">
                     <span class="page-item-arrow">&lt;</span>
                     <span class="page-item-label">قبلی</span>
                 </a>
                 {% endif %} {% for i in page_obj.paginator.page_range %} {% if page_obj.number == i %}
                 <div class="page-item active">{{ i }}</div>
-                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
-                <a class="page-item" href="?page={{ i }}">{{ i }}</a>
-                {% endif %} {% endfor %} {% if page_obj.has_next %}
-                <a class="page-item page-item-nav" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد">
-                    <span class="page-item-label">بعدی</span>
-                    <span class="page-item-arrow">&gt;</span>
-                </a>
-                <a class="page-item" href="?page={{ page_obj.paginator.num_pages }}" aria-label="صفحه آخر">&raquo;</a>
-                {% endif %}
+                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-item"
+                    href="?page={{ i }}">{{ i }}</a>
+                    {% endif %} {% endfor %} {% if page_obj.has_next %}
+                    <a class="page-item page-item-nav" href="?page={{ page_obj.next_page_number }}"
+                        aria-label="صفحه بعد">
+                        <span class="page-item-label">بعدی</span>
+                        <span class="page-item-arrow">&gt;</span>
+                    </a>
+                    <a class="page-item" href="?page={{ page_obj.paginator.num_pages }}"
+                        aria-label="صفحه آخر">&raquo;</a>
+                    {% endif %}
             </div>
             {% endif %}
         </main>

@@ -37,7 +37,7 @@ class HomeView(TemplateView):
                 "image": 'images/slider-10.png',
                 "title1": "هر ایده",
                 "title2": "ابزاری مخصوص خود دارد",
-                "subtitle": "با بهترین لوازم هنری...",
+                "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
                 "primary_url": "{% url 'shop:show-product-view' %}", 
                 "primary_text": "مشاهده محصولات",
                 "secondary_url": "{% url 'website:categories' %}", 

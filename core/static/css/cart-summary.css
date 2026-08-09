@@ -135,28 +135,6 @@ header {
     font-weight: bold;
 }
 
-nav {
-    padding: 12px 5%;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    gap: 30px;
-    font-size: 13px;
-    justify-content: center;
-}
-
-nav ul li a {
-    color: #ccc;
-    transition: 0.2s;
-}
-
-nav ul li a:hover,
-nav ul li a.active {
-    color: #ffffff;
-}
-
 .cart-row-variant {
     display: flex !important;
     flex-direction: row !important;

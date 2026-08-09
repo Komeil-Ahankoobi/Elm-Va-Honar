@@ -11,4 +11,4 @@ urlpatterns = [
     path("brands/", views.BrandsView.as_view(), name="brands"),
     path("blog-post/", views.BlogPostView.as_view(), name="blog-post"),
     path("blog-post/<int:pk>/detail", views.BlogPostDetailView.as_view(), name="blog-post-detail"),
-]
+] 
