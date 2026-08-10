@@ -1794,3 +1794,94 @@ button.edit-address-btn:hover {
         gap: 12px;
     }
 }
+
+/* ==========================================================================
+   Password Action Box Styles
+   ========================================================================== */
+.password-field {
+    margin-bottom: 22px;
+}
+
+.password-action-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 8px 14px;
+    transition: border-color var(--transition-fast);
+}
+
+.password-action-card:focus-within,
+.password-action-card:hover {
+    border-color: var(--color-primary);
+}
+
+.pw-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pw-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.dots {
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--color-text-muted);
+    user-select: none;
+}
+
+.btn-change-password {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.btn-change-password:hover {
+    background-color: var(--color-primary-dark);
+    color: #ffffff;
+}
+
+.btn-change-password svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+/* Password Box Responsive Rules */
+@media (max-width: 480px) {
+    .password-action-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .pw-info {
+        justify-content: center;
+    }
+
+    .btn-change-password {
+        width: 100%;
+        justify-content: center;
+    }
+}
