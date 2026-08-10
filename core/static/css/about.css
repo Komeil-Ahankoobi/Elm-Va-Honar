@@ -2,6 +2,34 @@
    About Us Page Styles
    ========================================================================== */
 
+/* ==================== BREADCRUMB ==================== */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 2rem auto;
+    max-width: var(--container-width);
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+    color: var(--text-main);
+}
+
+@media (max-width: 480px) {
+    .breadcrumb {
+        font-size: 12px;
+        margin: 16px;
+    }
+}
+
 section {
     max-width: 1240px;
     margin: 2rem auto;
@@ -27,17 +55,227 @@ section {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
+/* ==================== Hero Decorative Animation — Design Compass ==================== */
+/* پس‌زمینه‌ی کانتینر: به‌جای گرادیان فیروزه‌ای/نارنجی اشباع، از رنگ‌های خودِ برند استفاده شد */
 .about-hero__image {
+    position: relative;
     width: 100%;
     height: 380px;
+    min-height: 380px;
     border-radius: 16px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(47, 93, 80, 0.06) 0%,
+        var(--color-bg) 55%,
+        rgba(200, 120, 63, 0.08) 100%
+    );
 }
 
-.about-hero__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+/* هسته‌ی نورانی: سبز اصلی به نارنجی اصلی */
+.about-hero__center-blob {
+    position: absolute;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    filter: blur(2px);
+    animation: aboutBlobPulse 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes aboutBlobPulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.18);
+        opacity: 1;
+    }
+}
+
+/* حلقه: سبز اصلی سایت */
+.about-hero__ring {
+    position: absolute;
+    z-index: 1;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    border: 2px solid rgba(47, 93, 80, 0.35);
+    animation: aboutRingSpin 30s linear infinite;
+}
+
+@keyframes aboutRingSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* مدارِ چرخش ابزارهای هنری */
+.about-hero__orbit {
+    position: absolute;
+    z-index: 2;
+    width: 230px;
+    height: 230px;
+    animation: aboutOrbitSpin 22s linear infinite;
+    will-change: transform;
+}
+
+@keyframes aboutOrbitSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.about-hero__orbit-pos {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+}
+
+.about-hero__orbit-pos--1 {
+    transform: rotate(45deg) translate(115px) rotate(-45deg);
+}
+.about-hero__orbit-pos--2 {
+    transform: rotate(135deg) translate(115px) rotate(-135deg);
+}
+.about-hero__orbit-pos--3 {
+    transform: rotate(225deg) translate(115px) rotate(-225deg);
+}
+.about-hero__orbit-pos--4 {
+    transform: rotate(315deg) translate(115px) rotate(-315deg);
+}
+
+/* آیکون‌ها با چرخش معکوس همیشه صاف می‌مونن (نه وارونه) */
+.about-hero__orbit-icon {
+    position: absolute;
+    top: -26px;
+    left: -26px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: aboutOrbitCounterSpin 22s linear infinite;
+    will-change: transform;
+}
+
+.about-hero__orbit-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* آیکون‌های مداری: فقط بین دو رنگ اصلی برند (سبز و نارنجی) تناوب دارن */
+.about-hero__orbit-pos--1 .about-hero__orbit-icon {
+    color: var(--color-primary);
+}
+.about-hero__orbit-pos--2 .about-hero__orbit-icon {
+    color: var(--color-accent);
+}
+.about-hero__orbit-pos--3 .about-hero__orbit-icon {
+    color: var(--color-primary-dark);
+}
+.about-hero__orbit-pos--4 .about-hero__orbit-icon {
+    color: var(--color-accent);
+}
+
+@keyframes aboutOrbitCounterSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@media (max-width: 992px) {
+    .about-hero__image {
+        height: 260px;
+        min-height: 260px;
+    }
+    .about-hero__ring,
+    .about-hero__orbit {
+        width: 170px;
+        height: 170px;
+    }
+    .about-hero__orbit-pos--1 {
+        transform: rotate(45deg) translate(78px) rotate(-45deg);
+    }
+    .about-hero__orbit-pos--2 {
+        transform: rotate(135deg) translate(78px) rotate(-135deg);
+    }
+    .about-hero__orbit-pos--3 {
+        transform: rotate(225deg) translate(78px) rotate(-225deg);
+    }
+    .about-hero__orbit-pos--4 {
+        transform: rotate(315deg) translate(78px) rotate(-315deg);
+    }
+    .about-hero__orbit-icon {
+        width: 42px;
+        height: 42px;
+        top: -21px;
+        left: -21px;
+    }
+    .about-hero__orbit-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .about-hero__center-blob {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+/* برچسب وسط */
+.about-hero__center-label {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(47, 93, 80, 0.12);
+    text-align: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--color-primary-dark);
+    line-height: 1.5;
+    padding: 8px;
+}
+
+@media (max-width: 992px) {
+    .about-hero__center-label {
+        width: 82px;
+        height: 82px;
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-hero__center-blob,
+    .about-hero__ring,
+    .about-hero__orbit,
+    .about-hero__orbit-icon {
+        animation: none;
+    }
 }
 
 .about-hero__content {

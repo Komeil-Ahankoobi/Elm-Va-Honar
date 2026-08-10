@@ -12,8 +12,9 @@ from shop.models import (
     ProductModel,
     ProductCategoryModel,
     ProductBrandModel,
+    
 )
-from .models import BlogModel
+from .models import BlogModel, BlogCategoryModel
 
 
 class HomeView(TemplateView):
@@ -37,7 +38,7 @@ class HomeView(TemplateView):
                 "image": 'images/slider-10.png',
                 "title1": "هر ایده",
                 "title2": "ابزاری مخصوص خود دارد",
-                "subtitle": "با بهترین لوازم هنری...",
+                "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
                 "primary_url": "{% url 'shop:show-product-view' %}", 
                 "primary_text": "مشاهده محصولات",
                 "secondary_url": "{% url 'website:categories' %}", 
@@ -97,7 +98,14 @@ class BrandsView(ListView):
 class BlogPostView(ListView):
     template_name = 'website/blog-post.html'
     paginate_by = 4
-    queryset = BlogModel.objects.all()
+
+    def get_queryset(self):
+        queryset = BlogModel.objects.all()
+
+        if q:= self.request.GET.get("q"):
+            queryset = BlogModel.objects.filter(title__contains=q)
+
+        return queryset
 
 
     def get_context_data(self, **kwargs):
@@ -108,13 +116,16 @@ class BlogPostView(ListView):
 
 class BlogPostDetailView(DetailView):
     template_name = 'website/blog-post-detail.html'
-    queryset = BlogModel.objects.all()
+    queryset = BlogModel.objects.select_related('category').prefetch_related('key_points', 'faqs', 'related_products')
+    context_object_name = "blog"
 
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['avtive_page'] = 'blog-post-detail'
+        context['sidebar_categories'] = BlogCategoryModel.objects.all()
+        context['related_posts'] = BlogModel.objects.filter(category=self.object.category).exclude(pk=self.object.pk)[:4]
         return context
 
     

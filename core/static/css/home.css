@@ -1,72 +1,11 @@
 /* ==========================================================================
-   Variables & General Reset
+   NOTE: این فایل به base.css وابسته است (متغیرهای :root از اونجا میان).
+   حتما base.css رو قبل از این فایل توی <head> لینک کن.
    ========================================================================== */
-:root {
-    --color-primary: #2f5d50;
-    --color-primary-dark: #23473d;
-    --color-accent: #c8783f;
-    --color-bg: #f4f3ef;
-    --color-surface: #ffffff;
-    --color-dark-bg: #1a1c1e;
-    --color-dark-surface: #26292c;
-    --color-text-dark: #222222;
-    --color-text-muted: #666666;
-    --color-border: #e8e5e1;
-    --color-border-light: #f0ede8;
 
-    --font-fa: "Vazirmatn", sans-serif;
-    --font-en: "Inter", sans-serif;
-
-    --container-width: 1240px;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-full: 9999px;
-
-    --transition-fast: 0.2s ease;
-    --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04);
-    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.08);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: var(--font-fa);
-    background-color: var(--color-bg);
-    color: var(--color-text-dark);
-    direction: rtl;
-    text-align: right;
-    line-height: 1.6;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-ul {
-    list-style: none;
-}
-
-button {
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-family: inherit;
-}
-
-.container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
+/* ==========================================================================
+   Home-page shared visuals
+   ========================================================================== */
 .placeholder-img {
     width: 100%;
     height: 100%;
@@ -79,62 +18,37 @@ button {
 }
 
 /* ==========================================================================
-   Section Card Box Layout Update
+   Section Card Box Layout
    ========================================================================== */
-
-/* 1. ایجاد فاصله عمودی بین سکشن‌ها */
 .section {
     padding: 20px 0;
-}
-
-/* ==================== BREADCRUMB ==================== */
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-}
-
-.breadcrumb a {
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.breadcrumb a:hover {
-    color: var(--text-main);
 }
 
 .features {
     padding: 20px 0;
 }
 
-/* 2. تبدیل container داخل هر سکشن به یک باکس/کارت با پس‌زمینه متفاوت */
 .section > .container,
 .hero > .container,
 .features > .container {
-    background-color: var(--color-surface); /* پس‌زمینه سفید */
-    border: 1px solid var(--color-border); /* خط دور بسیار ملایم */
-    border-radius: var(--radius-lg); /* انحنای گوشه‌ها (16px) */
-    padding: 28px 24px; /* فاصله محتوا از دیواره‌های کارت */
-    box-shadow: var(--shadow-soft); /* سایه نرم و شیک */
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-soft);
 }
 
-/* 3. استایل‌های تکمیلی برای برخی بخش‌های خاص */
 .hero > .container {
-    padding: 12px; /* هیرو اسلایدر نیازی به پدینگ زیاد ندارد */
+    padding: 12px;
 }
 
 .features > .container {
-    background-color: transparent; /* اگر می‌خواهید فیچرها کارت جداگانه باقی بمانند */
+    background-color: transparent;
     border: none;
     box-shadow: none;
     padding: 0;
 }
 
-/* کارت‌های درون بخش ویژگی‌ها */
 .feature-card {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -147,7 +61,8 @@ button {
    Combined Dark Hero Card (Header + Hero + Features)
    ========================================================================== */
 .hero-wrapper-card {
-    background-color: #1a1c1e; /* رنگ تیره زمینه مطابق عکس */
+    width: 100%;
+    background-color: #1a1c1e;
     border-radius: 20px;
     padding: 16px 24px 24px;
     margin-top: 16px;
@@ -156,7 +71,6 @@ button {
     margin-bottom: 1rem;
 }
 
-/* اصلاح هدر درون کارت تیره */
 .header--dark {
     background: transparent !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -198,12 +112,10 @@ button {
     background-color: var(--color-accent);
 }
 
-/* اصلاح اسلایدر داخل کارت تیره */
 .hero {
     padding: 16px 0 !important;
 }
 
-/* اصلاح ویژگی‌ها (Features) درون کارت تیره */
 .features {
     padding: 16px 0 0 !important;
 }
@@ -237,308 +149,6 @@ button {
 .hero-wrapper-card .feature-card__desc {
     color: rgba(255, 255, 255, 0.5);
     font-size: 11px;
-}
-
-/* ==========================================================================
-   Header & Nav
-   ========================================================================== */
-
-.header {
-    background-color: var(--color-dark-bg);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.header__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    gap: 24px;
-}
-
-.header__logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.header__logo-symbol {
-    font-family: var(--font-en);
-    font-weight: 700;
-    font-size: 24px;
-    color: #ffffff;
-}
-
-.header__logo-title {
-    display: block;
-    font-family: var(--font-en);
-    font-weight: 700;
-    font-size: 18px;
-    color: #ffffff;
-    line-height: 1.1;
-}
-
-.header__logo-tagline {
-    display: block;
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.header__top form {
-    flex: 1;
-    max-width: 520px;
-    display: flex;
-}
-
-.header__search {
-    flex: 1;
-    max-width: 520px;
-    display: flex;
-    align-items: center;
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
-    padding: 4px 6px 4px 16px;
-}
-
-.header__search-select {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-left: 1px solid var(--color-border);
-    font-size: 13px;
-    color: var(--color-text-muted);
-}
-
-.header__search-input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 8px 14px;
-    font-family: inherit;
-    font-size: 13px;
-    outline: none;
-}
-
-.header__search-btn {
-    display: flex;
-    color: var(--color-text-muted);
-}
-
-.header__user-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.header__action-btn {
-    font-size: 13px;
-    font-weight: 500;
-    color: #ffffff;
-}
-
-.header__icon-btn {
-    display: flex;
-    position: relative;
-    padding: 4px;
-    color: #ffffff;
-}
-
-.header__cart-badge {
-    position: absolute;
-    top: -2px;
-    left: -4px;
-    background-color: var(--color-accent);
-    color: var(--color-surface);
-    font-size: 10px;
-    font-weight: 700;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-en);
-}
-
-.nav {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.nav__list {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 32px;
-    padding: 12px 0;
-}
-
-.nav__link {
-    font-size: 14px;
-    font-weight: 500;
-    position: relative;
-    padding-bottom: 4px;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.nav__link--active,
-.nav__link:hover {
-    color: var(--color-accent);
-}
-
-.nav__link--active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--color-accent);
-    border-radius: var(--radius-full);
-}
-
-/* ==========================================================================
-   Hamburger Button & Off-canvas Mobile Navigation
-   ========================================================================== */
-.header__hamburger {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    border-radius: var(--radius-sm);
-    transition: background-color var(--transition-fast);
-}
-
-.header__hamburger:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-}
-
-.header__hamburger-line {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background-color: #ffffff;
-    border-radius: var(--radius-full);
-    transition:
-        transform var(--transition-fast),
-        opacity var(--transition-fast);
-}
-
-.header__hamburger--active .header__hamburger-line:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-
-.header__hamburger--active .header__hamburger-line:nth-child(2) {
-    opacity: 0;
-}
-
-.header__hamburger--active .header__hamburger-line:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
-
-.nav__drawer-header {
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--color-border-light);
-}
-
-.nav__drawer-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav__drawer-logo .header__logo-title {
-    font-size: 15px;
-}
-
-.nav__close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    color: var(--color-text-muted);
-    transition: all var(--transition-fast);
-}
-
-.nav__close:hover {
-    background-color: var(--color-bg);
-    color: var(--color-text-dark);
-}
-
-.nav__overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    z-index: 999;
-    transition:
-        opacity var(--transition-fast),
-        visibility var(--transition-fast);
-}
-
-.nav__overlay--active {
-    opacity: 1;
-    visibility: visible;
-}
-
-body.no-scroll {
-    overflow: hidden;
-}
-
-/* ==========================================================================
-   Buttons
-   ========================================================================== */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 24px;
-    border-radius: var(--radius-full);
-    font-size: 14px;
-    font-weight: 500;
-    transition: all var(--transition-normal);
-}
-
-.btn--primary {
-    background-color: var(--color-primary);
-    color: var(--color-surface);
-}
-
-.btn--primary:hover {
-    background-color: var(--color-primary-dark);
-}
-
-.btn--outline-light {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: var(--color-surface);
-}
-
-.btn--outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-.btn--sm {
-    padding: 6px 16px;
-    font-size: 12px;
-}
-
-.btn--light {
-    background-color: var(--color-surface);
-    color: var(--color-text-dark);
 }
 
 /* ==========================================================================
@@ -589,36 +199,6 @@ body.no-scroll {
     display: block;
 }
 
-/* Dark gradient overlay so the title/subtitle stay readable over any photo */
-.hero__slide::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: linear-gradient(to left, rgba(10, 12, 10, 0.15) 0%, rgba(10, 12, 10, 0.75) 65%);
-}
-
-.hero__content {
-    position: relative;
-    z-index: 2;
-    padding: 0 60px;
-    max-width: 550px;
-    color: var(--color-surface);
-}
-
-.hero__title {
-    font-size: 34px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 12px;
-}
-
-.hero__title span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .hero__subtitle {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.8);
@@ -627,6 +207,7 @@ body.no-scroll {
 
 .hero__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     justify-content: center;
 }
@@ -654,6 +235,7 @@ body.no-scroll {
 .hero__arrow--prev {
     right: 16px;
 }
+
 .hero__arrow--next {
     left: 16px;
 }
@@ -724,7 +306,6 @@ body.no-scroll {
 /* ==========================================================================
    Sections Layout & Horizontal Smooth Scroll Sliders
    ========================================================================== */
-
 .section-header {
     display: flex;
     align-items: center;
@@ -746,6 +327,21 @@ body.no-scroll {
 .section-header__link {
     font-size: 13px;
     color: var(--color-text-muted);
+}
+.brand-item__logo {
+    max-height: 90px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    border: none;
+    outline: none;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.brand-item__logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
 }
 
 .carousel-arrow {
@@ -769,7 +365,6 @@ body.no-scroll {
     color: var(--color-primary);
 }
 
-/* Scroll Container Utility for Sliders */
 .scroll-container {
     display: flex;
     gap: 16px;
@@ -778,6 +373,8 @@ body.no-scroll {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE/Edge */
     padding: 4px 0;
+    flex: 1 1 auto;
+    min-width: 0; /* allow shrinking inside flex parent so it scrolls instead of overflowing the page */
 }
 
 .scroll-container::-webkit-scrollbar {
@@ -805,7 +402,7 @@ body.no-scroll {
 .category-circle-card__img-wrap {
     width: 100px;
     height: 100px;
-    border-radius: 12px;
+    border-radius: 50%;     
     overflow: hidden;
     margin-bottom: 8px;
     border: 1px solid var(--color-border);
@@ -988,14 +585,11 @@ body.no-scroll {
 
 .brand-item {
     background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
     height: 60px;
     width: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-soft);
     flex-shrink: 0;
 }
 
@@ -1058,414 +652,41 @@ body.no-scroll {
 }
 
 /* ==========================================================================
-   Footer
+   Hero Content (text block over the slide image)
    ========================================================================== */
-.footer {
-    background-color: var(--color-dark-bg);
+.hero__content {
+    position: relative;
+    z-index: 2;
+    padding: 0 60px;
+    max-width: 550px;
     color: var(--color-surface);
-    padding-top: 48px;
-    margin-top: 40px;
 }
 
-.footer__main {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    gap: 32px;
-    padding-bottom: 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer__logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
-.footer__logo-symbol {
-    font-family: var(--font-en);
+.hero__title {
+    font-size: 34px;
     font-weight: 700;
-    font-size: 24px;
-}
-
-.footer__logo-title {
-    display: block;
-    font-family: var(--font-en);
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.footer__logo-tagline {
-    display: block;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.footer__title {
-    font-size: 14px;
-    font-weight: 700;
+    line-height: 1.3;
     margin-bottom: 12px;
-}
-
-.footer__desc {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 8px;
-}
-
-.footer__read-more {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.footer__links li {
-    margin-bottom: 8px;
-}
-
-.footer__links a {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer__socials {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.footer__socials a {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer__subtitle {
-    font-size: 12px;
-    margin-bottom: 2px;
-}
-
-.footer__subtext {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 10px;
-}
-
-.footer__newsletter-form {
-    display: flex;
-    background-color: var(--color-dark-surface);
-    border-radius: var(--radius-full);
-    padding: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer__newsletter-form input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 6px 12px;
-    font-family: inherit;
-    font-size: 12px;
-    color: var(--color-surface);
-    outline: none;
-}
-
-.footer__newsletter-form button {
-    width: 32px;
-    height: 32px;
-    background-color: var(--color-surface);
-    color: var(--color-dark-bg);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.footer__trust-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.trust-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.trust-item__icon {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.trust-item__text {
     display: flex;
     flex-direction: column;
-}
-
-.trust-item__text strong {
-    font-size: 12px;
-}
-
-.trust-item__text span {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.footer__bottom {
-    padding: 16px 0;
-    text-align: center;
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.logout-btn {
-    color: white;
-}
-
-@media (max-width: 1200px) {
-    .blog-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .footer__main {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 992px) {
-    .features__container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .promo-grid {
-        grid-template-columns: 1fr;
-    }
-    .footer__trust-bar {
-        flex-wrap: wrap;
-        gap: 16px;
-    }
-}
-
-@media (max-width: 768px) {
-    .header__top {
-        flex-wrap: wrap;
-    }
-    .header__search {
-        order: 3;
-        max-width: 100%;
-        width: 100%;
-    }
-
-    /* Hamburger trigger */
-    .header__hamburger {
-        display: flex;
-    }
-
-    /* Off-canvas nav drawer */
-    .nav {
-        position: fixed;
-        top: 0;
-        right: -300px;
-        width: 280px;
-        max-width: 82%;
-        height: 100vh;
-        background-color: var(--color-surface);
-        border-top: none;
-        box-shadow: -6px 0 30px rgba(0, 0, 0, 0.15);
-        z-index: 1000;
-        overflow-y: auto;
-        transition: right var(--transition-normal);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .nav--open {
-        right: 0;
-    }
-
-    .nav__drawer-header {
-        display: flex;
-    }
-
-    .nav__container {
-        flex: 1;
-    }
-
-    .nav__list {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: flex-start;
-        gap: 0;
-        padding: 8px 0;
-        overflow-x: visible;
-        white-space: normal;
-    }
-
-    .nav__item {
-        border-bottom: 1px solid var(--color-border-light);
-    }
-
-    .nav__item:last-child {
-        border-bottom: none;
-    }
-
-    .nav__link {
-        display: block;
-        padding: 14px 20px;
-        font-size: 14px;
-        color: var(--color-text-dark);
-    }
-
-    .nav__drawer-logo .header__logo-title,
-    .nav__drawer-logo .header__logo-symbol {
-        color: var(--color-primary);
-    }
-
-    .nav__link--active::after {
-        content: none;
-    }
-
-    .nav__link--active {
-        color: var(--color-primary);
-        font-weight: 700;
-        background-color: var(--color-bg);
-    }
-
-    .hero__slider {
-        height: 280px;
-    }
-    .hero__title {
-        font-size: 22px;
-    }
-    .hero__content {
-        padding: 0 24px;
-    }
-    .blog-grid {
-        grid-template-columns: 1fr;
-    }
-    .footer__main {
-        grid-template-columns: 1fr;
-    }
-    .carousel-arrow {
-        display: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .header__logo-tagline {
-        display: none;
-    }
-    .header__top {
-        padding: 12px 16px;
-        gap: 12px;
-    }
-    .header__action-btn span {
-        font-size: 12px;
-    }
-    .features__container {
-        grid-template-columns: 1fr;
-    }
-    .promo-grid {
-        grid-template-columns: 1fr;
-    }
-    .hero__title {
-        font-size: 19px;
-    }
-    .hero__content {
-        padding: 0 18px;
-    }
-    .hero__subtitle {
-        font-size: 12px;
-        margin-bottom: 16px;
-    }
-    .footer__trust-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-    }
-    .nav {
-        width: 260px;
-    }
-}
-
-/* ============================================================
-   Refund / Cancellation Notice
-   انتهای فایل static/css/order-checkout.css اضافه شود
-   ============================================================ */
-
-.refund-notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin: 16px 0;
-    padding: 16px 18px;
-    background: #fffbeb;
-    border: 1px solid #fcd34d;
-    border-right: 4px solid #f59e0b;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.12);
-}
-
-.refund-notice-icon {
-    flex-shrink: 0;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #fef3c7;
-    color: #b45309;
-    font-size: 15px;
-    display: flex;
     align-items: center;
+}
+
+.hero__title span {
+    display: inline-block;
     justify-content: center;
+    align-items: center;
 }
 
-.refund-notice-body {
-    flex: 1;
-    min-width: 0;
-}
-
-.refund-notice-title {
-    margin: 0 0 6px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #92400e;
-}
-
-.refund-notice-text {
-    margin: 0;
-    font-size: 12px;
-    line-height: 2;
-    color: #78350f;
-    text-align: justify;
-}
-
-.refund-notice-text strong {
-    font-weight: 700;
-    color: #92400e;
-}
-
-/* جلب توجه اولیه: یک پالس کوتاه هنگام باز شدن صفحه */
-@media (prefers-reduced-motion: no-preference) {
-    .refund-notice {
-        animation: refund-notice-pulse 1.6s ease-out 0.4s 2;
-    }
-}
-
-@keyframes refund-notice-pulse {
-    0%,
-    100% {
-        box-shadow: 0 1px 3px rgba(245, 158, 11, 0.12);
-    }
-    50% {
-        box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.18);
-    }
-}
-
-@media (max-width: 720px) {
-    .refund-notice {
-        padding: 14px;
-        gap: 10px;
-    }
-
-    .refund-notice-text {
-        font-size: 11.5px;
-    }
+.hero__slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        to left,
+        rgba(10, 12, 10, 0.1) 0%,
+        rgba(10, 12, 10, 0.7) 60%,
+        rgba(10, 12, 10, 0.85) 100%
+    );
 }

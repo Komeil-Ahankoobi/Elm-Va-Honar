@@ -161,7 +161,7 @@ class ShopProductView(ListView):
         context['total_product'] = ProductModel.objects.count()
         context['categories'] = ProductCategoryModel.objects.all()[:12]
         context['avtive_page'] = 'show-product-view'
-        context['filter_by'] = self.request.GET.get('filter-by')
+        context['filter_by'] = self.request.GET.get('filter-by'),
 
         return context
     

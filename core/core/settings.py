@@ -219,7 +219,10 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
+
+KAVENEGAR_API_KEY = config("KAVENEGAR_API_KEY")
+
 AUTHENTICATION_BACKENDS = [
-    'accounts.backends.UsernameOrPhoneBackend',
-    'django.contrib.auth.backends.ModelBackend', 
+    'accounts.backends.PhoneOTPBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]

@@ -22,7 +22,13 @@
             <div class="price-category-row">
                 <div class="price-box">
                     <div class="price-value">قیمت</div>
-                    <div class="price-note" id="pd-price">{{ object.get_price|intcomma }} تومان</div>
+                    {% if object.has_variants %}
+                    {% with price_range=object.get_price_range %}
+                    <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
+                    {% endwith %}
+                    {% else %}
+                    <span class="product-price">{{ object.get_price|intcomma }} تومان</span>
+                    {% endif %}
                 </div>
 
                 {% if object.category.all %}

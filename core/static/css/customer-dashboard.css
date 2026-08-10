@@ -2,9 +2,7 @@
    Variables (matching site theme)
    ========================================================================== */
 
-
-
-   /* main css */
+/* main css */
 
 :root {
     --color-primary: #2f5d50;
@@ -19,7 +17,7 @@
     --color-border: #e8e5e1;
     --color-border-light: #f0ede8;
 
-    --font-fa: "Vazirmatn", sans-serif;
+    --font-fa: "ray", sans-serif;
 
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -154,6 +152,9 @@ input {
     position: relative;
     padding: 24px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .sidebar .brand h1 {
@@ -170,20 +171,21 @@ input {
 
 .sidebar-close-btn {
     display: none;
-    position: absolute;
-    top: 20px;
-    left: 16px;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     color: rgba(255, 255, 255, 0.7);
-    transition: background-color var(--transition-fast);
+    background-color: rgba(255, 255, 255, 0.05);
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
 }
 
 .sidebar-close-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
 }
 
 .sidebar-close-btn svg {
@@ -506,7 +508,7 @@ input {
     .sidebar {
         position: fixed;
         top: 0;
-        right: -300px;
+        right: -300px; /* مخفی در بیرون از کادر سمت راست */
         width: 280px;
         max-width: 82%;
         height: 100vh;
@@ -516,10 +518,12 @@ input {
         box-shadow: -6px 0 30px rgba(0, 0, 0, 0.25);
     }
 
-    .sidebar.active {
+    /* کلاس open متناسب با فایل JS */
+    .sidebar.open {
         right: 0;
     }
 
+    /* نمایش دکمه بستن (ضربدر) در حالت کشویی */
     .sidebar-close-btn {
         display: flex;
     }
@@ -541,10 +545,10 @@ input {
     }
 }
 
- /* end main css */
+/* end main css */
 
- /* setting css */
- 
+/* setting css */
+
 .page-title-row {
     display: flex;
     align-items: center;
@@ -775,9 +779,9 @@ input {
         align-items: flex-start;
     }
 }
- /* end setting css */
+/* end setting css */
 
- /* ==========================================================================
+/* ==========================================================================
    Order List Page
    ========================================================================== */
 .order-list {
@@ -1006,7 +1010,6 @@ input {
 /* ==========================================================================
    end Order List Page
    ========================================================================== */
-
 
 /* ==========================================================================
    Order Detail Page
@@ -1436,7 +1439,7 @@ input {
    end Order Detail Page
    ========================================================================== */
 
-   /* ==========================================================================
+/* ==========================================================================
    Address List Page
    ========================================================================== */
 .address-toolbar {
@@ -1602,7 +1605,6 @@ button.edit-address-btn:hover {
    end Address List Page
    ========================================================================== */
 
-
 /* ==========================================================================
    Address Create / 
    ========================================================================== */
@@ -1751,3 +1753,135 @@ button.edit-address-btn:hover {
 /* ==========================================================================
    end Address Create / 
    ========================================================================== */
+
+/* ==========================================================================
+   Order List Breakpoint Correction (Fix Overflow between 769px - 953px)
+   ========================================================================== */
+@media (max-width: 953px) {
+    /* تغییر حالت سطرِ عریض به شبکه ترکیبی منظم برای جلوگیری از بیرون‌زدگی دکمه */
+    .order-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 20px;
+        padding: 18px;
+    }
+
+    .order-number,
+    .order-date,
+    .order-amount,
+    .order-status {
+        width: 100%;
+    }
+
+    .order-action {
+        grid-column: 1 / -1;
+        width: 100%;
+        margin-top: 4px;
+        padding-top: 12px;
+        border-top: 1px dashed var(--color-border);
+    }
+
+    .view-details-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    /* در موبایل‌های کوچک، اطلاعات تک ستونه نمایش داده شوند */
+    .order-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* ==========================================================================
+   Password Action Box Styles
+   ========================================================================== */
+.password-field {
+    margin-bottom: 22px;
+}
+
+.password-action-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 8px 14px;
+    transition: border-color var(--transition-fast);
+}
+
+.password-action-card:focus-within,
+.password-action-card:hover {
+    border-color: var(--color-primary);
+}
+
+.pw-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pw-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.dots {
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--color-text-muted);
+    user-select: none;
+}
+
+.btn-change-password {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.btn-change-password:hover {
+    background-color: var(--color-primary-dark);
+    color: #ffffff;
+}
+
+.btn-change-password svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+/* Password Box Responsive Rules */
+@media (max-width: 480px) {
+    .password-action-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .pw-info {
+        justify-content: center;
+    }
+
+    .btn-change-password {
+        width: 100%;
+        justify-content: center;
+    }
+}

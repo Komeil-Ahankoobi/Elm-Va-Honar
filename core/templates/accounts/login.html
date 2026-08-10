@@ -2,136 +2,86 @@
 
 <!doctype html>
 <html lang="fa" dir="rtl">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ElmVHonar — ورود به حساب کاربری</title>
-        <meta name="description" content="ورود به حساب کاربری فروشگاه علم و هنر" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" />
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ElmVHonar — ورود</title>
+    <meta name="description" content="ورود به حساب کاربری فروشگاه علم و هنر" />
 
-        <link rel="stylesheet" href="{% static 'css/login.css' %}" />
-        <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}" />
-    </head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" />
 
-    <body>
-        <section class="card">
-            <div class="logo-wrap">
-                <div class="logo">
-                    <svg class="feather" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M32 6C24 8 16 14 10 24C8 27 7 30 6 34C10 33 14 31 18 28C24 24 29 17 32 6Z"
-                            fill="#b5793f" />
-                        <path d="M32 6C26 12 20 18 12 26" stroke="#8a5a2b" stroke-width="1" stroke-linecap="round" />
-                    </svg>
-                    <span style="margin-right: 2px">H</span>
-                    E
-                </div>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}" />
+</head>
+
+<body>
+    <section class="card">
+        <div class="logo-wrap">
+            <div class="logo">
+                <svg class="feather" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 6C24 8 16 14 10 24C8 27 7 30 6 34C10 33 14 31 18 28C24 24 29 17 32 6Z"
+                        fill="#b5793f" />
+                    <path d="M32 6C26 12 20 18 12 26" stroke="#8a5a2b" stroke-width="1" stroke-linecap="round" />
+                </svg>
+                <span style="margin-right: 2px">H</span>
+                E
             </div>
+        </div>
 
-            <h1 class="title">ورود به حساب کاربری</h1>
-            <p class="subtitle">برای ادامه، اطلاعات حساب کاربری خود را وارد کنید</p>
+        <h1 class="title">ورود به ElmVHonar</h1>
+        <p class="subtitle">شماره تلفن خود را وارد کنید تا کد تایید برایتان ارسال شود</p>
 
-            <form action="{% url 'accounts:login' %}" method="post" aria-label="فرم ورود">
-                {% csrf_token %}
+        <form id="login-form" action="{% url 'accounts:login' %}" method="post" aria-label="فرم ورود">
+            {% csrf_token %} {% if form.errors %}
+            <div class="form-alert-error" role="alert">{{ form.errors }}</div>
+            {% endif %}
 
-                <div class="field">
-                    <label for="username">نام کاربری یا شماره تلفن</label>
-                    <div class="input-wrap">
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            dir="ltr"
-                            placeholder="نام کاربری یا شماره موبایل خود را وارد کنید"
-                            aria-required="true" />
-                        <span class="icon">
-                            <svg
-                                width="18"
-                                height="18"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.8"
-                                stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label for="password">رمز عبور</label>
-                    <div class="input-wrap">
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            dir="ltr"
-                            placeholder="رمز عبور خود را وارد کنید"
-                            autocomplete="current-password"
-                            aria-required="true"
-                            aria-describedby="password-error" />
-                        <button type="button" class="pwd-toggle" id="pwd-toggle" aria-label="نمایش رمز عبور">
-                            <svg
-                                id="eye-icon"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" />
-                                <circle cx="8" cy="8" r="2" />
-                            </svg>
-                        </button>
-                    </div>
-                    <p class="form-error" id="password-error" role="alert">رمز عبور الزامی است.</p>
-                </div>
-
-                <div class="forgot">
-                    <a href="#">رمز عبور خود را فراموش کرده‌اید؟</a>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    <span class="btn-arrow" aria-hidden="true">
-                        <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                            <path d="M10 17l5-5-5-5" />
-                            <path d="M15 12H3" />
+            <div class="field">
+                <label for="phone_number">شماره تلفن</label>
+                <div class="input-wrap">
+                    <input type="tel" id="phone_number" name="phone_number" dir="ltr" placeholder="09xxxxxxxxx"
+                        aria-required="true" aria-describedby="phone_number-error" />
+                    <span class="icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="6" y="2" width="12" height="20" rx="2" />
+                            <path d="M11 18h2" />
                         </svg>
                     </span>
-                    <span class="btn-text">ورود به حساب کاربری</span>
-                    <span class="btn-spinner" aria-hidden="true"></span>
-                </button>
-            </form>
+                </div>
+                <p class="form-error" id="phone_number-error" role="alert">شماره تلفن معتبر وارد کنید.</p>
+            </div>
 
-            <p class="login-register">
-                 ثبت‌نام نکرده اید ؟
-                <a href="{% url 'accounts:register' %}">قبت نام کنید</a>
-            </p>
-        </section>
+            <button type="submit" class="submit-btn" id="login-btn">
+                <span class="btn-arrow" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                        <path d="M10 17l5-5-5-5" />
+                        <path d="M15 12H3" />
+                    </svg>
+                </span>
+                <span class="btn-text">دریافت کد تایید</span>
+                <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+        </form>
 
-        <!-- ============================================================
+        <p class="login-register">
+            هنوز ثبت‌نام نکرده‌اید؟
+            <a href="{% url 'accounts:register' %}">ثبت‌نام کنید</a>
+        </p>
+    </section>
+
+    <!-- ============================================================
        JAVASCRIPT
        ============================================================ -->
-        <script src="{% static 'js/login.js' %}" defer></script>
-        <script src="{% static 'vendor/toastify/toastify.js'%}"></script>
+    <script src="{% static 'js/login.js' %}" defer></script>
+    <script src="{% static 'vendor/toastify/toastify.js'%}"></script>
 
-        {% include 'messages.html' %}
-    </body>
+    {% include 'messages.html' %}
+</body>
+
 </html>

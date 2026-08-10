@@ -17,13 +17,16 @@
 
 <!-- Search & Filter Toolbar -->
 <section class="blog-toolbar">
-    <div class="blog-search">
-        <input type="text" placeholder="جستجو در مقالات..." />
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-    </div>
+    <form action="{% url 'website:blog-post' %}" method="get">
+        {% csrf_token %}
+        <div class="blog-search">
+            <input type="text" name="q" placeholder="جستجو در مقالات..." />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </div>
+    </form>
 
     <div class="sort-select-wrapper">
         <select class="sort-select">

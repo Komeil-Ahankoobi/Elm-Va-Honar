@@ -68,20 +68,24 @@
             </div>
         </div>
 
-        <div class="field">
+        <!-- Password Action Box (به‌روزرسانی‌شده) -->
+        <div class="field password-field">
             <label>رمز عبور</label>
-            <div class="field-input password">
-                <a href="{% url 'dashboard:customer:setting' %}" class="link-btn">تغییر رمز عبور</a>
-                <div class="pw-wrap">
-                    <input type="password" value="{{ user.password }}" dir="ltr" style="text-align: left;" readonly>
-
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="4" y="11" width="16" height="9" rx="2" />
-                        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+            <div class="password-action-card">
+                <div class="pw-info">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pw-icon">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
+                    <span class="dots">• • • • • • • •</span>
                 </div>
-
+                <a href="{% url 'dashboard:customer:setting' %}" class="btn-change-password">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    تغییر رمز عبور
+                </a>
             </div>
         </div>
 

@@ -2,6 +2,34 @@
    FAQ, Rules & Shopping Guide Page Styles
    ========================================================================== */
 
+/* ==================== BREADCRUMB ==================== */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 2rem auto;
+    max-width: var(--container-width);
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+    color: var(--text-main);
+}
+
+@media (max-width: 480px) {
+    .breadcrumb {
+        font-size: 12px;
+        margin: 16px;
+    }
+}
+
 .info-page {
     padding-top: 30px;
     padding-bottom: 50px;
@@ -16,6 +44,8 @@
     border-radius: 20px;
     padding: 36px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    margin: 2rem auto;
+    max-width: var(--container-width);
 }
 
 .info-card__header {

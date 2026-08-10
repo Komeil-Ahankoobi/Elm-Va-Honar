@@ -146,10 +146,18 @@ nav ul li a.active {
 }
 
 /* ================= CONTAINER ================= */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 20px;
+}
+
 .breadcrumbs {
     font-size: 12px;
     color: var(--text-muted);
     margin-bottom: 20px;
+    margin-top: 1rem;
 }
 
 /* ================= PRODUCT HEADER ================= */
@@ -222,6 +230,8 @@ nav ul li a.active {
     display: flex;
     align-items: baseline;
     gap: 6px;
+    font-weight: bold;
+    color: #1a1a1a;
 }
 
 .price-amount {
@@ -277,6 +287,16 @@ nav ul li a.active {
     gap: 6px;
 }
 
+.stock-status-out {
+    color: #dc2626;
+}
+
+.pd-description {
+    font-size: 12px;
+    line-height: 1.9;
+    color: #444;
+}
+
 .features-list {
     list-style: none;
     font-size: 12px;
@@ -300,6 +320,7 @@ nav ul li a.active {
     top: 0;
 }
 
+/* Color & Size Selector */
 .color-selector {
     margin-top: 5px;
 }
@@ -316,14 +337,17 @@ nav ul li a.active {
     gap: 8px;
     align-items: center;
     margin-bottom: 5px;
+    flex-wrap: wrap;
 }
 
 .dot {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     cursor: pointer;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0;
+    outline-offset: 2px;
 }
 
 .dot.active {
@@ -354,7 +378,8 @@ nav ul li a.active {
     font-size: 11px;
     color: var(--text-muted);
     text-align: center;
-    width: 226px;
+    width: 100%;
+    max-width: 226px;
 }
 
 /* Quantity & Buttons */
@@ -446,6 +471,7 @@ nav ul li a.active {
 .badge-item i {
     font-size: 24px;
     color: #333;
+    flex-shrink: 0;
 }
 
 .badge-text {
@@ -470,6 +496,12 @@ nav ul li a.active {
     gap: 15px;
 }
 
+.pd-thumb-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .main-image-container {
     position: relative;
     background: var(--card-bg);
@@ -479,12 +511,35 @@ nav ul li a.active {
     align-items: center;
     justify-content: center;
     border: 1px solid #eee;
+    overflow: hidden;
 }
 
-.main-image-container img {
+.pd-image-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pd-image {
+    position: absolute;
     max-height: 85%;
     max-width: 85%;
     object-fit: contain;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+}
+
+#pd-thumb-1:checked ~ .main-image-container .pd-image-1,
+#pd-thumb-2:checked ~ .main-image-container .pd-image-2,
+#pd-thumb-3:checked ~ .main-image-container .pd-image-3,
+#pd-thumb-4:checked ~ .main-image-container .pd-image-4,
+#pd-thumb-5:checked ~ .main-image-container .pd-image-5 {
+    opacity: 1;
+    visibility: visible;
 }
 
 .nav-arrow {
@@ -494,7 +549,7 @@ nav ul li a.active {
     width: 30px;
     height: 30px;
     background: white;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color, #e5e5e5);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -503,6 +558,7 @@ nav ul li a.active {
     font-size: 11px;
     color: #555;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    z-index: 2;
 }
 
 .nav-arrow.left {
@@ -518,7 +574,7 @@ nav ul li a.active {
     bottom: 15px;
     right: 15px;
     background: white;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-color, #e5e5e5);
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -528,11 +584,12 @@ nav ul li a.active {
     font-size: 11px;
     color: #666;
     cursor: pointer;
+    z-index: 2;
 }
 
 .thumbnail-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
 }
 
@@ -546,10 +603,19 @@ nav ul li a.active {
     justify-content: center;
     cursor: pointer;
     overflow: hidden;
+    transition: border-color 0.2s ease;
 }
 
 .thumb-item.active {
     border-color: #999;
+}
+
+#pd-thumb-1:checked ~ .thumbnail-list label[for="pd-thumb-1"],
+#pd-thumb-2:checked ~ .thumbnail-list label[for="pd-thumb-2"],
+#pd-thumb-3:checked ~ .thumbnail-list label[for="pd-thumb-3"],
+#pd-thumb-4:checked ~ .thumbnail-list label[for="pd-thumb-4"],
+#pd-thumb-5:checked ~ .thumbnail-list label[for="pd-thumb-5"] {
+    border-color: var(--accent-green, #1d3b2a);
 }
 
 .thumb-item img {
@@ -580,6 +646,7 @@ nav ul li a.active {
     color: var(--text-muted);
     cursor: pointer;
     border-bottom: 2px solid transparent;
+    white-space: nowrap;
 }
 
 .tab-btn.active {
@@ -602,15 +669,14 @@ nav ul li a.active {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.tab-desc p {
-    font-size: 12px;
-    line-height: 1.8;
-    color: #444;
-    margin-bottom: 15px;
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .tab-desc {
@@ -621,6 +687,8 @@ nav ul li a.active {
 
 .tab-desc p {
     margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 1.8;
 }
 
 .tab-desc p:last-child {
@@ -664,6 +732,7 @@ nav ul li a.active {
 .specs-table td {
     padding: 10px 12px;
     color: #444;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .specs-table td:first-child {
@@ -677,11 +746,27 @@ nav ul li a.active {
     position: relative;
 }
 
+.related-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.related-section-header .section-title {
+    margin-bottom: 0;
+}
+
 .section-title {
     text-align: center;
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 20px;
+}
+
+.related-viewall {
+    font-size: 12px;
+    color: var(--accent-green, #1d3b2a);
+    font-weight: bold;
 }
 
 .related-grid {
@@ -699,6 +784,12 @@ nav ul li a.active {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+}
+
+.wishlist-icon-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 .related-card .wishlist-icon {
@@ -738,6 +829,7 @@ nav ul li a.active {
     font-weight: bold;
     text-align: center;
     margin-bottom: 8px;
+    line-height: 1.4;
 }
 
 .related-price {
@@ -779,6 +871,7 @@ nav ul li a.active {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     font-size: 11px;
     color: #555;
+    z-index: 2;
 }
 
 .section-arrow.left {
@@ -913,102 +1006,190 @@ footer {
     color: #666;
 }
 
-/* این استایل‌ها رو به انتهای product.css اضافه کنید */
+/* ================= MEDIA QUERIES (RESPONSIVE MAIN CONTENT) ================= */
 
-/* ================= وضعیت ناموجود ================= */
-.stock-status-out {
-    color: #dc2626;
+/* Tablet & Medium Screens (<= 992px) */
+@media (max-width: 992px) {
+    .product-main {
+        grid-template-columns: 1fr; /* تغییر حالت ۲ ستونه به ۱ ستون */
+        gap: 25px;
+        padding: 20px;
+    }
+
+    /* ابتدا گالری تصاویر دیده می‌شود، سپس اطلاعات محصول */
+    .gallery-box {
+        order: 1;
+    }
+
+    .buy-box {
+        order: 2;
+    }
+
+    .main-image-container {
+        height: 320px;
+    }
+
+    .related-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .section-arrow {
+        display: none; /* مخفی کردن فلش‌های شناور متداخل در تبلت و موبایل */
+    }
 }
 
-/* ================= توضیحات محصول در buy-box ================= */
-.pd-description {
-    font-size: 12px;
-    line-height: 1.9;
-    color: #444;
+/* Mobile Screens (<= 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 15px;
+    }
+
+    .product-header h1 {
+        font-size: 20px;
+    }
+
+    .product-main {
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+
+    .main-image-container {
+        height: 280px;
+    }
+
+    .nav-arrow {
+        width: 26px;
+        height: 26px;
+        font-size: 10px;
+    }
+
+    .nav-arrow.left {
+        left: 8px;
+    }
+
+    .nav-arrow.right {
+        right: 8px;
+    }
+
+    .thumb-item {
+        height: 65px;
+    }
+
+    .tabs-container {
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+
+    .tabs-header {
+        gap: 15px;
+        margin-bottom: 18px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .tab-btn {
+        font-size: 12px;
+    }
+
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .related-card {
+        padding: 10px;
+    }
+
+    .related-img {
+        height: 110px;
+    }
 }
 
-/* ================= گالری با سوییچر CSS-only (رادیو) ================= */
-.pd-thumb-radio {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
+/* Extra Small Mobile Screens (<= 360px) */
+@media (max-width: 360px) {
+    .container {
+        padding: 10px 10px;
+    }
 
-.pd-image-stack {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .product-header h1 {
+        font-size: 17px;
+    }
 
-.pd-image {
-    position: absolute;
-    max-height: 85%;
-    max-width: 85%;
-    object-fit: contain;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease;
-}
+    .product-main {
+        padding: 12px;
+    }
 
-#pd-thumb-1:checked ~ .main-image-container .pd-image-1,
-#pd-thumb-2:checked ~ .main-image-container .pd-image-2,
-#pd-thumb-3:checked ~ .main-image-container .pd-image-3,
-#pd-thumb-4:checked ~ .main-image-container .pd-image-4,
-#pd-thumb-5:checked ~ .main-image-container .pd-image-5 {
-    opacity: 1;
-    visibility: visible;
-}
+    .main-image-container {
+        height: 230px;
+    }
 
-/* هایلایت تصویر کوچک فعال */
-.thumb-item {
-    display: flex;
-}
+    .thumb-item {
+        height: 50px;
+    }
 
-#pd-thumb-1:checked ~ .thumbnail-list label[for="pd-thumb-1"],
-#pd-thumb-2:checked ~ .thumbnail-list label[for="pd-thumb-2"],
-#pd-thumb-3:checked ~ .thumbnail-list label[for="pd-thumb-3"],
-#pd-thumb-4:checked ~ .thumbnail-list label[for="pd-thumb-4"],
-#pd-thumb-5:checked ~ .thumbnail-list label[for="pd-thumb-5"] {
-    border-color: var(--accent-green, #1d3b2a);
-}
+    .thumbnail-list {
+        gap: 6px;
+    }
 
-/* nav-arrow و zoom-btn الان label/button هستن، نه div؛ ریست سریع */
-.nav-arrow,
-.zoom-btn {
-    border: 1px solid var(--border-color, #e5e5e5);
-    background: white;
-    cursor: pointer;
-}
+    .price-category-row {
+        gap: 12px;
+        justify-content: space-between;
+    }
 
-/* ================= انتخاب رنگ داینامیک (دکمه به‌جای div) ================= */
-.color-dots .dot {
-    padding: 0;
-    outline-offset: 2px;
-}
+    .price-value {
+        font-size: 11px;
+    }
 
-/* ================= هدر بخش محصولات مرتبط ================= */
-.related-section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+    .price-note {
+        font-size: 13px;
+    }
 
-.related-section-header .section-title {
-    margin-bottom: 0;
-}
+    .btn-add-to-cart,
+    .btn-wishlist {
+        padding: 10px;
+        font-size: 12px;
+    }
 
-.related-viewall {
-    font-size: 12px;
-    color: var(--accent-green, #1d3b2a);
-    font-weight: bold;
-}
+    .trust-badges {
+        grid-template-columns: 1fr; /* تک ستونه شدن بنرهای اعتماد در سایز کوچک */
+        gap: 12px;
+    }
 
-.wishlist-icon-btn {
-    background: transparent;
-    border: none;
-    padding: 0;
+    .badge-item i {
+        font-size: 20px;
+    }
+
+    .tabs-container {
+        padding: 12px;
+    }
+
+    .specs-table td {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    .specs-table td:first-child {
+        width: 40%;
+    }
+
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .related-title {
+        font-size: 10px;
+    }
+
+    .related-price {
+        font-size: 11px;
+    }
+
+    .btn-card-add {
+        font-size: 10px;
+        padding: 6px;
+    }
 }

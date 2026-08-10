@@ -4,67 +4,71 @@
 {% load jalali_tags %}
 {% block content %}
 
-
 <h2 class="page-title">سفارش‌های من</h2>
-<p class="page-sub">لیست تمامی سفارش‌های ثبت شده توسط شما</p>
+<p class="page-sub">تاریخچه سفارش‌ها و وضعیت خریدهای خود را مشاهده کنید.</p>
 
 <div class="order-list">
-
     {% for order in orders %}
     <section class="card order-row">
         <div class="order-col order-number">
-            <span class="col-label">شماره سفارش</span>
-            <span class="col-value">{{ order.id }}</span>
+            <span class="col-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+                شماره سفارش
+            </span>
+            <span class="col-value">#{{ order.id }}</span>
         </div>
 
         <div class="order-col order-date">
             <span class="col-label">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                     <line x1="16" y1="2" x2="16" y2="6" />
                     <line x1="8" y1="2" x2="8" y2="6" />
                     <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
                 تاریخ ثبت
             </span>
-            <span class="col-value">
-                {{ order.created_date|date:"Y/m/d" }}
-                <span class="col-time">{{ order.created_date|jalali_date }}</span>
-            </span>
+            <span class="col-value">{{ order.created_date|jalali_date }}</span>
         </div>
 
         <div class="order-col order-amount">
             <span class="col-label">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="5" width="20" height="14" rx="2" />
-                    <line x1="2" y1="10" x2="22" y2="10" />
+                    <line x1="12" y1="1" x2="12" y2="23" />
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                 </svg>
-                مبلغ سفارش
+                مبلغ کل
             </span>
-            <span class="col-value">{{ order.total_price|intcomma }} <span class="currency">تومان</span></span>
+            <span class="col-value">
+                {{ order.get_total_price|intcomma }} <span class="currency">تومان</span>
+            </span>
         </div>
 
         <div class="order-col order-status">
-            <span class="col-label">وضعیت سفارش</span>
-            <span class="status-pill status-{{ order.get_status.label }}">
+            <span class="col-label">وضعیت</span>
+            <span class="status-pill status-{{ order.status }}">
                 <span class="dot"></span>
                 {{ order.get_status.label }}
             </span>
         </div>
 
-        <div class="order-col order-action">
+        <div class="order-action">
             <a href="{% url 'dashboard:customer:order-detail' pk=order.id %}" class="view-details-btn">
+                مشاهده جزئیات
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6" />
                 </svg>
-                مشاهده جزئیات
             </a>
         </div>
     </section>
     {% empty %}
-    <p>هنوز سفارشی ثبت نکرده‌اید</p>
+    <div class="card empty-state">
+        <p>هنوز هیچ سفارشی ثبت نکرده‌اید.</p>
+    </div>
     {% endfor %}
-
 </div>
 
 <div class="pagination">
@@ -73,18 +77,18 @@
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6" />
         </svg>
-        
-       
+
+
     </a>
     {% else %}
     <span class="page-btn prev disabled">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6" />
         </svg>
-       
+
     </span>
     {% endif %}
-    
+
 
     {% for num in page_obj.paginator.page_range %}
     {% if num == page_obj.number %}
@@ -94,19 +98,19 @@
     {% endif %}
     {% endfor %}
 
-    
+
 
     {% if page_obj.has_next %}
     <a href="?page={{ page_obj.next_page_number }}" class="page-btn next">
-       
+
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6" />
         </svg>
     </a>
     {% else %}
     <span class="page-btn next disabled">
-       
-         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6" />
         </svg>
     </span>

@@ -1,29 +1,27 @@
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
-from .models import Profile
+from django.utils import timezone
+from .models import Profile, OTPCode
 
 User = get_user_model()
 
 
-class UsernameOrPhoneBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        if username is None:
+class PhoneOTPBackend(ModelBackend):
+    def authenticate(self, request, phone_number=None, code=None, **kwargs):
+        if not phone_number or not code:
             return None
 
-        user = None
+        otp = OTPCode.objects.filter(
+            phone_number=phone_number, is_used=False
+        ).order_by('-created_at').first()
 
-        if username.isdigit() and username.startswith('09'):
-            try:
-                profile = Profile.objects.select_related('user').get(phone_number=username)
-                user = profile.user
-            except Profile.DoesNotExist:
-                return None
-        else:
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                return None
+        if otp is None or otp.code != code or otp.is_expired():
+            return None
 
-        if user.check_password(password) and self.user_can_authenticate(user):
-            return user
-        return None
+        otp.is_used = True
+        otp.save(update_fields=['is_used'])
+
+        try:
+            return Profile.objects.select_related('user').get(phone_number=phone_number).user
+        except Profile.DoesNotExist:
+            return None

@@ -19,7 +19,6 @@
 }
 
 body {
-    font-family: "Vazirmatn", sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     direction: rtl;
@@ -160,16 +159,30 @@ a {
     padding: 24px 16px;
 }
 
+/* ==================== BREADCRUMB ==================== */
 .breadcrumb {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
-    margin-bottom: 16px;
+    margin: 2rem auto;
+    max-width: var(--container-width);
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+    color: var(--text-main);
 }
 
 .blog-header {
+    max-width: var(--container-width);
+    margin: 0 auto;
     text-align: center;
     margin-bottom: 32px;
 }
@@ -188,6 +201,8 @@ a {
 
 /* Toolbar: Search & Sort */
 .blog-toolbar {
+    max-width: var(--container-width);
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -239,6 +254,8 @@ a {
 
 /* Articles Grid */
 .articles-grid {
+    max-width: var(--container-width);
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -364,6 +381,8 @@ a {
 
 /* Newsletter Banner */
 .newsletter-banner {
+    max-width: var(--container-width);
+    margin: 0 auto;
     background: #fff;
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -542,5 +561,9 @@ a {
     }
     .blog-search {
         width: 100%;
+    }
+    .breadcrumb {
+        font-size: 12px;
+        margin: 16px;
     }
 }

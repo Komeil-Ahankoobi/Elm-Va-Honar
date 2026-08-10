@@ -16,7 +16,11 @@
         type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base-responsive.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home-responsive.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
 </head>
 
@@ -27,7 +31,7 @@
         <!-- Header -->
         <header class="header header--dark">
             <div class="header__top">
-                
+
                 <div class="header__logo-area">
                     <a href="#" class="header__logo">
                         <span class="header__logo-symbol">EH</span>
@@ -70,7 +74,7 @@
                         </svg>
                     </a>
                     {% else %}
-                    <a href="{% url 'accounts:login' %}" class="header__action-btn">
+                    <a href="{% url 'accounts:login' %}" class="header__action-btn login-btn">
                         <span>ورود / ثبت‌نام</span>
                     </a>
                     <a href="{% url 'accounts:login' %}" class="header__icon-btn" aria-label="Wishlist">
@@ -93,10 +97,31 @@
                         <span class="header__cart-badge">{{ cart.get_total_quantity }}</span>
                         {% endif %}
                     </a>
+                    <button class="header__hamburger" id="navHamburger" aria-label="باز کردن منو" aria-expanded="false"
+                        aria-controls="mainNav">
+                        <span class="header__hamburger-line"></span>
+                        <span class="header__hamburger-line"></span>
+                        <span class="header__hamburger-line"></span>
+                    </button>
                 </div>
             </div>
 
-            <nav class="nav">
+            <div class="nav__overlay" id="navOverlay"></div>
+
+            <nav class="nav" id="mainNav">
+                <div class="nav__drawer-header">
+                    <div class="nav__drawer-logo">
+                        <span class="header__logo-symbol">EH</span>
+                        <span class="header__logo-title">ElmvHonar</span>
+                    </div>
+                    <button class="nav__close" id="navClose" aria-label="بستن منو">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
                 <div class="nav__container">
                     <ul class="nav__list">
 
@@ -167,7 +192,12 @@
                                 class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {% else %}loading="lazy" {% endif %}>
                         </picture>
                         <div class="hero__content">
-                            <h1 class="hero__title"><span>{{ slide.title1 }}</span>{{ slide.title2 }}</h1>
+                            <h1 class="hero__title">
+                                <span>{{ slide.title1 }}</span>
+                                <span>
+                                    {{ slide.title2 }}
+                                </span>
+                            </h1>
                             <p class="hero__subtitle">{{ slide.subtitle }}</p>
                             <div class="hero__actions">
                                 <a href="{{ slide.primary_url|default:'#' }}" class="btn btn--primary">{{ slide.primary_text }}</a>
@@ -176,20 +206,6 @@
                         </div>
                     </div>
                     {% endfor %}
-
-                    <button class="hero__arrow hero__arrow--prev" id="heroPrev" aria-label="Previous">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M9 18l6-6-6-6" />
-                        </svg>
-                    </button>
-
-                    <button class="hero__arrow hero__arrow--next" id="heroNext" aria-label="Next">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M15 18l-6-6 6-6" />
-                        </svg>
-                    </button>
 
                     <div class="hero__dots" id="heroDots">
                         {% for slide in hero_slides %}
@@ -353,31 +369,31 @@
     <section class="section promo-banners">
         <div class="container">
             <div class="promo-grid">
-                <div class="promo-card">
-                    <div class="placeholder-img placeholder-img--dark"></div>
-                    <div class="promo-card__content">
-                        <h3 class="promo-card__title">دفتر و کاغذ</h3>
-                        <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
-                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-                    </div>
-                </div>
-                <div class="promo-card">
-                    <div class="placeholder-img placeholder-img--dark"></div>
-                    <div class="promo-card__content">
-                        <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
-                        <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
-                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-                    </div>
-                </div>
-                <div class="promo-card">
-                    <div class="placeholder-img placeholder-img--dark"></div>
-                    <div class="promo-card__content">
-                        <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
-                        <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
-                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-                    </div>
-                </div>
-            </div>
+    <div class="promo-card">
+        <img src="{% static 'images/cat-baner-1.webp' %}" alt="دفتر و کاغذ" class="placeholder-img placeholder-img--dark">
+        <div class="promo-card__content">
+            <h3 class="promo-card__title">دفتر و کاغذ</h3>
+            <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
+            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+        </div>
+    </div>
+    <div class="promo-card">
+        <img src="{% static 'images/cat-baner-2.webp' %}" alt="مداد رنگی‌های حرفه‌ای" class="placeholder-img placeholder-img--dark">
+        <div class="promo-card__content">
+            <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
+            <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
+            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+        </div>
+    </div>
+    <div class="promo-card">
+        <img src="{% static 'images/cat-baner-3.webp' %}" alt="رنگ‌های آکریلیک" class="placeholder-img placeholder-img--dark">
+        <div class="promo-card__content">
+            <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
+            <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
+            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+        </div>
+    </div>
+</div>
         </div>
     </section>
 
@@ -397,7 +413,7 @@
 
             <div class="products-carousel-wrap">
                 <button class="carousel-arrow carousel-arrow--prev" id="prodPrev" aria-label="Previous Product">
-                    
+
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 18l6-6-6-6" />
                     </svg>
@@ -539,21 +555,60 @@
             <div class="brands-ticker">
                 <div class="brands-ticker__track">
                     <!-- Duplicate list for seamless infinite loop -->
-                    <div class="brand-item"><span class="brand-item__text">FABER-CASTELL</span></div>
-                    <div class="brand-item"><span class="brand-item__text">WINSOR & NEWTON</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/faber-castell.webp' %}" alt="Faber-Castell" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/winsor-newton.webp' %}" alt="Winsor & Newton" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Canson</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Vesta</span></div>
-                    <div class="brand-item"><span class="brand-item__text">STAEDTLER</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Pentel</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/vesta.webp' %}" alt="Vesta" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/stadler.webp' %}" alt="Staedtler" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pentel.webp' %}" alt="Pentel" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/picasso.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/elmvhonar.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
 
-                    <div class="brand-item"><span class="brand-item__text">FABER-CASTELL</span></div>
-                    <div class="brand-item"><span class="brand-item__text">WINSOR & NEWTON</span></div>
+                    <!-- تکرار دوم برای infinite loop -->
+                    <div class="brand-item">
+                        <img src="{% static 'images/faber-castell.webp' %}" alt="Faber-Castell" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/winsor-newton.webp' %}" alt="Winsor & Newton" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Canson</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Vesta</span></div>
-                    <div class="brand-item"><span class="brand-item__text">STAEDTLER</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Pentel</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/vesta.webp' %}" alt="Vesta" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/stadler.webp' %}" alt="Staedtler" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pentel.webp' %}" alt="Pentel" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/picasso.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
+                     <div class="brand-item">
+                        <img src="{% static 'images/elmvhonar.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
                 </div>
             </div>
         </div>
@@ -636,11 +691,10 @@
                 <div class="footer__col">
                     <h4 class="footer__title">دسترسی سریع</h4>
                     <ul class="footer__links">
-                        <li><a href="#">دسته‌بندی‌ها</a></li>
-                        <li><a href="#">برندها</a></li>
-                        <li><a href="#">جدیدترین‌ها</a></li>
-                        <li><a href="#">پیشنهاد ویژه</a></li>
-                        <li><a href="#">مجله علم و هنر</a></li>
+                        <li><a href="{% url 'website:categories' %}">دسته‌بندی‌ها</a></li>
+                        <li><a href="{% url 'website:brands' %}">برندها</a></li>
+                        <li><a href="{% url 'shop:show-product-view' %}">محصولات</a></li>
+                        <li><a href="{% url 'website:blog-post' %}">مجله علم و هنر</a></li>
                     </ul>
                 </div>
 
@@ -648,7 +702,6 @@
                     <h4 class="footer__title">خدمات مشتریان</h4>
                     <ul class="footer__links">
                         <li><a href="{% url 'website:rule_qu' %}">پرسش‌های متداول</a></li>
-                        <li><a href="{% url 'website:rule_qu' %}">رویه‌های ارسال</a></li>
                         <li><a href="{% url 'website:rule_qu' %}">روش‌های پرداخت</a></li>
                         <li><a href="{% url 'website:rule_qu' %}">بازگشت و مرجوعی</a></li>
                         <li><a href="{% url 'website:rule_qu' %}">تماس با ما</a></li>
@@ -677,9 +730,9 @@
                         </a>
 
 
-                        <!-- <a href="https://ble.ir/elmvhonar" class="social-icon" aria-label="بله">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                viewBox="0 0 1000 999.72">
+                        <a href="https://ble.ir/elmvhonar" aria-label="بله">
+                            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 999.72">
                                 <defs>
                                     <linearGradient id="linear-gradient" x1="800.4" y1="93.39" x2="93.57" y2="800.23"
                                         gradientUnits="userSpaceOnUse">
@@ -700,14 +753,14 @@
                             </svg>
                         </a>
 
-                        <a href="https://eitaa.com/elvmhonar" class="social-icon" aria-label="ایتا">
-                            <svg height="2500" viewBox="5.312 -.192 501.099 512.323" width="2500"
+                        <a href="https://eitaa.com/elvmhonar" aria-label="ایتا">
+                            <svg width="20" height="20" viewBox="5.312 -.192 501.099 512.323"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="m127.317 510.763a141.312 141.312 0 0 1 -49.749-17.707c-34.56-19.819-60.352-55.317-68.629-94.421-3.221-15.296-3.627-34.624-3.2-153.749.405-128.193.106-121.579 6.208-142.699 3.029-10.517 11.456-28.587 17.557-37.696 22.507-33.494 55.616-54.998 96.64-62.784 8.192-1.557 20.053-1.707 129.195-1.707 133.355 0 128.96-.192 150.741 6.699a145.216 145.216 0 0 1 92.032 89.259c7.04 19.989 7.381 23.189 7.872 75.84l.427 47.573-8.341 5.717c-11.904 8.128-27.52 22.613-49.408 45.867-25.216 26.795-50.688 51.627-63.616 62.016-27.925 22.421-53.504 35.221-79.488 39.765-13.525 2.347-35.883 1.429-49.109-2.027-11.797-3.072-11.029-3.584-15.488 9.899a135.573 135.573 0 0 0 -6.784 32.981l-.661 8.683-3.115-.64c-25.92-5.141-51.605-27.413-61.525-53.333a76.437 76.437 0 0 1 -5.547-26.005l-.341-7.253-6.592-6.059c-13.739-12.587-22.677-27.989-25.493-43.968-4.523-25.451 7.253-54.229 32.811-80.128 26.965-27.371 66.709-48.853 105.664-57.173 14.037-2.987 38.784-3.776 51.264-1.6 24.277 4.224 44.096 16.491 56.427 34.965 3.883 5.781 4.16 6.613 3.776 11.84a17.323 17.323 0 0 1 -3.904 10.517c-9.92 13.888-39.424 28.757-71.168 35.84-56 12.48-91.605-3.029-86.037-37.525.555-3.477.853-6.485.661-6.677-.683-.683-6.251 2.219-12.267 6.4-10.219 7.125-19.264 20.992-22.4 34.283-.768 3.328-1.067 8.661-.725 13.867.427 7.061 1.131 9.685 4.096 15.701 1.963 3.968 5.867 9.6 8.704 12.565l5.12 5.355-2.048 2.603a103.36 103.36 0 0 0 -14.443 25.963 77.547 77.547 0 0 0 -2.24 38.72c2.197 9.835 8.981 23.36 15.765 31.317 5.163 6.08 17.003 16.299 18.901 16.299.512 0 .939-1.024.939-2.261.021-4.907 3.925-20.757 6.955-28.309 9.024-22.571 28.821-41.813 60.16-58.453 5.227-2.773 20.309-10.027 33.536-16.149 29.013-13.44 44.864-21.653 53.568-27.84 25.088-17.771 40.597-44.053 45.653-77.333 1.835-12.16 1.835-34.859 0-47.083-7.851-52.011-46.827-87.381-102.784-93.227-62.4-6.549-141.824 41.664-190.763 115.776-23.808 36.053-39.893 76.053-46.656 116.117-2.624 15.531-3.605 44.373-1.984 58.667 4.117 36.352 17.536 65.664 40.597 88.661a139.328 139.328 0 0 0 39.893 28.011c50.517 24.107 106.453 24.64 155.627 1.515 21.248-10.005 42.112-25.515 64.491-48 21.76-21.867 36.48-40.107 76.629-95.104 22.187-30.357 39.765-50.517 48.469-55.573l3.2-1.835-.405 65.941c-.384 63.851-.469 66.283-2.624 75.968-12.8 57.131-54.187 98.901-110.827 111.829l-9.984 2.283-123.2.213c-100.992.171-124.8-.043-132.053-1.195z"
                                     fill="#e37600" />
                             </svg>
-                        </a> -->
+                        </a>
 
                     </div>
 
@@ -790,6 +843,49 @@
     <script src="{% static 'js/home.js' %}"></script>
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
     <script src="{% static 'vendor/toastify/toastify-es.js' %}"></script>
+
+    <!-- Mobile off-canvas navigation toggle -->
+    <script>
+        (function () {
+            var hamburger = document.getElementById('navHamburger');
+            var nav = document.getElementById('mainNav');
+            var overlay = document.getElementById('navOverlay');
+            var closeBtn = document.getElementById('navClose');
+
+            if (!hamburger || !nav || !overlay) return;
+
+            function openNav() {
+                nav.classList.add('nav--open');
+                hamburger.classList.add('header__hamburger--active');
+                overlay.classList.add('nav__overlay--active');
+                document.body.classList.add('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'true');
+            }
+
+            function closeNav() {
+                nav.classList.remove('nav--open');
+                hamburger.classList.remove('header__hamburger--active');
+                overlay.classList.remove('nav__overlay--active');
+                document.body.classList.remove('no-scroll');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+
+            hamburger.addEventListener('click', function () {
+                if (nav.classList.contains('nav--open')) {
+                    closeNav();
+                } else {
+                    openNav();
+                }
+            });
+
+            overlay.addEventListener('click', closeNav);
+            if (closeBtn) closeBtn.addEventListener('click', closeNav);
+
+            nav.querySelectorAll('.nav__link').forEach(function (link) {
+                link.addEventListener('click', closeNav);
+            });
+        })();
+    </script>
 
     {% include 'messages.html' %}
 </body>

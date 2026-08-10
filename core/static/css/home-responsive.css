@@ -1,0 +1,862 @@
+/* ==========================================================================
+   home-responsive.css
+
+   تمام کدهای ریسپانسیو (Media Query) مربوط به صفحه‌ی اصلی، که از home.css
+   جدا شده تا فایل اصلی سبک‌تر و مدیریتش راحت‌تر باشد.
+
+   ترتیب: از بزرگ‌ترین breakpoint به کوچک‌ترین (استراتژی Desktop-first،
+   هم‌راستا با بقیه‌ی پروژه).
+
+   ⚠️ این فایل باید همیشه بعد از home.css در <head> لود شود تا قوانین آن
+   با اولویت درست جایگزین قوانین پایه شوند.
+   ========================================================================== */
+
+/* -------------------- صفحه‌نمایش‌های بزرگ / لپ‌تاپ (≤ 1200px) -------------------- */
+@media (max-width: 1200px) {
+    footer.footer .footer__main {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 28px 24px !important;
+    }
+
+    footer.footer .footer__col--brand {
+        grid-column: 1 / -1 !important;
+    }
+
+    .blog-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* -------------------- تبلت‌ها (≤ 992px) -------------------- */
+@media (max-width: 992px) {
+    footer.footer {
+        padding-top: 32px !important;
+        margin-top: 0 !important;
+    }
+
+    footer.footer .container {
+        padding: 0 16px !important;
+    }
+
+    footer.footer .footer__main {
+        gap: 24px !important;
+        padding-bottom: 24px !important;
+    }
+
+    footer.footer .footer__trust-bar {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+        flex-wrap: unset !important;
+    }
+
+    footer.footer .trust-item {
+        min-width: 0 !important;
+    }
+
+    .features__container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .promo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Header responsive fixes */
+    .header__top {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .header__search,
+    .header__search-form {
+        order: 3;
+        max-width: 100%;
+        width: 100%;
+        flex: 0 0 100%;
+        margin: 0 auto;
+    }
+
+    .header__logo-tagline {
+        display: none;
+    }
+
+    .header__action-btn span {
+        font-size: 12px;
+    }
+
+    .hero__slider {
+        height: 320px;
+    }
+
+    .hero__content {
+        padding: 0 40px;
+        max-width: 480px;
+    }
+
+    .hero__title {
+        font-size: 28px;
+    }
+
+    .hero__subtitle {
+        font-size: 13px;
+    }
+}
+
+/* -------------------- موبایل بزرگ / تبلت عمودی (≤ 768px) -------------------- */
+@media (max-width: 768px) {
+    footer.footer {
+        padding-top: 24px !important;
+        margin-top: 0 !important;
+    }
+
+    footer.footer .container {
+        padding: 0 14px !important;
+    }
+
+    /* برند کامل عرض + دو ستون لینک کنار هم + خبرنامه کامل عرض */
+    footer.footer .footer__main {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 20px 16px !important;
+        padding-bottom: 20px !important;
+    }
+
+    footer.footer .footer__col--brand {
+        grid-column: 1 / -1 !important;
+    }
+
+    footer.footer .footer__col--newsletter {
+        grid-column: 1 / -1 !important;
+    }
+
+    footer.footer .footer__title {
+        font-size: 13px !important;
+        margin-bottom: 10px !important;
+    }
+
+    footer.footer .footer__desc {
+        font-size: 12px !important;
+        line-height: 1.7 !important;
+    }
+
+    footer.footer .footer__links li {
+        margin-bottom: 6px !important;
+    }
+
+    footer.footer .footer__links a {
+        font-size: 12px !important;
+    }
+
+    footer.footer .footer__socials {
+        gap: 14px !important;
+        margin-bottom: 12px !important;
+    }
+
+    footer.footer .footer__newsletter-form {
+        max-width: 100% !important;
+    }
+
+    /* trust-bar دو ستونه */
+    footer.footer .footer__trust-bar {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px 10px !important;
+        padding: 16px 0 !important;
+        flex-direction: unset !important;
+        align-items: stretch !important;
+    }
+
+    footer.footer .trust-item {
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    footer.footer .trust-item:last-child {
+        grid-column: 1 / -1 !important;
+    }
+    
+
+    /* Blog */
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Carousel arrows */
+    .carousel-arrow {
+        display: none;
+    }
+
+    .hero__slider {
+        height: 280px;
+    }
+
+    .hero__content {
+        padding: 0 30px;
+        max-width: 400px;
+    }
+
+    .hero__title {
+        font-size: 22px;
+        margin-bottom: 8px;
+    }
+
+    .hero__title span {
+        display: block;
+    }
+
+    .hero__subtitle {
+        font-size: 12px;
+        margin-bottom: 16px;
+    }
+
+    .hero__actions {
+        gap: 8px;
+    }
+
+    .hero__actions .btn {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+
+    .hero__arrow {
+        width: 32px;
+        height: 32px;
+    }
+
+    .hero__arrow svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .hero__arrow--prev {
+        right: 10px;
+    }
+
+    .hero__arrow--next {
+        left: 10px;
+    }
+
+    .hero__slide::after {
+        background: linear-gradient(
+            to left,
+            rgba(10, 12, 10, 0.2) 0%,
+            rgba(10, 12, 10, 0.75) 60%,
+            rgba(10, 12, 10, 0.9) 100%
+        );
+    }
+}
+
+/* -------------------- موبایل (≤ 576px) -------------------- */
+@media (max-width: 576px) {
+    footer.footer {
+        padding-top: 20px !important;
+        margin-top: 0 !important;
+    }
+
+    footer.footer .container {
+        padding: 0 12px !important;
+    }
+
+    footer.footer .footer__main {
+        gap: 16px 12px !important;
+        padding-bottom: 16px !important;
+    }
+
+    footer.footer .footer__logo {
+        margin-bottom: 10px !important;
+    }
+
+    footer.footer .footer__logo-symbol {
+        font-size: 20px !important;
+    }
+
+    footer.footer .footer__logo-title {
+        font-size: 14px !important;
+    }
+
+    footer.footer .footer__logo-tagline {
+        font-size: 10px !important;
+    }
+
+    footer.footer .footer__title {
+        font-size: 12.5px !important;
+        margin-bottom: 8px !important;
+    }
+
+    footer.footer .footer__desc {
+        font-size: 11.5px !important;
+    }
+
+    footer.footer .footer__links a {
+        font-size: 11.5px !important;
+    }
+
+    footer.footer .footer__subtitle {
+        font-size: 12px !important;
+    }
+
+    footer.footer .footer__subtext {
+        font-size: 11px !important;
+        margin-bottom: 8px !important;
+    }
+
+    footer.footer .footer__newsletter-form {
+        padding: 3px !important;
+    }
+
+    footer.footer .footer__newsletter-form input {
+        font-size: 12px !important;
+        padding: 6px 12px !important;
+        min-width: 0 !important;
+    }
+
+    footer.footer .footer__newsletter-form button {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    footer.footer .footer__trust-bar {
+        gap: 10px 8px !important;
+        padding: 14px 0 !important;
+    }
+
+    footer.footer .trust-item__text strong {
+        font-size: 11.5px !important;
+    }
+
+    footer.footer .trust-item__text span {
+        font-size: 10px !important;
+    }
+
+    footer.footer .footer__bottom {
+        padding: 12px 0 !important;
+        font-size: 11px !important;
+    }
+
+    .hero-wrapper-card {
+        padding: 12px 16px 16px;
+        border-radius: 16px;
+    }
+
+    /* Header */
+    .header__top {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .header__logo {
+        gap: 8px;
+    }
+
+    .header__logo-symbol {
+        font-size: 18px;
+    }
+
+    .header__logo-title {
+        font-size: 13px;
+    }
+
+    .header__user-actions {
+        gap: 8px;
+    }
+
+    .header__action-btn span {
+        font-size: 11px;
+    }
+
+    .header__icon-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .header__search {
+        padding: 2px 4px 2px 10px;
+        width: 100%;
+    }
+
+    .header__search-select {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    .header__search-input {
+        font-size: 12px;
+        padding: 6px 10px;
+        min-width: 50px;
+    }
+
+    .header__search-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .header__cart-badge {
+        width: 14px;
+        height: 14px;
+        font-size: 9px;
+        top: -4px;
+        left: -4px;
+    }
+
+    .nav {
+        width: 260px;
+    }
+
+    /* Features inside hero card */
+    .features__container {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .hero-wrapper-card .feature-card {
+        padding: 6px 8px;
+    }
+
+    .hero-wrapper-card .feature-card__title {
+        font-size: 11px;
+    }
+
+    .hero-wrapper-card .feature-card__desc {
+        font-size: 10px;
+    }
+
+    .hero__slider {
+        height: 240px;
+        border-radius: var(--radius-md);
+    }
+
+    .hero__content {
+        padding: 0 16px;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .hero__title {
+        font-size: 17px;
+        margin-bottom: 4px;
+        line-height: 1.4;
+    }
+
+    .hero__title span {
+        display: block;
+    }
+
+    .hero__subtitle {
+        font-size: 11px;
+        margin-bottom: 10px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero__actions {
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .hero__actions .btn {
+        font-size: 10px;
+        padding: 5px 12px;
+        border-radius: var(--radius-sm);
+    }
+
+    .hero__arrow {
+        width: 26px;
+        height: 26px;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hero__arrow svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .hero__arrow--prev {
+        right: 6px;
+    }
+
+    .hero__arrow--next {
+        left: 6px;
+    }
+
+    .hero__dots {
+        bottom: 8px;
+        gap: 4px;
+    }
+
+    .hero__dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .hero__dot--active {
+        width: 16px;
+    }
+}
+
+/* -------------------- موبایل خیلی کوچک (≤ 400px) -------------------- */
+@media (max-width: 400px) {
+    footer.footer {
+        padding-top: 16px !important;
+        margin-top: 12px !important;
+    }
+
+    footer.footer .container {
+        padding: 0 10px !important;
+    }
+
+    /* دو ستون نگه داشته می‌شود (نه یک ستون) تا فوتر بیش از حد کشیده نشود؛
+       فقط بخش برند و خبرنامه که محتوای بلندتری دارند کل عرض را می‌گیرند
+       و «دسترسی سریع» + «خدمات مشتریان» کنار هم می‌مانند. */
+    footer.footer .footer__main {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 14px 12px !important;
+        padding-bottom: 14px !important;
+    }
+
+    footer.footer .footer__col--brand,
+    footer.footer .footer__col--newsletter {
+        grid-column: 1 / -1 !important;
+    }
+
+    footer.footer .footer__logo-symbol {
+        font-size: 18px !important;
+    }
+
+    footer.footer .footer__logo-title {
+        font-size: 13px !important;
+    }
+
+    footer.footer .footer__title {
+        font-size: 12px !important;
+    }
+
+    footer.footer .footer__desc {
+        font-size: 11px !important;
+    }
+
+    footer.footer .footer__links a {
+        font-size: 11px !important;
+    }
+
+    footer.footer .footer__newsletter-form input {
+        font-size: 11px !important;
+        padding: 5px 10px !important;
+    }
+
+    footer.footer .footer__newsletter-form button {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    /* نوار اعتماد هم دو ستونه می‌ماند (به‌جای یک ستون) تا ۵ آیتم به‌جای
+       ۵ ردیف، در ۳ ردیف جا شوند و فوتر خیلی بلند نشود. */
+    footer.footer .footer__trust-bar {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px 8px !important;
+        padding: 12px 0 !important;
+    }
+
+    footer.footer .trust-item:last-child {
+        grid-column: 1 / -1 !important;
+    }
+
+    footer.footer .trust-item__text strong {
+        font-size: 11px !important;
+    }
+
+    footer.footer .trust-item__text span {
+        font-size: 9.5px !important;
+    }
+
+    .hero-wrapper-card {
+        padding: 8px 10px 12px;
+    }
+
+    .header__top {
+        padding: 8px 8px;
+        gap: 6px;
+    }
+
+    .header__logo-symbol {
+        font-size: 15px;
+    }
+
+    .header__logo-title {
+        font-size: 11px;
+    }
+
+    .header__user-actions {
+        gap: 4px;
+    }
+
+    .header__action-btn span {
+        font-size: 10px;
+    }
+
+    .header__icon-btn svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .header__search {
+        padding: 2px 3px 2px 6px;
+    }
+
+    .header__search-select {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .header__search-input {
+        font-size: 11px;
+        padding: 4px 6px;
+        min-width: 40px;
+    }
+
+    .header__search-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .header__cart-badge {
+        width: 12px;
+        height: 12px;
+        font-size: 7px;
+        top: -4px;
+        left: -4px;
+    }
+
+    .header__hamburger {
+        width: 32px;
+        height: 32px;
+        gap: 4px;
+    }
+
+    .header__hamburger-line {
+        width: 18px;
+        height: 2px;
+    }
+
+    .features__container {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .hero__dots {
+        bottom: 8px;
+        gap: 4px;
+    }
+
+    .hero__dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .hero__dot--active {
+        width: 14px;
+    }
+
+    .hero__slider {
+        height: 200px;
+    }
+
+    .hero__content {
+        padding: 0 12px;
+    }
+
+    .hero__title {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .hero__subtitle {
+        font-size: 10px;
+        margin-bottom: 8px;
+    }
+
+    .hero__actions .btn {
+        font-size: 9px;
+        padding: 4px 10px;
+    }
+
+    .hero__arrow {
+        width: 22px;
+        height: 22px;
+    }
+
+    .hero__arrow svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+/* -------------------- جعبه اطلاعیه بازگشت وجه (≤ 720px) -------------------- */
+@media (max-width: 720px) {
+    .refund-notice {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .refund-notice-text {
+        font-size: 11.5px;
+    }
+}
+
+/* -------------------- کاهش انیمیشن برای کاربرانی که آن را در سیستم غیرفعال نکرده‌اند -------------------- */
+@media (prefers-reduced-motion: no-preference) {
+    .refund-notice {
+        animation: refund-notice-pulse 1.6s ease-out 0.4s 2;
+    }
+}
+
+/* ==========================================================================
+   بهبودهای تکمیلی ریسپانسیو
+   (نقاطی از صفحه که ریسپانسیو نداشتند یا ناقص بودند و برای پوشش کامل
+   سایزهای استاندارد اضافه شدند)
+   ========================================================================== */
+
+/* container و کارت‌های section در تبلت و موبایل کمی جمع‌وجورتر شوند */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px 16px;
+    }
+
+    .section > .container,
+    .hero > .container,
+    .features > .container {
+        padding: 20px 16px;
+    }
+
+    .section-header__title-wrap {
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .scroll-container {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 14px 14px;
+    }
+
+    .section > .container,
+    .hero > .container,
+    .features > .container {
+        padding: 16px 14px;
+        border-radius: var(--radius-md);
+    }
+
+    .section-header {
+        margin-bottom: 14px;
+    }
+
+    .section-header__title {
+        font-size: 16px;
+    }
+
+    /* دسته‌بندی‌های دایره‌ای کمی کوچک‌تر تا در موبایل راحت‌تر جا شوند */
+    .category-circle-card {
+        width: 84px;
+    }
+
+    .category-circle-card__img-wrap {
+        width: 84px;
+        height: 84px;
+    }
+
+    .category-circle-card__title {
+        font-size: 11px;
+    }
+
+    /* کارت محصول کمی باریک‌تر در موبایل */
+    .product-card {
+        width: 152px;
+    }
+
+    .product-card__img-wrap {
+        height: 110px;
+    }
+
+    /* بنرهای پروموشن کوتاه‌تر در موبایل */
+    .promo-card {
+        height: 130px;
+    }
+
+    .promo-card__title {
+        font-size: 14px;
+    }
+
+    .scroll-container {
+        gap: 10px;
+    }
+
+    .hero__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: end;
+    }
+
+    .hero__title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero__subtitle {
+        width: 175px;
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 10px 10px;
+    }
+
+    .section > .container,
+    .hero > .container,
+    .features > .container {
+        padding: 14px 10px;
+    }
+
+    .category-circle-card {
+        width: 74px;
+    }
+
+    .category-circle-card__img-wrap {
+        width: 74px;
+        height: 74px;
+    }
+
+    .product-card {
+        width: 135px;
+        padding: 10px;
+    }
+
+    .product-card__img-wrap {
+        height: 96px;
+    }
+
+    .product-card__title {
+        font-size: 11px;
+    }
+
+    /* در گوشی‌های خیلی کوچک فقط آیکن جستجو نمایش داده شود تا فضا کم نیاید */
+    .header__search-select span {
+        display: none;
+    }
+
+    .header__search-select {
+        padding: 4px 8px;
+    }
+
+    .promo-card {
+        height: 120px;
+    }
+
+    .hero__subtitle {
+        width: 145px;
+    }
+}
