@@ -44,11 +44,6 @@ class NewsLetterModelAdmin(admin.ModelAdmin):
     actions = [export_to_excel]
 
 
-# ۲. ادمین بلاگ
-@admin.register(BlogModel)
-class BlogModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'category', 'title', 'reading_time', 'status']
-
 
 # ۳. ادمین دسته‌بندی بلاگ
 @admin.register(BlogCategoryModel)
@@ -69,8 +64,6 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = ['id', 'category', 'title', 'reading_time', 'status']
     inlines = [BlogKeyPointInline, BlogFAQInline]
     filter_horizontal = ['related_products']
-
-admin.site.register(NewsLetterModel, NewsLetterModelAdmin)   
 
 
 
