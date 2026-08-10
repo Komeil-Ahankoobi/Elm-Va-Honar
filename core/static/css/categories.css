@@ -18,11 +18,7 @@
 }
 
 body {
-    font-family:
-        "Vazirmatn",
-        -apple-system,
-        BlinkMacSystemFont,
-        sans-serif;
+    font-family: var(--font-fa) !important;
     background-color: var(--bg-color);
     color: var(--text-main);
     direction: rtl;

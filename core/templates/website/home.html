@@ -16,6 +16,7 @@
         type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/base-responsive.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
@@ -368,31 +369,31 @@
     <section class="section promo-banners">
         <div class="container">
             <div class="promo-grid">
-                <div class="promo-card">
-                    <div class="placeholder-img placeholder-img--dark"></div>
-                    <div class="promo-card__content">
-                        <h3 class="promo-card__title">دفتر و کاغذ</h3>
-                        <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
-                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-                    </div>
-                </div>
-                <div class="promo-card">
-                    <div class="placeholder-img placeholder-img--dark"></div>
-                    <div class="promo-card__content">
-                        <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
-                        <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
-                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-                    </div>
-                </div>
-                <div class="promo-card">
-                    <div class="placeholder-img placeholder-img--dark"></div>
-                    <div class="promo-card__content">
-                        <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
-                        <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
-                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-                    </div>
-                </div>
-            </div>
+    <div class="promo-card">
+        <img src="{% static 'images/cat-baner-1.webp' %}" alt="دفتر و کاغذ" class="placeholder-img placeholder-img--dark">
+        <div class="promo-card__content">
+            <h3 class="promo-card__title">دفتر و کاغذ</h3>
+            <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
+            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+        </div>
+    </div>
+    <div class="promo-card">
+        <img src="{% static 'images/cat-baner-2.webp' %}" alt="مداد رنگی‌های حرفه‌ای" class="placeholder-img placeholder-img--dark">
+        <div class="promo-card__content">
+            <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
+            <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
+            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+        </div>
+    </div>
+    <div class="promo-card">
+        <img src="{% static 'images/cat-baner-3.webp' %}" alt="رنگ‌های آکریلیک" class="placeholder-img placeholder-img--dark">
+        <div class="promo-card__content">
+            <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
+            <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
+            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+        </div>
+    </div>
+</div>
         </div>
     </section>
 
@@ -554,21 +555,60 @@
             <div class="brands-ticker">
                 <div class="brands-ticker__track">
                     <!-- Duplicate list for seamless infinite loop -->
-                    <div class="brand-item"><span class="brand-item__text">FABER-CASTELL</span></div>
-                    <div class="brand-item"><span class="brand-item__text">WINSOR & NEWTON</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/faber-castell.webp' %}" alt="Faber-Castell" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/winsor-newton.webp' %}" alt="Winsor & Newton" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Canson</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Vesta</span></div>
-                    <div class="brand-item"><span class="brand-item__text">STAEDTLER</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Pentel</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/vesta.webp' %}" alt="Vesta" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/stadler.webp' %}" alt="Staedtler" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pentel.webp' %}" alt="Pentel" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/picasso.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/elmvhonar.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
 
-                    <div class="brand-item"><span class="brand-item__text">FABER-CASTELL</span></div>
-                    <div class="brand-item"><span class="brand-item__text">WINSOR & NEWTON</span></div>
+                    <!-- تکرار دوم برای infinite loop -->
+                    <div class="brand-item">
+                        <img src="{% static 'images/faber-castell.webp' %}" alt="Faber-Castell" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/winsor-newton.webp' %}" alt="Winsor & Newton" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Canson</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Vesta</span></div>
-                    <div class="brand-item"><span class="brand-item__text">STAEDTLER</span></div>
-                    <div class="brand-item"><span class="brand-item__text">Pentel</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/vesta.webp' %}" alt="Vesta" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/stadler.webp' %}" alt="Staedtler" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pentel.webp' %}" alt="Pentel" class="brand-item__logo" loading="lazy">
+                    </div>
                     <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo" loading="lazy">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{% static 'images/picasso.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
+                     <div class="brand-item">
+                        <img src="{% static 'images/elmvhonar.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                    </div>
                 </div>
             </div>
         </div>

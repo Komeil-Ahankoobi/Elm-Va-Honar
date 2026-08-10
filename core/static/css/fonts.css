@@ -69,3 +69,19 @@
     font-style: normal;
     font-display: swap;
 }
+
+@font-face {
+    font-family: "estedad";
+    src: url("../fonts/Estedad-Bold.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "ray";
+    src: url("../fonts/Ray-ExtraBold.ttf") format("truetype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}

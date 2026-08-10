@@ -328,6 +328,21 @@
     font-size: 13px;
     color: var(--color-text-muted);
 }
+.brand-item__logo {
+    max-height: 90px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    border: none;
+    outline: none;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.brand-item__logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+}
 
 .carousel-arrow {
     width: 34px;
@@ -387,7 +402,7 @@
 .category-circle-card__img-wrap {
     width: 100px;
     height: 100px;
-    border-radius: 12px;
+    border-radius: 50%;     
     overflow: hidden;
     margin-bottom: 8px;
     border: 1px solid var(--color-border);
@@ -570,14 +585,11 @@
 
 .brand-item {
     background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
     height: 60px;
     width: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-soft);
     flex-shrink: 0;
 }
 

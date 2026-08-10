@@ -98,7 +98,14 @@ class BrandsView(ListView):
 class BlogPostView(ListView):
     template_name = 'website/blog-post.html'
     paginate_by = 4
-    queryset = BlogModel.objects.all()
+
+    def get_queryset(self):
+        queryset = BlogModel.objects.all()
+
+        if q:= self.request.GET.get("q"):
+            queryset = BlogModel.objects.filter(title__contains=q)
+
+        return queryset
 
 
     def get_context_data(self, **kwargs):

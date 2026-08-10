@@ -7,20 +7,21 @@
     --text-muted: #707070;
     --border-color: #e2e8f0;
     --card-bg: #ffffff;
-    --font-family: "Vazirmatn", sans-serif;
+    --font-family: "ray", sans-serif;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: var(--font-family);
+    font-family: var(--font-fa) !important;
 }
 
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
     direction: rtl;
+    
 }
 
 a {

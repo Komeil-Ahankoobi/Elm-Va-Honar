@@ -8,7 +8,7 @@
     --text-muted: #6b7280;
     --border-color: #e5e7eb;
     --card-bg: #ffffff;
-    --font-family: "Vazirmatn", sans-serif;
+    --font-family: "ray", sans-serif;
 }
 
 * {
@@ -54,7 +54,7 @@ header {
     padding: 2px 8px;
     font-size: 22px;
     font-weight: bold;
-    font-family: serif;
+    font-family: var(--font-fa) !important;
     letter-spacing: 1px;
 }
 
