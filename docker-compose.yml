@@ -28,11 +28,12 @@ services:
         volumes:
             - ./core:/usr/src/app
         ports:
-            - "9999:8000"
+            - "1111:8000"
         environment:
             - SECRET_KEY=test
             - DEBUG=True
             - SHOW_DEBUGGER_TOOLBAR=True
+            - KAVENEGAR_API_KEY=4D4F734457794557576D503349564E694C314436614B552B3342377537464E31704E5A3645324B703363343D
         restart: always
         depends_on:
             db:

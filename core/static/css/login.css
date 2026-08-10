@@ -288,6 +288,19 @@ p.subtitle {
     height: 16px;
 }
 
+.otp-input {
+    text-align: center;
+    letter-spacing: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.resend-disabled {
+    color: #6f6f6f !important;
+    cursor: default;
+    pointer-events: none;
+}
+
 @media (max-width: 480px) {
     .card {
         padding: 30px 22px 26px;
