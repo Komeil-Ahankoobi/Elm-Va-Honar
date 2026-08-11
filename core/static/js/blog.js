@@ -60,3 +60,17 @@ document.addEventListener("click", function (e) {
 
     window.location.href = card.dataset.href;
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const supportBtn = document.querySelector('.support-widget__btn');
+  const footer = document.querySelector('footer'); // اگر تگ فوتر شما اسم دیگری دارد، اینجا جایگزین کنید
+
+  if (supportBtn && footer) {
+    supportBtn.addEventListener('click', (e) => {
+      e.preventDefault(); // جلوگیری از رفتار پیش‌فرض لینک (#)
+      footer.scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  }
+});
