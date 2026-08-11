@@ -29,10 +29,9 @@
     </form>
 
     <div class="sort-select-wrapper">
-        <select class="sort-select">
-            <option>جدیدترین</option>
-            <option>محبوب‌ترین</option>
-            <option>پر بازدیدترین</option>
+        <select name="filter-by" class="sort-select" onchange="filterProducts(this)">
+            <option value="new" {% if filter_by == "new" %}selected{% endif %}>جدیدترین</option>
+            <option value="old" {% if filter_by == "old" %}selected{% endif %}>قدیمی ترین</option>
         </select>
     </div>
 </section>
@@ -44,7 +43,7 @@
     <article class="article-card">
         <a href="{% url 'website:blog-post-detail' pk=blog.id %}">
             <div class="card-image">
-                <img src="assets/images/blog-1.jpg" alt="خودکارهای ژله‌ای" />
+                <img src="{{ blog.image.url }}" alt="{{ blog.image_alt_text|default:blog.title }}" />
                 <span class="card-badge">معرفی محصول</span>
             </div>
             <div class="card-content">
@@ -92,3 +91,8 @@
 </section>
 
 {% endblock content %}
+
+
+{% block extra_js %}
+    <script src="{% static 'js/blog.js' %}" defer></script>
+{% endblock extra_js %}

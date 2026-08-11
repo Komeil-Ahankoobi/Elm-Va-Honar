@@ -6,11 +6,11 @@
     <p>موارد انتخاب‌شده:</p>
     <ul>
         {% for product in products %}
-            <li>{{ product }} — قیمت فعلی: {{ product.price }}</li>
+            <li>{{ product }} — تخفیف فعلی: {{ product.discount_percent }}٪</li>
         {% endfor %}
     </ul>
     {{ form.as_p }}
-    <input type="hidden" name="action" value="increase_price_custom">
-    <input type="submit" name="apply" value="اعمال تغییرات">
+    <input type="hidden" name="action" value="set_discount_percent">
+    <input type="submit" name="apply" value="اعمال تخفیف">
 </form>
 {% endblock %}

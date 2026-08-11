@@ -69,6 +69,12 @@ class HomeView(TemplateView):
                 "secondary_text": "دسته‌بندی‌ها",
             },
         ]
+        
+        
+        context['popular_cats'] = ProductCategoryModel.objects.filter(popular=True)
+        context['cat_baners'] = ProductCategoryModel.objects.filter(baner=True)
+        context['blog_posts'] = BlogModel.objects.all().order_by('-created_date')[:4]
+
         return context
 
 class AboutView(TemplateView):
@@ -124,7 +130,6 @@ class BrandsView(ListView):
         context['avtive_page'] = 'brands'
         return context
 
-
 class BlogPostView(ListView):
     template_name = 'website/blog-post.html'
     paginate_by = 4
@@ -132,15 +137,25 @@ class BlogPostView(ListView):
     def get_queryset(self):
         queryset = BlogModel.objects.all()
 
-        if q:= self.request.GET.get("q"):
-            queryset = BlogModel.objects.filter(title__contains=q)
+        if q := self.request.GET.get("q"):
+            queryset = queryset.filter(title__contains=q)
+
+        filter_by = self.request.GET.get("filter-by")
+        if filter_by == "new":
+            queryset = queryset.order_by("-created_date")
+        elif filter_by == "old":
+            queryset = queryset.order_by("created_date")
+
+        if category_id := self.request.GET.get("category"):
+            queryset = queryset.filter(category_id=category_id)
 
         return queryset
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['avtive_page'] = 'blog-post'
+        context['filter_by'] = self.request.GET.get("filter-by")
+        context['selected_category'] = self.request.GET.get("category")
         return context
 
 

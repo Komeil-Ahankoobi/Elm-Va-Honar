@@ -16,6 +16,11 @@ class ProductCategoryModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
     image = models.ImageField(default="default/آبرنگ.webp", upload_to="categories/img/")
+    popular = models.BooleanField(default=False)
+    baner = models.BooleanField(default=False)
+    baner_image =  models.ImageField(default="default/cat-abner-3.webp", upload_to="cat-baners/img/")
+    h3_text = models.CharField(max_length=200, null=True, blank=True)
+    p_text = models.CharField(max_length=150, null=True, blank=True)
 
     meta_title = models.CharField(max_length=70, blank=True,
         help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
@@ -73,7 +78,6 @@ class ProductBrandModel(models.Model):
         return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
 
 
-
 class ProductModel(models.Model):
     category = models.ManyToManyField(
         ProductCategoryModel,
@@ -101,10 +105,10 @@ class ProductModel(models.Model):
     meta_title = models.CharField(max_length=70, blank=True)
     meta_description = models.CharField(max_length=160, blank=True)
 
-    stock = models.PositiveIntegerField(default=0)
+    stock = models.PositiveIntegerField(default=0, null=True, blank=True)
     status = models.IntegerField(choices=ProductStatusType.choices, default=ProductStatusType.draft.value)
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
-    discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=0, null=True, blank=True)
+    discount_percent = models.IntegerField(default=0, null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     avg_rate = models.FloatField(default=0.0)
 
@@ -127,9 +131,20 @@ class ProductModel(models.Model):
         return self.title
 
     def get_price(self):
+        if self.has_variants():
+            prices = [v.get_price() for v in self.varients.all()]
+            return min(prices) if prices else 0
         discount_amount = self.price * Decimal(self.discount_percent) / Decimal(100)
         discounted_amount = self.price - discount_amount
         return round(discounted_amount)
+
+    def get_stock(self):
+        if self.has_variants():
+            return sum(v.stock for v in self.varients.all())
+        return self.stock
+    
+    def is_in_stock(self):
+        return self.get_stock() > 0
 
     def is_publish(self):
         return self.status == ProductStatusType.publish.value
@@ -185,28 +200,32 @@ class ProductVarientModel(models.Model):
     product = models.ForeignKey(
         ProductModel, on_delete=models.CASCADE, related_name='varients'
     )
-
     variant_type = models.CharField(
         max_length=20, choices=VarientType.choices,
         help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن"
     )
-    color_code = models.CharField(
-        max_length=3, blank=True, null=True,
-        help_text="فقط برای نوع 'رنگ' پر کن. کد هگز، مثلاً 12"
-    )
-    number_code = models.CharField(
-        max_length=5, blank=True, null=True,
-        help_text="مثل 0000 یا 000 یا 00 یا 0 یا اعداد طبیعی مثل 16 و 15"
-    )
+    color_code = models.CharField(max_length=3, blank=True, null=True)
+    number_code = models.CharField(max_length=5, blank=True, null=True)
+
     price = models.DecimalField(
-        max_digits=10, decimal_places=0, null=True, blank=True,
-        help_text="فقط اگه این شماره/سایز/رنگ قیمتش با قیمت پایه محصول فرق داره پر کن. خالی بمونه یعنی از قیمت محصول استفاده میشه."
+        max_digits=10, decimal_places=0,
+        help_text="قیمت مخصوص همین سایز/رنگ"
     )
-    
-    
+    stock = models.PositiveIntegerField(
+        default=0,
+        help_text="موجودی مخصوص همین سایز/رنگ"
+    )
+    discount_percent = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="درصد تخفیف مخصوص همین سایز/رنگ"
+    )
+    status = models.IntegerField(
+        choices=ProductStatusType.choices, default=ProductStatusType.publish.value,
+        help_text="نمایش یا عدم نمایش همین سایز/رنگ به صورت مجزا"
+    )
+
     def __str__(self):
         return f'{self.product.title} - {self.variant_type}'
-
 
     def get_hex_color(self):
         code = (self.color_code or "").strip().lstrip("#")
@@ -221,6 +240,11 @@ class ProductVarientModel(models.Model):
         return code
 
     def get_price(self):
-        base_price = self.price if self.price is not None else self.product.price
-        discount_amount = base_price * Decimal(self.product.discount_percent) / Decimal(100)
-        return round(base_price - discount_amount)
+        discount_amount = self.price * Decimal(self.discount_percent) / Decimal(100)
+        return round(self.price - discount_amount)
+
+    def is_in_stock(self):
+        return self.stock > 0
+
+    def is_publish(self):
+        return self.status == ProductStatusType.publish.value
