@@ -26,7 +26,7 @@
     {% for cat in object_list %}
     <a href="{% url 'shop:show-product-view' %}?category={{ cat.id }}" class="category-card">
         <div class="icon-wrapper">
-            <img src="assets/images/cat-paper.png" alt="دفتر و کاغذ">
+            <img src="{{ cat.image.url }}" alt="دفتر و کاغذ">
         </div>
         <span class="category-title">{{ cat.title }}</span>
         {% if request.user.is_staff %}

@@ -5,13 +5,15 @@ from django.views.generic import (
 )
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.db.models import Count
+from django.urls import reverse
+from django.db.models import Count, Q
 
 from .forms import NewsLetterForm
 from shop.models import (
     ProductModel,
     ProductCategoryModel,
     ProductBrandModel,
+    ProductStatusType,
     
 )
 from .models import BlogModel, BlogCategoryModel
@@ -33,15 +35,37 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['four_product'] = ProductModel.objects.all().order_by('-created_date')[:4]
+        product_url = reverse('shop:show-product-view')
+        categories_url = reverse('website:categories')
         context['hero_slides'] = [
             {
-                "image": 'images/slider-10.png',
+                "image": 'images/sliders/slider-1.webp',
                 "title1": "هر ایده",
                 "title2": "ابزاری مخصوص خود دارد",
                 "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
-                "primary_url": "{% url 'shop:show-product-view' %}", 
+                "primary_url": product_url,
                 "primary_text": "مشاهده محصولات",
-                "secondary_url": "{% url 'website:categories' %}", 
+                "secondary_url": categories_url,
+                "secondary_text": "دسته‌بندی‌ها",
+            },
+            {
+                "image": 'images/sliders/slider-2.webp',
+                "title1": "هر ایده",
+                "title2": "ابزاری مخصوص خود دارد",
+                "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
+                "primary_url": product_url,
+                "primary_text": "مشاهده محصولات",
+                "secondary_url": categories_url,
+                "secondary_text": "دسته‌بندی‌ها",
+            },
+            {
+                "image": 'images/sliders/slider-3.webp',
+                "title1": "هر ایده",
+                "title2": "ابزاری مخصوص خود دارد",
+                "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
+                "primary_url": product_url,
+                "primary_text": "مشاهده محصولات",
+                "secondary_url": categories_url,
                 "secondary_text": "دسته‌بندی‌ها",
             },
         ]
@@ -71,7 +95,10 @@ class CategoriesView(ListView):
     paginate_by = 8
     
     queryset = ProductCategoryModel.objects.annotate(
-        product_count=Count('products')
+        product_count=Count(
+            'products',
+            filter=Q(products__status=ProductStatusType.publish.value)
+        )
     )
 
     
@@ -86,7 +113,10 @@ class BrandsView(ListView):
     paginate_by = 8
 
     queryset = ProductBrandModel.objects.annotate(
-        product_count=Count('products')
+        product_count=Count(
+            'products',
+            filter=Q(products__status=ProductStatusType.publish.value)
+        )
     )
     
     def get_context_data(self, **kwargs):
@@ -127,5 +157,3 @@ class BlogPostDetailView(DetailView):
         context['sidebar_categories'] = BlogCategoryModel.objects.all()
         context['related_posts'] = BlogModel.objects.filter(category=self.object.category).exclude(pk=self.object.pk)[:4]
         return context
-
-    

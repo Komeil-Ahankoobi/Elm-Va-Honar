@@ -98,10 +98,13 @@
                         <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
                             loading="lazy" />
                     </div>
+
+                    <div class="product-title">{{ product.title }}</div>
+
                     <div class="product-category">
                         {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
                     </div>
-                    <div class="product-title">{{ product.title }}</div>
+
                     {% if product.has_variants %}
                     {% with price_range=product.get_price_range %}
                     <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
