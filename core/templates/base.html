@@ -25,12 +25,8 @@
     <header class="header">
         <div class="header__top container">
             <div class="header__logo-area">
-                <a href="#" class="header__logo">
-                    <span class="header__logo-symbol">EH</span>
-                    <div class="header__logo-text">
-                        <span class="header__logo-title">ElmvHonar</span>
-                        <span class="header__logo-tagline">علم و هنر در کنار شما</span>
-                    </div>
+                <a href="{% url 'website:home' %}" class="header__logo">
+                    <img src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar" class="header__logo-img">
                 </a>
             </div>
 
@@ -181,11 +177,7 @@
             <div class="footer__main">
                 <div class="footer__col footer__col--brand">
                     <div class="footer__logo">
-                        <span class="footer__logo-symbol">EH</span>
-                        <div class="footer__logo-text">
-                            <span class="footer__logo-title">ElmvHonar</span>
-                            <span class="footer__logo-tagline">علم و هنر در کنار شما</span>
-                        </div>
+                        <img src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar" class="footer__logo-img">
                     </div>
                     <h4 class="footer__title">درباره ما</h4>
                     <p class="footer__desc">

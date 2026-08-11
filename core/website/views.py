@@ -69,6 +69,12 @@ class HomeView(TemplateView):
                 "secondary_text": "دسته‌بندی‌ها",
             },
         ]
+        
+        
+        context['popular_cats'] = ProductCategoryModel.objects.filter(popular=True)
+        context['cat_baners'] = ProductCategoryModel.objects.filter(baner=True)
+        context['blog_posts'] = BlogModel.objects.all().order_by('-created_date')[:4]
+
         return context
 
 class AboutView(TemplateView):

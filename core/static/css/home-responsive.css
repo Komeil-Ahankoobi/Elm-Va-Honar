@@ -174,7 +174,6 @@
     footer.footer .trust-item:last-child {
         grid-column: 1 / -1 !important;
     }
-    
 
     /* Blog */
     .blog-grid {
@@ -335,7 +334,8 @@
 
     .hero-wrapper-card {
         padding: 12px 16px 16px;
-        border-radius: 16px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
     }
 
     /* Header */

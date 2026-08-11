@@ -16,6 +16,11 @@ class ProductCategoryModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
     image = models.ImageField(default="default/آبرنگ.webp", upload_to="categories/img/")
+    popular = models.BooleanField(default=False)
+    baner = models.BooleanField(default=False)
+    baner_image =  models.ImageField(default="default/cat-abner-3.webp", upload_to="cat-baners/img/")
+    h3_text = models.CharField(max_length=200, null=True, blank=True)
+    p_text = models.CharField(max_length=150, null=True, blank=True)
 
     meta_title = models.CharField(max_length=70, blank=True,
         help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
@@ -71,7 +76,6 @@ class ProductBrandModel(models.Model):
 
     def get_meta_description(self):
         return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
-
 
 
 class ProductModel(models.Model):

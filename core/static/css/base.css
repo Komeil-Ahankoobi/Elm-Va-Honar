@@ -90,7 +90,6 @@ button {
     padding: 0 20px;
 }
 
-
 /* ==========================================================================
    Buttons
    ========================================================================== */
@@ -157,6 +156,13 @@ button {
     align-items: center;
     gap: 12px;
     flex-shrink: 0;
+}
+
+.header__logo-img {
+    height: 55px;
+    width: auto;
+    display: block;
+    object-fit: contain;
 }
 
 .header__logo-symbol {
@@ -447,8 +453,8 @@ footer.footer .footer__col--brand {
 footer.footer .footer__logo {
     display: flex !important;
     align-items: center !important;
+    margin-bottom: 1rem;
     gap: 10px !important;
-    margin-bottom: 16px !important;
     justify-content: flex-start !important;
     direction: rtl !important;
 }
@@ -458,6 +464,14 @@ footer.footer .footer__logo-symbol {
     font-weight: 700 !important;
     font-size: 24px !important;
     color: #ffffff !important;
+}
+
+footer.footer .footer__logo-img {
+    height: 50px !important;
+    width: 70px !important;
+    display: block !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
 }
 
 footer.footer .footer__logo-title {
