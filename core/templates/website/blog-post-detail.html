@@ -30,8 +30,8 @@
                 <h3 class="sidebar-widget__title">دسته‌بندی مطالب</h3>
                 <ul class="sidebar-categories">
                     {% for category in sidebar_categories %}
-                    <li class="active">
-                        <a href="#">
+                    <li class="{% if selected_category == category.id|stringformat:'s' %}active{% endif %}">
+                        <a href="{% url 'website:blog-post' %}?category={{ category.id }}">
                             <span>{{ category.title }}</span>
                         </a>
                     </li>
@@ -79,7 +79,7 @@
             <!-- Hero Image & Title Section -->
             <article class="article-card">
                 <div class="article-hero">
-                    <img src="images/watercolor-brushes-hero.jpg" alt="راهنمای انتخاب قلم مو برای نقاشی آبرنگ">
+                    <img src="{{ blog.image.url }}" alt="{{ blog.image_alt_text|default:blog.title }}" />
                     <span class="article-badge">آموزش</span>
                 </div>
 
@@ -232,40 +232,40 @@
 
                 <div class="products-grid">
 
-                    {% for product in blog.related_products.all %}
-                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="product-card reveal"
-                        style="cursor: pointer" data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
-                        <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                        <div class="product-img">
-                            <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
-                                loading="lazy" />
-                        </div>
-                        <div class="product-category">
-                            {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
-                        </div>
-                        <div class="product-title">{{ product.title }}</div>
-                        {% if product.has_variants %}
-                        {% with price_range=product.get_price_range %}
-                        <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
-                        {% endwith %}
-                        {% else %}
-                        <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
-                        {% endif %}
+                   {% for product in blog.related_products.all %}
+                    <div class="product-card reveal" style="cursor: pointer"
+                    data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                    <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
+                    <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <div class="product-img">
+                    <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
+                        loading="lazy" />
+                    </div>
+                    <div class="product-category">
+                    {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
+                    </div>
+                    <div class="product-title">{{ product.title }}</div>
+                    {% if product.has_variants %}
+                    {% with price_range=product.get_price_range %}
+                    <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
+                    {% endwith %}
+                    {% else %}
+                    <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
+                    {% endif %}
 
-                        {% if product.has_variants %}
-                        <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
-                            <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
-                        </a>
-                        {% else %}
-                        <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
-                            data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
-                            data-stock="{{ product.stock }}">
-                            <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
-                        </button>
-                        {% endif %}
+                    {% if product.has_variants %}
+                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
+                    <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
                     </a>
+                    {% else %}
+                    <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
+                    data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
+                    data-stock="{{ product.stock }}">
+                    <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                    </button>
+                    {% endif %}
+                    </div>
                     {% empty %}
                     <p>محصولی یافت نشد.</p>
                     {% endfor %}

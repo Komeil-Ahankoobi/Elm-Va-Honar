@@ -24,10 +24,10 @@
                     <div class="price-value">قیمت</div>
                     {% if object.has_variants %}
                     {% with price_range=object.get_price_range %}
-                    <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
+                    <span class="product-price" id="pd-price" >از {{ price_range.0|intcomma }} تومان</span>
                     {% endwith %}
                     {% else %}
-                    <span class="product-price">{{ object.get_price|intcomma }} تومان</span>
+                    <span class="product-price" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
                     {% endif %}
                 </div>
 
@@ -264,7 +264,7 @@
         {% endif %}
         <tr>
             <td>قیمت</td>
-            <td id="spec-price-value">{{ object.get_price|intcomma }} تومان</td>
+            <td id="spec-price-value">-</td>
         </tr>
       
     </table>
