@@ -17,6 +17,13 @@
     background: radial-gradient(circle, #4a4d4a 0%, #2a2d2a 100%);
 }
 
+.header__logo-img {
+    height: 40px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
 /* ==========================================================================
    Section Card Box Layout
    ========================================================================== */
@@ -176,8 +183,8 @@
     opacity: 0;
     visibility: hidden;
     transition:
-        opacity var(--transition-normal),
-        visibility var(--transition-normal);
+        opacity 0.4s ease,
+        visibility 0.4s ease;
 }
 
 .hero__slide--active {
@@ -336,7 +343,9 @@
     opacity: 0.7;
     border: none;
     outline: none;
-    transition: filter 0.3s ease, opacity 0.3s ease;
+    transition:
+        filter 0.3s ease,
+        opacity 0.3s ease;
 }
 
 .brand-item__logo:hover {
@@ -402,10 +411,17 @@
 .category-circle-card__img-wrap {
     width: 100px;
     height: 100px;
-    border-radius: 50%;     
+    border-radius: 50%;
     overflow: hidden;
     margin-bottom: 8px;
     border: 1px solid var(--color-border);
+}
+
+.category-circle-card__img-wrap img.placeholder-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .category-circle-card:hover .placeholder-img {

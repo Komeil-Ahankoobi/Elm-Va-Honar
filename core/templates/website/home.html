@@ -33,12 +33,8 @@
             <div class="header__top">
 
                 <div class="header__logo-area">
-                    <a href="#" class="header__logo">
-                        <span class="header__logo-symbol">EH</span>
-                        <div class="header__logo-text">
-                            <span class="header__logo-title">ElmvHonar</span>
-                            <span class="header__logo-tagline">علم و هنر در کنار شما</span>
-                        </div>
+                    <a href="{% url 'website:home' %}" class="header__logo">
+                        <img src="{% static 'images/logos/elmvhonar.webp' %}" alt="ElmvHonar" class="header__logo-img">
                     </a>
                 </div>
 
@@ -294,66 +290,135 @@
                 </button>
 
                 <div class="categories-grid scroll-container" id="catGrid">
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/آبرنگ.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">رنگ‌ها</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/ابزار و تجهیزات.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">قلم مو</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/بوم.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">دفتر و کاغذ</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/پاستل.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">طراحی و گرافیک</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/پتینه.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">هنرهای تجسمی</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/جوهر و راپید.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">ابزار و تجهیزات</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/رنگ آکریلیک.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">لوازم رنگی</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/رنگ روغن.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">پر فروش‌ها</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/قلم مو.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">خوشنویسی</span>
                     </a>
+
                     <a href="#" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{% static 'images/categories/گواش.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">پاستل</span>
                     </a>
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <img src="{% static 'images/categories/لوازم اداری.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
+
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <img src="{% static 'images/categories/لوازم هنری.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
+
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <img src="{% static 'images/categories/ماژیک.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
+
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <img src="{% static 'images/categories/مجسمه سازی.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
+
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <img src="{% static 'images/categories/مدادرنگی.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
+
+                    <a href="#" class="category-circle-card">
+                        <div class="category-circle-card__img-wrap">
+                            <img src="{% static 'images/categories/مقوا.webp' %}" alt="دسته‌بندی"
+                                class="placeholder-img">
+                        </div>
+                        <span class="category-circle-card__title">پاستل</span>
+                    </a>
+
+
                 </div>
 
                 <button class="carousel-arrow carousel-arrow--next" id="catNext" aria-label="Next Category">
@@ -369,31 +434,34 @@
     <section class="section promo-banners">
         <div class="container">
             <div class="promo-grid">
-    <div class="promo-card">
-        <img src="{% static 'images/cat-baner-1.webp' %}" alt="دفتر و کاغذ" class="placeholder-img placeholder-img--dark">
-        <div class="promo-card__content">
-            <h3 class="promo-card__title">دفتر و کاغذ</h3>
-            <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
-            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-        </div>
-    </div>
-    <div class="promo-card">
-        <img src="{% static 'images/cat-baner-2.webp' %}" alt="مداد رنگی‌های حرفه‌ای" class="placeholder-img placeholder-img--dark">
-        <div class="promo-card__content">
-            <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
-            <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
-            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-        </div>
-    </div>
-    <div class="promo-card">
-        <img src="{% static 'images/cat-baner-3.webp' %}" alt="رنگ‌های آکریلیک" class="placeholder-img placeholder-img--dark">
-        <div class="promo-card__content">
-            <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
-            <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
-            <a href="#" class="btn btn--sm btn--light">مشاهده</a>
-        </div>
-    </div>
-</div>
+                <div class="promo-card">
+                    <img src="{% static 'images/cat-baners/cat-baner-1.webp' %}" alt="دفتر و کاغذ"
+                        class="placeholder-img placeholder-img--dark">
+                    <div class="promo-card__content">
+                        <h3 class="promo-card__title">دفتر و کاغذ</h3>
+                        <p class="promo-card__desc">مناسب هر سبک و تکنیک</p>
+                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <img src="{% static 'images/cat-baners/cat-baner-2.webp' %}" alt="مداد رنگی‌های حرفه‌ای"
+                        class="placeholder-img placeholder-img--dark">
+                    <div class="promo-card__content">
+                        <h3 class="promo-card__title">مداد رنگی‌های حرفه‌ای</h3>
+                        <p class="promo-card__desc">رنگ‌هایی برای هر رویا</p>
+                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <img src="{% static 'images/cat-baners/cat-baner-3.webp' %}" alt="رنگ‌های آکریلیک"
+                        class="placeholder-img placeholder-img--dark">
+                    <div class="promo-card__content">
+                        <h3 class="promo-card__title">رنگ‌های آکریلیک</h3>
+                        <p class="promo-card__desc">کیفیتی که می‌توانید حس کنید</p>
+                        <a href="#" class="btn btn--sm btn--light">مشاهده</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -556,58 +624,66 @@
                 <div class="brands-ticker__track">
                     <!-- Duplicate list for seamless infinite loop -->
                     <div class="brand-item">
-                        <img src="{% static 'images/faber-castell.webp' %}" alt="Faber-Castell" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/winsor-newton.webp' %}" alt="Winsor & Newton" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item"><span class="brand-item__text">Canson</span></div>
                     <div class="brand-item">
-                        <img src="{% static 'images/vesta.webp' %}" alt="Vesta" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/vesta.webp' %}" alt="Vesta" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/stadler.webp' %}" alt="Staedtler" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/pentel.webp' %}" alt="Pentel" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/pentel.webp' %}" alt="Pentel" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
                     <div class="brand-item">
-                        <img src="{% static 'images/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/picasso.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
-                    </div>
-                    <div class="brand-item">
-                        <img src="{% static 'images/elmvhonar.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/picasso.webp' %}" alt="Picasso" class="brand-item__logo"
+                            loading="lazy">
                     </div>
 
                     <!-- تکرار دوم برای infinite loop -->
                     <div class="brand-item">
-                        <img src="{% static 'images/faber-castell.webp' %}" alt="Faber-Castell" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/winsor-newton.webp' %}" alt="Winsor & Newton" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item"><span class="brand-item__text">Canson</span></div>
                     <div class="brand-item">
-                        <img src="{% static 'images/vesta.webp' %}" alt="Vesta" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/vesta.webp' %}" alt="Vesta" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/stadler.webp' %}" alt="Staedtler" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/pentel.webp' %}" alt="Pentel" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/pentel.webp' %}" alt="Pentel" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item"><span class="brand-item__text">Maimeri</span></div>
                     <div class="brand-item">
-                        <img src="{% static 'images/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/picasso.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
-                    </div>
-                     <div class="brand-item">
-                        <img src="{% static 'images/elmvhonar.webp' %}" alt="Picasso" class="brand-item__logo" loading="lazy">
+                        <img src="{% static 'images/brands/picasso.webp' %}" alt="Picasso" class="brand-item__logo"
+                            loading="lazy">
                     </div>
                 </div>
             </div>
@@ -844,50 +920,49 @@
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
     <script src="{% static 'vendor/toastify/toastify-es.js' %}"></script>
 
-    <!-- Mobile off-canvas navigation toggle -->
+    {% include 'messages.html' %}
+
     <script>
         (function () {
-            var hamburger = document.getElementById('navHamburger');
-            var nav = document.getElementById('mainNav');
-            var overlay = document.getElementById('navOverlay');
-            var closeBtn = document.getElementById('navClose');
+            var hamburger = document.getElementById("navHamburger");
+            var nav = document.getElementById("mainNav");
+            var overlay = document.getElementById("navOverlay");
+            var closeBtn = document.getElementById("navClose");
 
             if (!hamburger || !nav || !overlay) return;
 
             function openNav() {
-                nav.classList.add('nav--open');
-                hamburger.classList.add('header__hamburger--active');
-                overlay.classList.add('nav__overlay--active');
-                document.body.classList.add('no-scroll');
-                hamburger.setAttribute('aria-expanded', 'true');
+                nav.classList.add("nav--open");
+                hamburger.classList.add("header__hamburger--active");
+                overlay.classList.add("nav__overlay--active");
+                document.body.classList.add("no-scroll");
+                hamburger.setAttribute("aria-expanded", "true");
             }
 
             function closeNav() {
-                nav.classList.remove('nav--open');
-                hamburger.classList.remove('header__hamburger--active');
-                overlay.classList.remove('nav__overlay--active');
-                document.body.classList.remove('no-scroll');
-                hamburger.setAttribute('aria-expanded', 'false');
+                nav.classList.remove("nav--open");
+                hamburger.classList.remove("header__hamburger--active");
+                overlay.classList.remove("nav__overlay--active");
+                document.body.classList.remove("no-scroll");
+                hamburger.setAttribute("aria-expanded", "false");
             }
 
-            hamburger.addEventListener('click', function () {
-                if (nav.classList.contains('nav--open')) {
+            hamburger.addEventListener("click", function () {
+                if (nav.classList.contains("nav--open")) {
                     closeNav();
                 } else {
                     openNav();
                 }
             });
 
-            overlay.addEventListener('click', closeNav);
-            if (closeBtn) closeBtn.addEventListener('click', closeNav);
+            overlay.addEventListener("click", closeNav);
+            if (closeBtn) closeBtn.addEventListener("click", closeNav);
 
-            nav.querySelectorAll('.nav__link').forEach(function (link) {
-                link.addEventListener('click', closeNav);
+            nav.querySelectorAll(".nav__link").forEach(function (link) {
+                link.addEventListener("click", closeNav);
             });
         })();
     </script>
-
-    {% include 'messages.html' %}
 </body>
 
 </html>

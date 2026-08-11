@@ -15,6 +15,7 @@ class ProductStatusType(models.IntegerChoices):
 class ProductCategoryModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
+    image = models.ImageField(default="default/آبرنگ.webp", upload_to="categories/img/")
 
     meta_title = models.CharField(max_length=70, blank=True,
         help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
@@ -45,6 +46,8 @@ class ProductCategoryModel(models.Model):
 class ProductBrandModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
+    image = models.ImageField(default="default/faber-castell.webp", upload_to="brands/img/")
+
 
     meta_title = models.CharField(max_length=70, blank=True,
         help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")

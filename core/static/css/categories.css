@@ -107,8 +107,6 @@ body {
 .icon-wrapper {
     width: 96px;
     height: 96px;
-    border-radius: 50%;
-    background-color: #f4f4f5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,9 +114,19 @@ body {
 }
 
 .icon-wrapper img {
-    width: 56px;
-    height: 56px;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Brands page: logos usually have padding/whitespace, so show them
+   smaller and un-cropped instead of zoomed/cover like category photos */
+.brands-grid .icon-wrapper img {
+    width: 140PX;
+    height: 140PX;
     object-fit: contain;
+    border-radius: 0;
 }
 
 /* SVG Fallback icon style if img is missing */
@@ -307,8 +315,8 @@ body {
     }
 
     .icon-wrapper img {
-        width: 44px;
-        height: 44px;
+        width: 100%;
+        height: 100%;
     }
 
     .category-title {
@@ -388,8 +396,8 @@ body {
     }
 
     .icon-wrapper img {
-        width: 36px;
-        height: 36px;
+        width: 80px;
+        height: 80px;
     }
 
     .category-card-text {

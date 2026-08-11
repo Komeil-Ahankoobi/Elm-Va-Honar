@@ -23,11 +23,11 @@
 </section>
 
 <!-- Grid -->
-<section class="categories-grid">
+<section class="categories-grid brands-grid">
     {% for brand in object_list %}
     <a href="{% url 'shop:show-product-view' %}?brand={{ brand.id }}" class="category-card">
         <div class="icon-wrapper">
-            <img src="assets/images/brands/faber-castell.png" alt="فابر کاستل">
+            <img src="{{ brand.image.url }}" alt="فابر کاستل">
         </div>
         <span class="category-title">{{ brand.title }}</span>
         {% if request.user.is_staff %}
