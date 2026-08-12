@@ -150,7 +150,11 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+# مسیر دیسک پایدار (Persistent Disk) روی رانفلر.
+# مقدار پیش‌فرض رو با مسیر واقعی mount شده‌ی دیسک پایدارت جایگزین کن،
+# یا بهتر، مقدار MEDIA_ROOT رو در Environment Variables پنل رانفلر ست کن.
+MEDIA_ROOT = config("MEDIA_ROOT", default=str(BASE_DIR / 'media'))
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'

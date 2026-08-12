@@ -108,10 +108,6 @@
                 <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
             </button>
 
-            <button type="button" class="btn-wishlist" aria-label="افزودن {{ object.title }} به علاقه‌مندی">
-                <i class="fa-regular fa-heart"></i> افزودن به علاقه‌مندی
-            </button>
-
             <div class="trust-badges">
                 <div class="badge-item">
                     <i class="fa-solid fa-truck-fast"></i>
@@ -153,9 +149,6 @@
             <input type="radio" name="pd-thumb" id="pd-thumb-5" class="pd-thumb-radio" />
 
             <div class="main-image-container">
-                <label class="nav-arrow left" for="pd-thumb-5" aria-label="تصویر قبلی">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </label>
 
                 <div class="pd-image-stack">
                     <img
@@ -184,45 +177,6 @@
                         loading="lazy" />
                 </div>
 
-                <label class="nav-arrow right" for="pd-thumb-1" aria-label="تصویر بعدی">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </label>
-
-                <button type="button" class="zoom-btn" aria-label="بزرگ‌نمایی تصویر">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-
-            <div class="thumbnail-list">
-                <label class="thumb-item" for="pd-thumb-1" aria-label="مشاهده تصویر ۱">
-                    <img
-                        src="https://picsum.photos/seed/{{ object.slug }}-1/160/160"
-                        alt="{{ object.get_image_alt }}" />
-                </label>
-                <label class="thumb-item" for="pd-thumb-2" aria-label="مشاهده تصویر ۲">
-                    <img
-                        src="https://picsum.photos/seed/{{ object.slug }}-2/160/160"
-                        alt="{{ object.get_image_alt }}"
-                        loading="lazy" />
-                </label>
-                <label class="thumb-item" for="pd-thumb-3" aria-label="مشاهده تصویر ۳">
-                    <img
-                        src="https://picsum.photos/seed/{{ object.slug }}-3/160/160"
-                        alt="{{ object.get_image_alt }}"
-                        loading="lazy" />
-                </label>
-                <label class="thumb-item" for="pd-thumb-4" aria-label="مشاهده تصویر ۴">
-                    <img
-                        src="https://picsum.photos/seed/{{ object.slug }}-4/160/160"
-                        alt="{{ object.get_image_alt }}"
-                        loading="lazy" />
-                </label>
-                <label class="thumb-item" for="pd-thumb-5" aria-label="مشاهده تصویر ۵">
-                    <img
-                        src="https://picsum.photos/seed/{{ object.slug }}-5/160/160"
-                        alt="{{ object.get_image_alt }}"
-                        loading="lazy" />
-                </label>
             </div>
         </div>
     </div>

@@ -213,14 +213,14 @@
 
 .related-post-item__cat {
     display: block;
-    font-size: 9px;
-    color: #94a3b8;
+    font-size: 10px;
+    color: #363c43;
 }
 
 .related-post-item__date {
     display: block;
-    font-size: 9px;
-    color: #cbd5e1;
+    font-size: 10px;
+    color: #363c43;
 }
 
 .sidebar-widget__more-btn {
@@ -289,9 +289,10 @@
 }
 
 .article-title {
-    font-size: 22px;
+    font-size: 25px;
     font-weight: 800;
     color: #1e293b;
+    line-height: 1.5;
     margin-bottom: 12px;
 }
 
@@ -314,8 +315,8 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 11px;
-    color: #94a3b8;
+    font-size: 12px;
+    color: #3b4048;
 }
 
 /* Table of Contents */
@@ -360,7 +361,7 @@
 
 /* Article Body Typography */
 .article-body h2 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
     color: #1e293b;
     margin-top: 28px;
@@ -368,9 +369,12 @@
 }
 
 .article-body p {
-    font-size: 13px;
+    font-size: 15.5px;
     color: #475569;
-    line-height: 1.9;
+    line-height: 2.05;
+    word-spacing: 1px;
+    text-align: justify;
+    text-justify: inter-word;
     margin-bottom: 16px;
 }
 
@@ -393,10 +397,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 800;
     color: #1e293b;
-    margin: 0 0 16px 0;
+    margin: 0 0 18px 0;
 }
 
 .section-title__icon {
@@ -412,32 +416,41 @@
 }
 
 .section-text {
-    font-size: 13px;
+    font-size: 15.5px;
     color: #475569;
-    line-height: 2;
+    line-height: 2.05;
+    letter-spacing: 0;
+    word-spacing: 1px;
+    text-align: justify;
+    text-justify: inter-word;
     margin: 0;
 }
 
-/* Key Points Checklist (Card Style) */
+/* Key Points Checklist (Card Style) - title on top, description below, like FAQ */
 .article-checklist {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 24px 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .article-checklist li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
     background-color: #f8fafc;
     border-radius: 12px;
     padding: 14px 16px;
-    font-size: 12px;
-    color: #475569;
-    line-height: 1.8;
+}
+
+.checklist-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    line-height: 1.6;
 }
 
 .checklist-icon {
@@ -450,14 +463,18 @@
     border-radius: 50%;
     background-color: #0f766e;
     color: #ffffff;
-    margin-top: 1px;
 }
 
-.checklist-text strong {
-    display: inline-block;
-    color: #1e293b;
-    font-weight: 700;
-    margin-left: 4px;
+.checklist-desc {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.95;
+    word-spacing: 1px;
+    text-align: justify;
+    text-justify: inter-word;
+    margin: 0 0 0 32px;
+    padding-right: 32px;
+    border-right: 2px solid #e2e8f0;
 }
 
 /* FAQ Section */
@@ -472,7 +489,9 @@
     border: 1px solid #f1f5f9;
     border-radius: 14px;
     padding: 18px 20px;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition:
+        border-color 0.2s,
+        background-color 0.2s;
 }
 
 .faq-item:hover {
@@ -484,7 +503,7 @@
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     color: #1e293b;
     margin: 0 0 10px 0;
@@ -506,9 +525,12 @@
 }
 
 .faq-answer {
-    font-size: 12px;
+    font-size: 14px;
     color: #64748b;
-    line-height: 1.9;
+    line-height: 1.95;
+    word-spacing: 1px;
+    text-align: justify;
+    text-justify: inter-word;
     margin: 0 0 0 32px;
     padding-right: 32px;
     border-right: 2px solid #e2e8f0;
@@ -556,32 +578,6 @@
     color: #64748b;
     line-height: 1.6;
     margin-bottom: 0;
-}
-
-/* Article Checklist */
-.article-checklist {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 24px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.article-checklist li {
-    font-size: 12px;
-    color: #475569;
-    position: relative;
-    padding-right: 20px;
-    line-height: 1.7;
-}
-
-.article-checklist li::before {
-    content: "✓";
-    position: absolute;
-    right: 0;
-    color: #0f766e;
-    font-weight: bold;
 }
 
 /* Tip Box */
@@ -788,13 +784,13 @@
 }
 
 .related-products-section .product-category {
-    font-size: 9px;
-    color: #94a3b8;
+    font-size: 11px;
+    color: #33383f;
     margin-bottom: 4px;
 }
 
 .related-products-section .product-title {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: #1e293b;
     margin-bottom: 8px;
@@ -805,7 +801,7 @@
 }
 
 .related-products-section .product-price {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
     color: #1e293b;
     margin-bottom: 10px;
@@ -911,7 +907,7 @@
     }
 
     .article-title {
-        font-size: 17px;
+        font-size: 19px;
     }
 
     .article-excerpt {
@@ -939,11 +935,11 @@
     }
 
     .article-body h2 {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .article-body p {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .article-tip-box {
@@ -993,7 +989,7 @@
     }
 
     .article-title {
-        font-size: 15px;
+        font-size: 19px;
     }
 
     .breadcrumb {
@@ -1020,7 +1016,7 @@
     }
 
     .related-products-section .product-title {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .related-products-section .btn-add-cart {
@@ -1032,7 +1028,7 @@
 /* Extra Small Mobile */
 @media (max-width: 360px) {
     .article-title {
-        font-size: 14px;
+        font-size: 19px;
     }
 
     .article-hero img {
@@ -1046,8 +1042,14 @@
     .related-products-section .product-img {
         height: 75px;
     }
+
+    .checklist-desc,
+    .faq-answer {
+        margin-right: 0;
+        padding-right: 16px;
+    }
 }
 
-.empty-post-detail-product{
+.empty-post-detail-product {
     margin-right: 2rem;
 }

@@ -10,6 +10,9 @@
     <meta name="description"
         content="{% block meta_description %}نوشت‌افزار علم و هنر — فروش لوازم‌التحریر، رنگ، ابزار طراحی و خوشنویسی با کیفیت ممتاز{% endblock meta_description %}" />
     <meta name="enamad" content="53417095" />
+
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.webp' %}">
+
     <link rel="stylesheet" href="{% static 'css/fonts.css'%}" />
     <link rel="stylesheet" href="{% static 'css/base.css'%}" />
     <link rel="stylesheet" href="{% static 'css/base-responsive.css'%}" />
@@ -33,13 +36,6 @@
             <!-- همبرگر منو برای موبایل -->
             <form action="{% url 'shop:show-product-view' %}" method="get" class="header__search-form">
                 <div class="header__search">
-                    <div class="header__search-select">
-                        <span>همه دسته‌ها</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M6 9l6 6 6-6" />
-                        </svg>
-                    </div>
                     <input type="text" name="q" class="header__search-input" placeholder="جستجو محصولات..." />
                     <button class="header__search-btn" aria-label="Search">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -184,7 +180,7 @@
                         فروشگاه ElmvHonar مرجع تخصصی لوازم هنر و طراحی با هدف ارائه بهترین محصولات و تجربه خریدی لذت‌بخش
                         برای هنرمندان و علاقه‌مندان به هنر.
                     </p>
-                    <a href="#" class="footer__read-more">بیشتر درباره ما...</a>
+                    <a href="{% url 'website:about' %}" class="footer__read-more">بیشتر درباره ما...</a>
                 </div>
 
                 <div class="footer__col">

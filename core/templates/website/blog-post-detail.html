@@ -80,7 +80,6 @@
             <article class="article-card">
                 <div class="article-hero">
                     <img src="{{ blog.image.url }}" alt="{{ blog.image_alt_text|default:blog.title }}" />
-                    <span class="article-badge">آموزش</span>
                 </div>
 
                 <div class="article-header">
@@ -126,7 +125,8 @@
                     <div class="content-section" id="intro">
                         <h2 class="section-title">
                             <span class="section-title__icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <line x1="4" y1="6" x2="20" y2="6" />
                                     <line x1="4" y1="12" x2="20" y2="12" />
                                     <line x1="4" y1="18" x2="14" y2="18" />
@@ -135,7 +135,7 @@
                             توضیحات
                         </h2>
                         <p class="section-text">
-                            {{blog.content}}
+                            {{blog.content|linebreaksbr}}
                         </p>
                     </div>
 
@@ -143,7 +143,8 @@
                     <div class="content-section" id="important-points">
                         <h2 class="section-title">
                             <span class="section-title__icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
                             </span>
@@ -152,15 +153,16 @@
                         <ul class="article-checklist">
                             {% for point in blog.key_points.all %}
                             <li>
-                                <span class="checklist-icon">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12" />
-                                    </svg>
-                                </span>
-                                <span class="checklist-text">
-                                    <strong>{{point.title}}</strong>
-                                    {{point.description}}
-                                </span>
+                                <h3 class="checklist-title">
+                                    <span class="checklist-icon">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    </span>
+                                    {{ point.title }}
+                                </h3>
+                                <p class="checklist-desc">{{ point.description }}</p>
                             </li>
                             {% endfor %}
                         </ul>
@@ -170,7 +172,8 @@
                     <div class="content-section faq-section" id="faq">
                         <h2 class="section-title">
                             <span class="section-title__icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                                 </svg>
                             </span>
@@ -218,42 +221,42 @@
 
                 <div class="products-grid">
 
-                   {% for product in blog.related_products.all %}
+                    {% for product in blog.related_products.all %}
                     <div class="product-card reveal" style="cursor: pointer"
-                    data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
-                    <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
-                    <i class="fa-regular fa-heart"></i>
-                    </button>
-                    <div class="product-img">
-                    <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
-                        loading="lazy" />
-                    </div>
-                    <div class="product-category">
+                        data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                        <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <div class="product-img">
+                            <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
+                                loading="lazy" />
+                        </div>
+                        <div class="product-category">
                     {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
-                    </div>
-                    <div class="product-title">{{ product.title }}</div>
-                    {% if product.has_variants %}
-                    {% with price_range=product.get_price_range %}
-                    <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
-                    {% endwith %}
-                    {% else %}
-                    <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
-                    {% endif %}
+                        </div>
+                        <div class="product-title">{{ product.title }}</div>
+                        {% if product.has_variants %}
+                        {% with price_range=product.get_price_range %}
+                        <span class="product-price">از {{ price_range.0|intcomma }} تومان</span>
+                        {% endwith %}
+                        {% else %}
+                        <span class="product-price">{{ product.get_price|intcomma }} تومان</span>
+                        {% endif %}
 
-                    {% if product.has_variants %}
-                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
-                    <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
-                    </a>
-                    {% else %}
-                    <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
-                    data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
-                    data-stock="{{ product.stock }}">
-                    <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
-                    </button>
-                    {% endif %}
+                        {% if product.has_variants %}
+                        <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
+                            <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
+                        </a>
+                        {% else %}
+                        <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
+                            data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
+                            data-stock="{{ product.stock }}">
+                            <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                        </button>
+                        {% endif %}
                     </div>
                     {% empty %}
-                    <p class="empty-post-detail-product" >محصولی یافت نشد.</p>
+                    <p class="empty-post-detail-product">محصولی یافت نشد.</p>
                     {% endfor %}
 
 

@@ -97,9 +97,6 @@
                 {% for product in products %}
                 <div class="product-card reveal" style="cursor: pointer"
                     data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
-                    <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
                     <div class="product-img">
                         <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
                             loading="lazy" />
