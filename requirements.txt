@@ -1,14 +1,10 @@
 Django>=5.2,<5.3
 psycopg[binary]
 gunicorn
-
-# Environment variables
 python-decouple
 pillow
 faker
 jdatetime
 openpyxl
 requests
-
-# برای static files (چون ENABLE_WHITENOISE داری)
 whitenoise
