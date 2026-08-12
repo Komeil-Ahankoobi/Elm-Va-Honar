@@ -40,13 +40,6 @@
                 </div>
 
                 <form action="{% url 'shop:show-product-view' %}" method="get" class="header__search">
-                    <div class="header__search-select">
-                        <span>همه دسته‌ها</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M6 9l6 6 6-6" />
-                        </svg>
-                    </div>
                     <input type="text" name="q" class="header__search-input" placeholder="جستجوی محصول...">
                     <button class="header__search-btn" type="submit" aria-label="Search">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -280,7 +273,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-header__title">دسته‌بندی‌های محبوب</h2>
-                <a href="#" class="section-header__link">مشاهده همه</a>
+                <a href="{% url 'website:categories' %}" class="section-header__link">مشاهده همه دسته بندی ها</a>
             </div>
 
             <div class="categories-carousel">
@@ -345,7 +338,7 @@
                         <span class="countdown-timer__time">۲۱ : ۴۵ : ۲۱</span>
                     </div>
                 </div>
-                <a href="#" class="section-header__link">مشاهده همه</a>
+                <a href="{% url 'shop:show-product-view' %}" class="section-header__link">مشاهده همه همه محصولات</a>
             </div>
 
             <div class="products-carousel-wrap">
@@ -359,13 +352,6 @@
                 <div class="products-grid scroll-container" id="prodGrid">
                     <div class="product-card">
                         <div class="product-card__badge">۱۳٪</div>
-                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                        </button>
                         <div class="product-card__img-wrap">
                             <div class="placeholder-img"></div>
                         </div>
@@ -378,13 +364,6 @@
 
                     <div class="product-card">
                         <div class="product-card__badge">۱۰٪</div>
-                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                        </button>
                         <div class="product-card__img-wrap">
                             <div class="placeholder-img"></div>
                         </div>
@@ -397,13 +376,6 @@
 
                     <div class="product-card">
                         <div class="product-card__badge">۱۵٪</div>
-                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                        </button>
                         <div class="product-card__img-wrap">
                             <div class="placeholder-img"></div>
                         </div>
@@ -416,13 +388,6 @@
 
                     <div class="product-card">
                         <div class="product-card__badge">۱۰٪</div>
-                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                        </button>
                         <div class="product-card__img-wrap">
                             <div class="placeholder-img"></div>
                         </div>
@@ -435,13 +400,6 @@
 
                     <div class="product-card">
                         <div class="product-card__badge">۲۰٪</div>
-                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                        </button>
                         <div class="product-card__img-wrap">
                             <div class="placeholder-img"></div>
                         </div>
@@ -454,13 +412,6 @@
 
                     <div class="product-card">
                         <div class="product-card__badge">۱۵٪</div>
-                        <button class="product-card__wishlist" aria-label="Add to Wishlist">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                            </svg>
-                        </button>
                         <div class="product-card__img-wrap">
                             <div class="placeholder-img"></div>
                         </div>
@@ -486,7 +437,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-header__title">برندهای معتبر</h2>
-                <a href="#" class="section-header__link">مشاهده همه</a>
+                <a href="{% url 'website:brands' %}" class="section-header__link">مشاهده همه برند ها</a>
             </div>
 
             <div class="brands-ticker">
@@ -526,7 +477,7 @@
                         <img src="{% static 'images/brands/c-class.webp' %}" alt="c-class" class="brand-item__logo"
                             loading="lazy">
                     </div>
-                    
+
 
                     <div class="brand-item">
                         <img src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo"
@@ -572,7 +523,7 @@
                         <img src="{% static 'images/brands/c-class.webp' %}" alt="c-class" class="brand-item__logo"
                             loading="lazy">
                     </div>
-                    
+
 
 
                     <div class="brand-item">
@@ -594,7 +545,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-header__title">مجله علم و هنر</h2>
-                <a href="#" class="section-header__link">مشاهده همه</a>
+                <a href="{% url 'website:blog-post' %}" class="section-header__link">مشاهده همه مجله ها</a>
             </div>
 
             <div class="blog-grid">
@@ -603,12 +554,16 @@
                 <a href="{% url 'website:blog-post-detail' pk=post.id %}">
                     <article class="blog-card">
                         <div class="blog-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-card__img"
+                                loading="lazy">
                             <span class="blog-card__badge">{{ post.title }}</span>
                         </div>
                         <div class="blog-card__content">
                             <h3 class="blog-card__title">{{ post.brief_description }}</h3>
-                            <span class="blog-card__date">{{ post.created_date|jalali_date }}</span>
+                            <div class="blog-date-cont">
+                                <span class="blog-card__date">{{ post.created_date|jalali_date }}</span>
+                                <span class="blog-card__date">ادامه -></span>
+                            </div>
                         </div>
                     </article>
                 </a>
@@ -632,7 +587,7 @@
                         فروشگاه ElmvHonar مرجع تخصصی لوازم هنر و طراحی با هدف ارائه بهترین محصولات و تجربه خریدی لذت‌بخش
                         برای هنرمندان و علاقه‌مندان به هنر.
                     </p>
-                    <a href="#" class="footer__read-more">بیشتر درباره ما...</a>
+                    <a href="{% url 'website:about' %}" class="footer__read-more">بیشتر درباره ما...</a>
                 </div>
 
                 <div class="footer__col">
@@ -835,8 +790,8 @@
         })();
     </script>
     <script type="text/javascript">
-  !function(){var i="M3pf84",d=document,g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.type="text/javascript",g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}();
-</script>
+        !function () { var i = "M3pf84", d = document, g = d.createElement("script"), s = "https://www.goftino.com/widget/" + i, l = localStorage.getItem("goftino_" + i); g.type = "text/javascript", g.async = !0, g.src = l ? s + "?o=" + l : s; d.getElementsByTagName("head")[0].appendChild(g); }();
+    </script>
 </body>
 
 </html>

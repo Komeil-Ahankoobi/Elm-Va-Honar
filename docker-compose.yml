@@ -28,7 +28,7 @@ services:
         volumes:
             - ./core:/usr/src/app
         ports:
-            - "1111:8000"
+            - "9999:8000"
         environment:
             - SECRET_KEY=test
             - DEBUG=True

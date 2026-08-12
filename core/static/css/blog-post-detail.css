@@ -418,26 +418,31 @@
     margin: 0;
 }
 
-/* Key Points Checklist (Card Style) */
+/* Key Points Checklist (Card Style) - title on top, description below, like FAQ */
 .article-checklist {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 24px 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .article-checklist li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
     background-color: #f8fafc;
     border-radius: 12px;
     padding: 14px 16px;
-    font-size: 12px;
-    color: #475569;
-    line-height: 1.8;
+}
+
+.checklist-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    line-height: 1.6;
 }
 
 .checklist-icon {
@@ -450,14 +455,15 @@
     border-radius: 50%;
     background-color: #0f766e;
     color: #ffffff;
-    margin-top: 1px;
 }
 
-.checklist-text strong {
-    display: inline-block;
-    color: #1e293b;
-    font-weight: 700;
-    margin-left: 4px;
+.checklist-desc {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.8;
+    margin: 0 0 0 32px;
+    padding-right: 32px;
+    border-right: 2px solid #e2e8f0;
 }
 
 /* FAQ Section */
@@ -472,7 +478,9 @@
     border: 1px solid #f1f5f9;
     border-radius: 14px;
     padding: 18px 20px;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition:
+        border-color 0.2s,
+        background-color 0.2s;
 }
 
 .faq-item:hover {
@@ -556,32 +564,6 @@
     color: #64748b;
     line-height: 1.6;
     margin-bottom: 0;
-}
-
-/* Article Checklist */
-.article-checklist {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 24px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.article-checklist li {
-    font-size: 12px;
-    color: #475569;
-    position: relative;
-    padding-right: 20px;
-    line-height: 1.7;
-}
-
-.article-checklist li::before {
-    content: "✓";
-    position: absolute;
-    right: 0;
-    color: #0f766e;
-    font-weight: bold;
 }
 
 /* Tip Box */
@@ -1046,8 +1028,14 @@
     .related-products-section .product-img {
         height: 75px;
     }
+
+    .checklist-desc,
+    .faq-answer {
+        margin-right: 0;
+        padding-right: 16px;
+    }
 }
 
-.empty-post-detail-product{
+.empty-post-detail-product {
     margin-right: 2rem;
 }
