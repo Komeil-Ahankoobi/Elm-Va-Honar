@@ -65,8 +65,7 @@
     {% for i in page_obj.paginator.page_range %}
     {% if page_obj.number == i %}
     <a href="?page={{ i }}" class="page-link active">{{ i }}</a>
-    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a href="?page={{ i }}" class="page-link">{{
-        i }}</a>
+    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a href="?page={{ i }}" class="page-link">{{ i }}</a>
         {% elif i == 1 or i == page_obj.paginator.num_pages %}
         <a href="?page={{ i }}" class="page-link">{{ i }}</a>
         {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}
