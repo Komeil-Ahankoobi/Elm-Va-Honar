@@ -74,3 +74,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+document.querySelectorAll('.related-products-section').forEach(section => {
+    const track = section.querySelector('.products-grid');
+    const nextBtn = section.querySelector('.next-btn');
+    const prevBtn = section.querySelector('.prev-btn');
+
+    nextBtn?.addEventListener('click', () => {
+        track.scrollBy({ left: -220, behavior: 'smooth' });
+    });
+
+    prevBtn?.addEventListener('click', () => {
+        track.scrollBy({ left: 220, behavior: 'smooth' });
+    });
+});
+
+function filterProducts(selectedElemnt) {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    const paramsName = selectedElemnt.name;
+    const paramsValue = selectedElemnt.value;
+
+    params.set(paramsName, paramsValue);
+
+    const newUrl = `${url.pathname}?${params.toString()}`;
+    window.location.href = newUrl;
+}
+
+function clearFilters() {
+    window.location.href = window.location.pathname;
+}

@@ -8,7 +8,7 @@ from .models import (
     ProductVarientModel,
     ProductBrandModel,
 )
-from .forms import PriceIncreaseForm, DiscountPercentForm
+from .forms import PriceIncreaseForm, PriceDecreaseForm, DiscountPercentForm
 
 
 class ProductVarientInline(admin.TabularInline):
@@ -51,6 +51,44 @@ def increase_price_custom(modeladmin, request, queryset):
             'products': queryset,
             'form': form,
             'title': 'افزایش درصدی قیمت',
+        }
+    )
+
+
+@admin.action(description='کاهش درصدی قیمت موارد انتخاب‌شده')
+def decrease_price_custom(modeladmin, request, queryset):
+    form = None
+
+    if 'apply' in request.POST:
+        form = PriceDecreaseForm(request.POST)
+        if form.is_valid():
+            percentage = form.cleaned_data['percentage']
+            multiplier = Decimal('1') - (percentage / Decimal('100'))
+
+            updated_count = queryset.count()
+            for obj in queryset:
+                obj.price = obj.price * multiplier
+                obj.save()
+
+            modeladmin.message_user(
+                request,
+                f'{updated_count} مورد با موفقیت {percentage}٪ کاهش قیمت پیدا کردن.',
+                messages.SUCCESS
+            )
+            return None
+
+    if not form:
+        form = PriceDecreaseForm(
+            initial={'_selected_action': queryset.values_list('id', flat=True)}
+        )
+
+    return render(
+        request,
+        'admin/decrease_price.html',
+        context={
+            'products': queryset,
+            'form': form,
+            'title': 'کاهش درصدی قیمت',
         }
     )
 
@@ -104,7 +142,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_filter = ("status", "category", "brand")
     search_fields = ("title", "meta_title")
     inlines = [ProductVarientInline]
-    actions = [increase_price_custom, set_discount_percent, remove_discount_instant]
+    actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 
 @admin.register(ProductVarientModel)
@@ -112,7 +150,7 @@ class ProductVarientModelAdmin(admin.ModelAdmin):
     list_display = ("id", "product", "variant_type", "number_code", "color_code", "price", "stock", "discount_percent", "status")
     list_filter = ("variant_type", "status", "product__category")
     search_fields = ("product__title", "number_code", "color_code")
-    actions = [increase_price_custom, set_discount_percent, remove_discount_instant]
+    actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 
 @admin.register(ProductCategoryModel)
