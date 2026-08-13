@@ -98,7 +98,7 @@
                 <div class="product-card reveal" style="cursor: pointer"
                     data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
                     <div class="product-img">
-                        <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}"
                             loading="lazy" />
                     </div>
 

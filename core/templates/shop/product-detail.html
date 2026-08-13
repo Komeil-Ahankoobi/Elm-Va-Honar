@@ -153,28 +153,8 @@
                 <div class="pd-image-stack">
                     <img
                         class="pd-image pd-image-1"
-                        src="https://picsum.photos/seed/{{ object.slug }}-1/700/500"
-                        alt="{{ object.get_image_alt }} — نمای ۱" />
-                    <img
-                        class="pd-image pd-image-2"
-                        src="https://picsum.photos/seed/{{ object.slug }}-2/700/500"
-                        alt="{{ object.get_image_alt }} — نمای ۲"
-                        loading="lazy" />
-                    <img
-                        class="pd-image pd-image-3"
-                        src="https://picsum.photos/seed/{{ object.slug }}-3/700/500"
-                        alt="{{ object.get_image_alt }} — نمای ۳"
-                        loading="lazy" />
-                    <img
-                        class="pd-image pd-image-4"
-                        src="https://picsum.photos/seed/{{ object.slug }}-4/700/500"
-                        alt="{{ object.get_image_alt }} — نمای ۴"
-                        loading="lazy" />
-                    <img
-                        class="pd-image pd-image-5"
-                        src="https://picsum.photos/seed/{{ object.slug }}-5/700/500"
-                        alt="{{ object.get_image_alt }} — نمای ۵"
-                        loading="lazy" />
+                        src="{{object.image.url}}"
+                        alt="{{ object.title }} — نمای ۱" />
                 </div>
 
             </div>
