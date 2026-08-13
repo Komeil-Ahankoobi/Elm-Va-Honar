@@ -231,9 +231,6 @@
                             <img src="https://picsum.photos/seed/{{ product.slug }}/300/300" alt="{{ product.title }}"
                                 loading="lazy" />
                         </div>
-                        <div class="product-category">
-                    {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
-                        </div>
                         <div class="product-title">{{ product.title }}</div>
                         {% if product.has_variants %}
                         {% with price_range=product.get_price_range %}
@@ -248,11 +245,11 @@
                             <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
                         </a>
                         {% else %}
-                        <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
+                        <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
                             data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
                             data-stock="{{ product.stock }}">
-                            <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
-                        </button>
+                            <i class="fa-solid fa-cart-shopping"></i> مشاهده محصول
+                        </a>
                         {% endif %}
                     </div>
                     {% empty %}

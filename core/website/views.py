@@ -74,6 +74,7 @@ class HomeView(TemplateView):
         context['popular_cats'] = ProductCategoryModel.objects.filter(popular=True)
         context['cat_baners'] = ProductCategoryModel.objects.filter(baner=True)
         context['blog_posts'] = BlogModel.objects.all().order_by('-created_date')[:4]
+        context['special_products'] = ProductModel.objects.filter(discount_percent__gt=0)[:8]
 
         return context
 

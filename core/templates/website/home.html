@@ -12,7 +12,7 @@
     <meta name="description"
         content="فروشگاه اینترنتی نوشت‌افزار علم و هنر — فروش لوازم‌التحریر، رنگ، ابزار طراحی و خوشنویسی با کیفیت ممتاز و ارسال سریع.">
 
-    
+
 
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.webp' %}">
 
@@ -340,12 +340,8 @@
             <div class="section-header">
                 <div class="section-header__title-wrap">
                     <h2 class="section-header__title">پیشنهادهای ویژه</h2>
-                    <div class="countdown-timer">
-                        <span>پایان پیشنهاد:</span>
-                        <span class="countdown-timer__time">۲۱ : ۴۵ : ۲۱</span>
-                    </div>
                 </div>
-                <a href="{% url 'shop:show-product-view' %}" class="section-header__link">مشاهده همه محصولات</a>
+                <a href="{% url 'shop:show-product-view' %}?special_products=1" class="section-header__link">مشاهده همه محصولات</a>
             </div>
 
             <div class="products-carousel-wrap">
@@ -357,77 +353,23 @@
                 </button>
 
                 <div class="products-grid scroll-container" id="prodGrid">
-                    <div class="product-card">
-                        <div class="product-card__badge">۱۳٪</div>
-                        <div class="product-card__img-wrap">
-                            <div class="placeholder-img"></div>
-                        </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">زغال طراحی طبیعی H&B - 12 pcs</h3>
-                            <div class="product-card__price-area"><span class="product-card__price">۱۸۹,۰۰۰
-                                    تومان</span></div>
-                        </div>
-                    </div>
 
+                    {% for product in special_products %}
                     <div class="product-card">
-                        <div class="product-card__badge">۱۰٪</div>
+                        <div class="product-card__badge">{{ product.discount_percent }}٪</div>
                         <div class="product-card__img-wrap">
-                            <div class="placeholder-img"></div>
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="placeholder-img">
                         </div>
                         <div class="product-card__content">
-                            <h3 class="product-card__title">ماژیک طراحی مشکی پین‌تیل - ۸ عددی</h3>
-                            <div class="product-card__price-area"><span class="product-card__price">۳۴۰,۰۰۰
-                                    تومان</span></div>
+                            <h3 class="product-card__title">{{ product.title }}</h3>
+                            <div class="product-card__price-area">
+                                <span class="product-card__price">{{ product.price|intcomma }} تومان</span>
+                            </div>
+                            <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="product-card__btn">مشاهده
+                                محصول</a>
                         </div>
                     </div>
-
-                    <div class="product-card">
-                        <div class="product-card__badge">۱۵٪</div>
-                        <div class="product-card__img-wrap">
-                            <div class="placeholder-img"></div>
-                        </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">قلم مو گرد سر تخت عدد 6 - Roubloff</h3>
-                            <div class="product-card__price-area"><span class="product-card__price">۴۸۰,۰۰۰
-                                    تومان</span></div>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <div class="product-card__badge">۱۰٪</div>
-                        <div class="product-card__img-wrap">
-                            <div class="placeholder-img"></div>
-                        </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">رنگ آکریلیک وستا ۱۲ رنگ Vesta - 75ml</h3>
-                            <div class="product-card__price-area"><span class="product-card__price">۱,۱۹۰,۰۰۰
-                                    تومان</span></div>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <div class="product-card__badge">۲۰٪</div>
-                        <div class="product-card__img-wrap">
-                            <div class="placeholder-img"></div>
-                        </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">دفتر طراحی آبرنگ Fabriano - 300g/m²</h3>
-                            <div class="product-card__price-area"><span class="product-card__price">۵۹۰,۰۰۰
-                                    تومان</span></div>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <div class="product-card__badge">۱۵٪</div>
-                        <div class="product-card__img-wrap">
-                            <div class="placeholder-img"></div>
-                        </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">ست مداد رنگی فابرکاستل Polychromos 120 مدل پک</h3>
-                            <div class="product-card__price-area"><span class="product-card__price">۴,۲۸۰,۰۰۰
-                                    تومان</span></div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <button class="carousel-arrow carousel-arrow--next" id="prodNext" aria-label="Next Product">

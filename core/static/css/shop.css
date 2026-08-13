@@ -58,7 +58,7 @@ a {
 }
 
 .page-subtitle {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text-muted);
     margin-bottom: 25px;
 }
@@ -174,7 +174,7 @@ a {
     align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid #f0f0f0;
-    font-size: 12px;
+    font-size: 13px;
     color: #444;
     cursor: pointer;
 }
@@ -182,7 +182,7 @@ a {
 .category-list li:last-child {
     border-bottom: none;
 }
-
+.page-subtitle
 /* Promo Card */
 .promo-card {
     background-color: #f3eee7;
@@ -349,7 +349,7 @@ a {
 }
 
 .product-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 8px;
@@ -357,7 +357,7 @@ a {
 }
 
 .product-price {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     text-align: center;
     color: #111;

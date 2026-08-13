@@ -245,9 +245,7 @@
                 <div class="related-img">
                     <img src="{{ product.image.url }}" alt="{{ product.get_image_alt }}" loading="lazy" />
                 </div>
-                <div class="related-cat">
-                    {% for cat in product.category.all %} {{ cat.title }}{% if not forloop.last %}، {% endif %} {% endfor %}
-                </div>
+
                 <div class="related-title">{{ product.title }}</div>
                 <div class="related-price">{{ product.get_price|intcomma }} تومان</div>
                 <button
