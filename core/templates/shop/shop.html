@@ -12,7 +12,7 @@
     <h1 class="page-title">محصولات</h1>
     <p class="page-subtitle">در این صفحه می‌توانید تمام محصولات ما را مشاهده و خریداری کنید.</p>
 
-    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px">
+    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px">
         نمایش {{ page_obj.start_index }} تا {{ page_obj.end_index }} از {{ page_obj.paginator.count }} محصول
     </div>
 
@@ -25,7 +25,6 @@
                 <div class="filter-card">
                     <div class="filter-header">
                         <span>فیلتر بر اساس قیمت</span>
-                        <i class="fa-solid fa-chevron-up"></i>
                     </div>
                     <div class="price-input-group">
                         <label>کمترین قیمت</label>
@@ -51,7 +50,6 @@
             <div class="filter-card">
                 <div class="filter-header">
                     <span>دسته‌بندی محصولات</span>
-                    <i class="fa-solid fa-chevron-up"></i>
                 </div>
                 <ul class="category-list">
                     {% for category in categories %}
@@ -103,10 +101,6 @@
                     </div>
 
                     <div class="product-title">{{ product.title }}</div>
-
-                    <div class="product-category">
-                        {% for cat in product.category.all %}{{ cat.title }}{% if not forloop.last %}، {% endif %}{% endfor %}
-                    </div>
 
                     {% if product.has_variants %}
                     {% with price_range=product.get_price_range %}
