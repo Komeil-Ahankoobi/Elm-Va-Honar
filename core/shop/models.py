@@ -118,6 +118,31 @@ class ProductModel(models.Model):
     class Meta:
         ordering = ["-created_date"]
 
+    def sync_visibility_from_stock(self):
+        if self.has_variants():
+            return
+
+        current_stock = self.stock or 0
+        if current_stock <= 0 and self.status != ProductStatusType.draft.value:
+            self.status = ProductStatusType.draft.value
+            self.save(update_fields=["status"])
+        elif current_stock > 0 and self.status == ProductStatusType.draft.value:
+            self.status = ProductStatusType.publish.value
+            self.save(update_fields=["status"])
+
+    def sync_parent_visibility_from_variants(self):
+        if not self.has_variants():
+            return
+
+        total_stock = sum(v.stock for v in self.varients.all())
+        if total_stock <= 0 and self.status != ProductStatusType.draft.value:
+            self.status = ProductStatusType.draft.value
+            self.save(update_fields=["status"])
+        elif total_stock > 0 and self.status == ProductStatusType.draft.value:
+            self.status = ProductStatusType.publish.value
+            self.save(update_fields=["status"])
+    
+
     def get_absolute_url(self):
         return reverse('shop:show-product-detail-view', kwargs={'slug': self.slug})
 
@@ -143,8 +168,6 @@ class ProductModel(models.Model):
             return sum(v.stock for v in self.varients.all())
         return self.stock
     
-    def is_in_stock(self):
-        return self.get_stock() > 0
 
     def is_publish(self):
         return self.status == ProductStatusType.publish.value
@@ -224,6 +247,18 @@ class ProductVarientModel(models.Model):
         help_text="نمایش یا عدم نمایش همین سایز/رنگ به صورت مجزا"
     )
 
+    def sync_visibility_from_stock(self):
+       
+        current_stock = self.stock or 0
+        if current_stock <= 0 and self.status != ProductStatusType.draft.value:
+            self.status = ProductStatusType.draft.value
+            self.save(update_fields=["status"])
+        elif current_stock > 0 and self.status == ProductStatusType.draft.value:
+            self.status = ProductStatusType.publish.value
+            self.save(update_fields=["status"])
+
+        self.product.sync_parent_visibility_from_variants()
+
     def __str__(self):
         return f'{self.product.title} - {self.variant_type}'
 
@@ -243,8 +278,6 @@ class ProductVarientModel(models.Model):
         discount_amount = self.price * Decimal(self.discount_percent) / Decimal(100)
         return round(self.price - discount_amount)
 
-    def is_in_stock(self):
-        return self.stock > 0
 
     def is_publish(self):
         return self.status == ProductStatusType.publish.value

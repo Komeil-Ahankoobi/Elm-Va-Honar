@@ -4,8 +4,9 @@ from django.views.generic import (
     View
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from decimal import Decimal
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.utils import timezone
@@ -16,20 +17,17 @@ from order.models import (
     UserAddressModel,
     OrderModel,
     OrderItemsModel,
-    CoponModel 
+    CoponModel
 )
 from .forms import OrderCheckoutForm
 from cart.models import CartModel
 from cart.cart import CartSession
 
-from cart.utils import get_cart
 
-
-# Create your views here.
 class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormView):
     template_name = 'order/order-checkout.html'
     form_class = OrderCheckoutForm
-    
+
     def form_valid(self, form):
         user = self.request.user
         cleaned_data = form.cleaned_data
@@ -37,20 +35,44 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         copon = cleaned_data['copon']
 
         cart = CartModel.objects.get(user=user)
+
+        insufficient_items = self.check_stock_availability(cart)
+        if insufficient_items:
+            item_names = "، ".join(
+                item.product.title for item in insufficient_items
+            )
+            messages.error(
+                self.request,
+                f"موجودی کافی برای این محصولات نیست: {item_names}"
+            )
+            return redirect(reverse_lazy('order:order-failed'))
+
         order = self.create_order(address)
-        
+
         self.create_order_items(cart, order)
         self.clear_cart(cart)
 
         total_price = order.calculate_total_price()
         self.apply_copon(copon, total_price, order, user)
-        
+
         order.save()
-        
-        return redirect(reverse_lazy('order:order-success'))
-        
+
+        return redirect(reverse('payment:request', kwargs={'order_id': order.id}))
+
     def form_invalid(self, form):
         return redirect(reverse_lazy('order:order-failed'))
+
+    def check_stock_availability(self, cart):
+
+        insufficient_items = []
+        for item in cart.cart_items.all():
+            stock_source = item.variant if item.variant else item.product
+            available_stock = getattr(stock_source, "stock", None)
+            if available_stock is None:
+                continue
+            if item.quantity > available_stock:
+                insufficient_items.append(item)
+        return insufficient_items
 
     def apply_copon(self, copon, total_price, order, user):
         if copon:
@@ -64,7 +86,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             order.copon = copon
             copon.used_by.add(user)
             copon.save()
-            
+
         order.total_price = total_price
 
     def create_order(self, address):
@@ -75,7 +97,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             city=address.city,
             zip_code=address.zip_code,
         )
-        
+
     def create_order_items(self, cart, order):
         for item in cart.cart_items.all():
             OrderItemsModel.objects.create(
@@ -84,56 +106,54 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
                 variant=item.variant,
                 quantity=item.quantity,
                 price=item.product.get_price(),
-        )
-    
+            )
+
     def clear_cart(self, cart):
         cart.cart_items.all().delete()
         CartSession(self.request.session).clear()
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
         context['addresses'] = UserAddressModel.objects.filter(user=self.request.user)
-        
+
         cart = get_cart(self.request)
         price = cart.get_total_payment_amount()
         total_tax = round(price * 10 / 100)
         context['price'] = price
         context['total_tax'] = total_tax
         context['total_price'] = price + total_tax
-        
+
         return context
-        
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
-    
-     
+
+
 class OrderSuccessView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
     template_name = 'order/success.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = get_cart(self.request)
-        context["cart_items"] = cart.get_cart_items() 
+        context["cart_items"] = cart.get_cart_items()
         return context
-    
 
 
 class OrderFailedView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
     template_name = 'order/failed.html'
-    
-    
+
+
 class ValidateCoponView(LoginRequiredMixin, HasCustomerAccessPermission, View):
 
     def post(self, *args, **kwargs):
         code = self.request.POST.get('code')
         user = self.request.user
-        
+
         if not code:
             return JsonResponse({'message': 'کد تخفیف وارد نشده است'}, status=400)
-        
+
         try:
             copon = CoponModel.objects.get(code=code)
         except CoponModel.DoesNotExist:
@@ -141,7 +161,7 @@ class ValidateCoponView(LoginRequiredMixin, HasCustomerAccessPermission, View):
 
         if copon.is_usage_limit_reached:
             return JsonResponse({"message": 'حد استفاده از کد تخفیف به اتمام رسیده است'}, status=403)
-            
+
         if copon.expiration_date and copon.expiration_date < timezone.now():
             return JsonResponse({"message": 'کد تخفیف منقضی شده است'}, status=403)
 
@@ -152,7 +172,6 @@ class ValidateCoponView(LoginRequiredMixin, HasCustomerAccessPermission, View):
             cart = CartModel.objects.get(user=user)
         except CartModel.DoesNotExist:
             return JsonResponse({"message": 'سبد خرید یافت نشد'}, status=404)
-
 
         total_price = cart.calculate_total_price()
         discount_percent = Decimal(copon.discount_percent) / Decimal('100')

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "dashboard",
     'cart',
     'order',
+    "payment"
 ]
 
 MIDDLEWARE = [
@@ -230,3 +231,6 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.PhoneOTPBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+MERCHANT_ID = config("MERCHANT_ID",default="")
+SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)
