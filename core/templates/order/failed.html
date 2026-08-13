@@ -2,7 +2,19 @@
 <link rel="stylesheet" href="{% static 'css/failed.css' %}" />
 {% endblock extra_css %} {% block content %}
 <!-- MAIN CONTAINER -->
+ 
 <section class="container">
+    {% if messages %}
+    <div class="order-messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'error' }}">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- Cross Icon with dots -->
     <div class="failed-icon-wrapper">
         <div class="dot dot-1"></div>
@@ -69,4 +81,5 @@
         </a>
     </div>
 </section>
+
 {% endblock content %}

@@ -82,12 +82,6 @@ class OrderModel(models.Model):
             "title":OrderStatusType(self.status).name,
             "label":OrderStatusType(self.status).label,
         }
-        
-    # def get_price(self):
-    #     if self.copon:
-    #         discount = Decimal(self.copon.discount_percent) / Decimal("100")
-    #         return round(self.total_price - (self.total_price * discount))
-    #     return self.total_price
     
     def calculate_total_price(self):
         return sum(item.price * item.quantity for item in self.items.all())
