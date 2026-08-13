@@ -206,12 +206,16 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-bottom: 24px;
 }
 
 .blog-search {
     position: relative;
-    width: 320px;
+    flex: 1 1 220px;
+    min-width: 220px;
+    max-width: 320px;
 }
 
 .blog-search input {
@@ -257,6 +261,7 @@ a {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .btn-clear-filter {

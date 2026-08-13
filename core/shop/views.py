@@ -152,7 +152,8 @@ class ShopProductView(ListView):
             queryset = queryset.filter(category__id=category)         
         if brand := self.request.GET.get('brand'):
             queryset = queryset.filter(brand__id=brand)
-        
+        if self.request.GET.get('special_products'):
+            queryset = queryset.filter(discount_percent__gt=0)
         
         return queryset
     
