@@ -72,7 +72,10 @@ class ShopProductView(ListView):
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
             status=ProductStatusType.publish.value
-        ).annotate(
+        ).filter(
+            Q(varients__isnull=True)
+            | Q(varients__status=ProductStatusType.publish.value)
+        ).distinct().annotate(
             final_price=Round(ExpressionWrapper(
                  F("price") - (F("price") * F("discount_percent") / 100),
                  output_field=DecimalField()
@@ -170,7 +173,11 @@ class ShopProductView(ListView):
 class ShopProductDetailView(DetailView):
     template_name = "shop/product-detail.html"
     queryset = ProductModel.objects.filter(
-        status=ProductStatusType.publish.value) 
+        status=ProductStatusType.publish.value
+    ).filter(
+        Q(varients__isnull=True)
+        | Q(varients__status=ProductStatusType.publish.value)
+    ).distinct()
 
 
     def get_context_data(self, **kwargs):
@@ -180,6 +187,9 @@ class ShopProductDetailView(DetailView):
         related_products = ProductModel.objects.filter(
             status=ProductStatusType.publish.value,
             category__in=product.category.all()
+        ).filter(
+            Q(varients__isnull=True)
+            | Q(varients__status=ProductStatusType.publish.value)
         ).exclude(id=product.id).distinct()[:4]
 
         context["related_products"] = related_products
