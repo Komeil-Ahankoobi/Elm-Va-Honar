@@ -51,4 +51,6 @@ VISTA_ACRYLIC_COLORS = {
     "116": ("Fluorescent Green",       "39FF14"),
     "117": ("Fluorescent Blue",        "1F51FF"),
     "118": ("Fluorescent Purple",      "B026FF"),
+    "4": ("Cadmium Orange Hue",      "ed872d"),
+    "20": ("Flesh Tint",      "F5C1A5"),
 }

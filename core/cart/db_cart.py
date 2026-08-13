@@ -17,7 +17,8 @@ class CartDB:
         cart_items = []
         self.total_payment_price = 0
         for item in self.cart_obj.cart_items.select_related('product', 'variant').all():
-            price = item.quantity * item.product.get_price()
+            unit_price = item.variant.get_price() if item.variant else item.product.get_price()
+            price = item.quantity * unit_price
             self.total_payment_price += price
             cart_items.append({
                 "product_id": item.product_id,

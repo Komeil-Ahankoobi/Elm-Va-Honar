@@ -13,12 +13,36 @@ function formatPrice(num) {
 }
 
 function updatePriceDisplay(el) {
+    if (!el.dataset.price) return;
+
     const priceEl = document.getElementById("pd-price");
     const specPriceEl = document.getElementById("spec-price-value");
-    if (el.dataset.price) {
-        const formatted = formatPrice(Number(el.dataset.price)) + " تومان";
-        if (priceEl) priceEl.textContent = formatted;
-        if (specPriceEl) specPriceEl.textContent = formatted;
+    const oldPriceEl = document.getElementById("pd-price-old");
+    const discountBadgeEl = document.getElementById("pd-discount-badge");
+    const oldPriceLineEl = document.getElementById("pd-price-old-line");
+
+    const finalPrice = Number(el.dataset.price);
+    const originalPrice = el.dataset.originalPrice ? Number(el.dataset.originalPrice) : finalPrice;
+    const discountPercent = el.dataset.discount ? Number(el.dataset.discount) : 0;
+    const hasDiscount = discountPercent > 0 && originalPrice > finalPrice;
+
+    const formattedFinal = formatPrice(finalPrice) + " تومان";
+
+    if (priceEl) {
+        priceEl.textContent = formattedFinal;
+        priceEl.classList.remove("price-placeholder");
+        priceEl.classList.toggle("price-discounted", hasDiscount);
+    }
+    if (specPriceEl) specPriceEl.textContent = formattedFinal;
+
+    // این سایز/رنگ تخفیف داره: قیمت قبلی + بج تخفیف رو نشون بده
+    if (hasDiscount) {
+        if (oldPriceEl) oldPriceEl.textContent = formatPrice(originalPrice) + " تومان";
+        if (discountBadgeEl) discountBadgeEl.textContent = discountPercent + "٪ تخفیف";
+        if (oldPriceLineEl) oldPriceLineEl.style.display = "";
+    } else {
+        // این سایز/رنگ تخفیف نداره: مثل حالت عادی، قیمت قبلی مخفی می‌شه
+        if (oldPriceLineEl) oldPriceLineEl.style.display = "none";
     }
 }
 function updateSpecVariantValue(text, targetId) {

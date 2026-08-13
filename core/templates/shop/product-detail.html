@@ -22,12 +22,22 @@
             <div class="price-category-row">
                 <div class="price-box">
                     <div class="price-value">قیمت</div>
+
                     {% if object.has_variants %}
-                    {% with price_range=object.get_price_range %}
-                    <span class="product-price" id="pd-price" >از {{ price_range.0|intcomma }} تومان</span>
-                    {% endwith %}
+                    <!-- تا وقتی کاربر رنگ/سایز رو انتخاب نکرده، قیمت و تخفیفِ یک وریانت خاص رو نشون نمی‌دیم -->
+                    <div class="price-old-line" id="pd-price-old-line" style="display: none">
+                        <span class="product-price-old" id="pd-price-old"></span>
+                        <span class="discount-badge" id="pd-discount-badge"></span>
+                    </div>
+                    <span class="product-price price-placeholder" id="pd-price">یک گزینه را انتخاب کنید</span>
                     {% else %}
-                    <span class="product-price" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
+                    {% if object.has_discount %}
+                    <div class="price-old-line" id="pd-price-old-line">
+                        <span class="product-price-old" id="pd-price-old">{{ object.get_real_price|intcomma }} تومان</span>
+                        <span class="discount-badge" id="pd-discount-badge">{{ object.get_discount_percent }}٪ تخفیف</span>
+                    </div>
+                    {% endif %}
+                    <span class="product-price {% if object.has_discount %}price-discounted{% endif %}" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
                     {% endif %}
                 </div>
 
@@ -71,6 +81,8 @@
                         data-color-code="{{ variant.get_hex_color }}"
                         data-color-name="{{ variant.get_color_display_name }}"
                         data-price="{{ variant.get_price }}"
+                        data-original-price="{{ variant.price }}"
+                        data-discount="{{ variant.discount_percent }}"
                         aria-label="انتخاب رنگ {{ variant.get_color_display_name }}"></button>
                     {% endfor %}
                 </div>
@@ -89,6 +101,8 @@
                         data-variant-id="{{ variant.id }}"
                         data-size-code="{{ variant.number_code }}"
                         data-price="{{ variant.get_price }}"
+                        data-original-price="{{ variant.price }}"
+                        data-discount="{{ variant.discount_percent }}"
                         aria-label="انتخاب سایز {{ variant.number_code }}">{{ variant.number_code }}</button>
                     {% endfor %}
                 </div>

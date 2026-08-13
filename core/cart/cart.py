@@ -44,7 +44,12 @@ class CartSession:
                 continue
 
             variant_id = item.get("variant_id")
-            price = item["quantity"] * product_obj.get_price()
+            variant_obj = (
+                ProductVarientModel.objects.filter(id=variant_id).first()
+                if variant_id else None
+            )
+            unit_price = variant_obj.get_price() if variant_obj else product_obj.get_price()
+            price = item["quantity"] * unit_price
             self.total_payment_price += price
 
             cart_items.append({
@@ -53,10 +58,7 @@ class CartSession:
                 "quantity": item["quantity"],
                 "total_price": price,
                 "product_obj": product_obj,
-                "variant_obj": (
-                    ProductVarientModel.objects.filter(id=variant_id).first()
-                    if variant_id else None
-                ),
+                "variant_obj": variant_obj,
             })
         return cart_items
 

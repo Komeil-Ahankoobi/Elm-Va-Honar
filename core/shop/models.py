@@ -155,6 +155,9 @@ class ProductModel(models.Model):
     def __str__(self):
         return self.title
 
+    def get_visible_variants(self):
+        return self.varients.filter(status=ProductStatusType.publish.value)
+
     def get_price(self):
         if self.has_variants():
             prices = [v.get_price() for v in self.varients.all()]
@@ -195,6 +198,24 @@ class ProductModel(models.Model):
 
     def has_variants(self):
         return self.varients.exists()
+
+    def has_discount(self):
+        if self.has_variants():
+            return any(v.discount_percent > 0 for v in self.get_visible_variants())
+        return bool(self.discount_percent and self.discount_percent > 0)
+
+    def get_discount_percent(self):
+        if self.has_variants():
+            percents = [v.discount_percent for v in self.get_visible_variants() if v.discount_percent > 0]
+            return max(percents) if percents else 0
+        return self.discount_percent or 0
+
+    def get_original_price_range(self):
+        variants = list(self.get_visible_variants())
+        if not variants:
+            return None
+        prices = [v.price for v in variants]
+        return min(prices), max(prices)
 
     def get_price_range(self):
         variants = list(self.varients.all())
@@ -277,6 +298,9 @@ class ProductVarientModel(models.Model):
     def get_price(self):
         discount_amount = self.price * Decimal(self.discount_percent) / Decimal(100)
         return round(self.price - discount_amount)
+
+    def has_discount(self):
+        return bool(self.discount_percent and self.discount_percent > 0)
 
 
     def is_publish(self):
