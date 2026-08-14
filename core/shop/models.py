@@ -11,7 +11,8 @@ from .colors import VISTA_ACRYLIC_COLORS
 class ProductStatusType(models.IntegerChoices):
     publish = 1 ,("نمایش")
     draft = 2 ,("عدم نمایش")
-    
+   
+ 
 class ProductCategoryModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
@@ -221,6 +222,7 @@ class ProductModel(models.Model):
             return None
         prices = [v.get_price() for v in variants]
         return min(prices), max(prices)
+    
     
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")

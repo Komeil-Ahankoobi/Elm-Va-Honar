@@ -156,12 +156,13 @@ class ShopProductView(ListView):
         if brand := self.request.GET.get('brand'):
             queryset = queryset.filter(brand__id=brand)
 
-        queryset = queryset.filter(
-            status=ProductStatusType.publish.value
-        ).filter(
-            Q(discount_percent__gt=0)
-            | Q(varients__discount_percent__gt=0, varients__status=ProductStatusType.publish.value)
-        ).distinct()
+        if self.request.GET.get('special_products'):
+            queryset = queryset.filter(
+                status=ProductStatusType.publish.value
+            ).filter(
+                Q(discount_percent__gt=0)
+                | Q(varients__discount_percent__gt=0, varients__status=ProductStatusType.publish.value)
+            ).distinct()
         
         return queryset
     
