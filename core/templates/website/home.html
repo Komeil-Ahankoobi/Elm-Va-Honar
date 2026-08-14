@@ -355,21 +355,51 @@
                 <div class="products-grid scroll-container" id="prodGrid">
 
                     {% for product in special_products %}
-                    <div class="product-card">
-                        <div class="product-card__badge">{{ product.get_discount_percent  }}٪</div>
-                        <div class="product-card__img-wrap">
-                            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="placeholder-img">
-                        </div>
-                        <div class="product-card__content">
-                            <h3 class="product-card__title">{{ product.title }}</h3>
-                            <div class="product-card__price-area">
-                                <span class="product-card__price">{% if product.has_variants %}از {% endif %}{{ product.get_price|intcomma }} تومان</span>
-                            </div>
-                            <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="product-card__btn">مشاهده
-                                محصول</a>
-                        </div>
+                <div class="product-card reveal" style="cursor: pointer"
+                    data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                    {% if product.has_discount %}
+                    <div class="discount-badge">
+                        {% if product.has_variants %}تا {% endif %}{{ product.get_discount_percent }}٪ تخفیف
                     </div>
-                    {% endfor %}
+                    {% endif %}
+                    <div class="product-img">
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}"
+                            loading="lazy" />
+                    </div>
+
+                    <div class="product-title">{{ product.title }}</div>
+
+                    <div class="price-line">
+                        {% if product.has_discount and not product.has_variants %}
+                        <span class="product-price-old">{{ product.get_real_price|intcomma }} تومان</span>
+                        {% endif %}
+
+                        {% if product.has_variants %}
+                        {% with price_range=product.get_price_range %}
+                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
+                        {% endwith %}
+                        {% else %}
+                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
+                        {% endif %}
+                    </div>
+
+                    {% if product.has_variants and product.has_discount %}
+                    <div class="price-variant-note">بسته به انتخاب شما</div>
+                    {% endif %}
+
+                    {% if product.has_variants %}
+                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
+                        <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
+                    </a>
+                    {% else %}
+                    <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
+                        data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
+                        data-stock="{{ product.stock }}">
+                        <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                    </button>
+                    {% endif %}
+                </div>
+                {% endfor %}
                 </div>
 
                 <button class="carousel-arrow carousel-arrow--next" id="prodNext" aria-label="Next Product">

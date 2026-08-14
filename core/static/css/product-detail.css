@@ -336,6 +336,10 @@ nav ul li a.active {
     color: #dc2626;
 }
 
+.stock-status-pending {
+    color: var(--text-muted);
+}
+
 .pd-description {
     font-size: 14px;
     line-height: 1.9;
@@ -379,8 +383,8 @@ nav ul li a.active {
 
 .color-dots {
     display: flex;
-    gap: 8px;
-    align-items: center;
+    gap: 4px;
+    align-items: flex-start;
     margin-bottom: 5px;
     flex-wrap: wrap;
 }
@@ -398,6 +402,48 @@ nav ul li a.active {
 .dot.active {
     outline: 2px solid #333;
     outline-offset: 2px;
+}
+
+/* --- سواچ رنگی: دایره‌ی رنگ + کد ویستا زیرش --- */
+.color-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    padding: 5px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.color-swatch .dot {
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+
+.color-swatch .swatch-code {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1;
+    direction: ltr;
+}
+
+.color-swatch.active {
+    background-color: #f0f0f0;
+}
+
+.color-swatch.active .dot {
+    outline: 2px solid #333;
+    outline-offset: 2px;
+}
+
+.color-swatch.active .swatch-code {
+    color: var(--text-main);
+    font-weight: 800;
 }
 
 .size-dot {
@@ -541,12 +587,6 @@ nav ul li a.active {
     gap: 15px;
 }
 
-.pd-thumb-radio {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
 .main-image-container {
     position: relative;
     background: var(--card-bg);
@@ -578,11 +618,7 @@ nav ul li a.active {
     transition: opacity 0.2s ease;
 }
 
-#pd-thumb-1:checked ~ .main-image-container .pd-image-1,
-#pd-thumb-2:checked ~ .main-image-container .pd-image-2,
-#pd-thumb-3:checked ~ .main-image-container .pd-image-3,
-#pd-thumb-4:checked ~ .main-image-container .pd-image-4,
-#pd-thumb-5:checked ~ .main-image-container .pd-image-5 {
+.pd-image.active {
     opacity: 1;
     visibility: visible;
 }
@@ -614,6 +650,10 @@ nav ul li a.active {
     right: 15px;
 }
 
+button.nav-arrow {
+    padding: 0;
+}
+
 .zoom-btn {
     position: absolute;
     bottom: 15px;
@@ -633,12 +673,13 @@ nav ul li a.active {
 }
 
 .thumbnail-list {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
 .thumb-item {
+    width: 80px;
     height: 80px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -652,15 +693,15 @@ nav ul li a.active {
 }
 
 .thumb-item.active {
-    border-color: #999;
+    border-color: var(--accent-green, #1d3b2a);
 }
 
-#pd-thumb-1:checked ~ .thumbnail-list label[for="pd-thumb-1"],
-#pd-thumb-2:checked ~ .thumbnail-list label[for="pd-thumb-2"],
-#pd-thumb-3:checked ~ .thumbnail-list label[for="pd-thumb-3"],
-#pd-thumb-4:checked ~ .thumbnail-list label[for="pd-thumb-4"],
-#pd-thumb-5:checked ~ .thumbnail-list label[for="pd-thumb-5"] {
-    border-color: var(--accent-green, #1d3b2a);
+/* .thumb-item is now a <button>, so reset the browser's default button styling
+   while keeping the border/background/radius already defined above */
+button.thumb-item {
+    padding: 0;
+    font: inherit;
+    outline-offset: 2px;
 }
 
 .thumb-item img {
@@ -1120,6 +1161,7 @@ footer {
     }
 
     .thumb-item {
+        width: 65px;
         height: 65px;
     }
 
@@ -1173,6 +1215,7 @@ footer {
     }
 
     .thumb-item {
+        width: 50px;
         height: 50px;
     }
 

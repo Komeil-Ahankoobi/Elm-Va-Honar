@@ -54,15 +54,16 @@
             </div>
         </div>
 
-            {% if object.stock > 0 %}
-            <div class="stock-status">
-                <i class="fa-solid fa-check"></i>
-                موجود در انبار
+            {% if object.has_variants %}
+            <!-- تا وقتی کاربر یک رنگ/سایز انتخاب نکرده، موجودی هیچ وریانت خاصی رو نشون نمی‌دیم -->
+            <div class="stock-status stock-status-pending" id="pd-stock-status">
+                <i class="fa-solid fa-circle-info" id="pd-stock-icon"></i>
+                <span id="pd-stock-text">برای دیدن موجودی، یک گزینه را انتخاب کنید</span>
             </div>
             {% else %}
-            <div class="stock-status stock-status-out">
-                <i class="fa-solid fa-xmark"></i>
-                ناموجود
+            <div class="stock-status {% if not object.stock > 0 %}stock-status-out{% endif %}" id="pd-stock-status">
+                <i class="fa-solid {% if object.stock > 0 %}fa-check{% else %}fa-xmark{% endif %}" id="pd-stock-icon"></i>
+                <span id="pd-stock-text">{% if object.stock > 0 %}موجود در انبار{% else %}ناموجود{% endif %}</span>
             </div>
             {% endif %}
 
@@ -75,15 +76,19 @@
                     {% for variant in object.get_color_variants %}
                     <button
                         type="button"
-                        class="dot"
-                        style="background-color: #{{ variant.get_hex_color }};"
+                        class="color-swatch"
                         data-variant-id="{{ variant.id }}"
                         data-color-code="{{ variant.get_hex_color }}"
                         data-color-name="{{ variant.get_color_display_name }}"
+                        data-color-number="{{ variant.color_code }}"
                         data-price="{{ variant.get_price }}"
                         data-original-price="{{ variant.price }}"
                         data-discount="{{ variant.discount_percent }}"
-                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}"></button>
+                        data-stock="{{ variant.stock }}"
+                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}">
+                        <span class="dot" style="background-color: #{{ variant.get_hex_color }};"></span>
+                        <span class="swatch-code">{{ variant.color_code }}</span>
+                    </button>
                     {% endfor %}
                 </div>
                 <input type="hidden" id="selected-variant-id" value="" />
@@ -103,6 +108,7 @@
                         data-price="{{ variant.get_price }}"
                         data-original-price="{{ variant.price }}"
                         data-discount="{{ variant.discount_percent }}"
+                        data-stock="{{ variant.stock }}"
                         aria-label="انتخاب سایز {{ variant.number_code }}">{{ variant.number_code }}</button>
                     {% endfor %}
                 </div>
@@ -154,25 +160,50 @@
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: GALLERY (CSS-only switcher, no JS) -->
+        <!-- RIGHT COLUMN: GALLERY (uses ONLY ProductImageModel entries; falls back to the
+             main product.image field only when no gallery images have been added yet) -->
+        {% with gallery_images=object.product_images.all %}
         <div class="gallery-box">
-            <input type="radio" name="pd-thumb" id="pd-thumb-1" class="pd-thumb-radio" checked />
-            <input type="radio" name="pd-thumb" id="pd-thumb-2" class="pd-thumb-radio" />
-            <input type="radio" name="pd-thumb" id="pd-thumb-3" class="pd-thumb-radio" />
-            <input type="radio" name="pd-thumb" id="pd-thumb-4" class="pd-thumb-radio" />
-            <input type="radio" name="pd-thumb" id="pd-thumb-5" class="pd-thumb-radio" />
-
-            <div class="main-image-container">
-
+            <div class="main-image-container" id="pd-gallery">
                 <div class="pd-image-stack">
+                    {% if gallery_images %}
+                    {% for gallery_image in gallery_images %}
                     <img
-                        class="pd-image pd-image-1"
-                        src="{{object.image.url}}"
-                        alt="{{ object.title }} — نمای ۱" />
+                        class="pd-image{% if forloop.first %} active{% endif %}"
+                        src="{{ gallery_image.file.url }}"
+                        alt="{{ object.get_image_alt }} — نمای {{ forloop.counter }}"
+                        data-index="{{ forloop.counter0 }}" />
+                    {% endfor %}
+                    {% else %}
+                    <img
+                        class="pd-image active"
+                        src="{{ object.image.url }}"
+                        alt="{{ object.get_image_alt }}"
+                        data-index="0" />
+                    {% endif %}
                 </div>
 
+                {% if gallery_images|length > 1 %}
+                <button type="button" class="nav-arrow left" id="pd-gallery-left" aria-label="عکس بعدی">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button type="button" class="nav-arrow right" id="pd-gallery-right" aria-label="عکس قبلی">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                {% endif %}
             </div>
+
+            {% if gallery_images|length > 1 %}
+            <div class="thumbnail-list" id="pd-gallery-thumbs">
+                {% for gallery_image in gallery_images %}
+                <button type="button" class="thumb-item{% if forloop.first %} active{% endif %}" data-index="{{ forloop.counter0 }}" aria-label="نمای {{ forloop.counter }}">
+                    <img src="{{ gallery_image.file.url }}" alt="{{ object.get_image_alt }} — نمای {{ forloop.counter }}" />
+                </button>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
+        {% endwith %}
     </div>
 
     <!-- TABS SECTION -->
@@ -303,9 +334,17 @@
         {
           "@type": "Product",
           "name": "{{ object.title|escapejs }}",
-          {% if object.image %}
-          "image": "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}",
-          {% endif %}
+          {% with gallery_images=object.product_images.all %}
+          "image": [
+            {% if gallery_images %}
+            {% for gallery_image in gallery_images %}
+            "{{ request.scheme }}://{{ request.get_host }}{{ gallery_image.file.url }}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+            {% elif object.image %}
+            "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}"
+            {% endif %}
+          ],
+          {% endwith %}
           "description": "{{ object.get_meta_description|escapejs }}",
           "offers": {
             "@type": "Offer",

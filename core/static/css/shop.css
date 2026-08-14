@@ -249,13 +249,25 @@ a {
     background: #fafafa;
 }
 
-.inline-search i {
+.inline-search button {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
     color: #999;
-    font-size: 11px;
+}
+
+.inline-search svg {
+    display: block;
 }
 
 .sort-dropdown {
@@ -371,7 +383,7 @@ a {
     position: absolute;
     top: 12px;
     left: 12px;
-    background-color: #e11d48;
+    background-color: #16a34a;
     color: #ffffff;
     font-size: 11px;
     font-weight: bold;

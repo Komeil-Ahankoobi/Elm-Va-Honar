@@ -183,7 +183,7 @@ class ShopProductDetailView(DetailView):
     ).filter(
         Q(varients__isnull=True)
         | Q(varients__status=ProductStatusType.publish.value)
-    ).distinct()
+    ).distinct().prefetch_related("product_images")
 
 
     def get_context_data(self, **kwargs):
