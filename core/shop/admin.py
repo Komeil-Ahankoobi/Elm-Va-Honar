@@ -17,6 +17,12 @@ class ProductVarientInline(admin.TabularInline):
     fields = ['variant_type', 'color_code', 'number_code', 'price', 'stock', 'discount_percent', 'status']
 
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImageModel
+    extra = 1
+    fields = ['file']
+
+
 @admin.action(description='افزایش درصدی قیمت موارد انتخاب‌شده')
 def increase_price_custom(modeladmin, request, queryset):
     form = None
@@ -141,7 +147,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "stock", "status", "price", "discount_percent", "image_alt_text", "meta_title", "meta_description")
     list_filter = ("status", "category", "brand")
     search_fields = ("title", "meta_title")
-    inlines = [ProductVarientInline]
+    inlines = [ProductVarientInline, ProductImageInline]
     actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 

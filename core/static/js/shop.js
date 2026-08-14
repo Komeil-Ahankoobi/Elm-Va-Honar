@@ -50,6 +50,32 @@ function updateSpecVariantValue(text, targetId) {
     if (specVariantEl) specVariantEl.textContent = text;
 }
 
+// موجودی مخصوص همون وریانت انتخاب‌شده (نه فیلد stock کلی خود محصول) رو نشون می‌ده
+function updateStockDisplay(el) {
+    if (el.dataset.stock === undefined) return;
+
+    const stockStatusEl = document.getElementById("pd-stock-status");
+    const stockIconEl = document.getElementById("pd-stock-icon");
+    const stockTextEl = document.getElementById("pd-stock-text");
+    const addToCartBtn = document.querySelector(".btn-add-to-cart");
+    if (!stockStatusEl) return;
+
+    const stock = Number(el.dataset.stock);
+    const inStock = stock > 0;
+
+    stockStatusEl.classList.remove("stock-status-pending");
+    stockStatusEl.classList.toggle("stock-status-out", !inStock);
+
+    if (stockIconEl) {
+        stockIconEl.classList.remove("fa-check", "fa-xmark", "fa-circle-info");
+        stockIconEl.classList.add(inStock ? "fa-check" : "fa-xmark");
+    }
+    if (stockTextEl) stockTextEl.textContent = inStock ? "موجود در انبار" : "ناموجود";
+
+    // دکمه افزودن به سبد هم باید موجودی همون وریانت رو بشناسه، نه موجودی کلی محصول
+    if (addToCartBtn) addToCartBtn.dataset.stock = stock;
+}
+
 (function initScroll() {
     const header = document.getElementById("site-header");
     const backTop = document.getElementById("back-to-top");
@@ -255,6 +281,35 @@ document.addEventListener("click", function (e) {
     window.location.href = card.dataset.href;
 });
 
+// --- اسلایدر گالری تصاویر در صفحه جزئیات محصول ---
+(function initProductGallery() {
+    const gallery = document.getElementById("pd-gallery");
+    if (!gallery) return;
+
+    const images = Array.from(gallery.querySelectorAll(".pd-image"));
+    const thumbs = Array.from(document.querySelectorAll("#pd-gallery-thumbs .thumb-item"));
+    const leftBtn = document.getElementById("pd-gallery-left");
+    const rightBtn = document.getElementById("pd-gallery-right");
+
+    if (images.length <= 1) return;
+
+    let currentIndex = 0;
+
+    function showImage(index) {
+        currentIndex = (index + images.length) % images.length;
+        images.forEach((img, i) => img.classList.toggle("active", i === currentIndex));
+        thumbs.forEach((thumb, i) => thumb.classList.toggle("active", i === currentIndex));
+    }
+
+    // چون سایت راست‌چین (RTL) هست، دکمه‌ی سمت چپ باید عکس بعدی و دکمه‌ی سمت راست باید عکس قبلی رو نشون بده
+    leftBtn?.addEventListener("click", () => showImage(currentIndex + 1));
+    rightBtn?.addEventListener("click", () => showImage(currentIndex - 1));
+
+    thumbs.forEach((thumb) => {
+        thumb.addEventListener("click", () => showImage(Number(thumb.dataset.index)));
+    });
+})();
+
 // --- پالت انتخاب رنگ در صفحه جزئیات محصول ---
 (function initColorPalette() {
     const palette = document.getElementById("pd-color-palette");
@@ -263,14 +318,19 @@ document.addEventListener("click", function (e) {
     const hiddenInput = document.getElementById("selected-variant-id");
     const nameEl = document.getElementById("pd-color-selected-name");
 
-    palette.querySelectorAll(".dot").forEach((dot) => {
-        dot.addEventListener("click", () => {
-            palette.querySelectorAll(".dot").forEach((d) => d.classList.remove("active"));
-            dot.classList.add("active");
-            hiddenInput.value = dot.dataset.variantId;
-            if (nameEl) nameEl.textContent = dot.dataset.colorName || "#" + dot.dataset.colorCode;
-            updateSpecVariantValue(dot.dataset.colorName || "#" + dot.dataset.colorCode, "spec-color-value");
-            updatePriceDisplay(dot);
+    palette.querySelectorAll(".color-swatch").forEach((swatch) => {
+        swatch.addEventListener("click", () => {
+            palette.querySelectorAll(".color-swatch").forEach((s) => s.classList.remove("active"));
+            swatch.classList.add("active");
+            hiddenInput.value = swatch.dataset.variantId;
+
+            const colorName = swatch.dataset.colorName || "#" + swatch.dataset.colorCode;
+            const colorLabel = swatch.dataset.colorNumber ? `${colorName} (کد ${swatch.dataset.colorNumber})` : colorName;
+
+            if (nameEl) nameEl.textContent = colorLabel;
+            updateSpecVariantValue(colorLabel, "spec-color-value");
+            updatePriceDisplay(swatch);
+            updateStockDisplay(swatch);
         });
     });
 })();
@@ -290,6 +350,7 @@ document.addEventListener("click", function (e) {
             if (nameEl) nameEl.textContent = "شماره " + dot.dataset.sizeCode;
             updateSpecVariantValue("شماره " + dot.dataset.sizeCode, "spec-size-value");
             updatePriceDisplay(dot);
+            updateStockDisplay(dot);
         });
     });
 })();
