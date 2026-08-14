@@ -12,7 +12,7 @@
     <meta name="description"
         content="فروشگاه اینترنتی نوشت‌افزار علم و هنر — فروش لوازم‌التحریر، رنگ، ابزار طراحی و خوشنویسی با کیفیت ممتاز و ارسال سریع.">
 
-
+    <meta name="google-site-verification" content="xOK1DsogtY7Kovk44bZcsbys-0PSkcvS-nW1XFJrUz8" />
 
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.webp' %}">
 
@@ -335,81 +335,80 @@
     </section>
 
     <!-- Special Offers (Products Carousel) -->
-    <section class="section products-section">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-header__title-wrap">
-                    <h2 class="section-header__title">پیشنهادهای ویژه</h2>
+   {% if special_products %}
+        <section class="section products-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-header__title-wrap">
+                        <h2 class="section-header__title">پیشنهادهای ویژه</h2>
+                    </div>
+                    <a href="{% url 'shop:show-product-view' %}?special_products=1" class="section-header__link">مشاهده همه محصولات</a>
                 </div>
-                <a href="{% url 'shop:show-product-view' %}?special_products=1" class="section-header__link">مشاهده همه محصولات</a>
-            </div>
 
-            <div class="products-carousel-wrap">
-                <button class="carousel-arrow carousel-arrow--prev" id="prodPrev" aria-label="Previous Product">
-
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </button>
-
-                <div class="products-grid scroll-container" id="prodGrid">
-
-                    {% for product in special_products %}
-                <div class="product-card reveal" style="cursor: pointer"
-                    data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
-                    {% if product.has_discount %}
-                    <div class="discount-badge">
-                        {% if product.has_variants %}تا {% endif %}{{ product.get_discount_percent }}٪ تخفیف
-                    </div>
-                    {% endif %}
-                    <div class="product-img">
-                        <img src="{{ product.image.url }}" alt="{{ product.title }}"
-                            loading="lazy" />
-                    </div>
-
-                    <div class="product-title">{{ product.title }}</div>
-
-                    <div class="price-line">
-                        {% if product.has_discount and not product.has_variants %}
-                        <span class="product-price-old">{{ product.get_real_price|intcomma }} تومان</span>
-                        {% endif %}
-
-                        {% if product.has_variants %}
-                        {% with price_range=product.get_price_range %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
-                        {% endwith %}
-                        {% else %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
-                        {% endif %}
-                    </div>
-
-                    {% if product.has_variants and product.has_discount %}
-                    <div class="price-variant-note">بسته به انتخاب شما</div>
-                    {% endif %}
-
-                    {% if product.has_variants %}
-                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
-                        <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
-                    </a>
-                    {% else %}
-                    <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
-                        data-stock="{{ product.stock }}">
-                        <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                <div class="products-carousel-wrap">
+                    <button class="carousel-arrow carousel-arrow--prev" id="prodPrev" aria-label="Previous Product">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
                     </button>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                </div>
 
-                <button class="carousel-arrow carousel-arrow--next" id="prodNext" aria-label="Next Product">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                </button>
+                    <div class="products-grid scroll-container" id="prodGrid">
+                        {% for product in special_products %}
+                        <div class="product-card reveal" style="cursor: pointer"
+                            data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                            {% if product.has_discount %}
+                            <div class="discount-badge">
+                                {% if product.has_variants %}تا {% endif %}{{ product.get_discount_percent }}٪ تخفیف
+                            </div>
+                            {% endif %}
+                            <div class="product-img">
+                                <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy" />
+                            </div>
+
+                            <div class="product-title">{{ product.title }}</div>
+
+                            <div class="price-line">
+                                {% if product.has_discount and not product.has_variants %}
+                                <span class="product-price-old">{{ product.get_real_price|intcomma }} تومان</span>
+                                {% endif %}
+
+                                {% if product.has_variants %}
+                                {% with price_range=product.get_price_range %}
+                                <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
+                                {% endwith %}
+                                {% else %}
+                                <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
+                                {% endif %}
+                            </div>
+
+                            {% if product.has_variants and product.has_discount %}
+                            <div class="price-variant-note">بسته به انتخاب شما</div>
+                            {% endif %}
+
+                            {% if product.has_variants %}
+                            <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
+                                <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
+                            </a>
+                            {% else %}
+                            <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
+                                data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
+                                data-stock="{{ product.stock }}">
+                                <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                            </button>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <button class="carousel-arrow carousel-arrow--next" id="prodNext" aria-label="Next Product">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+        {% endif %}
 
     <!-- Trusted Brands Continuous Ticker Section -->
     <section class="section brands-section">
