@@ -623,13 +623,24 @@ nav ul li a.active {
     visibility: visible;
 }
 
+/* نوار کنترل اسلایدر: زیر عکس اصلی و بیرون از کادر عکس، طوری که هیچ‌وقت روی عکس نیفتد */
+.gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.gallery-controls-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border-color, #e5e5e5);
+}
+
 .nav-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
-    background: white;
+    width: 32px;
+    height: 32px;
+    background: #fff;
     border: 1px solid var(--border-color, #e5e5e5);
     border-radius: 50%;
     display: flex;
@@ -639,15 +650,17 @@ nav ul li a.active {
     font-size: 11px;
     color: #555;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    z-index: 2;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
-.nav-arrow.left {
-    left: 15px;
+.nav-arrow:hover {
+    background: var(--accent-green, #1d3b2a);
+    border-color: var(--accent-green, #1d3b2a);
+    color: #fff;
 }
 
-.nav-arrow.right {
-    right: 15px;
+.nav-arrow:active {
+    transform: scale(0.94);
 }
 
 button.nav-arrow {
@@ -1147,17 +1160,13 @@ footer {
     }
 
     .nav-arrow {
-        width: 26px;
-        height: 26px;
+        width: 28px;
+        height: 28px;
         font-size: 10px;
     }
 
-    .nav-arrow.left {
-        left: 8px;
-    }
-
-    .nav-arrow.right {
-        right: 8px;
+    .gallery-controls {
+        gap: 10px;
     }
 
     .thumb-item {

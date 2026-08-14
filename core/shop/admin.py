@@ -174,3 +174,4 @@ class ProductBrandModelModelAdmin(admin.ModelAdmin):
 @admin.register(ProductImageModel)
 class ProductImageModelAdmin(admin.ModelAdmin):
     list_display = ("id", "file", "created_date")
+    autocomplete_fields = ["product"]
