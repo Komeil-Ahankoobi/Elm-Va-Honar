@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -233,6 +235,25 @@ class ProductImageModel(models.Model):
     
     class Meta:
         ordering = ["created_date"]
+
+
+class ProductSpecModel(models.Model):
+    """
+    مشخصات کلیدی/مقداری عمومی محصول (نمایش داده می‌شه چه محصول وریانت داشته باشه چه نداشته باشه).
+    مثال: عنوان = "برند" | محتوا = "وستا"
+    """
+    product = models.ForeignKey(
+        ProductModel, on_delete=models.CASCADE, related_name="specs"
+    )
+    title = models.CharField(max_length=100, help_text="عنوان ویژگی، مثلاً: برند")
+    description = models.CharField(max_length=255, help_text="مقدار ویژگی، مثلاً: وستا")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"{self.title} - {self.product.title}"
         
         
 class VarientType(models.TextChoices):
@@ -305,3 +326,31 @@ class ProductVarientModel(models.Model):
 
     def is_publish(self):
         return self.status == ProductStatusType.publish.value
+
+    def get_specs_json(self):
+        """
+        مشخصات مخصوص همین وریانت (سایز/رنگ) رو به JSON تبدیل می‌کنه تا
+        جاوااسکریپت صفحه‌ی جزئیات محصول بتونه بدون درخواست اضافه به سرور،
+        جدول مشخصات رو به صورت real-time آپدیت کنه.
+        """
+        specs = list(self.specs.all().values("title", "description"))
+        return json.dumps(specs, ensure_ascii=False)
+
+
+class ProductVariantSpecModel(models.Model):
+    """
+    مشخصات کلیدی/مقداری مخصوص یک وریانت خاص (یک سایز یا یک رنگ مشخص).
+    مثال: برای سایز ۲۷ -> عنوان = "طول قلمو" | محتوا = "۱۸ سانتی‌متر"
+    """
+    variant = models.ForeignKey(
+        ProductVarientModel, on_delete=models.CASCADE, related_name="specs"
+    )
+    title = models.CharField(max_length=100, help_text="عنوان ویژگی، مثلاً: طول قلمو")
+    description = models.CharField(max_length=255, help_text="مقدار ویژگی، مثلاً: ۱۸ سانتی‌متر")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"{self.title} - {self.variant}"

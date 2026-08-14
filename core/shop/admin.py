@@ -7,6 +7,8 @@ from .models import (
     ProductCategoryModel,
     ProductVarientModel,
     ProductBrandModel,
+    ProductSpecModel,          # ← اضافه شد
+    ProductVariantSpecModel,   # ← اضافه شد
 )
 from .forms import PriceIncreaseForm, PriceDecreaseForm, DiscountPercentForm
 
@@ -21,6 +23,20 @@ class ProductImageInline(admin.TabularInline):
     model = ProductImageModel
     extra = 1
     fields = ['file']
+
+
+class ProductSpecInline(admin.TabularInline):  # ← اضافه شد
+    model = ProductSpecModel
+    extra = 1
+    fields = ['title', 'description', 'order']
+    ordering = ['order']
+
+
+class ProductVariantSpecInline(admin.TabularInline):  # ← اضافه شد
+    model = ProductVariantSpecModel
+    extra = 1
+    fields = ['title', 'description', 'order']
+    ordering = ['order']
 
 
 @admin.action(description='افزایش درصدی قیمت موارد انتخاب‌شده')
@@ -147,7 +163,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "stock", "status", "price", "discount_percent", "image_alt_text", "meta_title", "meta_description")
     list_filter = ("status", "category", "brand")
     search_fields = ("title", "meta_title")
-    inlines = [ProductVarientInline, ProductImageInline]
+    inlines = [ProductVarientInline, ProductImageInline, ProductSpecInline]  # ← ProductSpecInline اضافه شد
     actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 
@@ -156,6 +172,7 @@ class ProductVarientModelAdmin(admin.ModelAdmin):
     list_display = ("id", "product", "variant_type", "number_code", "color_code", "price", "stock", "discount_percent", "status")
     list_filter = ("variant_type", "status", "product__category")
     search_fields = ("product__title", "number_code", "color_code")
+    inlines = [ProductVariantSpecInline]  # ← اضافه شد
     actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 
@@ -175,3 +192,20 @@ class ProductBrandModelModelAdmin(admin.ModelAdmin):
 class ProductImageModelAdmin(admin.ModelAdmin):
     list_display = ("id", "file", "created_date")
     autocomplete_fields = ["product"]
+
+
+# ← ثبت دو مدل جدید
+@admin.register(ProductSpecModel)
+class ProductSpecModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "product", "title", "description", "order")
+    list_filter = ("product",)
+    search_fields = ("title", "description", "product__title")
+    autocomplete_fields = ["product"]
+
+
+@admin.register(ProductVariantSpecModel)
+class ProductVariantSpecModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "variant", "title", "description", "order")
+    list_filter = ("variant__product",)
+    search_fields = ("title", "description", "variant__product__title")
+    autocomplete_fields = ["variant"]

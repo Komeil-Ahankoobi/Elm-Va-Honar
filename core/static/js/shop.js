@@ -59,6 +59,35 @@ function updateSpecVariantValue(text, targetId) {
     if (specVariantEl) specVariantEl.textContent = text;
 }
 
+// جدول "مشخصات محصول" رو بر اساس مشخصات مخصوص همون وریانت انتخاب‌شده (سایز/رنگ) بازسازی می‌کنه
+function updateVariantSpecs(el) {
+    const specsBody = document.getElementById("variant-specs-body");
+    if (!specsBody || el.dataset.specs === undefined) return;
+
+    let specs = [];
+    try {
+        specs = JSON.parse(el.dataset.specs);
+    } catch (err) {
+        console.error("خطا در خواندن مشخصات وریانت:", err);
+        return;
+    }
+
+    specsBody.innerHTML = "";
+    specs.forEach((spec) => {
+        const row = document.createElement("tr");
+
+        const titleCell = document.createElement("td");
+        titleCell.textContent = spec.title;
+
+        const valueCell = document.createElement("td");
+        valueCell.textContent = spec.description;
+
+        row.appendChild(titleCell);
+        row.appendChild(valueCell);
+        specsBody.appendChild(row);
+    });
+}
+
 // موجودی مخصوص همون وریانت انتخاب‌شده (نه فیلد stock کلی خود محصول) رو نشون می‌ده
 function updateStockDisplay(el) {
     if (el.dataset.stock === undefined) return;
@@ -340,6 +369,7 @@ document.addEventListener("click", function (e) {
             updateSpecVariantValue(colorLabel, "spec-color-value");
             updatePriceDisplay(swatch);
             updateStockDisplay(swatch);
+            updateVariantSpecs(swatch);
         });
     });
 })();
@@ -360,6 +390,7 @@ document.addEventListener("click", function (e) {
             updateSpecVariantValue("شماره " + dot.dataset.sizeCode, "spec-size-value");
             updatePriceDisplay(dot);
             updateStockDisplay(dot);
+            updateVariantSpecs(dot);
         });
     });
 })();
