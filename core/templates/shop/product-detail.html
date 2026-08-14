@@ -85,6 +85,7 @@
                         data-original-price="{{ variant.price }}"
                         data-discount="{{ variant.discount_percent }}"
                         data-stock="{{ variant.stock }}"
+                        data-specs="{{ variant.get_specs_json }}"
                         aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}">
                         <span class="dot" style="background-color: #{{ variant.get_hex_color }};"></span>
                         <span class="swatch-code">{{ variant.color_code }}</span>
@@ -109,6 +110,7 @@
                         data-original-price="{{ variant.price }}"
                         data-discount="{{ variant.discount_percent }}"
                         data-stock="{{ variant.stock }}"
+                        data-specs="{{ variant.get_specs_json }}"
                         aria-label="انتخاب سایز {{ variant.number_code }}">{{ variant.number_code }}</button>
                     {% endfor %}
                 </div>
@@ -224,32 +226,35 @@
 
         <!-- Specs Table -->
         <table class="tab-pane specs-table" data-tab-content="specs">
-        <tr>
-            <td>نام محصول</td>
-            <td>{{ object.title }}</td>
-        </tr>
-        <tr>
-            <td>برند</td>
-            <td><strong>{{ object.brand }}</strong></td>
-        </tr>
-        {% if object.has_number_variants %}
-        <tr>
-            <td>سایز انتخابی</td>
-            <td id="spec-size-value">—</td>
-        </tr>
-        {% endif %}
-        {% if object.has_color_variants %}
-        <tr>
-            <td>رنگ انتخابی</td>
-            <td id="spec-color-value">—</td>
-        </tr>
-        {% endif %}
-        <tr>
-            <td>قیمت</td>
-            <td id="spec-price-value">-</td>
-        </tr>
-      
-    </table>
+            <tbody>
+                {% for spec in object.specs.all %}
+                <tr>
+                    <td>{{ spec.title }}</td>
+                    <td>{{ spec.description }}</td>
+                </tr>
+                {% endfor %}
+                {% if object.has_number_variants %}
+                <tr>
+                    <td>سایز انتخابی</td>
+                    <td id="spec-size-value">—</td>
+                </tr>
+                {% endif %}
+                {% if object.has_color_variants %}
+                <tr>
+                    <td>رنگ انتخابی</td>
+                    <td id="spec-color-value">—</td>
+                </tr>
+                {% endif %}
+            </tbody>
+            {% if object.has_variants %}
+            <!--
+                این tbody خالیه و فقط از طریق shop.js پر می‌شه.
+                هر بار کاربر یک سایز/رنگ رو انتخاب می‌کنه، تابع updateVariantSpecs()
+                این ردیف‌ها رو با مشخصات همون وریانت جایگزین می‌کنه (real-time، بدون فچ به سرور).
+            -->
+            <tbody id="variant-specs-body"></tbody>
+            {% endif %}
+        </table>
 
     </div>
     </div>
