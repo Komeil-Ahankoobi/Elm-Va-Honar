@@ -356,14 +356,14 @@
 
                     {% for product in special_products %}
                     <div class="product-card">
-                        <div class="product-card__badge">{{ product.discount_percent }}٪</div>
+                        <div class="product-card__badge">{{ product.get_discount_percent  }}٪</div>
                         <div class="product-card__img-wrap">
                             <img src="{{ product.image.url }}" alt="{{ product.title }}" class="placeholder-img">
                         </div>
                         <div class="product-card__content">
                             <h3 class="product-card__title">{{ product.title }}</h3>
                             <div class="product-card__price-area">
-                                <span class="product-card__price">{{ product.price|intcomma }} تومان</span>
+                                <span class="product-card__price">{% if product.has_variants %}از {% endif %}{{ product.get_price|intcomma }} تومان</span>
                             </div>
                             <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="product-card__btn">مشاهده
                                 محصول</a>
