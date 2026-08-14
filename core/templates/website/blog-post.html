@@ -18,7 +18,6 @@
 <!-- Search & Filter Toolbar -->
 <section class="blog-toolbar">
     <form action="{% url 'website:blog-post' %}" method="get">
-        {% csrf_token %}
         <div class="blog-search">
             <input type="text" name="q" placeholder="جستجو در مقالات..." value="{{ request.GET.q }}" />
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

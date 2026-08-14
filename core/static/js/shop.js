@@ -12,6 +12,15 @@ function formatPrice(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+(function initSortSelectSync() {
+    const sortSelect = document.querySelector('select[name="filter-by"]');
+    if (!sortSelect) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const currentSort = params.get("filter-by") || "new";
+    sortSelect.value = currentSort;
+})();
+
 function updatePriceDisplay(el) {
     if (!el.dataset.price) return;
 

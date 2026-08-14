@@ -11,7 +11,8 @@ from .colors import VISTA_ACRYLIC_COLORS
 class ProductStatusType(models.IntegerChoices):
     publish = 1 ,("نمایش")
     draft = 2 ,("عدم نمایش")
-    
+   
+ 
 class ProductCategoryModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
@@ -109,8 +110,6 @@ class ProductModel(models.Model):
     status = models.IntegerField(choices=ProductStatusType.choices, default=ProductStatusType.draft.value)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0, null=True, blank=True)
     discount_percent = models.IntegerField(default=0, null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
-
-    avg_rate = models.FloatField(default=0.0)
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -223,6 +222,7 @@ class ProductModel(models.Model):
             return None
         prices = [v.get_price() for v in variants]
         return min(prices), max(prices)
+    
     
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")

@@ -355,7 +355,7 @@
                 <div class="products-grid scroll-container" id="prodGrid">
 
                     {% for product in special_products %}
-                    <div class="product-card reveal" style="cursor: pointer"
+                <div class="product-card reveal" style="cursor: pointer"
                     data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
                     {% if product.has_discount %}
                     <div class="discount-badge">
@@ -399,7 +399,7 @@
                     </button>
                     {% endif %}
                 </div>
-                    {% endfor %}
+                {% endfor %}
                 </div>
 
                 <button class="carousel-arrow carousel-arrow--next" id="prodNext" aria-label="Next Product">
