@@ -7,7 +7,7 @@ from django.conf import settings
 from django.urls import reverse
 
 
-from .colors import VISTA_ACRYLIC_COLORS
+from .colors import VISTA_ACRYLIC_COLORS, PARS_ACRYLIC_COLORS
 
 
 class ProductStatusType(models.IntegerChoices):
@@ -186,10 +186,10 @@ class ProductModel(models.Model):
         return self.image_alt_text or self.title
 
     def get_color_variants(self):
-        return self.varients.filter(variant_type=VarientType.color)
+        return self.varients.filter(variant_type__in=[VarientType.color, VarientType.pars_color])
 
     def has_color_variants(self):
-        return self.varients.filter(variant_type=VarientType.color).exists()
+        return self.varients.filter(variant_type__in=[VarientType.color, VarientType.pars_color]).exists()
 
     def get_number_variants(self):
         return self.varients.filter(variant_type=VarientType.number)
@@ -257,7 +257,8 @@ class ProductSpecModel(models.Model):
         
         
 class VarientType(models.TextChoices):
-    color = 'color', ("رنگ")
+    color = 'color', ("رنگ (ویستا)")
+    pars_color = 'pars_color', ("رنگ (پالت پارس)")
     number = 'number', ('شماره')
 
 
@@ -304,16 +305,23 @@ class ProductVarientModel(models.Model):
     def __str__(self):
         return f'{self.product.title} - {self.variant_type}'
 
+    def get_color_palette_dict(self):
+        if self.variant_type == VarientType.pars_color:
+            return PARS_ACRYLIC_COLORS
+        return VISTA_ACRYLIC_COLORS
+
     def get_hex_color(self):
         code = (self.color_code or "").strip().lstrip("#")
-        if code in VISTA_ACRYLIC_COLORS:
-            return VISTA_ACRYLIC_COLORS[code][1]
+        palette = self.get_color_palette_dict()
+        if code in palette:
+            return palette[code][1]
         return code or "cccccc"
 
     def get_color_display_name(self):
         code = (self.color_code or "").strip()
-        if code in VISTA_ACRYLIC_COLORS:
-            return VISTA_ACRYLIC_COLORS[code][0]
+        palette = self.get_color_palette_dict()
+        if code in palette:
+            return palette[code][0]
         return code
 
     def get_price(self):

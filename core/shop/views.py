@@ -7,7 +7,7 @@ from .models import (
     ProductCategoryModel,
     VarientType,
 )
-from .colors import VISTA_ACRYLIC_COLORS
+from .colors import VISTA_ACRYLIC_COLORS, PARS_ACRYLIC_COLORS
 from django.views.generic import (
     ListView,
     DetailView
@@ -55,12 +55,13 @@ def get_matching_color_codes(word):
     """اگه کلمه فارسی یا انگلیسی مربوط به یه رنگ باشه، کدهای متناظرش رو برمی‌گردونه."""
     keywords = PERSIAN_COLOR_KEYWORDS.get(word, [word.lower()])
     codes = set()
-    for code, (name, hex_code) in VISTA_ACRYLIC_COLORS.items():
-        name_lower = name.lower()
-        for kw in keywords:
-            if kw.lower() in name_lower:
-                codes.add(code)
-                break
+    for palette in (VISTA_ACRYLIC_COLORS, PARS_ACRYLIC_COLORS):
+        for code, (name, hex_code) in palette.items():
+            name_lower = name.lower()
+            for kw in keywords:
+                if kw.lower() in name_lower:
+                    codes.add(code)
+                    break
     return codes
 
 
@@ -109,11 +110,13 @@ class ShopProductView(ListView):
                     Q(varients__variant_type=VarientType.number, varients__number_code__in=numeric_tokens)
                 )
                 variant_conditions.append(
-                    Q(varients__variant_type=VarientType.color, varients__color_code__in=numeric_tokens)
+                    Q(varients__variant_type__in=[VarientType.color, VarientType.pars_color],
+                      varients__color_code__in=numeric_tokens)
                 )
             if color_codes:
                 variant_conditions.append(
-                    Q(varients__variant_type=VarientType.color, varients__color_code__in=color_codes)
+                    Q(varients__variant_type__in=[VarientType.color, VarientType.pars_color],
+                      varients__color_code__in=color_codes)
                 )
 
             if variant_conditions:
