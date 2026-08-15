@@ -38,6 +38,7 @@
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 15px !important;
+        position: static !important;
     }
 
     .products-grid {

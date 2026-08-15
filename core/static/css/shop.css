@@ -50,7 +50,7 @@ a {
 .breadcrumbs a:hover {
     color: var(--text-main);
 }
- 
+
 .page-title {
     font-size: 22px;
     font-weight: bold;
@@ -74,6 +74,15 @@ a {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: sticky;
+    /* هدر خودش sticky و top:0 هست؛ پس سایدبار باید دقیقاً زیر هدر بشینه،
+       نه top:0 (که باعث می‌شد زیر هدر قایم بشه و انگار اصلاً sticky نیست).
+       --header-height رو یه اسکریپت کوچیک تو base.html ست می‌کنه. */
+    top: calc(var(--header-height, 132px) + 20px);
+    /* NOTE: align-items on .layout stays at its default (stretch) on purpose —
+       that's what gives .sidebar's grid cell the same height as .main-content,
+       so it has room to stay stuck while you scroll through the products list
+       and only detaches once you reach the end of it. */
 }
 
 .filter-card {
@@ -221,7 +230,6 @@ a {
 
 /* ================= PRODUCTS AREA (LEFT) ================= */
 .products-header {
-
     align-items: center;
     background: #ffffff;
     border: 1px solid var(--border-color);
@@ -352,8 +360,6 @@ a {
     max-width: 100%;
     object-fit: contain;
 }
-
-
 
 .product-category {
     font-size: 10px;
