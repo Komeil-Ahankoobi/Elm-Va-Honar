@@ -49,7 +49,7 @@
                         {{ category.title }}{% if not forloop.last %}، {% endif %}
                         {% endfor %}
                     </div>
-                </div>
+                </div> 
                 {% endif %}
             </div>
         </div>
@@ -261,8 +261,10 @@
 
     <!-- RELATED PRODUCTS -->
     <div class="related-section">
+        {% if related_products.count != 0 %}
         <div class="section-arrow left"><i class="fa-solid fa-chevron-left"></i></div>
         <div class="section-arrow right"><i class="fa-solid fa-chevron-right"></i></div>
+        {% endif %}
 
         <div class="related-section-header">
             <div class="section-title">محصولات مرتبط</div>

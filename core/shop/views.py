@@ -68,7 +68,7 @@ def get_matching_color_codes(word):
 class ShopProductView(ListView):
     template_name = "shop/shop.html"
     context_object_name = "products"
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
@@ -203,3 +203,4 @@ class ShopProductDetailView(DetailView):
 
         context["related_products"] = related_products
         return context
+    

@@ -314,6 +314,13 @@ a {
         box-shadow 0.2s ease;
 }
 
+.article-card > a {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
 .article-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
@@ -374,7 +381,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px dashed var(--border-color);
+    border-top: 1px dashed black;
     padding-top: 10px;
     font-size: 11px;
     color: var(--text-muted);

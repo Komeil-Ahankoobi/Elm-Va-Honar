@@ -52,7 +52,6 @@
         <a href="{% url 'website:blog-post-detail' pk=blog.id %}">
             <div class="card-image">
                 <img src="{{ blog.image.url }}" alt="{{ blog.image_alt_text|default:blog.title }}" />
-                <span class="card-badge">معرفی محصول</span>
             </div>
             <div class="card-content">
                 <h3 class="card-title">{{ blog.title }}</h3>

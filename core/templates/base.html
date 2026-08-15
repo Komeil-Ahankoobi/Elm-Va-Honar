@@ -382,6 +382,23 @@
         })();
     </script>
 
+    <!-- ارتفاع واقعی هدر (که خودش sticky هستش) رو به‌صورت متغیر CSS منتشر می‌کنیم
+         تا هر عنصر sticky دیگه‌ای تو صفحه (مثل سایدبار فروشگاه) بتونه دقیقاً
+         زیر هدر بشینه، حتی اگه ارتفاع هدر با تغییر سایز صفحه عوض بشه. -->
+    <script>
+        (function () {
+            var header = document.querySelector('.header');
+            if (!header) return;
+
+            function setHeaderHeight() {
+                document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+            }
+
+            setHeaderHeight();
+            window.addEventListener('resize', setHeaderHeight);
+        })();
+    </script>
+
     {% include 'messages.html' %}
     {% block extra_js %}{% endblock extra_js %}
     {% block extra_js_no_compress %}{% endblock extra_js_no_compress %}
