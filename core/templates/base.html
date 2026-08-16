@@ -395,7 +395,14 @@
             }
 
             setHeaderHeight();
-            window.addEventListener('resize', setHeaderHeight);
+
+            // به‌جای فقط یه بار اندازه‌گیری (که با لود دیرهنگام لوگو/فونت وب می‌تونه نادرست بشه)،
+            // با ResizeObserver هر تغییری تو ارتفاع واقعی هدر رو زنده گوش می‌دیم و --header-height رو آپدیت می‌کنیم
+            if ('ResizeObserver' in window) {
+                new ResizeObserver(setHeaderHeight).observe(header);
+            } else {
+                window.addEventListener('resize', setHeaderHeight);
+            }
         })();
     </script>
 

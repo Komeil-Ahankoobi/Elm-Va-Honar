@@ -246,6 +246,7 @@ function filterProducts(selectedElemnt) {
     window.location.href = newUrl;
 }
 
+
 function clearFilters() {
     window.location.href = window.location.pathname;
 }

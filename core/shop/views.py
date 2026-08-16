@@ -69,6 +69,9 @@ class ShopProductView(ListView):
     template_name = "shop/shop.html"
     context_object_name = "products"
     paginate_by = 20
+    
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
@@ -172,7 +175,7 @@ class ShopProductView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_product'] = ProductModel.objects.count()
-        context['categories'] = ProductCategoryModel.objects.all()[:12]
+        context['categories'] = ProductCategoryModel.objects.all()
         context['avtive_page'] = 'show-product-view'
         context['filter_by'] = self.request.GET.get('filter-by'),
 

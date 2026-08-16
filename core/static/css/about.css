@@ -55,8 +55,8 @@ section {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
-/* ==================== Hero Decorative Animation — Design Compass ==================== */
-/* پس‌زمینه‌ی کانتینر: به‌جای گرادیان فیروزه‌ای/نارنجی اشباع، از رنگ‌های خودِ برند استفاده شد */
+/* ==================== Hero Decorative Animation — Painting EH ==================== */
+/* پس‌زمینه‌ی کانتینر: از رنگ‌های خودِ برند استفاده شد */
 .about-hero__image {
     position: relative;
     width: 100%;
@@ -75,131 +75,245 @@ section {
     );
 }
 
-/* هسته‌ی نورانی: سبز اصلی به نارنجی اصلی */
-.about-hero__center-blob {
-    position: absolute;
-    z-index: 1;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    filter: blur(2px);
-    animation: aboutBlobPulse 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+.about-hero__canvas {
+    width: 92%;
+    height: 92%;
 }
 
-@keyframes aboutBlobPulse {
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 0.9;
+/* بومِ نقاشی */
+.about-hero__board {
+    fill: #ffffff;
+    stroke: rgba(47, 93, 80, 0.12);
+    stroke-width: 2;
+}
+
+/* حروف EH: با قلم‌مو نوشته می‌شن */
+.about-hero__letters {
+    animation: aboutLettersFade 10s ease-in-out infinite;
+}
+
+.about-hero__letter {
+    fill: none;
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+}
+
+.about-hero__letter--e {
+    stroke: var(--color-primary);
+}
+
+.about-hero__letter--h {
+    stroke: var(--color-accent);
+}
+
+.about-hero__letter--e1 {
+    animation: aboutDrawE1 10s linear infinite;
+}
+.about-hero__letter--e2 {
+    animation: aboutDrawE2 10s linear infinite;
+}
+.about-hero__letter--e3 {
+    animation: aboutDrawE3 10s linear infinite;
+}
+.about-hero__letter--h1 {
+    animation: aboutDrawH1 10s linear infinite;
+}
+.about-hero__letter--h2 {
+    animation: aboutDrawH2 10s linear infinite;
+}
+.about-hero__letter--h3 {
+    animation: aboutDrawH3 10s linear infinite;
+}
+
+@keyframes aboutLettersFade {
+    0% {
+        opacity: 0;
     }
-    50% {
-        transform: scale(1.18);
+    4% {
         opacity: 1;
     }
-}
-
-/* حلقه: سبز اصلی سایت */
-.about-hero__ring {
-    position: absolute;
-    z-index: 1;
-    width: 230px;
-    height: 230px;
-    border-radius: 50%;
-    border: 2px solid rgba(47, 93, 80, 0.35);
-    animation: aboutRingSpin 30s linear infinite;
-}
-
-@keyframes aboutRingSpin {
-    from {
-        transform: rotate(0deg);
+    97% {
+        opacity: 1;
     }
-    to {
-        transform: rotate(360deg);
+    100% {
+        opacity: 0;
     }
 }
 
-/* مدارِ چرخش ابزارهای هنری */
-.about-hero__orbit {
-    position: absolute;
-    z-index: 2;
-    width: 230px;
-    height: 230px;
-    animation: aboutOrbitSpin 22s linear infinite;
+@keyframes aboutDrawE1 {
+    0%,
+    12% {
+        stroke-dashoffset: 100;
+    }
+    20%,
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes aboutDrawE2 {
+    0%,
+    27% {
+        stroke-dashoffset: 100;
+    }
+    34%,
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes aboutDrawE3 {
+    0%,
+    41% {
+        stroke-dashoffset: 100;
+    }
+    48%,
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes aboutDrawH1 {
+    0%,
+    65% {
+        stroke-dashoffset: 100;
+    }
+    72%,
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes aboutDrawH2 {
+    0%,
+    78% {
+        stroke-dashoffset: 100;
+    }
+    84%,
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes aboutDrawH3 {
+    0%,
+    90% {
+        stroke-dashoffset: 100;
+    }
+    96%,
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* پالت رنگ */
+.about-hero__palette ellipse {
+    fill: #ffffff;
+    stroke: rgba(47, 93, 80, 0.15);
+    stroke-width: 2;
+}
+
+.about-hero__paint--1 {
+    fill: var(--color-primary);
+}
+.about-hero__paint--2 {
+    fill: var(--color-accent);
+}
+.about-hero__paint--3 {
+    fill: var(--color-primary-dark);
+}
+.about-hero__paint--4 {
+    fill: var(--color-accent);
+}
+
+/* قلم‌مو */
+.about-hero__brush {
+    animation: aboutBrushMove 10s ease-in-out infinite;
+    transform-origin: 0 0;
     will-change: transform;
 }
 
-@keyframes aboutOrbitSpin {
-    from {
-        transform: rotate(0deg);
+.about-hero__brush-handle {
+    stroke: var(--color-primary-dark);
+    stroke-width: 4;
+    stroke-linecap: round;
+}
+
+.about-hero__brush-ferrule {
+    fill: #c9ccd1;
+}
+
+.about-hero__brush-tip {
+    fill: var(--color-accent);
+}
+
+@keyframes aboutBrushMove {
+    0%,
+    4% {
+        transform: translate(32px, 146px) rotate(-25deg);
     }
-    to {
-        transform: rotate(360deg);
+    8% {
+        transform: translate(70px, 80px) rotate(-25deg);
     }
-}
-
-.about-hero__orbit-pos {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-}
-
-.about-hero__orbit-pos--1 {
-    transform: rotate(45deg) translate(115px) rotate(-45deg);
-}
-.about-hero__orbit-pos--2 {
-    transform: rotate(135deg) translate(115px) rotate(-135deg);
-}
-.about-hero__orbit-pos--3 {
-    transform: rotate(225deg) translate(115px) rotate(-225deg);
-}
-.about-hero__orbit-pos--4 {
-    transform: rotate(315deg) translate(115px) rotate(-315deg);
-}
-
-/* آیکون‌ها با چرخش معکوس همیشه صاف می‌مونن (نه وارونه) */
-.about-hero__orbit-icon {
-    position: absolute;
-    top: -26px;
-    left: -26px;
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    background: #ffffff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: aboutOrbitCounterSpin 22s linear infinite;
-    will-change: transform;
-}
-
-.about-hero__orbit-icon svg {
-    width: 22px;
-    height: 22px;
-}
-
-/* آیکون‌های مداری: فقط بین دو رنگ اصلی برند (سبز و نارنجی) تناوب دارن */
-.about-hero__orbit-pos--1 .about-hero__orbit-icon {
-    color: var(--color-primary);
-}
-.about-hero__orbit-pos--2 .about-hero__orbit-icon {
-    color: var(--color-accent);
-}
-.about-hero__orbit-pos--3 .about-hero__orbit-icon {
-    color: var(--color-primary-dark);
-}
-.about-hero__orbit-pos--4 .about-hero__orbit-icon {
-    color: var(--color-accent);
-}
-
-@keyframes aboutOrbitCounterSpin {
-    from {
-        transform: rotate(0deg);
+    12% {
+        transform: translate(108px, 54px) rotate(-25deg);
     }
-    to {
-        transform: rotate(-360deg);
+    20% {
+        transform: translate(162px, 54px) rotate(-25deg);
+    }
+    23% {
+        transform: translate(135px, 76px) rotate(-25deg);
+    }
+    27% {
+        transform: translate(108px, 98px) rotate(-25deg);
+    }
+    34% {
+        transform: translate(162px, 98px) rotate(-25deg);
+    }
+    37% {
+        transform: translate(130px, 120px) rotate(-25deg);
+    }
+    41% {
+        transform: translate(108px, 142px) rotate(-25deg);
+    }
+    48% {
+        transform: translate(162px, 142px) rotate(-25deg);
+    }
+    52% {
+        transform: translate(90px, 158px) rotate(-25deg);
+    }
+    56%,
+    59% {
+        transform: translate(32px, 146px) rotate(-25deg);
+    }
+    62% {
+        transform: translate(150px, 90px) rotate(20deg);
+    }
+    65% {
+        transform: translate(196px, 54px) rotate(65deg);
+    }
+    72% {
+        transform: translate(196px, 142px) rotate(65deg);
+    }
+    75% {
+        transform: translate(220px, 110px) rotate(-10deg);
+    }
+    78% {
+        transform: translate(196px, 98px) rotate(-10deg);
+    }
+    84% {
+        transform: translate(256px, 98px) rotate(-10deg);
+    }
+    87% {
+        transform: translate(256px, 80px) rotate(65deg);
+    }
+    90% {
+        transform: translate(256px, 54px) rotate(65deg);
+    }
+    96% {
+        transform: translate(256px, 142px) rotate(65deg);
+    }
+    98% {
+        transform: translate(270px, 160px) rotate(30deg);
+    }
+    100% {
+        transform: translate(32px, 146px) rotate(-25deg);
     }
 }
 
@@ -208,73 +322,16 @@ section {
         height: 260px;
         min-height: 260px;
     }
-    .about-hero__ring,
-    .about-hero__orbit {
-        width: 170px;
-        height: 170px;
-    }
-    .about-hero__orbit-pos--1 {
-        transform: rotate(45deg) translate(78px) rotate(-45deg);
-    }
-    .about-hero__orbit-pos--2 {
-        transform: rotate(135deg) translate(78px) rotate(-135deg);
-    }
-    .about-hero__orbit-pos--3 {
-        transform: rotate(225deg) translate(78px) rotate(-225deg);
-    }
-    .about-hero__orbit-pos--4 {
-        transform: rotate(315deg) translate(78px) rotate(-315deg);
-    }
-    .about-hero__orbit-icon {
-        width: 42px;
-        height: 42px;
-        top: -21px;
-        left: -21px;
-    }
-    .about-hero__orbit-icon svg {
-        width: 18px;
-        height: 18px;
-    }
-    .about-hero__center-blob {
-        width: 110px;
-        height: 110px;
-    }
-}
-
-/* برچسب وسط */
-.about-hero__center-label {
-    position: absolute;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 6px 20px rgba(47, 93, 80, 0.12);
-    text-align: center;
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--color-primary-dark);
-    line-height: 1.5;
-    padding: 8px;
-}
-
-@media (max-width: 992px) {
-    .about-hero__center-label {
-        width: 82px;
-        height: 82px;
-        font-size: 11px;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .about-hero__center-blob,
-    .about-hero__ring,
-    .about-hero__orbit,
-    .about-hero__orbit-icon {
+    .about-hero__letters,
+    .about-hero__letter,
+    .about-hero__brush {
         animation: none;
+    }
+    .about-hero__letter {
+        stroke-dashoffset: 0;
     }
 }
 
