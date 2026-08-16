@@ -18,6 +18,53 @@ PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
 ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
 LATIN_DIGITS = "0123456789"
 
+# ترتیب الفبای فارسی برای بخش‌بندی کتگوری‌ها تو سایدبار.
+# "آ" جزو حروف مستقل الفبا نیست، معمولاً با "ا" یکی در نظر گرفته می‌شه؛
+# پس تو normalize_first_letter تبدیلش می‌کنیم به "ا".
+PERSIAN_ALPHABET = [
+    "ا", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ", "د", "ذ",
+    "ر", "ز", "ژ", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ",
+    "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی",
+]
+
+# نویسه‌های عربی/فارسی مشابه که باید قبل از گروه‌بندی یکسان‌سازی بشن
+# (مثلاً "ي" عربی با "ی" فارسی، یا "آ" با "ا")
+LETTER_NORMALIZE_MAP = {
+    "آ": "ا",
+    "أ": "ا",
+    "إ": "ا",
+    "ي": "ی",
+    "ك": "ک",
+}
+
+
+def normalize_first_letter(text):
+    if not text:
+        return ""
+    first_char = text.strip()[0]
+    return LETTER_NORMALIZE_MAP.get(first_char, first_char)
+
+
+def group_categories_by_letter(categories):
+    """
+    کتگوری‌ها رو بر اساس حرف اول عنوانشون (طبق ترتیب الفبای فارسی) گروه‌بندی می‌کنه.
+    فقط حروفی که حداقل یه کتگوری دارن برگردونده می‌شن.
+    خروجی: [{"letter": "ب", "categories": [...]}, ...]
+    """
+    grouped = {}
+    for category in categories:
+        letter = normalize_first_letter(category.title)
+        grouped.setdefault(letter, []).append(category)
+
+    result = []
+    for letter in PERSIAN_ALPHABET:
+        if letter in grouped:
+            result.append({
+                "letter": letter,
+                "categories": sorted(grouped[letter], key=lambda c: c.title),
+            })
+    return result
+
 SEARCH_STOPWORDS = {
     "سایز", "شماره", "نمره", "نمبر", "کد",
     "رنگ", "اکریلیک", "اکرلیک", "ویستا",
@@ -175,7 +222,9 @@ class ShopProductView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['total_product'] = ProductModel.objects.count()
-        context['categories'] = ProductCategoryModel.objects.all()
+        categories = ProductCategoryModel.objects.all().order_by('title')
+        context['categories'] = categories
+        context['alphabet_categories'] = group_categories_by_letter(categories)
         context['avtive_page'] = 'show-product-view'
         context['filter_by'] = self.request.GET.get('filter-by'),
 
@@ -206,4 +255,3 @@ class ShopProductDetailView(DetailView):
 
         context["related_products"] = related_products
         return context
-    

@@ -74,15 +74,25 @@ a {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    position: sticky;
-    /* هدر خودش sticky و top:0 هست؛ پس سایدبار باید دقیقاً زیر هدر بشینه،
-       نه top:0 (که باعث می‌شد زیر هدر قایم بشه و انگار اصلاً sticky نیست).
-       --header-height رو یه اسکریپت کوچیک تو base.html ست می‌کنه. */
-    top: calc(var(--header-height, 132px) + 20px);
-    /* NOTE: align-items on .layout stays at its default (stretch) on purpose —
-       that's what gives .sidebar's grid cell the same height as .main-content,
-       so it has room to stay stuck while you scroll through the products list
-       and only detaches once you reach the end of it. */
+    /* روی موبایل sticky غیرفعاله؛ فقط تو مدیا-کوئری پایین برای دسکتاپ فعال می‌شه */
+}
+
+@media (min-width: 993px) {
+    .sidebar {
+        position: sticky;
+        /* هدر خودش sticky و top:0 هست؛ پس سایدبار باید دقیقاً زیر هدر بشینه،
+           نه top:0 (که باعث می‌شد زیر هدر قایم بشه و انگار اصلاً sticky نیست).
+           --header-height رو یه اسکریپت کوچیک تو base.html ست می‌کنه. */
+        top: calc(var(--header-height, 132px) + 20px);
+        /* align-self: start لازمه چون .layout یه grid با align-items پیش‌فرض
+           (stretch) هست. اگه اینو ست نکنیم، خودِ باکس .sidebar به اندازه‌ی کل
+           ارتفاع main-content کش میاد و دیگه هیچ فضایی برای بالا/پایین رفتن و
+           چسبیدن نداره (بالا و پایینش همزمان با مرز container یکی می‌شه، پس
+           انگار position: sticky اصلاً اثر نداره). با align-self: start، سلول
+           گرید همچنان بلند می‌مونه ولی خودِ .sidebar فقط به اندازه‌ی محتوای
+           واقعیش (کارت‌های فیلتر) ارتفاع می‌گیره و جا برای چسبیدن پیدا می‌کنه. */
+        align-self: start;
+    }
 }
 
 .filter-card {
@@ -198,6 +208,28 @@ a {
 
 .category-list::-webkit-scrollbar-thumb:hover {
     background-color: #ccc;
+}
+
+.category-group {
+    direction: rtl;
+}
+
+.category-group:not(:last-child) {
+    margin-bottom: 6px;
+}
+
+.category-group-title {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--text-muted);
+    background: #f5f5f7;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+}
+
+.category-group-list {
+    list-style: none;
 }
 
 .category-list li {

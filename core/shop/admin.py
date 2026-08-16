@@ -164,6 +164,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_filter = ("status", "category", "brand")
     search_fields = ("title", "meta_title")
     inlines = [ProductVarientInline, ProductImageInline, ProductSpecInline]  # ← ProductSpecInline اضافه شد
+    autocomplete_fields = ["category", "brand"]  # ← قابلیت سرچ برای دسته و برند
     actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 
@@ -173,6 +174,7 @@ class ProductVarientModelAdmin(admin.ModelAdmin):
     list_filter = ("variant_type", "status", "product__category")
     search_fields = ("product__title", "number_code", "color_code")
     inlines = [ProductVariantSpecInline]  # ← اضافه شد
+    autocomplete_fields = ["product"]  # ← قابلیت سرچ برای انتخاب محصول
     actions = [increase_price_custom, decrease_price_custom, set_discount_percent, remove_discount_instant]
 
 
