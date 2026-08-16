@@ -51,16 +51,23 @@
                 <div class="filter-header">
                     <span>دسته‌بندی محصولات</span>
                 </div>
-                <ul class="category-list">
-                    {% for category in categories %}
-                    <a href="?category={{ category.id }}">
-                        <li>
-                            <span>{{ category.title }}</span>
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </li>
-                    </a>
+                <div class="category-list">
+                    {% for group in alphabet_categories %}
+                    <div class="category-group">
+                        <div class="category-group-title">{{ group.letter }}</div>
+                        <ul class="category-group-list">
+                            {% for category in group.categories %}
+                            <a href="?category={{ category.id }}">
+                                <li>
+                                    <span>{{ category.title }}</span>
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </li>
+                            </a>
+                            {% endfor %}
+                        </ul>
+                    </div>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </aside>
 
@@ -94,7 +101,7 @@
                         
                         <span>تعداد محصولات در هر صفحه: </span>
                         <select name="page_size" onchange="filterProducts(this)">
-                            <option value="10" {% if request.GET.page_size == "10" or not request.GET.page_size %}selected{% endif %}>1 تا 10</option>
+                            <option value="20" {% if request.GET.page_size == "20" or not request.GET.page_size %}selected{% endif %}>1 تا 20</option>
                             <option value="30" {% if request.GET.page_size == "30" %}selected{% endif %}>
                                 1 تا 30
                             </option>

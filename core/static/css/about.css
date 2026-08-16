@@ -592,7 +592,79 @@ section {
     color: #ffffff;
 }
 
-/* 5. CTA Bar */
+/* 5. Map Section */
+.about-map {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.about-map__frame {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.about-map__frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.about-map__address {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+    padding: 16px 20px;
+    background-color: #f0fdfa;
+    border: 1px solid #ccfbf1;
+    border-radius: 14px;
+}
+
+.about-map__address-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    background-color: #0f766e;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-map__address p {
+    font-size: 14px;
+    color: #1e293b;
+    line-height: 1.8;
+    font-weight: 500;
+}
+
+@media (max-width: 576px) {
+    .about-map {
+        padding: 20px;
+    }
+    .about-map__frame {
+        height: 280px;
+        border-radius: 12px;
+    }
+    .about-map__address {
+        padding: 14px 16px;
+        gap: 10px;
+    }
+    .about-map__address p {
+        font-size: 13px;
+    }
+}
+
+/* 6. CTA Bar */
 .about-cta {
     background: #ffffff;
     border-radius: 20px;
