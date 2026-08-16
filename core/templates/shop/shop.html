@@ -133,8 +133,7 @@
 
                         {% if product.has_variants %}
                         {% with price_range=product.get_price_range %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{
-                            price_range.0|intcomma }} تومان</span>
+                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
                         {% endwith %}
                         {% else %}
                         <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
