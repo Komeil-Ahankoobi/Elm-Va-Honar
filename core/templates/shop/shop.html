@@ -73,7 +73,8 @@
                         <input type="text" name="q" placeholder="جستجوی محصول مورد نظر..."
                             value="{{ request.GET.q }}" />
                         <button type="submit" aria-label="جستجو">
-                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="7"></circle>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
@@ -88,6 +89,20 @@
                             </option>
                             <option value="exp_to_cheep" {% if filter_by == "exp_to_cheep" %}selected{% endif %}>
                                 گران‌ترین
+                            </option>
+                        </select>
+                        
+                        <span>تعداد محصولات در هر صفحه: </span>
+                        <select name="page_size" onchange="filterProducts(this)">
+                            <option value="10" {% if request.GET.page_size == "10" or not request.GET.page_size %}selected{% endif %}>1 تا 10</option>
+                            <option value="30" {% if request.GET.page_size == "30" %}selected{% endif %}>
+                                1 تا 30
+                            </option>
+                            <option value="50" {% if request.GET.page_size == "50" %}selected{% endif %}>
+                                1 تا 50
+                            </option>
+                            <option value="100" {% if request.GET.page_size == "100" %}selected{% endif %}>
+                                1 تا 100
                             </option>
                         </select>
                     </div>
@@ -106,8 +121,7 @@
                     </div>
                     {% endif %}
                     <div class="product-img">
-                        <img src="{{ product.image.url }}" alt="{{ product.title }}"
-                            loading="lazy" />
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy" />
                     </div>
 
                     <div class="product-title">{{ product.title }}</div>
@@ -119,7 +133,8 @@
 
                         {% if product.has_variants %}
                         {% with price_range=product.get_price_range %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
+                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{
+                            price_range.0|intcomma }} تومان</span>
                         {% endwith %}
                         {% else %}
                         <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>

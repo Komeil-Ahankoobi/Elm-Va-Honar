@@ -34,7 +34,6 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['four_product'] = ProductModel.objects.all().order_by('-created_date')[:4]
         product_url = reverse('shop:show-product-view')
         categories_url = reverse('website:categories')
         context['hero_slides'] = [
@@ -106,7 +105,9 @@ class CategoriesView(ListView):
     template_name = 'website/categories.html'
     paginate_by = 8
     
-    queryset = ProductCategoryModel.objects.annotate(
+    queryset = ProductCategoryModel.objects.filter(
+        status=ProductStatusType.publish.value
+    ).annotate(
         product_count=Count(
             'products',
             filter=Q(products__status=ProductStatusType.publish.value)
@@ -124,7 +125,9 @@ class BrandsView(ListView):
     template_name = 'website/brands.html'
     paginate_by = 8
 
-    queryset = ProductBrandModel.objects.annotate(
+    queryset = ProductBrandModel.objects.filter(
+        status=ProductStatusType.publish.value
+    ).annotate(
         product_count=Count(
             'products',
             filter=Q(products__status=ProductStatusType.publish.value)
