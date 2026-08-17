@@ -24,6 +24,7 @@
 ## ✨ امکانات و ویژگی‌ها
 
 ### 🛍️ فروشگاه و محصولات
+
 - نمایش محصولات با دسته‌بندی، فیلتر بر اساس قیمت و مرتب‌سازی
 - پشتیبانی کامل از **Variant** محصولات (رنگ، سایز و ...) با نمایش پالت رنگی و انتخاب لحظه‌ای قیمت/موجودی/مشخصات
 - سیستم تخفیف با محاسبه‌ی خودکار درصد و قیمت نهایی
@@ -31,11 +32,13 @@
 - سبد خرید مبتنی بر Session و همچنین دیتابیس، با قابلیت ادغام سبد هنگام ورود کاربر (Merge on Login)
 
 ### 💳 پرداخت
+
 - اتصال به درگاه پرداخت **زرین‌پال (ZarinPal)**
 - مدیریت Idempotency و کنترل هم‌زمانی با `select_for_update()` برای جلوگیری از خطای موجودی در تراکنش‌های همزمان
 - به‌روزرسانی خودکار موجودی انبار پس از تأیید پرداخت
 
 ### 👤 حساب کاربری
+
 - ثبت‌نام و ورود از طریق شماره موبایل با پنل پیامکی **کاوه‌نگار**
 - پنل اختصاصی مشتری شامل:
   - مشاهده و ویرایش مشخصات کاربری
@@ -44,11 +47,13 @@
   - افزودن، ویرایش و حذف آدرس‌های چندگانه
 
 ### 📝 محتوا
+
 - بخش مجله (بلاگ) با مقالات آموزشی درباره‌ی کار با ابزارهای هنری
 - تنظیمات SEO شامل متاتگ‌ها، Sitemap، robots.txt و Schema.org (JSON-LD)
 - صفحه «درباره ما» با معرفی تیم و موقعیت فروشگاه روی نقشه گوگل
 
 ### 🎨 رابط کاربری
+
 - طراحی کاملاً واکنش‌گرا (Responsive) و راست‌به‌چپ (RTL)
 - فونت وزیرمتن و تم تیره با رنگ‌بندی بنفش/سبز
 - پنل مدیریت (Django Admin) با تم اختصاصی تیره/بنفش و فرم‌های Bulk Action
@@ -57,17 +62,17 @@
 
 ## 🛠️ تکنولوژی‌های استفاده‌شده
 
-| بخش | تکنولوژی |
-|---|---|
-| **بک‌اند** | Django 5.2.8, Django REST Framework |
-| **پایگاه داده** | PostgreSQL |
-| **فرانت‌اند** | HTML5, CSS3, JavaScript (Vanilla) |
-| **کانتینرسازی** | Docker, Docker Compose |
-| **سرور اپلیکیشن** | Gunicorn |
-| **فایل‌های استاتیک** | WhiteNoise |
-| **درگاه پرداخت** | ZarinPal (Sandbox/Production) |
-| **پنل پیامکی** | کاوه‌نگار (Kavenegar) |
-| **استقرار (Deployment)** | Runflare |
+| بخش                      | تکنولوژی                          |
+| ------------------------ | --------------------------------- |
+| **بک‌اند**               | Django 5.2.8                      |
+| **پایگاه داده**          | PostgreSQL                        |
+| **فرانت‌اند**            | HTML5, CSS3, JavaScript (Vanilla) |
+| **کانتینرسازی**          | Docker, Docker Compose            |
+| **سرور اپلیکیشن**        | Gunicorn                          |
+| **فایل‌های استاتیک**     | WhiteNoise                        |
+| **درگاه پرداخت**         | ZarinPal (Sandbox/Production)     |
+| **پنل پیامکی**           | کاوه‌نگار (Kavenegar)             |
+| **استقرار (Deployment)** | Runflare                          |
 
 ---
 
@@ -97,13 +102,12 @@
 
 </div>
 
-> 💡 تصاویر بالا را در مسیر `docs/screenshots/` قرار دهید تا در README نمایش داده شوند.
-
 ---
 
 ## 🚀 نصب و راه‌اندازی
 
 ### پیش‌نیازها
+
 - [Docker](https://www.docker.com/) و Docker Compose
 - Git
 
@@ -114,8 +118,7 @@
 git clone https://github.com/Komeil-Ahankoobi/Elm-Va-Honar.git
 cd Elm-Va-Honar
 
-# ساخت فایل‌های محیطی (env) بر اساس نمونه‌های موجود در پوشه envs/
-cp envs/.env.example envs/.env   # در صورت وجود فایل نمونه، مسیر را مطابق پروژه تنظیم کنید
+# تنظیم فایل‌های محیطی (env) در پوشه envs/
 
 # بالا آوردن سرویس‌ها با Docker Compose
 docker compose up --build
@@ -153,20 +156,28 @@ Elm-Va-Honar/
 
 ## 👥 تیم توسعه
 
+این پروژه از صفر تا استقرار نهایی، حاصل تلاش مشترک دو نفر است:
+
+<div align="center">
+
 <table>
   <tr>
-    <td align="center">
+    <td align="center" width="300">
+      <img src="https://github.com/Komeil-Ahankoobi.png" width="110" style="border-radius:50%"/><br/>
       <b>کمیل آهنکوبی</b><br/>
-      Web Developer<br/>
-      <a href="https://github.com/Komeil-Ahankoobi">GitHub</a>
+      <sub>💻 Web Developer</sub><br/><br/>
+      <a href="https://github.com/Komeil-Ahankoobi"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white"/></a>
     </td>
-    <td align="center">
+    <td align="center" width="300">
+      <img src="https://github.com/Ali-Arezoomandi.png" width="110" style="border-radius:50%"/><br/>
       <b>علی آرزومندی</b><br/>
-      Web Developer<br/>
-      <a href="https://github.com/Ali-Arezoomandi">GitHub</a>
+      <sub>💻 Web Developer</sub><br/><br/>
+      <a href="https://github.com/Ali-Arezoomandi"><img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white"/></a>
     </td>
   </tr>
 </table>
+
+</div>
 
 ---
 
