@@ -376,7 +376,7 @@ nav ul li a.active {
 
 .color-selector label {
     display: block;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
     margin-bottom: 8px;
 }
@@ -447,14 +447,14 @@ nav ul li a.active {
 }
 
 .size-dot {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text-main, #17171f);
     border: 1px solid rgba(0, 0, 0, 0.15);
