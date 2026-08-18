@@ -275,7 +275,7 @@ class ProductVarientModel(models.Model):
         help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن"
     )
     color_code = models.CharField(max_length=3, blank=True, null=True)
-    number_code = models.CharField(max_length=5, blank=True, null=True)
+    number_code = models.CharField(max_length=7, blank=True, null=True)
 
     price = models.DecimalField(
         max_digits=10, decimal_places=0,
