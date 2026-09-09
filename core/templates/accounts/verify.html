@@ -79,30 +79,103 @@
     </section>
 
     <script>
-        // شمارش معکوس ۱۲۰ ثانیه‌ای قبل از فعال شدن لینک ارسال مجدد
+        // شمارش معکوس ۱۲۰ ثانیه‌ای + ارسال مجدد کد بدون خروج از صفحه (AJAX)
         (function () {
-            var seconds = 120;
+            var COOLDOWN = 120;
+            var seconds = COOLDOWN;
             var timerEl = document.getElementById('resend-timer');
             var linkEl = document.getElementById('resend-link');
+            var interval = null;
+            var isRequesting = false;
 
-            var interval = setInterval(function () {
-                seconds -= 1;
-                if (seconds <= 0) {
-                    clearInterval(interval);
-                    linkEl.textContent = 'ارسال مجدد کد';
-                    linkEl.classList.remove('resend-disabled');
-                    linkEl.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        window.history.back(); // به صفحه قبل (شماره تلفن) برمی‌گردد تا کد جدید ارسال شود
-                    });
-                } else {
-                    timerEl.textContent = seconds;
+            function getCsrfToken() {
+                var input = document.querySelector('input[name="csrfmiddlewaretoken"]');
+                return input ? input.value : '';
+            }
+
+            function showToast(message, isError) {
+                if (typeof Toastify === 'function') {
+                    Toastify({
+                        text: message,
+                        duration: 3500,
+                        gravity: 'top',
+                        position: 'center',
+                        style: { background: isError ? '#dc3545' : '#28a745' },
+                    }).showToast();
                 }
-            }, 1000);
+            }
+
+            function setDisabledState() {
+                linkEl.classList.add('resend-disabled');
+                linkEl.textContent = '';
+                linkEl.appendChild(document.createTextNode('ارسال مجدد ('));
+                var span = document.createElement('span');
+                span.id = 'resend-timer';
+                span.textContent = seconds;
+                linkEl.appendChild(span);
+                linkEl.appendChild(document.createTextNode(')'));
+                timerEl = span;
+            }
+
+            function startCountdown() {
+                seconds = COOLDOWN;
+                setDisabledState();
+                clearInterval(interval);
+                interval = setInterval(function () {
+                    seconds -= 1;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        linkEl.textContent = 'ارسال مجدد کد';
+                        linkEl.classList.remove('resend-disabled');
+                    } else {
+                        timerEl.textContent = seconds;
+                    }
+                }, 1000);
+            }
+
+            function requestNewCode() {
+                if (isRequesting) return;
+                isRequesting = true;
+                var originalText = linkEl.textContent;
+                linkEl.textContent = 'در حال ارسال...';
+
+                fetch('{% url "accounts:resend_otp" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCsrfToken(),
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(function (res) {
+                        return res.json().then(function (data) {
+                            return { ok: res.ok, data: data };
+                        });
+                    })
+                    .then(function (result) {
+                        isRequesting = false;
+                        if (result.ok && result.data.success) {
+                            showToast(result.data.message || 'کد جدید ارسال شد.', false);
+                            startCountdown();
+                        } else {
+                            showToast(result.data.message || 'ارسال کد با خطا مواجه شد.', true);
+                            linkEl.textContent = originalText;
+                        }
+                    })
+                    .catch(function () {
+                        isRequesting = false;
+                        showToast('ارتباط با سرور برقرار نشد. دوباره تلاش کنید.', true);
+                        linkEl.textContent = originalText;
+                    });
+            }
 
             linkEl.addEventListener('click', function (e) {
                 e.preventDefault();
+                if (!linkEl.classList.contains('resend-disabled') && !isRequesting) {
+                    requestNewCode();
+                }
             });
+
+            startCountdown();
         })();
     </script>
 

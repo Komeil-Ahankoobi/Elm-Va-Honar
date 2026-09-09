@@ -1,7 +1,7 @@
 # accounts/services.py
 import logging
 import secrets
-import requests
+from melipayamak import Api
 from django.conf import settings
 from django.core.cache import cache
 from django.utils import timezone
@@ -23,40 +23,44 @@ def generate_otp_code(length=5):
 
 def send_otp_sms(phone_number, code):
     """
-    Sends the OTP through Kavenegar's Lookup (verify) endpoint.
+    Sends the OTP through Melipayamak's plain SMS send endpoint, using our
+    own dedicated sender line (MELIPAYAMAK_SENDER_NUMBER).
+
+    NOTE: this is the simple/manual send method - the same one used by the
+    "ارسال پیامک" page in the panel. Melipayamak also offers a faster,
+    pattern-based ("bodyId") OTP endpoint, but that requires an اقتصادی+
+    plan and manual activation by their sales team (021-63404). If/when
+    that's set up, only this function needs to change - swap `sms.send(...)`
+    below for `sms.send_by_base_number(code, phone_number, settings.MELIPAYAMAK_BODY_ID)`.
+
     Raises OTPSendError on any network/API failure so the caller can
     show a proper error instead of silently pretending the SMS went out.
     """
-    url = (
-        f"https://api.kavenegar.com/v1/{settings.KAVENEGAR_API_KEY}/verify/lookup.json"
-    )
-    params = {"receptor": phone_number, "token": code, "template": "otpcode"}
+    api = Api(settings.MELIPAYAMAK_USERNAME, settings.MELIPAYAMAK_PASSWORD)
+    sms = api.sms()
+    text = f" به نوشت افزار علم و هنر خوش آمدید . کد تایید شما برای ورود : {code}"
 
     try:
-        response = requests.post(url, data=params, timeout=5)
-    except requests.RequestException as exc:
-        logger.error("Kavenegar request failed for %s: %s", phone_number, exc)
+        response = sms.send(phone_number, settings.MELIPAYAMAK_SENDER_NUMBER, text)
+    except Exception as exc:
+        logger.error("Melipayamak request failed for %s: %s", phone_number, exc)
         raise OTPSendError("ارتباط با سرویس پیامک برقرار نشد.") from exc
 
-    try:
-        data = response.json()
-    except ValueError as exc:
+    if not isinstance(response, dict):
         logger.error(
-            "Kavenegar returned non-JSON response (status %s) for %s",
-            response.status_code,
+            "Melipayamak returned unexpected response type for %s: %r",
             phone_number,
+            response,
         )
-        raise OTPSendError("پاسخ نامعتبر از سرویس پیامک دریافت شد.") from exc
+        raise OTPSendError("پاسخ نامعتبر از سرویس پیامک دریافت شد.")
 
-    return_status = data.get("return", {}).get("status")
-    if response.status_code != 200 or return_status != 200:
-        logger.error("Kavenegar error for %s: %s", phone_number, data)
-        raise OTPSendError(
-            data.get("return", {}).get("message", "ارسال پیامک با خطا مواجه شد.")
-        )
+    ret_status = response.get("RetStatus")
+    if ret_status != 1:
+        logger.error("Melipayamak error for %s: %s", phone_number, response)
+        raise OTPSendError(response.get("StrRetStatus", "ارسال پیامک با خطا مواجه شد."))
 
-    logger.info("OTP sent to %s (status %s)", phone_number, return_status)
-    return data
+    logger.info("OTP sent to %s (RecId %s)", phone_number, response.get("Value"))
+    return response
 
 
 def can_request_otp(phone_number):

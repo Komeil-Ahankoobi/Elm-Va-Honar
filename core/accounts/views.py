@@ -3,6 +3,7 @@ import logging
 
 from django.shortcuts import redirect, render
 from django.views import View
+from django.http import JsonResponse
 from django.contrib.auth import login, get_user_model
 from django.contrib import messages
 
@@ -199,6 +200,47 @@ class VerifyLoginView(View):
                 form.add_error("code", "کد وارد شده اشتباه یا منقضی شده است.")
 
         return render(request, self.template_name, {"form": form})
+
+
+class ResendOTPView(View):
+    """
+    AJAX-only endpoint used by the "ارسال مجدد" link on verify.html.
+    Re-sends a code for whichever flow (register/login) has an in-progress
+    session, without sending the user back to a blank form.
+    """
+
+    class _ErrorCollector:
+        """Minimal stand-in for a Django form, just to reuse _issue_otp's
+        `form.add_error(field, message)` interface without needing a real form."""
+
+        def __init__(self):
+            self.errors = {}
+
+        def add_error(self, field, message):
+            self.errors[field or "__all__"] = message
+
+    def post(self, request):
+        if "register_data" in request.session:
+            phone_number = request.session["register_data"]["phone_number"]
+        elif "login_phone" in request.session:
+            phone_number = request.session["login_phone"]
+        else:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "نشست شما منقضی شده است. لطفاً دوباره تلاش کنید.",
+                },
+                status=400,
+            )
+
+        collector = self._ErrorCollector()
+        if _issue_otp(request, collector, phone_number):
+            return JsonResponse(
+                {"success": True, "message": "کد جدید برای شما ارسال شد."}
+            )
+
+        message = next(iter(collector.errors.values()), "ارسال کد با خطا مواجه شد.")
+        return JsonResponse({"success": False, "message": message}, status=400)
 
 
 class LogoutView(View):

@@ -199,10 +199,8 @@
                             </h1>
                             <p class="hero__subtitle">{{ slide.subtitle }}</p>
                             <div class="hero__actions">
-                                <a href="{{ slide.primary_url|default:'#' }}" class="btn btn--primary">{{
-                                    slide.primary_text }}</a>
-                                <a href="{{ slide.secondary_url|default:'#' }}" class="btn btn--outline-light">{{
-                                    slide.secondary_text }}</a>
+                                <a href="{{ slide.primary_url|default:'#' }}" class="btn btn--primary">{{ slide.primary_text }}</a>
+                                <a href="{{ slide.secondary_url|default:'#' }}" class="btn btn--outline-light">{{ slide.secondary_text }}</a>
                             </div>
                         </div>
                     </div>
@@ -379,12 +377,10 @@
 
                             {% if product.has_variants %}
                             {% with price_range=product.get_price_range %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{
-                                price_range.0|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
                             {% endwith %}
                             {% else %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{
-                                product.get_price|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
                             {% endif %}
                         </div>
 
