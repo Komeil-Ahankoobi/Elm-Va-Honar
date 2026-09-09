@@ -1,6 +1,6 @@
 # accounts/services.py
 import logging
-import random
+import secrets
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -13,11 +13,12 @@ logger = logging.getLogger(__name__)
 
 class OTPSendError(Exception):
     """Raised when the SMS provider fails or returns an error status."""
+
     pass
 
 
 def generate_otp_code(length=5):
-    return str(random.randint(10**(length - 1), (10**length) - 1))
+    return str(secrets.randbelow(9 * 10 ** (length - 1)) + 10 ** (length - 1))
 
 
 def send_otp_sms(phone_number, code):
@@ -26,7 +27,9 @@ def send_otp_sms(phone_number, code):
     Raises OTPSendError on any network/API failure so the caller can
     show a proper error instead of silently pretending the SMS went out.
     """
-    url = f"https://api.kavenegar.com/v1/{settings.KAVENEGAR_API_KEY}/verify/lookup.json"
+    url = (
+        f"https://api.kavenegar.com/v1/{settings.KAVENEGAR_API_KEY}/verify/lookup.json"
+    )
     params = {"receptor": phone_number, "token": code, "template": "otpcode"}
 
     try:
@@ -38,13 +41,19 @@ def send_otp_sms(phone_number, code):
     try:
         data = response.json()
     except ValueError as exc:
-        logger.error("Kavenegar returned non-JSON response (status %s) for %s", response.status_code, phone_number)
+        logger.error(
+            "Kavenegar returned non-JSON response (status %s) for %s",
+            response.status_code,
+            phone_number,
+        )
         raise OTPSendError("پاسخ نامعتبر از سرویس پیامک دریافت شد.") from exc
 
     return_status = data.get("return", {}).get("status")
     if response.status_code != 200 or return_status != 200:
         logger.error("Kavenegar error for %s: %s", phone_number, data)
-        raise OTPSendError(data.get("return", {}).get("message", "ارسال پیامک با خطا مواجه شد."))
+        raise OTPSendError(
+            data.get("return", {}).get("message", "ارسال پیامک با خطا مواجه شد.")
+        )
 
     logger.info("OTP sent to %s (status %s)", phone_number, return_status)
     return data
@@ -52,7 +61,11 @@ def send_otp_sms(phone_number, code):
 
 def can_request_otp(phone_number):
     """Cooldown between two consecutive OTP requests for the same number."""
-    last_otp = OTPCode.objects.filter(phone_number=phone_number).order_by('-created_at').first()
+    last_otp = (
+        OTPCode.objects.filter(phone_number=phone_number)
+        .order_by("-created_at")
+        .first()
+    )
     if last_otp and timezone.now() < last_otp.created_at + timedelta(seconds=120):
         return False
     return True
@@ -66,8 +79,36 @@ def check_daily_otp_limit(phone_number, max_requests=5, window_hours=24):
     since the 120s cooldown alone would still allow ~700 sends/day.
     """
     since = timezone.now() - timedelta(hours=window_hours)
-    count = OTPCode.objects.filter(phone_number=phone_number, created_at__gte=since).count()
+    count = OTPCode.objects.filter(
+        phone_number=phone_number, created_at__gte=since
+    ).count()
     return count < max_requests
+
+
+MAX_OTP_ATTEMPTS = 5
+
+
+def get_otp_attempt_key(phone_number):
+    return f"otp_attempts_{phone_number}"
+
+
+def register_failed_otp_attempt(phone_number):
+    """
+    هر تلاش ناموفق رو می‌شماره. وقتی به سقف رسید True برمی‌گردونه
+    تا caller بتونه OTP رو باطل کنه.
+    """
+    key = get_otp_attempt_key(phone_number)
+    attempts = cache.get(key, 0) + 1
+    cache.set(key, attempts, 300)
+    return attempts >= MAX_OTP_ATTEMPTS
+
+
+def reset_otp_attempts(phone_number):
+    cache.delete(get_otp_attempt_key(phone_number))
+
+
+def otp_attempts_exceeded(phone_number):
+    return cache.get(get_otp_attempt_key(phone_number), 0) >= MAX_OTP_ATTEMPTS
 
 
 def get_client_ip(request):
@@ -82,17 +123,17 @@ def get_client_ip(request):
     you ever sit behind multiple/untrusted proxies, use a package like
     django-ipware instead, since a client can otherwise spoof this header.
     """
-    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if forwarded_for:
         # The header can be a comma-separated chain; the first entry is
         # the original client as set by the nearest trusted proxy.
-        return forwarded_for.split(',')[0].strip()
-    return request.META.get('REMOTE_ADDR')
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
 
 
 def check_ip_rate_limit(request, max_requests=5, window_seconds=3600):
     ip = get_client_ip(request)
-    key = f'otp_ip_{ip}'
+    key = f"otp_ip_{ip}"
     count = cache.get(key, 0)
     if count >= max_requests:
         return False
