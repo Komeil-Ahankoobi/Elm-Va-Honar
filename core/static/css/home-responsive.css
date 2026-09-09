@@ -860,3 +860,16 @@
         width: 145px;
     }
 }
+
+@media (max-width: 768px) {
+    footer.footer .trust-item--enamad {
+        width: calc(50% - 8px) !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    footer.footer .trust-item--enamad {
+        width: calc(50% - 6px) !important;
+    }
+}

@@ -845,3 +845,37 @@ body {
     color: var(--primary-color);
     font-weight: 500;
 }
+
+/* Enamad Badge Alignment */
+footer.footer .trust-item--enamad {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #ffffff !important;
+    padding: 6px !important;
+    border-radius: var(--radius-md) !important;
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast) !important;
+    max-height: 75px !important;
+}
+
+footer.footer .trust-item--enamad:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+footer.footer .trust-item--enamad a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+}
+
+footer.footer .trust-item--enamad img {
+    height: 60px !important;
+    width: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}

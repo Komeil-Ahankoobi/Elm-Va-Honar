@@ -21,12 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", default='django-insecure-p58l@s92)c-_vl6m3p3z#e9+$e17x$2q(od!-6902j^lyg161m')
+SECRET_KEY = config(
+    "SECRET_KEY",
+    default="django-insecure-p58l@s92)c-_vl6m3p3z#e9+$e17x$2q(od!-6902j^lyg161m",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool, default=False)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast= lambda v: [item.strip() for item in v.split(',')] ,default="*")
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS", cast=lambda v: [item.strip() for item in v.split(",")], default="*"
+)
 
 # Runflare (like most PaaS providers) terminates HTTPS at a proxy and forwards
 # plain HTTP to the container. Without this, Django thinks every request is
@@ -37,77 +42,76 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # your Runflare subdomain / custom domain over HTTPS.
 CSRF_TRUSTED_ORIGINS = config(
     "CSRF_TRUSTED_ORIGINS",
-    cast=lambda v: [item.strip() for item in v.split(',')] if v else [],
-    default=""
+    cast=lambda v: [item.strip() for item in v.split(",")] if v else [],
+    default="",
 )
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.humanize',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'django.contrib.sitemaps',
-
-    'accounts',
-    'website',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.humanize",
+    "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "django.contrib.sitemaps",
+    "accounts",
+    "website",
     "shop",
     "dashboard",
-    'cart',
-    'order',
-    "payment"
+    "cart",
+    "order",
+    "payment",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart_processor',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart_processor",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("PGDB_NAME",default='postgres'),                      
-        'USER': config("PGDB_USER",default='postgres'),
-        'PASSWORD': config("PGDB_PASSWORD",default='postgres'),
-        'HOST': config("PGDB_HOST",default='db'),
-        'PORT': config("PGDB_PORT", cast=int,default=5432),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("PGDB_NAME", default="postgres"),
+        "USER": config("PGDB_USER", default="postgres"),
+        "PASSWORD": config("PGDB_PASSWORD", default="postgres"),
+        "HOST": config("PGDB_HOST", default="db"),
+        "PORT": config("PGDB_PORT", cast=int, default=5432),
     }
 }
 
@@ -116,16 +120,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -133,9 +137,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = config("TIME_ZONE", default='UTC')
+TIME_ZONE = config("TIME_ZONE", default="UTC")
 
 SITE_ID = config("SITE_ID", cast=int, default=1)
 
@@ -147,25 +151,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # مسیر دیسک پایدار (Persistent Disk) روی رانفلر.
 # مقدار پیش‌فرض رو با مسیر واقعی mount شده‌ی دیسک پایدارت جایگزین کن،
 # یا بهتر، مقدار MEDIA_ROOT رو در Environment Variables پنل رانفلر ست کن.
-MEDIA_ROOT = config("MEDIA_ROOT", default=str(BASE_DIR / 'media'))
+MEDIA_ROOT = config("MEDIA_ROOT", default=str(BASE_DIR / "media"))
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ===== Email Settings =====
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -181,10 +183,10 @@ DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@example.com")
 SERVER_EMAIL = config("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 PASSWORD_RESET_TIMEOUT = config("PASSWORD_RESET_TIMEOUT", cast=int, default=3600)
-    
+
 # accounts model settings
-LOGIN_REDIRECT_URL = 'website:home'
-LOGOUT_REDIRECT_URL= 'website:home'
+LOGIN_REDIRECT_URL = "website:home"
+LOGOUT_REDIRECT_URL = "website:home"
 
 # ===== Logging =====
 # Without this, Django swallows 500-error tracebacks in production (DEBUG=False)
@@ -228,9 +230,9 @@ if not DEBUG:
 KAVENEGAR_API_KEY = config("KAVENEGAR_API_KEY")
 
 AUTHENTICATION_BACKENDS = [
-    'accounts.backends.PhoneOTPBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    "accounts.backends.PhoneOTPBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
-MERCHANT_ID = config("MERCHANT_ID",default="")
+MERCHANT_ID = config("MERCHANT_ID", default="")
 SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)
