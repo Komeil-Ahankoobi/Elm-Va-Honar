@@ -23,25 +23,35 @@ def generate_otp_code(length=5):
 
 def send_otp_sms(phone_number, code):
     """
-    Sends the OTP through Melipayamak's plain SMS send endpoint, using our
-    own dedicated sender line (MELIPAYAMAK_SENDER_NUMBER).
+    Sends the OTP through Melipayamak's pattern-based ("bodyId") send
+    endpoint (SendByBaseNumber).
 
-    NOTE: this is the simple/manual send method - the same one used by the
-    "ارسال پیامک" page in the panel. Melipayamak also offers a faster,
-    pattern-based ("bodyId") OTP endpoint, but that requires an اقتصادی+
-    plan and manual activation by their sales team (021-63404). If/when
-    that's set up, only this function needs to change - swap `sms.send(...)`
-    below for `sms.send_by_base_number(code, phone_number, settings.MELIPAYAMAK_BODY_ID)`.
+    NOTE: our current sender line (MELIPAYAMAK_SENDER_NUMBER) is a public/
+    shared line (خط خدماتی عمومی). Public lines are NOT allowed to send
+    free-text SMS (the old `sms.send(...)` call used to return
+    RetStatus 9 / "PublicNumber" for exactly this reason) - by regulation
+    they can only send messages through an approved pattern.
+
+    To use this you must first create an OTP pattern in the Melipayamak
+    panel (پنل > پترن‌ها), get it approved, and put its id in
+    settings.MELIPAYAMAK_BODY_ID (via env). Once you switch to a dedicated
+    line that supports free-text sending, you can go back to
+    `sms.send(phone_number, settings.MELIPAYAMAK_SENDER_NUMBER, text)`.
 
     Raises OTPSendError on any network/API failure so the caller can
     show a proper error instead of silently pretending the SMS went out.
     """
     api = Api(settings.MELIPAYAMAK_USERNAME, settings.MELIPAYAMAK_PASSWORD)
     sms = api.sms()
-    text = f" به نوشت افزار علم و هنر خوش آمدید . کد تایید شما برای ورود : {code}"
 
     try:
-        response = sms.send(phone_number, settings.MELIPAYAMAK_SENDER_NUMBER, text)
+        # `code` here is passed as the pattern's variable value. If your
+        # approved pattern has more than one placeholder, Melipayamak
+        # expects the values separated by ";" in the order the
+        # placeholders appear in the pattern, e.g. f"{name};{code}".
+        response = sms.send_by_base_number(
+            code, phone_number, settings.MELIPAYAMAK_BODY_ID
+        )
     except Exception as exc:
         logger.error("Melipayamak request failed for %s: %s", phone_number, exc)
         raise OTPSendError("ارتباط با سرویس پیامک برقرار نشد.") from exc
