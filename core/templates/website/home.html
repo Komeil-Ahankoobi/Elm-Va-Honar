@@ -11,8 +11,8 @@
     <title>نوشت‌افزار علم و هنر | فروش قلم، کاغذ، مرکب و لوازم‌التحریر حرفه‌ای</title>
     <meta name="description"
         content="فروشگاه اینترنتی نوشت‌افزار علم و هنر — فروش لوازم‌التحریر، رنگ، ابزار طراحی و خوشنویسی با کیفیت ممتاز و ارسال سریع.">
-
     <meta name="google-site-verification" content="xOK1DsogtY7Kovk44bZcsbys-0PSkcvS-nW1XFJrUz8" />
+    <meta name="enamad" content="53417095" />
 
 
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.webp' %}">
@@ -187,8 +187,7 @@
                             <source srcset="{{ slide.image_webp }}" type="image/webp">
                             {% endif %}
                             <img src="{% static slide.image %}" alt="{{ slide.title|striptags }}"
-                                class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {%
-                                else %}loading="lazy" {% endif %}>
+                                class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {% else %}loading="lazy" {% endif %}>
                         </picture>
                         <div class="hero__content">
                             <h1 class="hero__title">
@@ -377,7 +376,8 @@
 
                             {% if product.has_variants %}
                             {% with price_range=product.get_price_range %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{
+                                price_range.0|intcomma }} تومان</span>
                             {% endwith %}
                             {% else %}
                             <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
@@ -666,11 +666,10 @@
             <div class="footer__trust-bar">
                 <div class="trust-item trust-item--enamad">
                     <a referrerpolicy='origin' target='_blank'
-                        href='https://trustseal.enamad.ir/?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'>
-                        <img referrerpolicy='origin'
+                        href='https://trustseal.enamad.ir/?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'><img
+                            referrerpolicy='origin'
                             src='https://trustseal.enamad.ir/logo.aspx?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'
-                            alt='اینماد' style='cursor:pointer' code='GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'>
-                    </a>
+                            alt='' style='cursor:pointer' code='GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'></a>
                 </div>
 
                 <div class="trust-item">
