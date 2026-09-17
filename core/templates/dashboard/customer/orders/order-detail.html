@@ -6,132 +6,276 @@
 {% block title %}جزئیات سفارش #{{ order.id }} | ElmVHonar{% endblock %}
 
 {% block content %}
-<div class="breadcrumb">
-    <a href="{% url 'dashboard:customer:order' %}">سفارش‌های من</a>
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="9 18 15 12 9 6" />
-    </svg>
-    <span class="current">جزئیات سفارش #{{ order.id }}</span>
-</div>
-
-<div class="page-header-row">
-    <div class="page-title-row">
-        <h2 class="page-title">جزئیات سفارش #{{ order.id }}</h2>
-    </div>
-    <a href="{% url 'dashboard:customer:order' %}" class="btn-back">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
+<div class="order-detail-page">
+    <div class="breadcrumb">
+        <a href="{% url 'dashboard:customer:order' %}">سفارش‌های من</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="9 18 15 12 15 6" />
         </svg>
-        بازگشت
-    </a>
-</div>
-
-<!-- Summary Bar -->
-<div class="card order-summary-bar">
-    <div class="summary-col">
-        <span class="col-label">تاریخ ثبت سفارش</span>
-        <span class="col-value">{{ order.created_date|jalali_date }}</span>
+        <span class="current">جزئیات سفارش #{{ order.id }}</span>
     </div>
-    <div class="summary-col">
-        <span class="col-label">وضعیت سفارش</span>
-        <span class="status-pill status-{{ order.status }}">
-            <span class="dot"></span>
-            {{ order.get_status.label }}
-        </span>
-    </div>
-    <div class="summary-col total-col">
-        <span class="col-label">مبلغ کل سفارش</span>
-        <span class="col-value">{{ order.get_total_price|intcomma }} تومان</span>
-    </div>
-</div>
 
-<div class="order-detail-grid">
+    <header class="detail-header">
+        <div>
+            <h2 class="page-title">جزئیات سفارش #{{ order.id }}</h2>
+            <p class="page-sub">اطلاعات اقلام، وضعیت و خلاصه پرداخت این سفارش</p>
+        </div>
+        <a href="{% url 'dashboard:customer:order' %}" class="btn-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+            </svg>
+            بازگشت به سفارش‌ها
+        </a>
+    </header>
 
-    <!-- Main Content: Products List -->
-    <div class="order-main-col">
-        <section class="card">
-            <div class="card-title-row">
-                <h3 class="card-title">اقلام سفارش</h3>
-            </div>
+    <section class="card order-summary-bar">
+        <div class="summary-item">
+            <span class="summary-label">تاریخ ثبت سفارش</span>
+            <strong>{{ order.created_date|jalali_date }}</strong>
+        </div>
+        <div class="summary-item summary-status-item">
+            <span class="summary-label">وضعیت سفارش</span>
+            <span class="status-pill status-{{ order.status }}">
+                <span class="status-icon" aria-hidden="true">
+                    {% if order.status == 1 %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 2" />
+                    </svg>
+                    {% elif order.status == 2 %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="m8 12 2.7 2.7L16 9.5" />
+                    </svg>
+                    {% elif order.status == 3 %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="m9 9 6 6m0-6-6 6" />
+                    </svg>
+                    {% elif order.status == 4 %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z" />
+                        <circle cx="7" cy="19" r="1.5" />
+                        <circle cx="18" cy="19" r="1.5" />
+                    </svg>
+                    {% else %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 8v4m0 4h.01" />
+                    </svg>
+                    {% endif %}
+                </span>
+                <span>{{ order.get_status.label }}</span>
+            </span>
+        </div>
+        <div class="summary-item summary-total-item">
+            <span class="summary-label">مبلغ کل سفارش</span>
+            <strong>{{ order.get_total_price|intcomma }} <small>تومان</small></strong>
+        </div>
+    </section>
 
-            <div class="products-table">
-                <div class="products-table-header">
-                    <span class="col-product">محصول</span>
-                    <span class="col-unit-price">قیمت واحد</span>
-                    <span class="col-qty">تعداد</span>
-                    <span class="col-total">مبلغ کل</span>
+    <div class="order-detail-layout">
+        <main class="order-products-column">
+            <section class="card products-card">
+                <div class="card-section-header">
+                    <div>
+                        <span class="section-kicker">خرید شما</span>
+                        <h3 class="card-title">اقلام سفارش</h3>
+                    </div>
+                    <span class="items-count">{{ order.items.all|length }} قلم</span>
                 </div>
 
-                {% for item in order.order_items.all %}
-                <div class="product-row">
-                    <div class="col-product">
-                        {% if item.product.image %}
-                        <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="product-thumb">
-                        {% else %}
-                        <div class="product-thumb-placeholder"></div>
-                        {% endif %}
+                <div class="products-table">
+                    <div class="products-table-header">
+                        <div class="product-heading">محصول</div>
+                        <div>قیمت پایه</div>
+                        <div>تخفیف</div>
+                        <div>قیمت نهایی</div>
+                        <div>تعداد</div>
+                        <div>مبلغ کل</div>
+                    </div>
+
+                    {% for item in order.items.all %}
+                    <div class="product-row">
+                        <div class="product-column">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}"
+                                class="product-thumb">
+                            {% else %}
+                            <div class="product-thumb-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <path d="m3 16 5-5 4 4 3-3 6 6" />
+                                </svg>
+                            </div>
+                            {% endif %}
                         <div class="product-meta">
-                            <span class="product-name">{{ item.product.title }}</span>
+
+
+                            <strong class="product-name">
+                                {{ item.product.title }}
+                            </strong>
+
+                            {% if item.variant %}
+
+                                <div class="order-item-variant">
+
+                                    {% if item.variant.variant_type == "color" or item.variant.variant_type == "pars_color" %}
+
+                                        <span class="order-variant-type">
+                                            {{ item.variant.get_variant_type_display }}
+                                        </span>
+
+                                        <span class="order-variant-value">
+
+                                            <span
+                                                class="order-color-dot"
+                                                style="background-color: #{{ item.variant.get_hex_color }};"
+                                                title="{{ item.variant.get_color_display_name }}">
+                                            </span>
+
+                                            <span class="order-variant-code">
+                                                {{ item.variant.color_code }}
+                                            </span>
+
+                                        </span>
+
+                                    {% elif item.variant.variant_type == "number" %}
+
+                                        <span class="order-variant-type">
+                                            {{ item.variant.get_variant_type_display }}
+                                        </span>
+
+                                        <span class="order-variant-value">
+
+                                            <span class="order-number-dot">
+                                                {{ item.variant.number_code }}
+                                            </span>
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% endif %}
+                        </div>
+                        </div>
+                        <div class="table-value" data-label="قیمت پایه">{{ item.original_price|intcomma }}
+                            <small>تومان</small>
+                        </div>
+                        <div class="table-value" data-label="تخفیف">
+                            {% if item.has_discount %}<span class="discount-badge">٪{{ item.discount_percent }}</span>{% else %}<span class="no-discount">—</span>{% endif %}
+                        </div>
+                        <div class="table-value final-price" data-label="قیمت نهایی">{{ item.price|intcomma }}
+                            <small>تومان</small>
+                        </div>
+                        <div class="table-value quantity-value" data-label="تعداد">{{ item.quantity }}
+                            <small>عدد</small>
+                        </div>
+                        <div class="table-value total-price" data-label="مبلغ کل">{{ item.total_price|intcomma }}
+                            <small>تومان</small>
                         </div>
                     </div>
-                    <div class="col-unit-price" data-label="قیمت واحد:">
-                        {{ item.price|intcomma }} تومان
+                    {% empty %}
+                    <div class="products-empty">هیچ آیتمی برای این سفارش ثبت نشده است.</div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <aside class="order-sidebar-column">
+            <section class="card side-card shipping-card">
+                <div class="card-section-header">
+                    <div>
+                        <span class="section-kicker">ارسال</span>
+                        <h3 class="card-title">اطلاعات تحویل</h3>
                     </div>
-                    <div class="col-qty" data-label="تعداد:">
-                        {{ item.quantity }} عدد
+                    <span class="side-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 10.5 12 3l9 7.5" />
+                            <path d="M5 9v11h14V9M9 20v-6h6v6" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="shipping-list">
+                    <div class="shipping-row">
+                        <span>گیرنده</span>
+                        <strong>{{ order.user.user_profile.first_name }} {{ order.user.user_profile.last_name }}</strong>
                     </div>
-                    <div class="col-total" data-label="جمع:">
-                        {{ item.get_total_price|intcomma }} تومان
+                    <div class="shipping-row shipping-address">
+                        <span>نشانی ارسال</span>
+                        <strong>{{ order.address }}</strong>
+                    </div>
+                    <div class="shipping-row">
+                        <span>کد پستی</span>
+                        <strong class="ltr-value">{{ order.zip_code }}</strong>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
-        </section>
+            </section>
+
+            <section class="card side-card payment-card">
+                <div class="card-section-header">
+                    <div>
+                        <span class="section-kicker">تراکنش</span>
+                        <h3 class="card-title">خلاصه پرداخت</h3>
+                    </div>
+                    <span class="side-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="9" />
+                            <path
+                                d="M15 9.5c-.7-.7-1.6-1-2.7-1-1.4 0-2.3.7-2.3 1.7 0 2.7 5 1.1 5 4 0 1-.9 1.8-2.5 1.8-1.2 0-2.2-.4-2.8-1.1M12 6.5v11" />
+                        </svg>
+                    </span>
+                </div>
+
+                <div class="payment-summary-clean">
+                    <div class="payment-line">
+                        <span>جمع کل کالاها</span>
+                        <strong>{{ order.subtotal_price|intcomma }} تومان</strong>
+                    </div>
+
+                    {% if order.has_copon %}
+                    <div class="coupon-box">
+                        <div class="coupon-top">
+                            <span>کد تخفیف</span>
+                            <strong>{{ order.copon_code }}</strong>
+                            <b>٪{{ order.copon_discount_percent }}</b>
+                        </div>
+                        <div class="payment-line discount-line">
+                            <span>مبلغ تخفیف</span>
+                            <strong>− {{ order.discount_amount|intcomma }} تومان</strong>
+                        </div>
+                    </div>
+                    <div class="payment-line">
+                        <span>مبلغ بعد از تخفیف</span>
+                        <strong>{{ order.total_price|intcomma }} تومان</strong>
+                    </div>
+                    {% endif %}
+
+                    <div class="payment-line">
+                        <span>مالیات بر ارزش افزوده (٪۱۰)</span>
+                        <strong>{{ total_tax|intcomma }} تومان</strong>
+                    </div>
+
+                    <div class="payment-total">
+                        <span>مبلغ نهایی پرداختی</span>
+                        <strong>{{ total_basket_price|intcomma }} <small>تومان</small></strong>
+                    </div>
+                </div>
+            </section>
+        </aside>
     </div>
-
-    <!-- Side Content: Shipping & Payment Info -->
-    <div class="order-side-col">
-        <!-- Shipping Address Card -->
-        <section class="card">
-            <h3 class="card-title">اطلاعات تحویل</h3>
-            <div class="info-block">
-                <span class="info-label">گیرنده:</span>
-                <span class="info-value">{{ order.user.user_profile.first_name }} {{ order.user.user_profile.last_name }}</span>
-            </div>
-            <div class="info-block">
-                <span class="info-label">نشانی ارسال:</span>
-                <span class="info-value">{{ order.address }}</span>
-            </div>
-            <div class="info-block">
-                <span class="info-label">کد پستی:</span>
-                <span class="info-value">{{ order.zip_code }}</span>
-            </div>
-        </section>
-
-        <!-- Payment Breakdown Card -->
-        <section class="card">
-            <h3 class="card-title">خلاصه پرداخت</h3>
-            <div class="price-row">
-                <span class="price-label">مبلغ کل کالاها:</span>
-                <span class="price-value">{{ order.get_total_price|intcomma }} تومان</span>
-            </div>
-            <div class="price-divider"></div>
-            <div class="price-row total">
-                <span class="price-label">مبلغ پرداختی:</span>
-                <span class="price-value">{{ order.get_total_price|intcomma }} تومان</span>
-            </div>
-        </section>
-    </div>
-
 </div>
-
-<script>
-    document.querySelectorAll('.copy-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var value = btn.dataset.copy;
-            navigator.clipboard.writeText(value);
-        });
-    });
-</script>
 {% endblock %}

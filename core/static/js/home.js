@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const startHeroAutoPlay = () => {
             stopHeroAutoPlay();
-            heroInterval = setInterval(nextHeroSlide, 4000);
+            heroInterval = setInterval(nextHeroSlide, 1500);
         };
 
         const stopHeroAutoPlay = () => {
