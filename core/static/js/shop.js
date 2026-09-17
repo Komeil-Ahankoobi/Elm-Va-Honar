@@ -30,6 +30,21 @@ function updatePriceDisplay(el) {
     const discountBadgeEl = document.getElementById("pd-discount-badge");
     const oldPriceLineEl = document.getElementById("pd-price-old-line");
 
+    // اگه وریانت انتخاب‌شده موجودی نداشته باشه، به‌جای قیمت یه استایل مخصوص "ناموجود" نشون می‌دیم
+    const stock = el.dataset.stock !== undefined ? Number(el.dataset.stock) : null;
+    const inStock = stock === null || stock > 0;
+
+    if (!inStock) {
+        if (priceEl) {
+            priceEl.textContent = "ناموجود";
+            priceEl.classList.remove("price-placeholder", "price-discounted");
+            priceEl.classList.add("price-unavailable");
+        }
+        if (specPriceEl) specPriceEl.textContent = "ناموجود";
+        if (oldPriceLineEl) oldPriceLineEl.style.display = "none";
+        return;
+    }
+
     const finalPrice = Number(el.dataset.price);
     const originalPrice = el.dataset.originalPrice ? Number(el.dataset.originalPrice) : finalPrice;
     const discountPercent = el.dataset.discount ? Number(el.dataset.discount) : 0;
@@ -39,7 +54,7 @@ function updatePriceDisplay(el) {
 
     if (priceEl) {
         priceEl.textContent = formattedFinal;
-        priceEl.classList.remove("price-placeholder");
+        priceEl.classList.remove("price-placeholder", "price-unavailable");
         priceEl.classList.toggle("price-discounted", hasDiscount);
     }
     if (specPriceEl) specPriceEl.textContent = formattedFinal;
@@ -96,6 +111,8 @@ function updateStockDisplay(el) {
     const stockIconEl = document.getElementById("pd-stock-icon");
     const stockTextEl = document.getElementById("pd-stock-text");
     const addToCartBtn = document.querySelector(".btn-add-to-cart");
+    const cartIconEl = document.getElementById("pd-cart-icon");
+    const cartTextEl = document.getElementById("pd-cart-btn-text");
     if (!stockStatusEl) return;
 
     const stock = Number(el.dataset.stock);
@@ -111,7 +128,16 @@ function updateStockDisplay(el) {
     if (stockTextEl) stockTextEl.textContent = inStock ? "موجود در انبار" : "ناموجود";
 
     // دکمه افزودن به سبد هم باید موجودی همون وریانت رو بشناسه، نه موجودی کلی محصول
-    if (addToCartBtn) addToCartBtn.dataset.stock = stock;
+    if (addToCartBtn) {
+        addToCartBtn.dataset.stock = stock;
+        addToCartBtn.disabled = !inStock;
+        addToCartBtn.classList.toggle("is-disabled", !inStock);
+    }
+    if (cartIconEl) {
+        cartIconEl.classList.remove("fa-cart-shopping", "fa-ban");
+        cartIconEl.classList.add(inStock ? "fa-cart-shopping" : "fa-ban");
+    }
+    if (cartTextEl) cartTextEl.textContent = inStock ? "افزودن به سبد خرید" : "ناموجود";
 }
 
 (function initScroll() {
@@ -201,6 +227,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- Add to cart (لیست محصولات، جزئیات محصول، محصولات مرتبط) ---
     document.querySelectorAll(".btn-add-cart, .btn-add-to-cart, .btn-card-add").forEach((btn) => {
         btn.addEventListener("click", () => {
+            if (btn.disabled || btn.classList.contains("is-disabled")) {
+                showToast("این محصول در حال حاضر ناموجود است");
+                return;
+            }
+
             const colorPalette = document.getElementById("pd-color-palette");
             const sizePalette = document.getElementById("pd-size-palette");
             if (btn.classList.contains("btn-add-to-cart") && (colorPalette || sizePalette)) {

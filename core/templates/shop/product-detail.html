@@ -31,13 +31,17 @@
                     </div>
                     <span class="product-price price-placeholder" id="pd-price">یک گزینه را انتخاب کنید</span>
                     {% else %}
-                    {% if object.has_discount %}
+                    {% if object.stock > 0 and object.has_discount %}
                     <div class="price-old-line" id="pd-price-old-line">
                         <span class="product-price-old" id="pd-price-old">{{ object.get_real_price|intcomma }} تومان</span>
                         <span class="discount-badge" id="pd-discount-badge">{{ object.get_discount_percent }}٪ تخفیف</span>
                     </div>
                     {% endif %}
+                    {% if object.stock > 0 %}
                     <span class="product-price {% if object.has_discount %}price-discounted{% endif %}" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
+                    {% else %}
+                    <span class="product-price price-unavailable" id="pd-price">ناموجود</span>
+                    {% endif %}
                     {% endif %}
                 </div>
 
@@ -76,7 +80,7 @@
                     {% for variant in object.get_color_variants %}
                     <button
                         type="button"
-                        class="color-swatch"
+                        class="color-swatch{% if variant.stock <= 0 %} variant-unavailable{% endif %}"
                         data-variant-id="{{ variant.id }}"
                         data-color-code="{{ variant.get_hex_color }}"
                         data-color-name="{{ variant.get_color_display_name }}"
@@ -86,7 +90,7 @@
                         data-discount="{{ variant.discount_percent }}"
                         data-stock="{{ variant.stock }}"
                         data-specs="{{ variant.get_specs_json }}"
-                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}">
+                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}{% if variant.stock <= 0 %}، ناموجود{% endif %}">
                         <span class="dot" style="background-color: #{{ variant.get_hex_color }};"></span>
                         <span class="swatch-code">{{ variant.color_code }}</span>
                     </button>
@@ -103,7 +107,7 @@
                     {% for variant in object.get_number_variants %}
                     <button
                         type="button"
-                        class="dot size-dot"
+                        class="dot size-dot{% if variant.stock <= 0 %} variant-unavailable{% endif %}"
                         data-variant-id="{{ variant.id }}"
                         data-size-code="{{ variant.number_code }}"
                         data-price="{{ variant.get_price }}"
@@ -111,7 +115,7 @@
                         data-discount="{{ variant.discount_percent }}"
                         data-stock="{{ variant.stock }}"
                         data-specs="{{ variant.get_specs_json }}"
-                        aria-label="انتخاب سایز {{ variant.number_code }}">{{ variant.number_code }}</button>
+                        aria-label="انتخاب سایز {{ variant.number_code }}{% if variant.stock <= 0 %}، ناموجود{% endif %}">{{ variant.number_code }}</button>
                     {% endfor %}
                 </div>
                 {% if not object.has_color_variants %}
@@ -122,12 +126,14 @@
 
             <button
                 type="button"
-                class="btn-add-to-cart"
+                class="btn-add-to-cart{% if not object.has_variants and object.stock <= 0 %} is-disabled{% endif %}"
                 aria-label="افزودن {{ object.title }} به سبد خرید"
                 data-url="{% url 'cart:session-add-product' %}"
                 data-product-id="{{ object.id }}"
-                data-stock="{{ object.stock }}">
-                <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                data-stock="{{ object.stock }}"
+                {% if not object.has_variants and object.stock <= 0 %}disabled{% endif %}>
+                <i class="fa-solid {% if not object.has_variants and object.stock <= 0 %}fa-ban{% else %}fa-cart-shopping{% endif %}" id="pd-cart-icon"></i>
+                <span id="pd-cart-btn-text">{% if not object.has_variants and object.stock <= 0 %}ناموجود{% else %}افزودن به سبد خرید{% endif %}</span>
             </button>
 
             <div class="trust-badges">
@@ -165,8 +171,11 @@
         <!-- RIGHT COLUMN: GALLERY (uses ONLY ProductImageModel entries; falls back to the
              main product.image field only when no gallery images have been added yet) -->
         {% with gallery_images=object.product_images.all %}
-        <div class="gallery-box">
+        <div class="gallery-box{% if not object.has_variants and object.stock <= 0 %} is-sold-out{% endif %}">
             <div class="main-image-container" id="pd-gallery">
+                {% if not object.has_variants and object.stock <= 0 %}
+                <div class="sold-out-badge">ناموجود</div>
+                {% endif %}
                 <div class="pd-image-stack">
                     {% if gallery_images %}
                     {% for gallery_image in gallery_images %}
