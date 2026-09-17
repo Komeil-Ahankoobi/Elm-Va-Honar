@@ -1,26 +1,28 @@
-from django.db import models
+from django.db import models, transaction
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.utils import timezone
+from django.conf import settings
 
 from shop.models import (
     ProductModel,
     ProductVarientModel,
 )
 
+
 # Create your models here.
 class OrderStatusType(models.IntegerChoices):
-    pending = 1, 'در انتظار پرداخت'
-    succes = 2, 'پرداخت شده'
-    faild = 3, 'لغو شده'
-    complete = 4, 'ارسال شده'
+    pending = 1, "در انتظار پرداخت"
+    succes = 2, "پرداخت شده"
+    faild = 3, "لغو شده"
+    complete = 4, "ارسال شده"
 
 
 class UserAddressModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='adresses')
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="adresses")
+
     address = models.CharField(max_length=255)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
@@ -28,18 +30,19 @@ class UserAddressModel(models.Model):
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
+
 
 class CoponModel(models.Model):
     code = models.CharField(max_length=100, unique=True)
-    discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    discount_percent = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
     max_limit_usage = models.PositiveIntegerField(default=10)
-    used_by = models.ManyToManyField(User, related_name='copon_users', blank=True)
+    used_by = models.ManyToManyField(User, related_name="copon_users", blank=True)
 
-    expiration_date = models.DateTimeField(null=True,blank=True)
+    expiration_date = models.DateTimeField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
 
     @property
     def is_usage_limit_reached(self):
@@ -50,52 +53,112 @@ class CoponModel(models.Model):
 
     def __str__(self):
         return self.code
-    
-    
-    
+
+
 class OrderModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
 
     address = models.CharField(max_length=255)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=50)
 
-    total_price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
+    subtotal_price = models.DecimalField(
+        default=0, max_digits=10, decimal_places=0
+    )  # جمع کل قبل از تخفیفِ کد تخفیف
+    total_price = models.DecimalField(
+        default=0, max_digits=10, decimal_places=0
+    )  # جمع نهایی بعد از تخفیفِ کد تخفیف (بدون مالیات)
 
-    copon = models.ForeignKey(CoponModel, on_delete=models.PROTECT, null=True, blank=True, related_name='copon')
-    status = models.IntegerField(choices=OrderStatusType.choices, default=OrderStatusType.pending.value)
+    copon = models.ForeignKey(
+        CoponModel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="copon",
+    )
+    # اسنپ‌شاتِ کد تخفیف در لحظه‌ی خرید (چون ممکنه copon بعداً حذف/ادیت بشه)
+    copon_code = models.CharField(max_length=100, null=True, blank=True)
+    copon_discount_percent = models.PositiveIntegerField(default=0)
+    discount_amount = models.DecimalField(default=0, max_digits=10, decimal_places=0)
+
+    status = models.IntegerField(
+        choices=OrderStatusType.choices, default=OrderStatusType.pending.value
+    )
 
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_date"]
-        
-        
+
     def __str__(self):
-        return f'{self.user.username} - {self.id}'
-    
+        return f"{self.user.username} - {self.id}"
+
     def get_status(self):
         return {
-            "id":self.status,
-            "title":OrderStatusType(self.status).name,
-            "label":OrderStatusType(self.status).label,
+            "id": self.status,
+            "title": OrderStatusType(self.status).name,
+            "label": OrderStatusType(self.status).label,
         }
-    
+
     def calculate_total_price(self):
         return sum(item.price * item.quantity for item in self.items.all())
 
     def get_total_items_quantity(self):
         result = self.items.aggregate(total=Sum("quantity"))
         return result["total"] or 0
-    
+
+    def get_tax_amount(self):
+        return round(self.total_price * Decimal("10") / Decimal("100"))
+
+    def get_total_price(self):
+        return self.total_price + self.get_tax_amount()
+
     @property
-    def get_discount_price(self):
-        if not self.copon:
-            return 0
-        discount = Decimal(self.copon.discount_percent) / Decimal("100")
-        return round(self.calculate_total_price() * discount)
+    def has_copon(self):
+        return bool(self.copon_code)
+
+    def confirm_payment(self):
+        if self.is_successful:
+            return
+
+        with transaction.atomic():
+            self._decrease_stock()
+
+            self.status = OrderStatusType.succes.value
+            self.save(update_fields=["status", "updated_date"])
+
+            if self.copon:
+                self.copon.used_by.add(self.user)
+
+            from cart.models import CartModel
+
+            cart = CartModel.objects.filter(user=self.user).first()
+            if cart:
+                cart.cart_items.all().delete()
+
+    def cancel_payment(self):
+        if self.is_successful:
+            return
+
+        if not self.payments.exists():
+            self.delete()
+            return
+
+        self.status = OrderStatusType.faild.value
+        self.save(update_fields=["status", "updated_date"])
+
+    def _decrease_stock(self):
+        for item in self.items.select_related("product", "variant"):
+            stock_obj = item.variant if item.variant else item.product
+            model_class = type(stock_obj)
+
+            locked_obj = model_class.objects.select_for_update().get(pk=stock_obj.pk)
+            current_stock = locked_obj.stock or 0
+            locked_obj.stock = max(current_stock - item.quantity, 0)
+            locked_obj.save(update_fields=["stock"])
+            locked_obj.sync_visibility_from_stock()
 
     @property
     def is_successful(self):
@@ -103,28 +166,49 @@ class OrderModel(models.Model):
 
 
 class OrderItemsModel(models.Model):
-    order = models.ForeignKey(OrderModel, on_delete=models.CASCADE, related_name='items')
+    order = models.ForeignKey(
+        OrderModel, on_delete=models.CASCADE, related_name="items"
+    )
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT)
     variant = models.ForeignKey(
-        ProductVarientModel, on_delete=models.SET_NULL,
-        null=True, blank=True
+        ProductVarientModel, on_delete=models.SET_NULL, null=True, blank=True
     )
 
     quantity = models.PositiveIntegerField(default=0)
+
+    original_price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
+    discount_percent = models.IntegerField(default=0)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
 
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
     @property
+    def has_discount(self):
+        return bool(self.discount_percent and self.discount_percent > 0)
+
+    @property
     def unit_price(self):
         return self.price
+
+    @property
+    def unit_discount_amount(self):
+        if not self.has_discount:
+            return 0
+        return self.original_price - self.price
+
+    @property
+    def total_discount_amount(self):
+        return self.unit_discount_amount * self.quantity
+
+    @property
+    def original_total_price(self):
+        return self.original_price * self.quantity
 
     @property
     def total_price(self):
         return self.price * self.quantity
 
-
     def __str__(self):
-        variant_part = self.variant.variant_type if self.variant else 'بدون وریانت'
-        return f'{self.product.title} - {variant_part} - {self.order.id}'
+        variant_part = self.variant.variant_type if self.variant else "بدون وریانت"
+        return f"{self.product.title} - {variant_part} - {self.order.id}"
