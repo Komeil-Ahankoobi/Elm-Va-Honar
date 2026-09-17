@@ -48,8 +48,8 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             self.apply_copon_pricing(copon, subtotal_price, order)
             order.save()
 
-        # return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
-        return redirect(reverse("order:order-success", kwargs={"order_id": order.id}))
+        return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
+        # return redirect(reverse("order:order-success", kwargs={"order_id": order.id}))
 
     def form_invalid(self, form):
         return redirect(reverse_lazy("order:order-failed"))

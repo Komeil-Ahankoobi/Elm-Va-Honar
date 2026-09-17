@@ -7,14 +7,14 @@ from django.views.generic import View
 from cart.cart import CartSession
 from order.models import OrderModel
 from .models import PaymentModel, PaymentStatusType
-from .zarinpal_client import ZarinPalSandbox
+from .zarinpal_client import ZarinPalClient
 
 
 class PaymentRequestView(View):
     def get(self, request, order_id, *args, **kwargs):
         order = get_object_or_404(OrderModel, pk=order_id, user=request.user)
 
-        amount = order.total_price
+        amount = int(order.total_price)
 
         with transaction.atomic():
             existing_pending = (
@@ -23,35 +23,47 @@ class PaymentRequestView(View):
                 .first()
             )
 
-            zarin_pal = ZarinPalSandbox(
+            client = ZarinPalClient(
                 callback_url=request.build_absolute_uri(reverse("payment:verify"))
             )
-            response = zarin_pal.payment_request(int(amount))
+            result = client.payment_request(
+                amount,
+                description=f"پرداخت سفارش شماره {order.pk}",
+                email=getattr(request.user, "email", None) or None,
+                mobile=getattr(request.user, "phone_number", None) or None,
+                order_id=order.pk,
+            )
 
-            status_code = response.get("Status")
-            authority = response.get("Authority")
+            authority = result["authority"]
 
-            if status_code != 100 or not authority:
+            if not result["ok"] or not authority:
                 messages.error(
                     request, "اتصال به درگاه پرداخت برقرار نشد، دوباره تلاش کن"
                 )
+                # نکته: cancel_payment اگه هنوز هیچ PaymentModel ای برای این
+                # order ساخته نشده باشه، کل order رو حذف می‌کنه (طبق
+                # order/models.py). به همین خاطر order-failed هم در
+                # urls.py هیچ آرگومانی نمی‌گیره؛ بعد از این خط دیگه
+                # نمی‌شه به order.pk رفرنس داد.
                 order.cancel_payment()
                 return redirect(reverse_lazy("order:order-failed"))
 
             if existing_pending:
                 existing_pending.authority_id = authority
                 existing_pending.amount = amount
-                existing_pending.response_json = response
+                existing_pending.response_code = result["code"]
+                existing_pending.response_json = result["raw"]
                 existing_pending.save()
             else:
                 PaymentModel.objects.create(
                     order=order,
                     authority_id=authority,
                     amount=amount,
-                    response_json=response,
+                    response_code=result["code"],
+                    response_json=result["raw"],
                 )
 
-        return redirect(zarin_pal.generate_payment_url(authority))
+        return redirect(client.generate_payment_url(authority))
 
 
 class PaymentVerifyView(View):
@@ -69,32 +81,36 @@ class PaymentVerifyView(View):
             )
             order = payment_obj.order
 
+            # اگر قبلاً نتیجه‌اش مشخص شده، دوباره verify نمی‌کنیم.
+            # اینجا حتماً PaymentModel وجود داره پس order هرگز به‌خاطر
+            # cancel_payment حذف نشده و order.pk معتبره.
             if payment_obj.status != PaymentStatusType.pending.value:
                 is_success = payment_obj.status == PaymentStatusType.success.value
                 return redirect(
-                    reverse_lazy("order:order-success")
+                    reverse_lazy("order:order-success", kwargs={"order_id": order.pk})
                     if is_success
                     else reverse_lazy("order:order-failed")
                 )
 
+            # طبق مستندات، فقط وقتی Status برابر OK است باید verify صدا زده شود.
             if gateway_status != "OK":
                 payment_obj.status = PaymentStatusType.failed.value
                 payment_obj.save(update_fields=["status", "updated_date"])
                 order.cancel_payment()
                 return redirect(reverse_lazy("order:order-failed"))
 
-            zarin_pal = ZarinPalSandbox()
-            response = zarin_pal.payment_verify(
+            client = ZarinPalClient()
+            result = client.payment_verify(
                 int(payment_obj.amount), payment_obj.authority_id
             )
 
-            status_code = response.get("Status")
-            ref_id = response.get("RefID")
-            is_success = status_code in {100, 101}
+            is_success = result["ok"]
 
-            payment_obj.ref_id = ref_id
-            payment_obj.response_code = status_code
-            payment_obj.response_json = response
+            payment_obj.ref_id = result["ref_id"]
+            payment_obj.card_pan = result["card_pan"] or ""
+            payment_obj.card_hash = result["card_hash"] or ""
+            payment_obj.response_code = result["code"]
+            payment_obj.response_json = result["raw"]
             payment_obj.status = (
                 PaymentStatusType.success.value
                 if is_success
@@ -113,7 +129,7 @@ class PaymentVerifyView(View):
                 order.cancel_payment()
 
         return redirect(
-            reverse_lazy("order:order-success")
+            reverse_lazy("order:order-success", kwargs={"order_id": order.pk})
             if is_success
             else reverse_lazy("order:order-failed")
         )
