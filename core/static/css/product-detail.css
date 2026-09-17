@@ -301,6 +301,12 @@ nav ul li a.active {
     color: var(--text-muted);
 }
 
+.product-price.price-unavailable {
+    font-size: 16px;
+    font-weight: 700;
+    color: #dc2626;
+}
+
 .price-old-line {
     display: flex;
     align-items: center;
@@ -1295,4 +1301,83 @@ footer {
         font-size: 10px;
         padding: 6px;
     }
+}
+/* ================= OUT OF STOCK (SOLD OUT) ================= */
+
+/* محصول بدون وریانت که موجودیش صفره: عکس یه‌ذره کم‌رنگ‌تر + بج کوچیک «ناموجود» گوشه‌ی گالری
+   (دقیقاً هم‌شکل بجِ گوشه‌ی کارت تو صفحه‌ی لیست محصولات) */
+.gallery-box.is-sold-out .pd-image {
+    opacity: 0.88;
+}
+
+.sold-out-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 9px;
+    border-radius: 20px;
+    z-index: 3;
+}
+
+/* بج وضعیت موجودی رو یه‌کم برجسته‌تر و شبیه بج/پیل می‌کنیم (کلاس‌ها همونایی هستن که shop.js سوییچ می‌کنه) */
+.stock-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #ecfdf5;
+    width: fit-content;
+}
+
+.stock-status-out {
+    background: #fef2f2;
+}
+
+.stock-status-pending {
+    background: #f4f4f5;
+}
+
+/* دکمه‌ی افزودن به سبد وقتی محصول/وریانتِ انتخاب‌شده ناموجوده */
+.btn-add-to-cart.is-disabled,
+.btn-add-to-cart.is-disabled:hover,
+.btn-add-to-cart:disabled,
+.btn-add-to-cart:disabled:hover {
+    background-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+/* وریانت‌های ناموجود داخل پالت رنگ/سایز: کم‌رنگ + یه خط قرمز مورب روی دایره */
+.color-swatch.variant-unavailable .dot {
+    position: relative;
+    opacity: 0.35;
+    filter: grayscale(0.5);
+}
+
+.size-dot.variant-unavailable {
+    position: relative;
+    opacity: 0.35;
+    filter: grayscale(0.5);
+}
+
+.color-swatch.variant-unavailable .dot::after,
+.size-dot.variant-unavailable::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(
+        to top left,
+        transparent calc(50% - 1px),
+        #dc2626 calc(50% - 1px),
+        #dc2626 calc(50% + 1px),
+        transparent calc(50% + 1px)
+    );
+}
+
+.color-swatch.variant-unavailable .swatch-code {
+    color: #dc2626;
+    text-decoration: line-through;
 }

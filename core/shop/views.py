@@ -1,4 +1,4 @@
-from django.db.models import F, DecimalField, ExpressionWrapper, Q
+from django.db.models import F, DecimalField, ExpressionWrapper, Q, Min, Max, Case, When
 from django.db.models.functions import Round
 
 from .models import (
@@ -121,16 +121,55 @@ class ShopProductView(ListView):
         return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
+        # قیمت محصول اصلی بعد از تخفیف خودش (برای محصولات بدون وریانت)
+        own_final_price = ExpressionWrapper(
+            F("price") - (F("price") * F("discount_percent") / 100),
+            output_field=DecimalField()
+        )
+        # قیمت هر وریانت بعد از تخفیف خودش
+        variant_final_price = ExpressionWrapper(
+            F("varients__price") - (F("varients__price") * F("varients__discount_percent") / 100),
+            output_field=DecimalField()
+        )
+
         queryset = ProductModel.objects.filter(
             status=ProductStatusType.publish.value
         ).filter(
             Q(varients__isnull=True)
             | Q(varients__status=ProductStatusType.publish.value)
         ).distinct().annotate(
-            final_price=Round(ExpressionWrapper(
-                 F("price") - (F("price") * F("discount_percent") / 100),
-                 output_field=DecimalField()
-            ))
+            # کمترین/بیشترین قیمت بین وریانت‌هایی که هم منتشر شدن هم موجودن
+            variant_available_min=Min(
+                variant_final_price,
+                filter=Q(varients__status=ProductStatusType.publish.value, varients__stock__gt=0)
+            ),
+            variant_available_max=Max(
+                variant_final_price,
+                filter=Q(varients__status=ProductStatusType.publish.value, varients__stock__gt=0)
+            ),
+            # fallback: اگه هیچ وریانت موجودی نبود، بین وریانت‌های منتشرشده (صرف‌نظر از موجودی)
+            variant_any_min=Min(
+                variant_final_price,
+                filter=Q(varients__status=ProductStatusType.publish.value)
+            ),
+            variant_any_max=Max(
+                variant_final_price,
+                filter=Q(varients__status=ProductStatusType.publish.value)
+            ),
+        ).annotate(
+            # اولویت با وریانت موجود، بعد وریانت منتشرشده (حتی ناموجود)، بعد قیمت خود محصول
+            final_price_min=Round(Case(
+                When(variant_available_min__isnull=False, then=F("variant_available_min")),
+                When(variant_any_min__isnull=False, then=F("variant_any_min")),
+                default=own_final_price,
+                output_field=DecimalField(),
+            )),
+            final_price_max=Round(Case(
+                When(variant_available_max__isnull=False, then=F("variant_available_max")),
+                When(variant_any_max__isnull=False, then=F("variant_any_max")),
+                default=own_final_price,
+                output_field=DecimalField(),
+            )),
         )
         
         if q := self.request.GET.get('q'):
@@ -185,23 +224,29 @@ class ShopProductView(ListView):
         try:
             if min_price := self.request.GET.get('min_price'):
                 min_price = int(min_price)
-                queryset = queryset.filter(final_price__gte=min_price)
+                # اگه بیشترین قیمت محصول (بین وریانت‌ها یا خودش) از حد پایین کمتر باشه یعنی کلاً پایین‌تر از بازه‌س
+                queryset = queryset.filter(final_price_max__gte=min_price)
         except (ValueError, TypeError):
             pass 
         try:
             if max_price := self.request.GET.get('max_price'):
                 max_price = int(max_price)
-                queryset = queryset.filter(final_price__lte=max_price)
+                # اگه کمترین قیمت محصول از حد بالا بیشتر باشه یعنی کلاً بالاتر از بازه‌س
+                queryset = queryset.filter(final_price_min__lte=max_price)
         except (ValueError, TypeError):
             pass
         
         filter_by = self.request.GET.get('filter-by')
         
         if filter_by == 'cheep_to_exp':
-            queryset = queryset.order_by('final_price')        
+            queryset = queryset.order_by('final_price_min')
         elif filter_by == 'exp_to_cheep':
-            queryset = queryset.order_by('-final_price')        
+            queryset = queryset.order_by('-final_price_max')
         elif filter_by == 'new':
+            queryset = queryset.order_by('-created_date')
+        else:
+            # annotate با Min/Max باعث می‌شه جنگو دیگه Meta.ordering مدل رو
+            # خودکار اعمال نکنه؛ پس باید همینجا صریح مرتب‌سازی پیش‌فرض (جدیدترین) رو بزنیم.
             queryset = queryset.order_by('-created_date')
             
         if category := self.request.GET.get('category'):
@@ -226,7 +271,7 @@ class ShopProductView(ListView):
         context['categories'] = categories
         context['alphabet_categories'] = group_categories_by_letter(categories)
         context['avtive_page'] = 'show-product-view'
-        context['filter_by'] = self.request.GET.get('filter-by'),
+        context['filter_by'] = self.request.GET.get('filter-by')
 
         return context
     

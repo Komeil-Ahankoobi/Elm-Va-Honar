@@ -525,7 +525,7 @@ section {
 }
 
 /* 4. Team Grid */
-/* ۵ کارت هم‌عرض، همه در یک ردیف */
+/* دسکتاپ: ۵ کارت هم‌عرض تو یه ردیف؛ سایزهای کوچیک‌تر تو مدیاکوئری پایین شکسته می‌شن */
 .team-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -731,6 +731,10 @@ section {
     .stat-item::after {
         display: none;
     }
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -738,27 +742,31 @@ section {
         grid-template-columns: 1fr;
     }
     .team-card {
-        padding: 14px 6px;
+        padding: 18px 10px;
+    }
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
     }
     .team-card__avatar {
-        width: 56px;
-        height: 56px;
-        margin-bottom: 8px;
+        width: 72px;
+        height: 72px;
+        margin-bottom: 10px;
     }
     .team-card__name {
-        font-size: 11px;
+        font-size: 13px;
     }
     .team-card__role {
-        font-size: 9px;
-        margin-bottom: 8px;
+        font-size: 11px;
+        margin-bottom: 10px;
     }
     .team-card__socials {
-        gap: 4px;
+        gap: 6px;
     }
     .team-card__socials a {
-        width: 28px;
-        height: 28px;
-        padding: 6px;
+        width: 34px;
+        height: 34px;
+        padding: 7px;
     }
     .about-cta {
         flex-direction: column;
@@ -798,5 +806,13 @@ section {
     }
     .stat-item::after {
         display: none;
+    }
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .team-card__avatar {
+        width: 64px;
+        height: 64px;
     }
 }

@@ -69,6 +69,10 @@ a {
     gap: 25px;
 }
 
+.category-filtered{
+    margin-bottom: 6rem;
+}
+
 /* ================= SIDEBAR (RIGHT) ================= */
 .sidebar {
     display: flex;
@@ -701,4 +705,43 @@ footer {
     align-items: center;
     font-size: 10px;
     color: #666;
+}
+/* ================= OUT OF STOCK (SOLD OUT) - محصولات بدون وریانت ================= */
+.product-img {
+    position: relative;
+}
+
+.sold-out-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #dc2626;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 9px;
+    border-radius: 20px;
+    z-index: 2;
+}
+
+.product-card.is-sold-out .product-img img {
+    opacity: 0.88;
+}
+
+.product-card.is-sold-out .product-title {
+    opacity: 0.55;
+}
+
+.product-price.price-unavailable {
+    color: #dc2626;
+}
+
+.btn-add-cart.is-disabled,
+.btn-add-cart.is-disabled:hover,
+.btn-add-cart:disabled,
+.btn-add-cart:disabled:hover {
+    background-color: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    cursor: not-allowed;
 }

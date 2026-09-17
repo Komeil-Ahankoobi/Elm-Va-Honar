@@ -163,6 +163,17 @@ class ProductModel(models.Model):
     def get_visible_variants(self):
         return self.varients.filter(status=ProductStatusType.publish.value)
 
+    def get_available_variants(self):
+        """
+        وریانت‌هایی که هم منتشر شدن هم موجودن. این متد برای محاسبه‌ی
+        قیمتی که تو کارت محصول (لیست محصولات) نشون داده می‌شه استفاده می‌شه،
+        تا مثلاً قیمت یه رنگ ناموجود به عنوان «از X تومان» نمایش داده نشه.
+        """
+        return self.varients.filter(
+            status=ProductStatusType.publish.value,
+            stock__gt=0,
+        )
+
     def get_price(self):
         if self.has_variants():
             prices = [v.get_price() for v in self.varients.all()]
@@ -223,7 +234,12 @@ class ProductModel(models.Model):
         return min(prices), max(prices)
 
     def get_price_range(self):
-        variants = list(self.varients.all())
+        # اولویت با وریانت‌هایی که واقعاً موجودن؛ اگه هیچ‌کدوم موجود نبود
+        # (که یعنی این وضعیت باید استثنا باشه، چون محصول باید draft بشه)
+        # به عنوان fallback از بین وریانت‌های منتشرشده حساب می‌کنه که خطا نده.
+        variants = list(self.get_available_variants())
+        if not variants:
+            variants = list(self.get_visible_variants())
         if not variants:
             return None
         prices = [v.get_price() for v in variants]
