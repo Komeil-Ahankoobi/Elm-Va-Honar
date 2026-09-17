@@ -6,18 +6,25 @@
 {% block content %}
 
 
-<div class="address-toolbar">
-    <a href="{% url 'dashboard:customer:address-create' %}" class="add-address-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14" />
-            <path d="M5 12h14" />
-        </svg>
-        افزودن آدرس جدید
-    </a>
+
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+    <div>
+        <h2 class="page-title">آدرس‌های من</h2>
+        <p class="page-sub">آدرس‌های خود را مشاهده، ویرایش و مدیریت کنید.</p>
+    </div>
+    <div class="address-toolbar">
+        <a href="{% url 'dashboard:customer:address-create' %}" class="add-address-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+            </svg>
+            افزودن آدرس جدید
+        </a>
+    </div>
 </div>
 
-<h2 class="page-title">آدرس‌های من</h2>
-<p class="page-sub">آدرس‌های خود را مشاهده، ویرایش و مدیریت کنید.</p>
+
+
 
 <p>تعداد آدرس ها : {{ addresses|length }}</p>
 <div class="address-list">
