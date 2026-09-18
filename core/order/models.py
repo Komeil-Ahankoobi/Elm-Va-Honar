@@ -12,12 +12,13 @@ from shop.models import (
 )
 
 
-# Create your models here.
 class OrderStatusType(models.IntegerChoices):
-    pending = 1, "در انتظار پرداخت"
-    succes = 2, "پرداخت شده"
-    faild = 3, "لغو شده"
-    complete = 4, "ارسال شده"
+    pending = 1, "در حال پرداخت"
+    paid = 2, "پرداخت شده"
+    processing = 3, "پردازش شده"
+    preparing = 4, "در حال آماده‌سازی"
+    shipped = 5, "تحویل پست مبدا داده شد"
+    cancelled = 6, "لغو شده"
 
 
 class UserAddressModel(models.Model):
@@ -93,7 +94,7 @@ class OrderModel(models.Model):
         ordering = ["-created_date"]
 
     def __str__(self):
-        return f"{self.user.username} - {self.id}"
+        return f"{self.user.user_profile.get_fullname()} - {self.id}"
 
     def get_status(self):
         return {
@@ -119,6 +120,26 @@ class OrderModel(models.Model):
     def has_copon(self):
         return bool(self.copon_code)
 
+    @property
+    def is_successful(self):
+        """سفارش‌هایی که پرداخت‌شون موفقیت‌آمیز بوده (از مرحله پرداخت به بعد)"""
+        return self.status in {
+            OrderStatusType.paid.value,
+            OrderStatusType.processing.value,
+            OrderStatusType.preparing.value,
+            OrderStatusType.shipped.value,
+        }
+
+    @property
+    def is_cancellable(self):
+        """فقط وقتی هنوز ارسال نهایی نشده باشه"""
+        return self.status in {
+            OrderStatusType.pending.value,
+            OrderStatusType.paid.value,
+            OrderStatusType.processing.value,
+            OrderStatusType.preparing.value,
+        }
+
     def confirm_payment(self):
         if self.is_successful:
             return
@@ -126,7 +147,7 @@ class OrderModel(models.Model):
         with transaction.atomic():
             self._decrease_stock()
 
-            self.status = OrderStatusType.succes.value
+            self.status = OrderStatusType.paid.value
             self.save(update_fields=["status", "updated_date"])
 
             if self.copon:
@@ -139,14 +160,12 @@ class OrderModel(models.Model):
                 cart.cart_items.all().delete()
 
     def cancel_payment(self):
-        if self.is_successful:
+        # سفارش را حذف نمی‌کنیم؛ سابقه‌ی سفارش باید برای کاربر و ادمین باقی بماند.
+        # اگر قبلاً ارسال شده، دیگر اجازه‌ی لغو نمی‌دهیم.
+        if self.status == OrderStatusType.shipped.value:
             return
 
-        if not self.payments.exists():
-            self.delete()
-            return
-
-        self.status = OrderStatusType.faild.value
+        self.status = OrderStatusType.cancelled.value
         self.save(update_fields=["status", "updated_date"])
 
     def _decrease_stock(self):
@@ -160,9 +179,7 @@ class OrderModel(models.Model):
             locked_obj.save(update_fields=["stock"])
             locked_obj.sync_visibility_from_stock()
 
-    @property
-    def is_successful(self):
-        return self.status == OrderStatusType.succes.value
+    # is_successful قبلاً به صورت property تعریف شد
 
 
 class OrderItemsModel(models.Model):

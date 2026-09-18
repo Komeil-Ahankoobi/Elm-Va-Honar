@@ -14,6 +14,15 @@ class OrderModelAdmin(admin.ModelAdmin):
         "created_date",
     )
 
+    # ادمین می‌تواند وضعیت سفارش را مستقیماً از لیست سفارش‌ها تغییر دهد.
+    list_editable = ("status",)
+
+    # فیلتر سریع سفارش‌ها بر اساس وضعیت
+    list_filter = (
+        "status",
+        "created_date",
+    )
+
     search_fields = (
         "=id",
         "copon__code",

@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import View
 
 from cart.cart import CartSession
-from order.models import OrderModel
+from order.models import OrderModel, OrderStatusType
 from .models import PaymentModel, PaymentStatusType
 from .zarinpal_client import ZarinPalClient
 
@@ -40,12 +40,17 @@ class PaymentRequestView(View):
                 messages.error(
                     request, "اتصال به درگاه پرداخت برقرار نشد، دوباره تلاش کن"
                 )
-                # نکته: cancel_payment اگه هنوز هیچ PaymentModel ای برای این
-                # order ساخته نشده باشه، کل order رو حذف می‌کنه (طبق
-                # order/models.py). به همین خاطر order-failed هم در
-                # urls.py هیچ آرگومانی نمی‌گیره؛ بعد از این خط دیگه
-                # نمی‌شه به order.pk رفرنس داد.
-                order.cancel_payment()
+
+                # خطای ارتباط/ساخت تراکنش به معنی لغو سفارش نیست.
+                # سفارش باید در وضعیت «در حال پرداخت» باقی بماند تا کاربر
+                # بتواند دوباره برای همان سفارش تلاش کند.
+                if order.status not in {
+                    OrderStatusType.cancelled.value,
+                    OrderStatusType.shipped.value,
+                }:
+                    order.status = OrderStatusType.pending.value
+                    order.save(update_fields=["status", "updated_date"])
+
                 return redirect(reverse_lazy("order:order-failed"))
 
             if existing_pending:
@@ -63,6 +68,14 @@ class PaymentRequestView(View):
                     response_json=result["raw"],
                 )
 
+            # به محض ایجاد تراکنش، سفارش در وضعیت «در حال پرداخت» است.
+            if order.status not in {
+                OrderStatusType.cancelled.value,
+                OrderStatusType.shipped.value,
+            }:
+                order.status = OrderStatusType.pending.value
+                order.save(update_fields=["status", "updated_date"])
+
         return redirect(client.generate_payment_url(authority))
 
 
@@ -72,6 +85,7 @@ class PaymentVerifyView(View):
         gateway_status = request.GET.get("Status")
 
         if not authority_id:
+            # چون Authority نداریم، نمی‌توانیم سفارش مشخصی را تغییر دهیم.
             return redirect(reverse_lazy("order:order-failed"))
 
         with transaction.atomic():
@@ -82,8 +96,6 @@ class PaymentVerifyView(View):
             order = payment_obj.order
 
             # اگر قبلاً نتیجه‌اش مشخص شده، دوباره verify نمی‌کنیم.
-            # اینجا حتماً PaymentModel وجود داره پس order هرگز به‌خاطر
-            # cancel_payment حذف نشده و order.pk معتبره.
             if payment_obj.status != PaymentStatusType.pending.value:
                 is_success = payment_obj.status == PaymentStatusType.success.value
                 return redirect(
@@ -92,11 +104,33 @@ class PaymentVerifyView(View):
                     else reverse_lazy("order:order-failed")
                 )
 
-            # طبق مستندات، فقط وقتی Status برابر OK است باید verify صدا زده شود.
+            # طبق رفتار callback زرین‌پال، Status فقط OK یا NOK است.
+            # NOK یعنی تراکنش ناموفق یا لغوشده توسط کاربر.
+            # در این مسیر سفارش را لغوشده ثبت می‌کنیم؛ خطاهای دیگری که
+            # قبل از callback رخ دهند، سفارش را لغو نمی‌کنند و در وضعیت
+            # «در حال پرداخت» باقی می‌مانند.
+            if gateway_status == "NOK":
+                payment_obj.status = PaymentStatusType.failed.value
+                payment_obj.save(update_fields=["status", "updated_date"])
+
+                order.cancel_payment()
+
+                return redirect(reverse_lazy("order:order-failed"))
+
+            # فقط Status=OK باید وارد مرحله Verify شود.
+            # اگر مقدار دیگری به callback رسید، پرداخت تأیید نشده است،
+            # اما این اتفاق به‌تنهایی دلیل لغو سفارش نیست.
             if gateway_status != "OK":
                 payment_obj.status = PaymentStatusType.failed.value
                 payment_obj.save(update_fields=["status", "updated_date"])
-                order.cancel_payment()
+
+                if order.status not in {
+                    OrderStatusType.cancelled.value,
+                    OrderStatusType.shipped.value,
+                }:
+                    order.status = OrderStatusType.pending.value
+                    order.save(update_fields=["status", "updated_date"])
+
                 return redirect(reverse_lazy("order:order-failed"))
 
             client = ZarinPalClient()
@@ -122,11 +156,19 @@ class PaymentVerifyView(View):
                 # وضعیت سفارش، مصرف‌شدنِ کد تخفیف، کم‌کردنِ موجودی، و خالی‌کردنِ
                 # سبد خریدِ دیتابیسی همگی داخل confirm_payment و اتمیک انجام می‌شن.
                 order.confirm_payment()
-                # سبدِ سشن (برای کاربر مهمان/مرورگر) فقط اینجا قابل پاک‌کردنه
-                # چون به request نیاز داره.
+
+                # سبدِ سشن فقط اینجا قابل پاک‌کردنه چون به request نیاز داره.
                 CartSession(request.session).clear()
             else:
-                order.cancel_payment()
+                # Verify شکست خورده، اما کاربر لزوماً سفارش را لغو نکرده است.
+                # بنابراین سفارش در «در حال پرداخت» باقی می‌ماند تا امکان
+                # تلاش مجدد برای پرداخت وجود داشته باشد.
+                if order.status not in {
+                    OrderStatusType.cancelled.value,
+                    OrderStatusType.shipped.value,
+                }:
+                    order.status = OrderStatusType.pending.value
+                    order.save(update_fields=["status", "updated_date"])
 
         return redirect(
             reverse_lazy("order:order-success", kwargs={"order_id": order.pk})

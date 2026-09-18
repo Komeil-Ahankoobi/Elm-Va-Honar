@@ -8,7 +8,10 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.http import JsonResponse
+from django.views import View
+from order.models import OrderStatusType
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
@@ -113,3 +116,42 @@ class CustomerDashboardOrderDetailView(
         context["total_tax"] = order.get_tax_amount()
         context["total_basket_price"] = order.get_total_price()
         return context
+
+
+class CustomerDashboardCancelOrderView(
+    LoginRequiredMixin, HasCustomerAccessPermission, View
+):
+
+    def post(self, request, pk):
+
+        order = get_object_or_404(OrderModel, pk=pk, user=request.user)
+
+        allowed_statuses = [
+            OrderStatusType.pending.value,
+            OrderStatusType.paid.value,
+            OrderStatusType.processing.value,
+        ]
+
+        if order.status not in allowed_statuses:
+            return JsonResponse(
+                {"success": False, "message": "این سفارش دیگر قابل لغو نیست."}
+            )
+
+        paid_order = order.status in [
+            OrderStatusType.paid.value,
+            OrderStatusType.processing.value,
+        ]
+
+        order.status = OrderStatusType.cancelled.value
+        order.save(update_fields=["status", "updated_date"])
+
+        if paid_order:
+            message = (
+                "سفارش شما لغو شد. \n"
+                "برای پیگیری سفارش خود با شماره مغازه تماس بگیرید: "
+                "33218734-026 - 9949819-0919"
+            )
+        else:
+            message = "سفارش شما با موفقیت لغو شد."
+
+        return JsonResponse({"success": True, "message": message})

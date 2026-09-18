@@ -5,20 +5,10 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# 100 = تراکنش موفق / 101 = تراکنش موفق بوده و قبلاً یک‌بار verify شده
 SUCCESS_CODES = (100, 101)
 
 
 class ZarinPalClient:
-    """
-    کلاینت درگاه پرداخت زرین‌پال بر اساس API نسخه ۴.
-
-    تنظیمات لازم در settings.py:
-        ZARINPAL_MERCHANT_ID = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-        ZARINPAL_SANDBOX = True          # روی production بگذارید False
-        ZARINPAL_CURRENCY = "IRT"        # "IRT" تومان، "IRR" ریال
-    """
-
     _timeout = 10
 
     def __init__(self, merchant_id=None, callback_url=None, sandbox=None, currency=None):
@@ -34,9 +24,6 @@ class ZarinPalClient:
         self.verify_url = f"{base}/pg/v4/payment/verify.json"
         self.start_pay_url = f"{base}/pg/StartPay/"
 
-    # ------------------------------------------------------------------ #
-    # مرحله اول: درخواست پرداخت و گرفتن authority
-    # ------------------------------------------------------------------ #
     def payment_request(
         self,
         amount,
@@ -71,9 +58,6 @@ class ZarinPalClient:
 
         return self._post(self.request_url, payload, label="payment_request")
 
-    # ------------------------------------------------------------------ #
-    # مرحله سوم: اعتبارسنجی تراکنش
-    # ------------------------------------------------------------------ #
     def payment_verify(self, amount, authority):
         payload = {
             "merchant_id": self.merchant_id,
@@ -82,15 +66,10 @@ class ZarinPalClient:
         }
         return self._post(self.verify_url, payload, label="payment_verify")
 
-    # ------------------------------------------------------------------ #
-    # مرحله دوم: ساخت آدرس صفحه پرداخت
-    # ------------------------------------------------------------------ #
+
     def generate_payment_url(self, authority):
         return self.start_pay_url + authority
 
-    # ------------------------------------------------------------------ #
-    # داخلی
-    # ------------------------------------------------------------------ #
     def _post(self, url, payload, label=""):
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
@@ -105,8 +84,6 @@ class ZarinPalClient:
             logger.error("ZarinPal %s failed: %s", label, e)
             return self._failure("connection_error")
 
-        # عمداً raise_for_status صدا نمی‌زنیم: زرین‌پال خطاها را با کد HTTP
-        # غیر ۲۰۰ ولی با بدنه JSON معتبر (کلید errors) برمی‌گرداند.
         try:
             body = response.json()
         except ValueError:
@@ -129,14 +106,6 @@ class ZarinPalClient:
 
     @staticmethod
     def _normalize(body):
-        """
-        پاسخ خام زرین‌پال را به یک دیکشنری یکدست تبدیل می‌کند.
-
-        نمونه پاسخ موفق:
-            {"data": {"code": 100, "authority": "A000...", ...}, "errors": []}
-        نمونه پاسخ ناموفق:
-            {"data": [], "errors": {"code": -9, "message": "...", "validations": [...]}}
-        """
         data = body.get("data")
         if not isinstance(data, dict):
             data = {}
