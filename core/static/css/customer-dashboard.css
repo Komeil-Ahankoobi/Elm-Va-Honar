@@ -1384,41 +1384,13 @@ button.edit-address-btn:hover {
     height: 15px;
 }
 
-/* 1: pending / 2: paid / 3: cancelled / 4: shipped */
-.orders-page .status-pill.status-1,
-.order-detail-page .status-pill.status-1 {
-    color: #b86a2f;
-    background: rgba(200, 120, 63, 0.11);
-    border-color: rgba(200, 120, 63, 0.18);
-}
-
-.orders-page .status-pill.status-2,
-.order-detail-page .status-pill.status-2 {
-    color: #2f5d50;
-    background: rgba(47, 93, 80, 0.11);
-    border-color: rgba(47, 93, 80, 0.18);
-}
-
-.orders-page .status-pill.status-3,
-.order-detail-page .status-pill.status-3 {
-    color: #b33d3d;
-    background: rgba(195, 60, 60, 0.1);
-    border-color: rgba(195, 60, 60, 0.16);
-}
-
-.orders-page .status-pill.status-4,
-.order-detail-page .status-pill.status-4 {
-    color: #2f6fce;
-    background: rgba(47, 111, 206, 0.1);
-    border-color: rgba(47, 111, 206, 0.16);
-}
-
 .orders-page .order-card-action {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding-inline-start: 18px;
     border-inline-start: 1px solid var(--color-border-light);
+    flex-direction: column;
 }
 
 .orders-page .view-details-btn {
@@ -2355,32 +2327,6 @@ button.edit-address-btn:hover {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
-}
-
-/* Keep status colors visible even if a generic status rule exists elsewhere. */
-.orders-page .status-pill.status-1,
-.order-detail-page .status-pill.status-1 {
-    color: #b86a2f !important;
-    background: rgba(200, 120, 63, 0.12) !important;
-    border-color: rgba(200, 120, 63, 0.22) !important;
-}
-.orders-page .status-pill.status-2,
-.order-detail-page .status-pill.status-2 {
-    color: #2f5d50 !important;
-    background: rgba(47, 93, 80, 0.12) !important;
-    border-color: rgba(47, 93, 80, 0.2) !important;
-}
-.orders-page .status-pill.status-3,
-.order-detail-page .status-pill.status-3 {
-    color: #b33d3d !important;
-    background: rgba(195, 60, 60, 0.11) !important;
-    border-color: rgba(195, 60, 60, 0.2) !important;
-}
-.orders-page .status-pill.status-4,
-.order-detail-page .status-pill.status-4 {
-    color: #2f6fce !important;
-    background: rgba(47, 111, 206, 0.11) !important;
-    border-color: rgba(47, 111, 206, 0.2) !important;
 }
 
 /* Tablet: keep the side cards beside the products where there is room. */
@@ -3749,5 +3695,180 @@ button.edit-address-btn:hover {
 
     .profile-info-value {
         font-size: 13px;
+    }
+}
+
+/* وضعیت‌های سفارش */
+.status-pill.status-1 {
+    /* در انتظار پرداخت */
+    background: rgba(245, 158, 11, 0.12);
+    color: #b45309;
+}
+
+.status-pill.status-2 {
+    /* پرداخت شده */
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803d;
+}
+
+.status-pill.status-3 {
+    /* پردازش — بنفش */
+    background: rgba(168, 85, 247, 0.15);
+    color: #840eeb;
+}
+
+.status-pill.status-4 {
+    /* در حال آماده‌سازی */
+    background: rgba(99, 102, 241, 0.12);
+    color: #4338ca;
+}
+
+.status-pill.status-5 {
+    /* تحویل پست مبدا داده شد — آبی آسمانی */
+    background: rgba(14, 165, 233, 0.15);
+    color: #0284c7;
+}
+
+.status-pill.status-6 {
+    /* لغو شده */
+    background: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
+}
+
+.cancel-order-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    background: #c0392b;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+.cancel-order-btn:hover {
+    background: #962d22;
+
+    transform: translateY(-2px);
+}
+
+.order-cancel-box {
+    margin-bottom: 20px;
+
+    display: flex;
+
+    justify-content: flex-start;
+}
+
+/* ============================================================================
+   CANCEL ORDER BUTTON & ACTION BOX STYLES
+   ============================================================================ */
+
+/* Detail Header Actions */
+.order-detail-page .detail-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Base Cancel Button */
+.cancel-order-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid rgba(220, 53, 69, 0.25);
+    border-radius: 11px;
+    background-color: rgba(220, 53, 69, 0.06);
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.cancel-order-btn svg {
+    width: 15px !important;
+    height: 15px !important;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+.cancel-order-btn:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+}
+
+/* Order List Action Box Layout Fix */
+.orders-page .order-card-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-inline-start: 18px;
+    border-inline-start: 1px solid var(--color-border-light);
+}
+
+.orders-page .order-card-action .cancel-order-btn {
+    height: 38px;
+    font-size: 13px;
+    padding: 0 14px;
+}
+
+/* Responsive Fixes for Cancel Button */
+@media (max-width: 700px) {
+    .order-detail-page .detail-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .order-detail-page .detail-actions {
+        width: 100%;
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .order-detail-page .detail-actions .cancel-order-btn,
+    .order-detail-page .detail-actions .btn-back {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .orders-page .order-card-action {
+        width: 100%;
+        flex-direction: column-reverse;
+        padding: 12px 0 0 !important;
+        border-inline-start: 0 !important;
+        border-top: 1px solid var(--color-border-light);
+        gap: 8px;
+    }
+
+    .orders-page .order-card-action .cancel-order-btn,
+    .orders-page .order-card-action .view-details-btn {
+        width: 100%;
+        justify-content: center;
     }
 }

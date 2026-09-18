@@ -78,9 +78,18 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="9" />
-                                <path d="m9 9 6 6m0-6-6 6" />
+                                <path d="M12 6v6l4 2" />
+                                <path d="M12 12h.01" />
                             </svg>
                             {% elif order.status == 4 %}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z" />
+                                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                                <path d="M12 12v4" />
+                                <path d="M10 14h4" />
+                            </svg>
+                            {% elif order.status == 5 %}
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z" />
@@ -91,7 +100,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="9" />
-                                <path d="M12 8v4m0 4h.01" />
+                                <path d="m9 9 6 6m0-6-6 6" />
                             </svg>
                             {% endif %}
                         </span>
@@ -101,13 +110,26 @@
             </div>
 
             <div class="order-card-action">
-                <a href="{% url 'dashboard:customer:order-detail' pk=order.id %}" class="view-details-btn">
+                                <a href="{% url 'dashboard:customer:order-detail' pk=order.id %}" class="view-details-btn">
                     <span>مشاهده جزئیات</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                         stroke-linejoin="round">
                         <polyline points="15 18 9 12 15 6" />
                     </svg>
                 </a>
+                {% if order.status == 1 or order.status == 2 or order.status == 3 %}
+                <button class="cancel-order-btn" data-url="{% url 'dashboard:customer:order-cancel' pk=order.id %}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="15" y1="9" x2="9" y2="15" />
+                        <line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                    <span>لغو سفارش</span>
+                </button>
+                {% endif %}
+
+
             </div>
         </article>
         {% empty %}
@@ -129,15 +151,15 @@
     <nav class="pagination orders-pagination" aria-label="صفحه‌بندی سفارش‌ها">
         {% if page_obj.has_previous %}
         <a href="?page={{ page_obj.previous_page_number }}" class="page-btn nav-page" aria-label="صفحه قبل">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6" />
             </svg>
         </a>
         {% else %}
         <span class="page-btn nav-page disabled">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6" />
             </svg>
         </span>
@@ -150,16 +172,14 @@
 
         {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}" class="page-btn nav-page" aria-label="صفحه بعد">
-            <svg
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6" />
             </svg>
         </a>
         {% else %}
         <span class="page-btn nav-page disabled">
-          <svg
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6" />
             </svg>
@@ -169,3 +189,40 @@
     {% endif %}
 </div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("click", function (e) {
+        const btn = e.target.closest(".cancel-order-btn");
+        if (!btn) return;
+
+        const confirmCancel = confirm("آیا مایل به لغو سفارش هستید؟");
+        if (!confirmCancel) return;
+
+        fetch(btn.dataset.url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                Toastify({
+                    text: data.message,
+                    duration: 5000,
+                    gravity: "top",
+                    position: "right"
+                }).showToast();
+
+                if (data.success) {
+                    setTimeout(() => {
+                        location.reload();
+                    }, 5000);
+                }
+            })
+            .catch(err => {
+                console.error("خطا در لغو سفارش:", err);
+            });
+    });
+</script>
+{% endblock extra_js %}

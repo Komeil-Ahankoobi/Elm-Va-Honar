@@ -13,9 +13,13 @@ class PaymentModel(models.Model):
         on_delete=models.PROTECT,
         related_name="payments",
     )
-    authority_id = models.CharField(max_length=255, unique=True, db_index=True)
+    authority_id = models.CharField(max_length=64, unique=True, db_index=True)
     ref_id = models.BigIntegerField(null=True, blank=True)
     amount = models.PositiveBigIntegerField(default=0)
+
+    card_pan = models.CharField(max_length=32, blank=True)
+    card_hash = models.CharField(max_length=128, blank=True)
+
     response_json = models.JSONField(default=dict, blank=True)
     response_code = models.IntegerField(null=True, blank=True)
     status = models.IntegerField(
