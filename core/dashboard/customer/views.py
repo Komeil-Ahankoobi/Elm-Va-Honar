@@ -95,6 +95,9 @@ class CustomerDashboardOrderView(
     paginate_by = 3
 
     def get_queryset(self):
+        
+        OrderModel.expire_stale_pending(user=self.request.user)
+
         return OrderModel.objects.filter(user=self.request.user)
 
 

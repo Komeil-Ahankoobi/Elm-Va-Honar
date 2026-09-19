@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import OrderModel, OrderItemsModel, CoponModel, UserAddressModel
 from django import forms
-
+from .widgets import JalaliDateTimeField
 
 @admin.register(OrderModel)
 class OrderModelAdmin(admin.ModelAdmin):
@@ -40,6 +40,12 @@ class OrderItemsModelAdmin(admin.ModelAdmin):
 
 
 class CoponModelAdminForm(forms.ModelForm):
+    expiration_date = JalaliDateTimeField(
+        required=False,
+        label="تاریخ انقضا (شمسی)",
+        help_text="فرمت: ۱۴۰۳/۰۶/۲۷ ۱۴:۳۰"
+    )
+
     class Meta:
         model = CoponModel
         fields = "__all__"

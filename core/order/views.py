@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.utils import timezone
+from django.db import IntegrityError
 
 from dashboard.permissions import HasCustomerAccessPermission
 from cart.utils import get_cart
@@ -15,6 +16,7 @@ from order.models import (
     OrderModel,
     OrderItemsModel,
     CoponModel,
+    PostPrice,
 )
 from .forms import OrderCheckoutForm
 from cart.models import CartModel
@@ -26,6 +28,20 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 
     def form_valid(self, form):
         user = self.request.user
+
+        OrderModel.expire_stale_pending(user=user)
+
+       
+        active_pending_order = OrderModel.get_active_pending_order(user)
+        if active_pending_order:
+            messages.info(
+                self.request,
+                "یک سفارش پرداخت‌نشده از قبل برای شما ثبت شده است. در حال انتقال به درگاه پرداخت برای همان سفارش هستید.",
+            )
+            return redirect(
+                reverse("payment:request", kwargs={"order_id": active_pending_order.id})
+            )
+
         cleaned_data = form.cleaned_data
         address = cleaned_data["address_id"]
         copon = cleaned_data["copon"]
@@ -41,15 +57,23 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             return redirect(reverse_lazy("order:order-failed"))
 
         with transaction.atomic():
-            order = self.create_order(address)
-            self.create_order_items(cart, order)
+            try:
+                order = self.create_order(address)
+            except IntegrityError:
+                # race condition: یه request موازی همین الان سفارش pending ساخته
+                active_pending_order = OrderModel.get_active_pending_order(user)
+                if active_pending_order:
+                    return redirect(
+                        reverse("payment:request", kwargs={"order_id": active_pending_order.id})
+                    )
+                raise
 
+            self.create_order_items(cart, order)
             subtotal_price = order.calculate_total_price()
             self.apply_copon_pricing(copon, subtotal_price, order)
             order.save()
 
         return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
-        # return redirect(reverse("order:order-success", kwargs={"order_id": order.id}))
 
     def form_invalid(self, form):
         return redirect(reverse_lazy("order:order-failed"))
@@ -68,6 +92,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 
     def apply_copon_pricing(self, copon, subtotal_price, order):
         order.subtotal_price = subtotal_price
+        post_price = PostPrice.load().price
 
         if copon:
             discount_price = round(
@@ -77,10 +102,10 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             order.copon_code = copon.code
             order.copon_discount_percent = copon.discount_percent
             order.discount_amount = discount_price
-            order.total_price = subtotal_price - discount_price
+            order.total_price = subtotal_price - discount_price + post_price
         else:
             order.discount_amount = 0
-            order.total_price = subtotal_price
+            order.total_price = subtotal_price + post_price
 
     def create_order(self, address):
         return OrderModel.objects.create(
@@ -110,10 +135,10 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 
         cart = get_cart(self.request)
         price = cart.get_total_payment_amount()
-        total_tax = round(price * 10 / 100)
+        post_price = PostPrice.load().price
         context["price"] = price
-        context["total_tax"] = total_tax
-        context["total_price"] = price + total_tax
+        context["post_price"] = post_price
+        context["total_price"] = price + post_price
 
         return context
 
@@ -170,15 +195,16 @@ class ValidateCoponView(LoginRequiredMixin, HasCustomerAccessPermission, View):
         except CartModel.DoesNotExist:
             return JsonResponse({"message": "سبد خرید یافت نشد"}, status=404)
 
+        post_price = PostPrice.load().price
         total_price = cart.calculate_total_price()
         discount_percent = Decimal(copon.discount_percent) / Decimal("100")
         total_price = round(total_price - (total_price * discount_percent), 0)
-        total_tax = round((total_price * Decimal("10")) / Decimal("100"), 0)
+        total_price = total_price + post_price
 
         return JsonResponse(
             {
                 "message": "کد تخفیف با موفقیت ثبت شد",
-                "total_tax": total_tax,
+                "post_price": post_price,
                 "total_price": total_price,
             },
             status=200,

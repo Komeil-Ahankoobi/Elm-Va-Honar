@@ -89,8 +89,38 @@ class OrderModel(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
+
     class Meta:
         ordering = ["-created_date"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user"],
+                condition=models.Q(status=OrderStatusType.pending.value),
+                name="one_pending_order_per_user",
+            )
+        ]
+
+    PENDING_TIMEOUT_MINUTES = 15 
+
+
+    @classmethod
+    def expire_stale_pending(cls, user=None):
+       
+        cutoff = timezone.now() - timezone.timedelta(minutes=cls.PENDING_TIMEOUT_MINUTES)
+        qs = cls.objects.filter(status=OrderStatusType.pending.value, created_date__lt=cutoff)
+        if user is not None:
+            qs = qs.filter(user=user)
+
+        for order in qs:
+            order.cancel_payment()
+
+    @classmethod
+    def get_active_pending_order(cls, user):
+        return cls.objects.filter(
+            user=user, status=OrderStatusType.pending.value
+        ).first()
+
+
 
     def __str__(self):
         return f"{self.user.username} - {self.id}"
@@ -212,3 +242,20 @@ class OrderItemsModel(models.Model):
     def __str__(self):
         variant_part = self.variant.variant_type if self.variant else "بدون وریانت"
         return f"{self.product.title} - {variant_part} - {self.order.id}"
+
+
+
+class PostPrice(models.Model):
+    price = models.PositiveIntegerField(default=190000, verbose_name="قیمت پست (تومان)")
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+    def __str__(self):
+        return f"{self.price} تومان"

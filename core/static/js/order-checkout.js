@@ -39,7 +39,7 @@ async function validateCopon() {
             alert(data.message);
         }
 
-        applyDiscount(data.total_price, data.total_tax);
+        applyDiscount(data.total_price, data.post_price);
     } catch (error) {
         if (typeof Toastify === "function") {
             Toastify({
