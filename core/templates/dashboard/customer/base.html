@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/customer-dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
 
+    {% block extra_css %}{% endblock extra_css %}
 </head>
 
 <body>
@@ -100,10 +101,14 @@
         </main>
     </div>
 
+    <!-- توجه: toastify-es.js نسخه‌ی ES Module هست و به‌عنوان اسکریپت معمولی
+         (بدون type="module") خطای "export declarations may only appear at
+         top level of a module" می‌ده. فقط نسخه‌ی UMD (toastify.js) کافیه. -->
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
-    <script src="{% static 'vendor/toastify/toastify-es.js' %}"></script>
     <script src="{% static 'js/customer-dashboard.js' %}"></script>
     {% include 'messages.html' %}
+
+    {% block extra_js %}{% endblock extra_js %}
 
 </body>
 

@@ -21,14 +21,29 @@
             <h2 class="page-title">جزئیات سفارش #{{ order.id }}</h2>
             <p class="page-sub">اطلاعات اقلام، وضعیت و خلاصه پرداخت این سفارش</p>
         </div>
-        <a href="{% url 'dashboard:customer:order' %}" class="btn-back">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-            </svg>
-            بازگشت به سفارش‌ها
-        </a>
+
+        <div class="detail-actions">
+            {% if order.status == 1 or order.status == 2 or order.status == 3 %}
+            <button class="cancel-order-btn" data-url="{% url 'dashboard:customer:order-cancel' pk=order.id %}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="15" y1="9" x2="9" y2="15" />
+                    <line x1="9" y1="9" x2="15" y2="15" />
+                </svg>
+                <span>لغو سفارش</span>
+            </button>
+            {% endif %}
+
+            <a href="{% url 'dashboard:customer:order' %}" class="btn-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+                <span>بازگشت به سفارش‌ها</span>
+            </a>
+        </div>
     </header>
 
     <section class="card order-summary-bar">
@@ -56,9 +71,18 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                         stroke-linejoin="round">
                         <circle cx="12" cy="12" r="9" />
-                        <path d="m9 9 6 6m0-6-6 6" />
+                        <path d="M12 6v6l4 2" />
+                        <path d="M12 12h.01" />
                     </svg>
                     {% elif order.status == 4 %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z" />
+                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                        <path d="M12 12v4" />
+                        <path d="M10 14h4" />
+                    </svg>
+                    {% elif order.status == 5 %}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z" />
@@ -69,7 +93,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
                         stroke-linejoin="round">
                         <circle cx="12" cy="12" r="9" />
-                        <path d="M12 8v4m0 4h.01" />
+                        <path d="m9 9 6 6m0-6-6 6" />
                     </svg>
                     {% endif %}
                 </span>
@@ -118,57 +142,28 @@
                                 </svg>
                             </div>
                             {% endif %}
-                        <div class="product-meta">
+                            <div class="product-meta">
+                                <strong class="product-name">{{ item.product.title }}</strong>
 
-
-                            <strong class="product-name">
-                                {{ item.product.title }}
-                            </strong>
-
-                            {% if item.variant %}
-
+                                {% if item.variant %}
                                 <div class="order-item-variant">
-
                                     {% if item.variant.variant_type == "color" or item.variant.variant_type == "pars_color" %}
-
-                                        <span class="order-variant-type">
-                                            {{ item.variant.get_variant_type_display }}
-                                        </span>
-
-                                        <span class="order-variant-value">
-
-                                            <span
-                                                class="order-color-dot"
-                                                style="background-color: #{{ item.variant.get_hex_color }};"
-                                                title="{{ item.variant.get_color_display_name }}">
-                                            </span>
-
-                                            <span class="order-variant-code">
-                                                {{ item.variant.color_code }}
-                                            </span>
-
-                                        </span>
-
+                                    <span class="order-variant-type">{{ item.variant.get_variant_type_display }}</span>
+                                    <span class="order-variant-value">
+                                        <span class="order-color-dot"
+                                            style="background-color: #{{ item.variant.get_hex_color }};"
+                                            title="{{ item.variant.get_color_display_name }}"></span>
+                                        <span class="order-variant-code">{{ item.variant.color_code }}</span>
+                                    </span>
                                     {% elif item.variant.variant_type == "number" %}
-
-                                        <span class="order-variant-type">
-                                            {{ item.variant.get_variant_type_display }}
-                                        </span>
-
-                                        <span class="order-variant-value">
-
-                                            <span class="order-number-dot">
-                                                {{ item.variant.number_code }}
-                                            </span>
-
-                                        </span>
-
+                                    <span class="order-variant-type">{{ item.variant.get_variant_type_display }}</span>
+                                    <span class="order-variant-value">
+                                        <span class="order-number-dot">{{ item.variant.number_code }}</span>
+                                    </span>
                                     {% endif %}
-
                                 </div>
-
-                            {% endif %}
-                        </div>
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="table-value" data-label="قیمت پایه">{{ item.original_price|intcomma }}
                             <small>تومان</small>
@@ -279,3 +274,40 @@
     </div>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("click", function (e) {
+        const btn = e.target.closest(".cancel-order-btn");
+        if (!btn) return;
+
+        const confirmCancel = confirm("آیا مایل به لغو سفارش هستید؟");
+        if (!confirmCancel) return;
+
+        fetch(btn.dataset.url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                Toastify({
+                    text: data.message,
+                    duration: 5000,
+                    gravity: "top",
+                    position: "right"
+                }).showToast();
+
+                if (data.success) {
+                    setTimeout(() => {
+                        location.reload();
+                    }, 5000);
+                }
+            })
+            .catch(err => {
+                console.error("خطا در لغو سفارش:", err);
+            });
+    });
+</script>
+{% endblock extra_js %}
