@@ -5,80 +5,143 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+SUCCESS_CODES = (100, 101)
 
-class ZarinPalSandbox:
-    _payment_request_url = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
-    _payment_verify_url = "https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
-    _payment_page_url = "https://sandbox.zarinpal.com/pg/StartPay/"
+
+class ZarinPalClient:
     _timeout = 10
 
-    def __init__(self, merchant_id=None, callback_url=None):
-        self.merchant_id = merchant_id or settings.MERCHANT_ID
+    def __init__(self, merchant_id=None, callback_url=None, sandbox=None, currency=None):
+        self.merchant_id = merchant_id or settings.ZARINPAL_MERCHANT_ID
         self.callback_url = callback_url
+        self.sandbox = (
+            getattr(settings, "ZARINPAL_SANDBOX", False) if sandbox is None else sandbox
+        )
+        self.currency = currency or getattr(settings, "ZARINPAL_CURRENCY", "IRR")
 
-    def payment_request(self, amount, description="پرداختی کاربر"):
+        base = "https://sandbox.zarinpal.com" if self.sandbox else "https://payment.zarinpal.com"
+        self.request_url = f"{base}/pg/v4/payment/request.json"
+        self.verify_url = f"{base}/pg/v4/payment/verify.json"
+        self.start_pay_url = f"{base}/pg/StartPay/"
+
+    def payment_request(
+        self,
+        amount,
+        description="پرداخت سفارش",
+        *,
+        mobile=None,
+        email=None,
+        order_id=None,
+    ):
         if not self.callback_url:
             raise ValueError(
-                "callback_url مشخص نشده. موقع ساخت ZarinPalSandbox باید callback_url پاس بدی."
+                "callback_url مشخص نشده. موقع ساخت ZarinPalClient باید callback_url پاس بدی."
             )
 
         payload = {
-            "MerchantID": self.merchant_id,
-            "Amount": str(amount),
-            "CallbackURL": self.callback_url,
-            "Description": description,
+            "merchant_id": self.merchant_id,
+            "amount": int(amount),
+            "currency": self.currency,
+            "description": description,
+            "callback_url": self.callback_url,
         }
-        headers = {"Content-Type": "application/json"}
 
-        try:
-            response = requests.post(
-                self._payment_request_url,
-                headers=headers,
-                json=payload,
-                timeout=self._timeout,
-            )
-            response.raise_for_status()
-        except requests.exceptions.Timeout:
-            logger.error("ZarinPal payment_request timeout")
-            return {"Status": 0, "error": "timeout"}
-        except requests.exceptions.RequestException as e:
-            logger.error("ZarinPal payment_request failed: %s", e)
-            return {"Status": 0, "error": "connection_error"}
+        metadata = {}
+        if mobile:
+            metadata["mobile"] = str(mobile)
+        if email:
+            metadata["email"] = str(email)
+        if order_id is not None:
+            metadata["order_id"] = str(order_id)
+        if metadata:
+            payload["metadata"] = metadata
 
-        try:
-            return response.json()
-        except ValueError:
-            logger.error("ZarinPal payment_request returned non-JSON response")
-            return {"Status": 0, "error": "invalid_response"}
+        return self._post(self.request_url, payload, label="payment_request")
 
     def payment_verify(self, amount, authority):
         payload = {
-            "MerchantID": self.merchant_id,
-            "Amount": str(amount),
-            "Authority": authority,
+            "merchant_id": self.merchant_id,
+            "amount": int(amount),
+            "authority": authority,
         }
-        headers = {"Content-Type": "application/json"}
+        return self._post(self.verify_url, payload, label="payment_verify")
+
+
+    def generate_payment_url(self, authority):
+        return self.start_pay_url + authority
+
+    def _post(self, url, payload, label=""):
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
         try:
             response = requests.post(
-                self._payment_verify_url,
-                headers=headers,
-                json=payload,
-                timeout=self._timeout,
+                url, json=payload, headers=headers, timeout=self._timeout
             )
-            response.raise_for_status()
         except requests.exceptions.Timeout:
-            logger.error("ZarinPal payment_verify timeout, authority=%s", authority)
-            return {"Status": 0, "error": "timeout"}
+            logger.error("ZarinPal %s timeout", label)
+            return self._failure("timeout")
         except requests.exceptions.RequestException as e:
-            logger.error("ZarinPal payment_verify failed: %s", e)
-            return {"Status": 0, "error": "connection_error"}
+            logger.error("ZarinPal %s failed: %s", label, e)
+            return self._failure("connection_error")
 
         try:
-            return response.json()
+            body = response.json()
         except ValueError:
-            logger.error("ZarinPal payment_verify returned non-JSON response")
-            return {"Status": 0, "error": "invalid_response"}
+            logger.error(
+                "ZarinPal %s returned non-JSON response (http=%s)",
+                label,
+                response.status_code,
+            )
+            return self._failure("invalid_response")
 
-    def generate_payment_url(self, authority):
-        return self._payment_page_url + authority
+        result = self._normalize(body)
+        if not result["ok"]:
+            logger.warning(
+                "ZarinPal %s unsuccessful: code=%s message=%s",
+                label,
+                result["code"],
+                result["message"],
+            )
+        return result
+
+    @staticmethod
+    def _normalize(body):
+        data = body.get("data")
+        if not isinstance(data, dict):
+            data = {}
+
+        errors = body.get("errors")
+        if isinstance(errors, list):
+            errors = errors[0] if errors else {}
+        if not isinstance(errors, dict):
+            errors = {}
+
+        code = data.get("code", errors.get("code"))
+
+        return {
+            "ok": code in SUCCESS_CODES,
+            "code": code,
+            "message": data.get("message") or errors.get("message"),
+            "authority": data.get("authority"),
+            "ref_id": data.get("ref_id"),
+            "card_pan": data.get("card_pan"),
+            "card_hash": data.get("card_hash"),
+            "fee": data.get("fee"),
+            "fee_type": data.get("fee_type"),
+            "raw": body,
+        }
+
+    @staticmethod
+    def _failure(reason):
+        return {
+            "ok": False,
+            "code": None,
+            "message": reason,
+            "authority": None,
+            "ref_id": None,
+            "card_pan": None,
+            "card_hash": None,
+            "fee": None,
+            "fee_type": None,
+            "raw": {"error": reason},
+        }

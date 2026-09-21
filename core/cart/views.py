@@ -2,6 +2,7 @@ from django.views.generic import View
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 import json
+from shop.models import ProductModel, ProductStatusType
 
 from .utils import get_cart
 
@@ -20,19 +21,39 @@ class SessionCartSummary(TemplateView):
 class SessionAddProduct(View):
 
     def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            product_id = int(data.get("product_id"))
+            variant_id = data.get("variant_id")
+            variant_id = int(variant_id) if variant_id else None
+        except (ValueError, TypeError, AttributeError):
+            return JsonResponse({"message": "درخواست نامعتبر است"}, status=400)
+
+        product = ProductModel.objects.filter(
+            pk=product_id, status=ProductStatusType.publish.value
+        ).first()
+        if product is None:
+            return JsonResponse({"message": "محصول پیدا نشد"}, status=404)
+
+        if product.has_variants():
+            # محصولِ دارای وریانت باید یکی از وریانت‌های منتشرشده‌ی خودش را داشته باشد
+            is_valid = (
+                variant_id is not None
+                and product.varients.filter(
+                    pk=variant_id, status=ProductStatusType.publish.value
+                ).exists()
+            )
+            if not is_valid:
+                return JsonResponse(
+                    {"message": "این رنگ یا شماره در دسترس نیست"}, status=400
+                )
+        elif variant_id is not None:
+            # محصول بدون وریانت نباید وریانت داشته باشد
+            return JsonResponse({"message": "درخواست نامعتبر است"}, status=400)
+
         cart = get_cart(request)
-        data = json.loads(request.body)
-        product_id = data.get('product_id')
-
-        variant_id = data.get('variant_id')
-        variant_id = int(variant_id) if variant_id else None
-
-        if product_id:
-            cart.add_product(product_id, variant_id)
-        return JsonResponse({
-            'total_quantity': cart.get_total_quantity(),
-        })
-
+        cart.add_product(product_id, variant_id)
+        return JsonResponse({"total_quantity": cart.get_total_quantity()})
     
 class UpdateCartQuantity(View):
 

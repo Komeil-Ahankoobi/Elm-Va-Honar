@@ -117,15 +117,29 @@ function updateStockDisplay(el) {
 
     const stock = Number(el.dataset.stock);
     const inStock = stock > 0;
+    // موجودیِ همون وریانت انتخاب‌شده کمه یا نه (بین ۱ تا ۵ عدد)
+    const isLowStock = inStock && stock <= 5;
 
     stockStatusEl.classList.remove("stock-status-pending");
     stockStatusEl.classList.toggle("stock-status-out", !inStock);
+    stockStatusEl.classList.toggle("stock-status-low", isLowStock);
 
     if (stockIconEl) {
         stockIconEl.classList.remove("fa-check", "fa-xmark", "fa-circle-info");
         stockIconEl.classList.add(inStock ? "fa-check" : "fa-xmark");
     }
-    if (stockTextEl) stockTextEl.textContent = inStock ? "موجود در انبار" : "ناموجود";
+
+    // وقتی موجودیِ وریانت انتخاب‌شده کمه، تعداد رو مستقیم همون‌جا
+    // کنار «موجود در انبار» می‌نویسیم تا واضح باشه
+    if (stockTextEl) {
+        if (!inStock) {
+            stockTextEl.textContent = "ناموجود";
+        } else if (isLowStock) {
+            stockTextEl.textContent = `موجود در انبار (فقط ${stock} عدد باقی مانده)`;
+        } else {
+            stockTextEl.textContent = "موجود در انبار";
+        }
+    }
 
     // دکمه افزودن به سبد هم باید موجودی همون وریانت رو بشناسه، نه موجودی کلی محصول
     if (addToCartBtn) {

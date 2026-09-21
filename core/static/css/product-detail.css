@@ -1381,3 +1381,69 @@ footer {
     color: #dc2626;
     text-decoration: line-through;
 }
+
+/* =========================================================
+   نمایش موجودی کم (Low Stock) در صفحه‌ی جزئیات محصول
+   محصول عادی: عدد موجودی مستقیماً توسط جنگو رندر می‌شه.
+   محصول واریانت‌دار: عدد موجودی با شاپ.جی‌اس و بعد از انتخاب
+   رنگ/سایز، داخل همون متن «موجود در انبار» نوشته می‌شه.
+   ========================================================= */
+
+/* ردیف وضعیت موجودی: آیکون+متن یک طرف، بج موجودی کم طرف دیگه */
+.stock-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* آیکون + متنِ «موجود در انبار / ناموجود» با هم یک گروه هستن */
+.stock-status-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* بج «فقط N عدد باقی مانده» که فقط برای محصولات بدون واریانت
+   استفاده می‌شه (وقتی ۱ تا ۵ عدد موجودی باشه) */
+.low-stock-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #fff3ec, #ffe3d6);
+    border: 1px solid #ffb199;
+    color: #c2410c;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.6;
+    animation: low-stock-pulse 1.8s ease-in-out infinite;
+}
+
+.low-stock-badge i {
+    color: #ea580c;
+    font-size: 11px;
+}
+
+.low-stock-badge b {
+    font-weight: 800;
+    margin: 0 1px;
+}
+
+/* وقتی محصول (یا وریانتِ انتخاب‌شده) کم‌موجود باشه، متن «موجود در
+   انبار» رنگ هشدار می‌گیره تا خودش هم به چشم بیاد */
+.stock-status.stock-status-low #pd-stock-text {
+    color: #c2410c;
+    font-weight: 700;
+}
+
+@keyframes low-stock-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.28); }
+    50% { box-shadow: 0 0 0 6px rgba(234, 88, 12, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .low-stock-badge { animation: none; }
+}

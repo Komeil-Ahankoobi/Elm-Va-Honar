@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import OrderModel, OrderItemsModel, CoponModel, UserAddressModel
 from django import forms
-
+from .widgets import JalaliDateTimeField
 
 @admin.register(OrderModel)
 class OrderModelAdmin(admin.ModelAdmin):
@@ -10,6 +10,15 @@ class OrderModelAdmin(admin.ModelAdmin):
         "get_user_fullname",
         "total_price",
         "copon",
+        "status",
+        "created_date",
+    )
+
+    # ادمین می‌تواند وضعیت سفارش را مستقیماً از لیست سفارش‌ها تغییر دهد.
+    list_editable = ("status",)
+
+    # فیلتر سریع سفارش‌ها بر اساس وضعیت
+    list_filter = (
         "status",
         "created_date",
     )
@@ -40,6 +49,12 @@ class OrderItemsModelAdmin(admin.ModelAdmin):
 
 
 class CoponModelAdminForm(forms.ModelForm):
+    expiration_date = JalaliDateTimeField(
+        required=False,
+        label="تاریخ انقضا (شمسی)",
+        help_text="فرمت: ۱۴۰۳/۰۶/۲۷ ۱۴:۳۰"
+    )
+
     class Meta:
         model = CoponModel
         fields = "__all__"

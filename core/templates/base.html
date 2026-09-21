@@ -404,7 +404,7 @@
         })();
     </script>
 
-    {% include 'messages.html' %}
+    {% block messages_toast %}{% include 'messages.html' %}{% endblock messages_toast %}
     {% block extra_js %}{% endblock extra_js %}
     {% block extra_js_no_compress %}{% endblock extra_js_no_compress %}
     <script type="text/javascript">

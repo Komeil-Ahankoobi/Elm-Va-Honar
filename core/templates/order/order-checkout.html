@@ -14,6 +14,54 @@
         <p>اطلاعات سفارش خود را تکمیل و پرداخت را انجام دهید.</p>
     </div>
 
+    <!-- Django Messages (پیام‌های warning/error/info مثل «پرداخت قبلی در حال انجام است») -->
+    {% if messages %}
+    <div class="checkout-messages" style="margin-bottom: 20px">
+        {% for message in messages %}
+        <div
+            class="checkout-alert checkout-alert-{{ message.tags }}"
+            style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 14px 18px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                font-size: 14px;
+                line-height: 1.8;
+                {% if message.tags == 'error' %}
+                    background: #fdecea;
+                    color: #b3261e;
+                    border: 1px solid #f5c6cb;
+                {% elif message.tags == 'warning' %}
+                    background: #fdecea;
+                    color: #b3261e;
+                    border: 1px solid #f5c6cb;
+                {% elif message.tags == 'success' %}
+                    background: #e8f5e9;
+                    color: #1e7e34;
+                    border: 1px solid #c3e6cb;
+                {% else %}
+                    background: #e8f0fe;
+                    color: #1a4d8f;
+                    border: 1px solid #c6dafc;
+                {% endif %}
+            ">
+            {% if message.tags == 'error' %}
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {% elif message.tags == 'warning' %}
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            {% elif message.tags == 'success' %}
+            <i class="fa-solid fa-circle-check"></i>
+            {% else %}
+            <i class="fa-solid fa-circle-info"></i>
+            {% endif %}
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- Checkout Grid Layout -->
     <div class="checkout-grid">
         <!-- LEFT COLUMN: ORDER SUMMARY & PAYMENT -->
@@ -27,7 +75,7 @@
                 </div>
                 <div class="summary-row">
                     <span>هزینه ارسال</span>
-                    <span class="value total-tax">{{ total_tax|intcomma }} تومان</span>
+                    <span class="value total-tax">{{ post_price|intcomma }} تومان</span>
                 </div>
 
                 <div class="summary-divider"></div>
@@ -131,6 +179,14 @@
         </div>
     </div>
 </div>
-{% endblock content %} {% block extra_js %}
+{% endblock content %}
+
+{# فقط تو همین صفحه toastify رو برای پیام‌ها غیرفعال می‌کنیم، چون پیام‌ها
+   همون بالا (بعد از عنوان صفحه) با یه باکس رنگی جدا نشون داده می‌شن.
+   بقیه‌ی صفحات چون این بلوک رو override نمی‌کنن، toast طبق روال قبل کار
+   می‌کنه. #}
+{% block messages_toast %}{% endblock messages_toast %}
+
+{% block extra_js %}
 <script src="{% static 'js/order-checkout.js' %}"></script>
 {% endblock extra_js %}

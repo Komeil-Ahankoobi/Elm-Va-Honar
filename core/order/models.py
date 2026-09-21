@@ -12,12 +12,17 @@ from shop.models import (
 )
 
 
-# Create your models here.
+class InsufficientStockError(Exception):
+    """موجودی یکی از کالاهای سفارش، در لحظه‌ی تأیید پرداخت کافی نیست."""
+
+
 class OrderStatusType(models.IntegerChoices):
-    pending = 1, "در انتظار پرداخت"
-    succes = 2, "پرداخت شده"
-    faild = 3, "لغو شده"
-    complete = 4, "ارسال شده"
+    pending = 1, "در حال پرداخت"
+    paid = 2, "پرداخت شده"
+    processing = 3, "پردازش شده"
+    preparing = 4, "در حال آماده‌سازی"
+    shipped = 5, "تحویل پست مبدا داده شد"
+    cancelled = 6, "لغو شده"
 
 
 class UserAddressModel(models.Model):
@@ -86,14 +91,56 @@ class OrderModel(models.Model):
         choices=OrderStatusType.choices, default=OrderStatusType.pending.value
     )
 
+    stock_reserved = models.BooleanField(default=False, editable=False)
+
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True)
 
+
     class Meta:
         ordering = ["-created_date"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user"],
+                condition=models.Q(status=OrderStatusType.pending.value),
+                name="one_pending_order_per_user",
+            )
+        ]
+
+    PENDING_TIMEOUT_MINUTES = 15 
+
+
+    @classmethod
+    def expire_stale_pending(cls, user=None):
+       
+        cutoff = timezone.now() - timezone.timedelta(minutes=cls.PENDING_TIMEOUT_MINUTES)
+        qs = cls.objects.filter(status=OrderStatusType.pending.value, created_date__lt=cutoff)
+        if user is not None:
+            qs = qs.filter(user=user)
+
+        for order in qs:
+            order.cancel_payment()
+
+    @classmethod
+    def get_active_pending_order(cls, user):
+        """
+        سفارشِ در انتظار پرداختِ فعالِ (هنوز منقضی‌نشده‌ی) این کاربر رو
+        برمی‌گردونه. به‌خاطر UniqueConstraint بالا، حداکثر یک سفارش pending
+        در دیتابیس برای هر کاربر وجود داره؛ اینجا علاوه‌بر این چک می‌کنیم
+        که منقضی هم نشده باشه (حتی اگه expire_stale_pending هنوز روی این
+        سفارش اجرا نشده باشه، مثلاً بین دو تا cron run).
+        """
+        order = cls.objects.filter(
+            user=user, status=OrderStatusType.pending.value
+        ).first()
+        if order and not order.is_pending_expired:
+            return order
+        return None
+
+
 
     def __str__(self):
-        return f"{self.user.username} - {self.id}"
+        return f"{self.user.user_profile.get_fullname()} - {self.id}"
 
     def get_status(self):
         return {
@@ -109,24 +156,78 @@ class OrderModel(models.Model):
         result = self.items.aggregate(total=Sum("quantity"))
         return result["total"] or 0
 
-    def get_tax_amount(self):
-        return round(self.total_price * Decimal("10") / Decimal("100"))
+    def get_post_price(self):
+        return PostPrice.load().price
 
     def get_total_price(self):
-        return self.total_price + self.get_tax_amount()
+        # total_price از قبل (موقع ثبت سفارش در apply_copon_pricing) شامل
+        # هزینه‌ی پست هست، پس اینجا دیگه دوباره اضافه نمی‌کنیم.
+        return self.total_price
 
     @property
     def has_copon(self):
         return bool(self.copon_code)
 
+    @property
+    def expires_at(self):
+        return self.created_date + timezone.timedelta(
+            minutes=self.PENDING_TIMEOUT_MINUTES
+        )
+
+    @property
+    def seconds_remaining(self):
+        """
+        چند ثانیه تا منقضی‌شدنِ این سفارشِ در انتظار پرداخت مونده.
+        اگر صفر برگردونه یعنی زمانش تموم شده.
+        """
+        remaining = (self.expires_at - timezone.now()).total_seconds()
+        return max(int(remaining), 0)
+
+    @property
+    def is_pending_expired(self):
+        return (
+            self.status == OrderStatusType.pending.value
+            and timezone.now() >= self.expires_at
+        )
+
+    @property
+    def is_successful(self):
+        """سفارش‌هایی که پرداخت‌شون موفقیت‌آمیز بوده (از مرحله پرداخت به بعد)"""
+        return self.status in {
+            OrderStatusType.paid.value,
+            OrderStatusType.processing.value,
+            OrderStatusType.preparing.value,
+            OrderStatusType.shipped.value,
+        }
+
+    @property
+    def is_cancellable(self):
+        """فقط وقتی هنوز ارسال نهایی نشده باشه"""
+        return self.status in {
+            OrderStatusType.pending.value,
+            OrderStatusType.paid.value,
+            OrderStatusType.processing.value,
+            OrderStatusType.preparing.value,
+        }
+
     def confirm_payment(self):
-        if self.is_successful:
-            return
-
         with transaction.atomic():
-            self._decrease_stock()
+            # قفل روی خودِ سفارش و خواندن دوباره‌ی وضعیتش: اگر یک تأییدِ دیگر
+            # همین الان پرداخت را ثبت کرده باشد، موجودی دوباره کم نمی‌شود.
+            self.status = (
+                type(self)
+                .objects.select_for_update()
+                .values_list("status", flat=True)
+                .get(pk=self.pk)
+            )
+            if self.is_successful:
+                return
 
-            self.status = OrderStatusType.succes.value
+            # اگر موجودی کافی نباشد InsufficientStockError می‌دهد و همه‌ی
+            # تغییرات همین بلوک برگردانده می‌شود.
+            self.reserve_stock()
+
+            self.status = OrderStatusType.paid.value
             self.save(update_fields=["status", "updated_date"])
 
             if self.copon:
@@ -136,34 +237,109 @@ class OrderModel(models.Model):
 
             cart = CartModel.objects.filter(user=self.user).first()
             if cart:
-                cart.cart_items.all().delete()
+                # فقط کالاهای همین سفارش از سبد پاک بشن، نه چیزی که بعداً اضافه شده
+                for item in self.items.all():
+                    cart.cart_items.filter(
+                        product_id=item.product_id, variant_id=item.variant_id
+                    ).delete()
 
     def cancel_payment(self):
-        if self.is_successful:
+        # سفارش را حذف نمی‌کنیم؛ سابقه‌ی سفارش باید برای کاربر و ادمین باقی بماند.
+        # اگر قبلاً ارسال شده، دیگر اجازه‌ی لغو نمی‌دهیم.
+        if self.status == OrderStatusType.shipped.value:
             return
 
-        if not self.payments.exists():
-            self.delete()
-            return
-
-        self.status = OrderStatusType.faild.value
+        self.status = OrderStatusType.cancelled.value
         self.save(update_fields=["status", "updated_date"])
 
-    def _decrease_stock(self):
+    def _stock_needs(self):
+        """
+        مقدارِ موردنیازِ هر ردیفِ موجودی (محصول یا وریانت) را
+        به شکل لیستِ مرتب‌شده برمی‌گرداند. ترتیب همیشه ثابت است تا دو سفارش
+        هم‌زمان با کالاهای مشترک، همدیگر را قفل نکنند.
+        """
+        needed = {}
         for item in self.items.select_related("product", "variant"):
             stock_obj = item.variant if item.variant else item.product
-            model_class = type(stock_obj)
+            key = (type(stock_obj), stock_obj.pk)
+            needed[key] = needed.get(key, 0) + item.quantity
+        return sorted(needed.items(), key=lambda kv: (kv[0][0].__name__, kv[0][1]))
 
-            locked_obj = model_class.objects.select_for_update().get(pk=stock_obj.pk)
-            current_stock = locked_obj.stock or 0
-            locked_obj.stock = max(current_stock - item.quantity, 0)
+    def _decrease_stock(self):
+        for (model_class, pk), quantity in self._stock_needs():
+            locked_obj = model_class.objects.select_for_update().get(pk=pk)
+
+            # موجودیِ خالی یعنی برای این کالا پیگیری نمی‌شود (مثل صفحه‌ی ثبت سفارش)
+            if locked_obj.stock is None:
+                continue
+
+            if locked_obj.stock < quantity:
+                raise InsufficientStockError(str(locked_obj))
+
+            locked_obj.stock -= quantity
             locked_obj.save(update_fields=["stock"])
             locked_obj.sync_visibility_from_stock()
 
-    @property
-    def is_successful(self):
-        return self.status == OrderStatusType.succes.value
+    def _increase_stock(self):
+        for (model_class, pk), quantity in self._stock_needs():
+            locked_obj = model_class.objects.select_for_update().get(pk=pk)
 
+            if locked_obj.stock is None:
+                continue
+
+            locked_obj.stock += quantity
+            locked_obj.save(update_fields=["stock"])
+            locked_obj.sync_visibility_from_stock()
+
+    def reserve_stock(self):
+        """موجودیِ کالاهای این سفارش را از انبار کم می‌کند؛ فقط یک بار."""
+        with transaction.atomic():
+            # وضعیتِ واقعیِ فیلد را از دیتابیس و زیر قفل می‌خوانیم، نه از حافظه
+            reserved = (
+                type(self)
+                .objects.select_for_update()
+                .values_list("stock_reserved", flat=True)
+                .get(pk=self.pk)
+            )
+            if reserved:
+                self.stock_reserved = True
+                return
+
+            # اگر موجودی کافی نباشد InsufficientStockError می‌دهد و همه‌ی
+            # کم‌شدن‌های این بلوک برگردانده می‌شود.
+            self._decrease_stock()
+
+            type(self).objects.filter(pk=self.pk).update(stock_reserved=True)
+            self.stock_reserved = True
+
+    def release_stock(self):
+        """موجودیِ رزروشده را به انبار برمی‌گرداند؛ فقط یک بار."""
+        with transaction.atomic():
+            reserved = (
+                type(self)
+                .objects.select_for_update()
+                .values_list("stock_reserved", flat=True)
+                .get(pk=self.pk)
+            )
+            if not reserved:
+                self.stock_reserved = False
+                return
+
+            self._increase_stock()
+
+            type(self).objects.filter(pk=self.pk).update(stock_reserved=False)
+            self.stock_reserved = False
+
+    def save(self, *args, **kwargs):
+        # هر جا وضعیت سفارش «لغو شده» ذخیره شود (انقضا، انصراف از درگاه،
+        # لغو مشتری در داشبورد، تغییر دستی در ادمین)، موجودیِ رزروشده یک بار
+        # به انبار برمی‌گردد. اگر رزرو نبوده باشد هیچ اتفاقی نمی‌افتد.
+        if self.pk and self.status == OrderStatusType.cancelled.value:
+            with transaction.atomic():
+                self.release_stock()
+                super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
 class OrderItemsModel(models.Model):
     order = models.ForeignKey(
@@ -212,3 +388,20 @@ class OrderItemsModel(models.Model):
     def __str__(self):
         variant_part = self.variant.variant_type if self.variant else "بدون وریانت"
         return f"{self.product.title} - {variant_part} - {self.order.id}"
+
+
+
+class PostPrice(models.Model):
+    price = models.PositiveIntegerField(default=190000, verbose_name="قیمت پست (تومان)")
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+    def __str__(self):
+        return f"{self.price} تومان"    
