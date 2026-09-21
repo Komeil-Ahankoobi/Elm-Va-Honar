@@ -239,8 +239,6 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-ZARINPAL_MERCHANT_ID = config(
-    "ZARINPAL_MERCHANT_ID", default="9f57ea6f-c224-403d-ae3f-f5e18dedb48a"
-)
-ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=True)
+ZARINPAL_MERCHANT_ID = config("ZARINPAL_MERCHANT_ID", default="")
+ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=False)
 ZARINPAL_CURRENCY = config("ZARINPAL_CURRENCY", default="IRT")

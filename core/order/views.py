@@ -4,7 +4,7 @@ from django.contrib import messages
 from decimal import Decimal
 from django.db import transaction
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db import IntegrityError
@@ -17,36 +17,60 @@ from order.models import (
     OrderItemsModel,
     CoponModel,
     PostPrice,
+    InsufficientStockError
 )
 from .forms import OrderCheckoutForm
 from cart.models import CartModel
+from shop.models import ProductStatusType
 
 
 class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormView):
     template_name = "order/order-checkout.html"
-    form_class = OrderCheckoutForm
+    form_class = OrderCheckoutForm  
 
     def form_valid(self, form):
         user = self.request.user
 
-        OrderModel.expire_stale_pending(user=user)
+        # اول سفارش‌های pending قدیمیِ منقضی‌شده‌ی همین کاربر رو پاک‌سازی
+        # می‌کنیم (شاید همین الان زمانش تموم شده و بشه ادامه داد).
+        OrderModel.expire_stale_pending()
 
-       
+        # اگه هنوز یه سفارش pending فعال (منقضی‌نشده) داره، اجازه نمی‌دیم
+        # سفارش جدید بسازه؛ باید صبر کنه تا همون تموم بشه یا زمانش سر بیاد.
+        # عمداً اینجا دیگه ریدایرکتش نمی‌کنیم به همون سفارشِ قبلی، چون
+        # ممکنه کاربر توی همین فاصله سبدش رو عوض کرده باشه (تعداد/محصول
+        # جدید اضافه کرده باشه) و سفارش قدیمی دیگه با سبد فعلی‌ش هم‌خوانی
+        # نداشته باشه.
         active_pending_order = OrderModel.get_active_pending_order(user)
         if active_pending_order:
-            messages.info(
+            response = self.redirect_if_double_submit(active_pending_order)
+            if response:
+                return response
+            remaining_minutes = (active_pending_order.seconds_remaining // 60) + 1
+            messages.warning(
                 self.request,
-                "یک سفارش پرداخت‌نشده از قبل برای شما ثبت شده است. در حال انتقال به درگاه پرداخت برای همان سفارش هستید.",
+                f"شما یک پرداخت در حال انجام دارید. لطفاً  {remaining_minutes} "
+                "دقیقه دیگر صبر کنید ، سپس دوباره تلاش کنید.",
             )
-            return redirect(
-                reverse("payment:request", kwargs={"order_id": active_pending_order.id})
-            )
+            return self.render_to_response(self.get_context_data(form=form))
 
         cleaned_data = form.cleaned_data
         address = cleaned_data["address_id"]
         copon = cleaned_data["copon"]
 
-        cart = CartModel.objects.get(user=user)
+        cart = CartModel.objects.filter(user=user).first()
+        if cart is None or not cart.cart_items.exists():
+            messages.error(self.request, "سبد خرید شما خالی است.")
+            return redirect(reverse_lazy("order:order-failed"))
+
+        invalid_items = self.find_invalid_items(cart)
+        if invalid_items:
+            item_names = "، ".join(item.product.title for item in invalid_items)
+            messages.error(
+                self.request,
+                f"این محصولات دیگر قابل خرید نیستند، لطفاً از سبد خرید حذفشان کنید: {item_names}",
+            )
+            return redirect(reverse_lazy("order:order-failed"))
 
         insufficient_items = self.check_stock_availability(cart)
         if insufficient_items:
@@ -56,26 +80,63 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             )
             return redirect(reverse_lazy("order:order-failed"))
 
-        with transaction.atomic():
-            try:
-                order = self.create_order(address)
-            except IntegrityError:
-                # race condition: یه request موازی همین الان سفارش pending ساخته
-                active_pending_order = OrderModel.get_active_pending_order(user)
-                if active_pending_order:
-                    return redirect(
-                        reverse("payment:request", kwargs={"order_id": active_pending_order.id})
+        try:
+            with transaction.atomic():
+                try:
+                    # یک نقطه‌ی برگشتِ جداگانه: اگر سفارشِ در حال پرداختِ دیگری همین الان
+                    # ساخته شده باشد، فقط همین بخش برگردانده می‌شود و تراکنشِ اصلی سالم می‌ماند.
+                    with transaction.atomic():
+                        order = self.create_order(address)
+                except IntegrityError:
+                    response = self.redirect_if_double_submit(
+                        OrderModel.get_active_pending_order(user)
                     )
-                raise
+                    if response:
+                        return response
+                    # race condition: یه request موازی همین الان سفارش pending
+                    # ساخته (مثلاً دو تب هم‌زمان). به‌جای ساخت سفارش دوم، همون
+                    # پیام «صبر کن» رو نشون می‌دیم، نه ریدایرکت به پرداخت.
+                    messages.warning(
+                        self.request,
+                        "شما یک پرداخت در حال انجام دارید. لطفاً کمی صبر کنید و دوباره تلاش کنید.",
+                    )
+                    return self.render_to_response(self.get_context_data(form=form))
 
-            self.create_order_items(cart, order)
-            subtotal_price = order.calculate_total_price()
-            self.apply_copon_pricing(copon, subtotal_price, order)
-            order.save()
+                self.create_order_items(cart, order)
+                subtotal_price = order.calculate_total_price()
+                self.apply_copon_pricing(copon, subtotal_price, order)
+                order.save()
+
+                # موجودی همین‌جا برای این سفارش رزرو (از انبار کم) می‌شود.
+                # اگر کالایی همین الان تمام شده باشد، کل این بلوک (سفارش و آیتم‌ها)
+                # برگردانده می‌شود و کاربر اصلاً به درگاه نمی‌رود.
+                order.reserve_stock()
+        except InsufficientStockError as error:
+            messages.error(
+                self.request, f"موجودی کافی برای این محصول نیست: {error}"
+            )
+            return redirect(reverse_lazy("order:order-failed"))
 
         return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
 
+
+    def redirect_if_double_submit(self, order):
+        """
+        اگر سفارشِ در حال پرداخت همین چند ثانیه‌ی پیش ساخته شده، یعنی کاربر
+        دو بار دکمه را زده؛ به‌جای پیام «صبر کنید» به همان سفارش ادامه می‌دهیم.
+        """
+        if order is None:
+            return None
+        age = (timezone.now() - order.created_date).total_seconds()
+        if age < 10:
+            return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
+        return None
+    
+
     def form_invalid(self, form):
+        for errors in form.errors.values():
+            for error in errors:
+                messages.error(self.request, error)
         return redirect(reverse_lazy("order:order-failed"))
 
     def check_stock_availability(self, cart):
@@ -89,6 +150,25 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             if item.quantity > available_stock:
                 insufficient_items.append(item)
         return insufficient_items
+
+
+    def find_invalid_items(self, cart):
+        """آیتم‌هایی از سبد که با محصول یا وریانتِ واقعی هم‌خوانی ندارند."""
+        invalid_items = []
+        for item in cart.cart_items.select_related("product", "variant"):
+            product = item.product
+            variant = item.variant
+            if product.status != ProductStatusType.publish.value:
+                invalid_items.append(item)
+            elif variant is not None and (
+                variant.product_id != product.pk
+                or variant.status != ProductStatusType.publish.value
+            ):
+                invalid_items.append(item)
+            elif variant is None and product.has_variants():
+                invalid_items.append(item)
+        return invalid_items
+
 
     def apply_copon_pricing(self, copon, subtotal_price, order):
         order.subtotal_price = subtotal_price
@@ -151,10 +231,18 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 class OrderSuccessView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
     template_name = "order/success.html"
 
+    def get(self, request, *args, **kwargs):
+        order = get_object_or_404(
+            OrderModel, pk=kwargs["order_id"], user=request.user
+        )
+
+        if not order.is_successful:
+            return redirect(reverse_lazy("order:order-failed"))
+
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart = get_cart(self.request)
-        context["cart_items"] = cart.get_cart_items()
         context["order_id"] = self.kwargs["order_id"]
         return context
 

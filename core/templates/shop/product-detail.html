@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/product-detail.css' %}" />
+<link rel="stylesheet" href="{% static 'css/product-detail-stock.css' %}" />
 {% endblock extra_css %} {% block title %} {{ object.get_meta_title }} {% endblock title %} {% block meta_description %}
 {{ object.get_meta_description }} {% endblock meta_description %} {% block content %}
 <div class="container">
@@ -61,13 +62,22 @@
             {% if object.has_variants %}
             <!-- تا وقتی کاربر یک رنگ/سایز انتخاب نکرده، موجودی هیچ وریانت خاصی رو نشون نمی‌دیم -->
             <div class="stock-status stock-status-pending" id="pd-stock-status">
-                <i class="fa-solid fa-circle-info" id="pd-stock-icon"></i>
-                <span id="pd-stock-text">برای دیدن موجودی، یک گزینه را انتخاب کنید</span>
+                <span class="stock-status-main">
+                    <i class="fa-solid fa-circle-info" id="pd-stock-icon"></i>
+                    <span id="pd-stock-text">برای دیدن موجودی، یک گزینه را انتخاب کنید</span>
+                </span>
             </div>
             {% else %}
-            <div class="stock-status {% if not object.stock > 0 %}stock-status-out{% endif %}" id="pd-stock-status">
-                <i class="fa-solid {% if object.stock > 0 %}fa-check{% else %}fa-xmark{% endif %}" id="pd-stock-icon"></i>
-                <span id="pd-stock-text">{% if object.stock > 0 %}موجود در انبار{% else %}ناموجود{% endif %}</span>
+            <div class="stock-status {% if not object.stock > 0 %}stock-status-out{% endif %}{% if object.stock > 0 and object.stock <= 5 %} stock-status-low{% endif %}" id="pd-stock-status">
+                <span class="stock-status-main">
+                    <i class="fa-solid {% if object.stock > 0 %}fa-check{% else %}fa-xmark{% endif %}" id="pd-stock-icon"></i>
+                    <span id="pd-stock-text">{% if object.stock > 0 %}موجود در انبار{% else %}ناموجود{% endif %}</span>
+                </span>
+                {% if object.stock > 0 and object.stock <= 5 %}
+                <span class="low-stock-badge">
+                    <i class="fa-solid fa-fire"></i> فقط <b>{{ object.stock }}</b> عدد باقی مانده
+                </span>
+                {% endif %}
             </div>
             {% endif %}
 
@@ -90,7 +100,7 @@
                         data-discount="{{ variant.discount_percent }}"
                         data-stock="{{ variant.stock }}"
                         data-specs="{{ variant.get_specs_json }}"
-                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}{% if variant.stock <= 0 %}، ناموجود{% endif %}">
+                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}{% if variant.stock <= 0 %}، ناموجود{% elif variant.stock <= 5 %}، تنها {{ variant.stock }} عدد باقی مانده{% endif %}">
                         <span class="dot" style="background-color: #{{ variant.get_hex_color }};"></span>
                         <span class="swatch-code">{{ variant.color_code }}</span>
                     </button>
@@ -115,7 +125,7 @@
                         data-discount="{{ variant.discount_percent }}"
                         data-stock="{{ variant.stock }}"
                         data-specs="{{ variant.get_specs_json }}"
-                        aria-label="انتخاب سایز {{ variant.number_code }}{% if variant.stock <= 0 %}، ناموجود{% endif %}">{{ variant.number_code }}</button>
+                        aria-label="انتخاب سایز {{ variant.number_code }}{% if variant.stock <= 0 %}، ناموجود{% elif variant.stock <= 5 %}، تنها {{ variant.stock }} عدد باقی مانده{% endif %}">{{ variant.number_code }}</button>
                     {% endfor %}
                 </div>
                 {% if not object.has_color_variants %}
