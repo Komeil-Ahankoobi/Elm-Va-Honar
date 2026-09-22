@@ -159,3 +159,32 @@ class CustomerDashboardCancelOrderView(
             message = "سفارش شما با موفقیت لغو شد."
 
         return JsonResponse({"success": True, "message": message})
+
+
+
+class CustomerDashboardAjaxCreateAddressView(
+    LoginRequiredMixin, HasCustomerAccessPermission, View
+):
+    def post(self, request):
+        form = UserAddressForm(request.POST)
+
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+
+            return JsonResponse(
+                {
+                    "success": True,
+                    "message": "آدرس شما با موفقیت ثبت شد",
+                    "address": {
+                        "id": address.id,
+                        "address": address.address,
+                        "state": address.state,
+                        "city": address.city,
+                        "zip_code": address.zip_code,
+                    },
+                }
+            )
+
+        return JsonResponse({"success": False, "errors": form.errors}, status=400)

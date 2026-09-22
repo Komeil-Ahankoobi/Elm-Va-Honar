@@ -37,4 +37,9 @@ urlpatterns = [
         views.CustomerDashboardCancelOrderView.as_view(),
         name="order-cancel",
     ),
+    path(
+        "addresses/ajax-create/",
+        views.CustomerDashboardAjaxCreateAddressView.as_view(),
+        name="address-ajax-create",
+    ),
 ]

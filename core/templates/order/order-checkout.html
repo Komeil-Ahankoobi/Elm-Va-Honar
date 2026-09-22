@@ -1,6 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/order-checkout.css' %}" />
-{% endblock extra_css %} {% block content %}
+{% endblock extra_css %} 
+{% block content %}
 <div class="container">
     <!-- Breadcrumb -->
     <div class="breadcrumbs">
@@ -14,7 +15,7 @@
         <p>اطلاعات سفارش خود را تکمیل و پرداخت را انجام دهید.</p>
     </div>
 
-    <!-- Django Messages (پیام‌های warning/error/info مثل «پرداخت قبلی در حال انجام است») -->
+    <!-- Django Messages -->
     {% if messages %}
     <div class="checkout-messages" style="margin-bottom: 20px">
         {% for message in messages %}
@@ -145,47 +146,100 @@
             <div class="section-heading">آدرس‌های من</div>
 
             <form class="address-cards-list" method="post" action="." id="order-form">
-                {% csrf_token %} {% for address in addresses %}
-                <label
-                    class="address-card {% if forloop.first %}selected{% endif %}"
-                    style="cursor: pointer; display: block">
-                    <div class="address-header">
-                        <div class="address-title-group">
-                            <span class="address-title">آدرس {{ forloop.counter }}</span>
-                            {% if forloop.first %}
-                            <span class="badge-default">پیش‌فرض</span>
-                            {% endif %}
+                {% csrf_token %}
+                <div id="address-cards-container">
+                    {% for address in addresses %}
+                    <label
+                        class="address-card {% if forloop.first %}selected{% endif %}"
+                        style="cursor: pointer; display: block">
+                        <div class="address-header">
+                            <div class="address-title-group">
+                                <span class="address-title">آدرس {{ forloop.counter }}</span>
+                                {% if forloop.first %}
+                                <span class="badge-default">پیش‌فرض</span>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="address-details">
-                        <div>{{ address.address }}</div>
-                        <div>کدپستی: {{ address.zip_code }}</div>
-                    </div>
-                    <div class="address-radio" style="margin-top: 10px">
-                        <input type="radio" name="address_id" value="{{ address.id }}" required />
-                    </div>
-                </label>
-                {% empty %}
-                <p>هیچ آدرسی ثبت نشده است.</p>
-                {% endfor %}
+                        <div class="address-details">
+                            <div>{{ address.address }}</div>
+                            <div>کدپستی: {{ address.zip_code }}</div>
+                        </div>
+                        <div class="address-radio" style="margin-top: 10px">
+                            <input type="radio" name="address_id" value="{{ address.id }}" required />
+                        </div>
+                    </label>
+                    {% empty %}
+                    <p id="no-address-message">هیچ آدرسی ثبت نشده است.</p>
+                    {% endfor %}
+                </div>
 
-                <a
-                    href="{% url 'dashboard:customer:address-create' %}"
+                <button
+                    type="button"
+                    id="add-address-trigger"
                     class="add-address-btn"
-                    style="display: inline-block; margin-top: 15px; text-decoration: none">
+                    style="margin-top: 15px">
                     <i class="fa-solid fa-plus"></i> + افزودن آدرس جدید
-                </a>
+                </button>
             </form>
         </div>
     </div>
 </div>
-{% endblock content %}
 
-{# فقط تو همین صفحه toastify رو برای پیام‌ها غیرفعال می‌کنیم، چون پیام‌ها
-   همون بالا (بعد از عنوان صفحه) با یه باکس رنگی جدا نشون داده می‌شن.
-   بقیه‌ی صفحات چون این بلوک رو override نمی‌کنن، toast طبق روال قبل کار
-   می‌کنه. #}
+<!-- ================= ADD ADDRESS MODAL ================= -->
+<div class="modal-overlay" id="add-address-modal-overlay">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="add-address-modal-title">
+        <div class="modal-header">
+            <h3 id="add-address-modal-title">افزودن آدرس جدید</h3>
+            <button type="button" class="modal-close" id="add-address-modal-close" aria-label="بستن">
+                &times;
+            </button>
+        </div>
+
+        <div class="modal-alert" id="add-address-modal-alert" style="display: none"></div>
+
+        <form
+            id="add-address-form"
+            data-url="{% url 'dashboard:customer:address-ajax-create' %}"
+            data-csrf="{{ csrf_token }}">
+            <div class="form-group">
+                <label for="modal_address">آدرس</label>
+                <textarea id="modal_address" name="address" rows="3" required></textarea>
+                <span class="field-error" data-error-for="address"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="modal_state">استان</label>
+                    <input type="text" id="modal_state" name="state" required />
+                    <span class="field-error" data-error-for="state"></span>
+                </div>
+                <div class="form-group">
+                    <label for="modal_city">شهر</label>
+                    <input type="text" id="modal_city" name="city" required />
+                    <span class="field-error" data-error-for="city"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="modal_zip_code">کدپستی</label>
+                <input type="text" id="modal_zip_code" name="zip_code" required />
+                <span class="field-error" data-error-for="zip_code"></span>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" id="add-address-modal-cancel">انصراف</button>
+                <button type="submit" class="btn-modal-submit" id="add-address-modal-submit">
+                    <span class="btn-text">ثبت آدرس</span>
+                    <span class="btn-spinner" style="display: none"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
 {% block messages_toast %}{% endblock messages_toast %}
+
 
 {% block extra_js %}
 <script src="{% static 'js/order-checkout.js' %}"></script>
