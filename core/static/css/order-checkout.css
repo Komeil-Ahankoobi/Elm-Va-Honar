@@ -539,3 +539,216 @@ a {
         font-size: 9.5px;
     }
 }
+
+/* ================= ADD ADDRESS MODAL ================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 22, 25, 0.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-overlay.is-open {
+    display: flex;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal-box {
+    background: var(--card-bg);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    padding: 22px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    animation: modal-pop 0.18s ease;
+}
+
+@keyframes modal-pop {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #111;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.modal-close:hover {
+    color: #111;
+}
+
+.modal-alert {
+    font-size: 12px;
+    line-height: 1.8;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    background: #fdecea;
+    color: #b3261e;
+    border: 1px solid #f5c6cb;
+}
+
+.form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #222;
+}
+
+.form-group input,
+.form-group textarea {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-size: 12px;
+    outline: none;
+    background: #fafafa;
+    resize: vertical;
+    width: 100%;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--accent-green);
+    background: #fff;
+}
+
+.field-error {
+    font-size: 10.5px;
+    color: #b3261e;
+    min-height: 13px;
+    display: block;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.btn-modal-cancel {
+    flex: 1;
+    background: #f1f5f9;
+    color: var(--text-main);
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-modal-cancel:hover {
+    background: #e2e8f0;
+}
+
+.btn-modal-submit {
+    flex: 1;
+    background-color: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-modal-submit:hover {
+    background-color: var(--accent-green-hover);
+}
+
+.btn-modal-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 360px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+.form-group input.input-error,
+.form-group textarea.input-error {
+    border-color: #b3261e;
+    background: #fdecea;
+}
+
+
+#address-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
