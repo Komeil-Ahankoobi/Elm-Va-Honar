@@ -20,6 +20,16 @@
     <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}" />
     <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}" />
 
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+        media="print" onload="this.media='all'" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        media="print" onload="this.media='all'" />
+
 
     {% block extra_css %}{% endblock extra_css %} {% block extra_css_no_compress %}{% endblock extra_css_no_compress %}
 </head>
@@ -30,7 +40,8 @@
         <div class="header__top container">
             <div class="header__logo-area">
                 <a href="{% url 'website:home' %}" class="header__logo">
-                    <img src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar" class="header__logo-img">
+                    <img loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar"
+                        class="header__logo-img" loading="lazy">
                 </a>
             </div>
 
@@ -174,7 +185,8 @@
             <div class="footer__main">
                 <div class="footer__col footer__col--brand">
                     <div class="footer__logo">
-                        <img src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar" class="footer__logo-img">
+                        <img loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar"
+                            class="footer__logo-img" loading="lazy">
                     </div>
                     <h4 class="footer__title">آدرس حضوری</h4>
                     <p class="footer__desc">
@@ -280,7 +292,7 @@
                 <div class="trust-item trust-item--enamad">
                     <a referrerpolicy='origin' target='_blank'
                         href='https://trustseal.enamad.ir/?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'><img
-                            referrerpolicy='origin'
+                            loading="lazy" referrerpolicy='origin'
                             src='https://trustseal.enamad.ir/logo.aspx?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'
                             alt='' style='cursor:pointer' code='GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'></a>
                 </div>
@@ -335,7 +347,7 @@
     </footer>
 
     <script src="{% static 'js/home.js' %}" defer></script>
-    <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
+    <script src="{% static 'vendor/toastify/toastify.js' %}" defer></script>
 
     <!-- اسکریپت منوی موبایل -->
     <script>
@@ -407,8 +419,30 @@
     {% block messages_toast %}{% include 'messages.html' %}{% endblock messages_toast %}
     {% block extra_js %}{% endblock extra_js %}
     {% block extra_js_no_compress %}{% endblock extra_js_no_compress %}
-    <script type="text/javascript">
-        !function () { var i = "M3pf84", d = document, g = d.createElement("script"), s = "https://www.goftino.com/widget/" + i, l = localStorage.getItem("goftino_" + i); g.type = "text/javascript", g.async = !0, g.src = l ? s + "?o=" + l : s; d.getElementsByTagName("head")[0].appendChild(g); }();
+    <!-- Goftino - لود با تأخیر برای بهبود پرفورمنس -->
+    <script>
+        (function () {
+            var loaded = false;
+            function loadGoftino() {
+                if (loaded) return;
+                loaded = true;
+                var i = "M3pf84",
+                    d = document,
+                    g = d.createElement("script"),
+                    s = "https://www.goftino.com/widget/" + i,
+                    l = localStorage.getItem("goftino_" + i);
+                g.type = "text/javascript";
+                g.async = true;
+                g.src = l ? s + "?o=" + l : s;
+                d.getElementsByTagName("head")[0].appendChild(g);
+            }
+
+            // بعد از تعامل کاربر یا بعد از ۵ ثانیه لود شود
+            ["scroll", "mousemove", "touchstart", "keydown"].forEach(function (evt) {
+                window.addEventListener(evt, loadGoftino, { once: true, passive: true });
+            });
+            setTimeout(loadGoftino, 5000);
+        })();
     </script>
 </body>
 

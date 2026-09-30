@@ -5,33 +5,43 @@ from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
 from django.urls import reverse
-
+from django.utils.functional import cached_property
 
 from .colors import VISTA_ACRYLIC_COLORS, PARS_ACRYLIC_COLORS
 
 
 class ProductStatusType(models.IntegerChoices):
-    publish = 1 ,("نمایش")
-    draft = 2 ,("عدم نمایش")
-   
- 
+    publish = 1, ("نمایش")
+    draft = 2, ("عدم نمایش")
+
+
 class ProductCategoryModel(models.Model):
     title = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(allow_unicode=True, unique=True)
     image = models.ImageField(default="default/آبرنگ.webp", upload_to="categories/img/")
-    
-    status = models.IntegerField(choices=ProductStatusType.choices, default=ProductStatusType.draft.value)
-    
+
+    status = models.IntegerField(
+        choices=ProductStatusType.choices, default=ProductStatusType.draft.value
+    )
+
     popular = models.BooleanField(default=False)
     baner = models.BooleanField(default=False)
-    baner_image =  models.ImageField(default="default/cat-abner-3.webp", upload_to="cat-baners/img/")
+    baner_image = models.ImageField(
+        default="default/cat-abner-3.webp", upload_to="cat-baners/img/"
+    )
     h3_text = models.CharField(max_length=200, null=True, blank=True)
     p_text = models.CharField(max_length=150, null=True, blank=True)
 
-    meta_title = models.CharField(max_length=70, blank=True,
-        help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
-    meta_description = models.CharField(max_length=160, blank=True,
-        help_text="توضیح کوتاه برای نتایج گوگل. حداکثر ۱۵۵-۱۶۰ کاراکتر.")
+    meta_title = models.CharField(
+        max_length=70,
+        blank=True,
+        help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.",
+    )
+    meta_description = models.CharField(
+        max_length=160,
+        blank=True,
+        help_text="توضیح کوتاه برای نتایج گوگل. حداکثر ۱۵۵-۱۶۰ کاراکتر.",
+    )
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -41,30 +51,41 @@ class ProductCategoryModel(models.Model):
 
     def __str__(self):
         return self.title
-    
 
     def get_absolute_url(self):
-        return reverse('shop:show-product-view') + f'?category={self.slug}'
-
+        return reverse("shop:show-product-view") + f"?category={self.slug}"
 
     def get_meta_title(self):
         return self.meta_title or self.title
 
     def get_meta_description(self):
-        return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
+        return (
+            self.meta_description
+            or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
+        )
 
 
 class ProductBrandModel(models.Model):
     title = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(allow_unicode=True, unique=True)
-    image = models.ImageField(default="default/faber-castell.webp", upload_to="brands/img/")
+    image = models.ImageField(
+        default="default/faber-castell.webp", upload_to="brands/img/"
+    )
 
-    status = models.IntegerField(choices=ProductStatusType.choices, default=ProductStatusType.draft.value)
+    status = models.IntegerField(
+        choices=ProductStatusType.choices, default=ProductStatusType.draft.value
+    )
 
-    meta_title = models.CharField(max_length=70, blank=True,
-        help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.")
-    meta_description = models.CharField(max_length=160, blank=True,
-        help_text="توضیح کوتاه برای نتایج گوگل. حداکثر ۱۵۵-۱۶۰ کاراکتر.")
+    meta_title = models.CharField(
+        max_length=70,
+        blank=True,
+        help_text="اگه خالی بمونه از title استفاده می‌شه. حداکثر ۶۰-۷۰ کاراکتر.",
+    )
+    meta_description = models.CharField(
+        max_length=160,
+        blank=True,
+        help_text="توضیح کوتاه برای نتایج گوگل. حداکثر ۱۵۵-۱۶۰ کاراکتر.",
+    )
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -76,36 +97,37 @@ class ProductBrandModel(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('shop:show-product-view') + f'?brand={self.slug}'
+        return reverse("shop:show-product-view") + f"?brand={self.slug}"
 
     def get_meta_title(self):
         return self.meta_title or self.title
 
     def get_meta_description(self):
-        return self.meta_description or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
+        return (
+            self.meta_description
+            or f"خرید {self.title} با بهترین قیمت از فروشگاه علم و هنر"
+        )
 
 
 class ProductModel(models.Model):
-    category = models.ManyToManyField(
-        ProductCategoryModel,
-        related_name='products'
-    )
+    category = models.ManyToManyField(ProductCategoryModel, related_name="products")
     brand = models.ForeignKey(
         ProductBrandModel,
         on_delete=models.PROTECT,
-        related_name='products',
-        null=True, 
+        related_name="products",
+        null=True,
         blank=True,
     )
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True, unique=True)
-    
+
     image = models.ImageField(default="default/default.png", upload_to="product/img/")
     image_alt_text = models.CharField(
-        max_length=255, blank=True,
-        help_text="متن جایگزین تصویر برای سئو. مثلاً: خرید بوم نقاشی سایز A3"
+        max_length=255,
+        blank=True,
+        help_text="متن جایگزین تصویر برای سئو. مثلاً: خرید بوم نقاشی سایز A3",
     )
-    
+
     description = models.TextField()
     brief_description = models.TextField(null=True, blank=True)
 
@@ -113,9 +135,18 @@ class ProductModel(models.Model):
     meta_description = models.CharField(max_length=160, blank=True)
 
     stock = models.PositiveIntegerField(default=0, null=True, blank=True)
-    status = models.IntegerField(choices=ProductStatusType.choices, default=ProductStatusType.draft.value)
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=0, null=True, blank=True)
-    discount_percent = models.IntegerField(default=0, null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    status = models.IntegerField(
+        choices=ProductStatusType.choices, default=ProductStatusType.draft.value
+    )
+    price = models.DecimalField(
+        default=0, max_digits=10, decimal_places=0, null=True, blank=True
+    )
+    discount_percent = models.IntegerField(
+        default=0,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -124,7 +155,7 @@ class ProductModel(models.Model):
         ordering = ["-created_date"]
 
     def sync_visibility_from_stock(self):
-        if self.has_variants():
+        if self.has_variants:
             return
 
         current_stock = self.stock or 0
@@ -136,7 +167,7 @@ class ProductModel(models.Model):
             self.save(update_fields=["status"])
 
     def sync_parent_visibility_from_variants(self):
-        if not self.has_variants():
+        if not self.has_variants:
             return
 
         total_stock = sum(v.stock for v in self.varients.all())
@@ -146,10 +177,9 @@ class ProductModel(models.Model):
         elif total_stock > 0 and self.status == ProductStatusType.draft.value:
             self.status = ProductStatusType.publish.value
             self.save(update_fields=["status"])
-    
 
     def get_absolute_url(self):
-        return reverse('shop:show-product-detail-view', kwargs={'slug': self.slug})
+        return reverse("shop:show-product-detail-view", kwargs={"slug": self.slug})
 
     def get_price_rial(self):
         return self.get_price() * 10
@@ -160,33 +190,33 @@ class ProductModel(models.Model):
     def __str__(self):
         return self.title
 
+    def _get_shop_variants(self):
+        if hasattr(self, "_shop_variants"):
+            return self._shop_variants
+
+        return list(self.varients.filter(status=ProductStatusType.publish.value))
+
     def get_visible_variants(self):
-        return self.varients.filter(status=ProductStatusType.publish.value)
+        return self._get_shop_variants()
 
     def get_available_variants(self):
-        """
-        وریانت‌هایی که هم منتشر شدن هم موجودن. این متد برای محاسبه‌ی
-        قیمتی که تو کارت محصول (لیست محصولات) نشون داده می‌شه استفاده می‌شه،
-        تا مثلاً قیمت یه رنگ ناموجود به عنوان «از X تومان» نمایش داده نشه.
-        """
-        return self.varients.filter(
-            status=ProductStatusType.publish.value,
-            stock__gt=0,
-        )
+        return [variant for variant in self._get_shop_variants() if variant.stock > 0]
 
     def get_price(self):
-        if self.has_variants():
-            prices = [v.get_price() for v in self.varients.all()]
+        if self.has_variants:
+            prices = [v.get_price() for v in self.get_visible_variants()]
             return min(prices) if prices else 0
+
         discount_amount = self.price * Decimal(self.discount_percent) / Decimal(100)
         discounted_amount = self.price - discount_amount
+
         return round(discounted_amount)
 
     def get_stock(self):
-        if self.has_variants():
-            return sum(v.stock for v in self.varients.all())
+        if self.has_variants:
+            return sum(v.stock for v in self.get_visible_variants())
+
         return self.stock
-    
 
     def is_publish(self):
         return self.status == ProductStatusType.publish.value
@@ -195,16 +225,24 @@ class ProductModel(models.Model):
         return self.meta_title or f"{self.title} | خرید آنلاین - علم و هنر"
 
     def get_meta_description(self):
-        return self.meta_description or (self.brief_description[:155] if self.brief_description else f"خرید {self.title} با بهترین قیمت و ارسال سریع از فروشگاه علم و هنر")
+        return self.meta_description or (
+            self.brief_description[:155]
+            if self.brief_description
+            else f"خرید {self.title} با بهترین قیمت و ارسال سریع از فروشگاه علم و هنر"
+        )
 
     def get_image_alt(self):
         return self.image_alt_text or self.title
 
     def get_color_variants(self):
-        return self.varients.filter(variant_type__in=[VarientType.color, VarientType.pars_color])
+        return self.varients.filter(
+            variant_type__in=[VarientType.color, VarientType.pars_color]
+        )
 
     def has_color_variants(self):
-        return self.varients.filter(variant_type__in=[VarientType.color, VarientType.pars_color]).exists()
+        return self.varients.filter(
+            variant_type__in=[VarientType.color, VarientType.pars_color]
+        ).exists()
 
     def get_number_variants(self):
         return self.varients.filter(variant_type=VarientType.number)
@@ -212,18 +250,26 @@ class ProductModel(models.Model):
     def has_number_variants(self):
         return self.varients.filter(variant_type=VarientType.number).exists()
 
+    @cached_property
     def has_variants(self):
-        return self.varients.exists()
+        return bool(self._get_shop_variants())
 
+    @cached_property
     def has_discount(self):
-        if self.has_variants():
+        if self.has_variants:
             return any(v.discount_percent > 0 for v in self.get_visible_variants())
+
         return bool(self.discount_percent and self.discount_percent > 0)
 
     def get_discount_percent(self):
-        if self.has_variants():
-            percents = [v.discount_percent for v in self.get_visible_variants() if v.discount_percent > 0]
+        if self.has_variants:
+            percents = [
+                v.discount_percent
+                for v in self.get_visible_variants()
+                if v.discount_percent > 0
+            ]
             return max(percents) if percents else 0
+
         return self.discount_percent or 0
 
     def get_original_price_range(self):
@@ -234,25 +280,28 @@ class ProductModel(models.Model):
         return min(prices), max(prices)
 
     def get_price_range(self):
-        # اولویت با وریانت‌هایی که واقعاً موجودن؛ اگه هیچ‌کدوم موجود نبود
-        # (که یعنی این وضعیت باید استثنا باشه، چون محصول باید draft بشه)
-        # به عنوان fallback از بین وریانت‌های منتشرشده حساب می‌کنه که خطا نده.
-        variants = list(self.get_available_variants())
+        variants = self.get_available_variants()
+
         if not variants:
-            variants = list(self.get_visible_variants())
+            variants = self.get_visible_variants()
+
         if not variants:
             return None
+
         prices = [v.get_price() for v in variants]
+
         return min(prices), max(prices)
-    
-    
+
+
 class ProductImageModel(models.Model):
-    product = models.ForeignKey(ProductModel,on_delete=models.CASCADE, related_name="product_images")
+    product = models.ForeignKey(
+        ProductModel, on_delete=models.CASCADE, related_name="product_images"
+    )
     file = models.ImageField(upload_to="product/extra-img/")
-    
+
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         ordering = ["created_date"]
 
@@ -262,6 +311,7 @@ class ProductSpecModel(models.Model):
     مشخصات کلیدی/مقداری عمومی محصول (نمایش داده می‌شه چه محصول وریانت داشته باشه چه نداشته باشه).
     مثال: عنوان = "برند" | محتوا = "وستا"
     """
+
     product = models.ForeignKey(
         ProductModel, on_delete=models.CASCADE, related_name="specs"
     )
@@ -274,44 +324,45 @@ class ProductSpecModel(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.product.title}"
-        
-        
+
+
 class VarientType(models.TextChoices):
-    color = 'color', ("رنگ (ویستا)")
-    pars_color = 'pars_color', ("رنگ (پالت پارس)")
-    number = 'number', ('شماره')
+    color = "color", ("رنگ (ویستا)")
+    pars_color = "pars_color", ("رنگ (پالت پارس)")
+    number = "number", ("شماره")
 
 
 class ProductVarientModel(models.Model):
     product = models.ForeignKey(
-        ProductModel, on_delete=models.CASCADE, related_name='varients'
+        ProductModel, on_delete=models.CASCADE, related_name="varients"
     )
     variant_type = models.CharField(
-        max_length=20, choices=VarientType.choices,
-        help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن"
+        max_length=20,
+        choices=VarientType.choices,
+        help_text="نوع تنوع: اگه رنگه 'رنگ' انتخاب کن، اگه شماره‌س (مثل قلمو) 'شماره' انتخاب کن",
     )
     color_code = models.CharField(max_length=3, blank=True, null=True)
     number_code = models.CharField(max_length=7, blank=True, null=True)
 
     price = models.DecimalField(
-        max_digits=10, decimal_places=0,
-        help_text="قیمت مخصوص همین سایز/رنگ"
+        max_digits=10, decimal_places=0, help_text="قیمت مخصوص همین سایز/رنگ"
     )
     stock = models.PositiveIntegerField(
-        default=0,
-        help_text="موجودی مخصوص همین سایز/رنگ"
+        default=0, help_text="موجودی مخصوص همین سایز/رنگ"
     )
     discount_percent = models.IntegerField(
-        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)],
-        help_text="درصد تخفیف مخصوص همین سایز/رنگ"
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="درصد تخفیف مخصوص همین سایز/رنگ",
     )
     status = models.IntegerField(
-        choices=ProductStatusType.choices, default=ProductStatusType.publish.value,
-        help_text="نمایش یا عدم نمایش همین سایز/رنگ به صورت مجزا"
+        choices=ProductStatusType.choices,
+        default=ProductStatusType.publish.value,
+        help_text="نمایش یا عدم نمایش همین سایز/رنگ به صورت مجزا",
     )
 
     def sync_visibility_from_stock(self):
-       
+
         current_stock = self.stock or 0
         if current_stock <= 0 and self.status != ProductStatusType.draft.value:
             self.status = ProductStatusType.draft.value
@@ -323,7 +374,7 @@ class ProductVarientModel(models.Model):
         self.product.sync_parent_visibility_from_variants()
 
     def __str__(self):
-        return f'{self.product.title} - {self.variant_type}'
+        return f"{self.product.title} - {self.variant_type}"
 
     def get_color_palette_dict(self):
         if self.variant_type == VarientType.pars_color:
@@ -351,7 +402,6 @@ class ProductVarientModel(models.Model):
     def has_discount(self):
         return bool(self.discount_percent and self.discount_percent > 0)
 
-
     def is_publish(self):
         return self.status == ProductStatusType.publish.value
 
@@ -370,11 +420,14 @@ class ProductVariantSpecModel(models.Model):
     مشخصات کلیدی/مقداری مخصوص یک وریانت خاص (یک سایز یا یک رنگ مشخص).
     مثال: برای سایز ۲۷ -> عنوان = "طول قلمو" | محتوا = "۱۸ سانتی‌متر"
     """
+
     variant = models.ForeignKey(
         ProductVarientModel, on_delete=models.CASCADE, related_name="specs"
     )
     title = models.CharField(max_length=100, help_text="عنوان ویژگی، مثلاً: طول قلمو")
-    description = models.CharField(max_length=255, help_text="مقدار ویژگی، مثلاً: ۱۸ سانتی‌متر")
+    description = models.CharField(
+        max_length=255, help_text="مقدار ویژگی، مثلاً: ۱۸ سانتی‌متر"
+    )
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

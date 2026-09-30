@@ -31,6 +31,16 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/home-responsive.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+        media="print" onload="this.media='all'" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        media="print" onload="this.media='all'" />
 </head>
 
 <body>
@@ -43,7 +53,8 @@
 
                 <div class="header__logo-area">
                     <a href="{% url 'website:home' %}" class="header__logo">
-                        <img src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar" class="header__logo-img">
+                        <img loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar"
+                            class="header__logo-img">
                     </a>
                 </div>
 
@@ -186,7 +197,7 @@
                             {% if slide.image_webp %}
                             <source srcset="{{ slide.image_webp }}" type="image/webp">
                             {% endif %}
-                            <img src="{% static slide.image %}" alt="{{ slide.title|striptags }}"
+                            <img loading="lazy" src="{% static slide.image %}" alt="{{ slide.title|striptags }}"
                                 class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {% else %}loading="lazy" {% endif %}>
                         </picture>
                         <div class="hero__content">
@@ -295,7 +306,7 @@
                     {% for cat in popular_cats %}
                     <a href="{% url 'shop:show-product-view' %}?category={{ cat.id }}" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <img src="{{ cat.image.url }}" alt="{{ cat.title }}" class="placeholder-img">
+                            <img loading="lazy" src="{{ cat.image.url }}" alt="{{ cat.title }}" class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">{{ cat.title }}</span>
                     </a>
@@ -320,7 +331,7 @@
 
                 {% for cat_baner in cat_baners %}
                 <div class="promo-card">
-                    <img src="{{ cat_baner.baner_image.url }}" alt="{{ cat_baner.h3_text }}"
+                    <img loading="lazy" src="{{ cat_baner.baner_image.url }}" alt="{{ cat_baner.h3_text }}"
                         class="placeholder-img placeholder-img--dark">
                     <div class="promo-card__content">
                         <h3 class="promo-card__title">{{ cat_baner.h3_text }}</h3>
@@ -365,7 +376,8 @@
                             </div>
                             {% endif %}
                             <div class="product-img">
-                                <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy" />
+                                <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}"
+                                    loading="lazy" />
                             </div>
 
                             <div class="product-title">{{ product.title }}</div>
@@ -429,95 +441,95 @@
 
                     <!-- Duplicate list for seamless infinite loop -->
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
+                        <img loading="lazy" src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
+                        <img loading="lazy" src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/vesta.webp' %}" alt="Vesta" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/vesta.webp' %}" alt="Vesta"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/pentel.webp' %}" alt="Pentel" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/pentel.webp' %}" alt="Pentel"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/canco.webp' %}" alt="canco" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/canco.webp' %}" alt="canco"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/c-class.webp' %}" alt="c-class" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/c-class.webp' %}" alt="c-class"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/picasso.webp' %}" alt="Picasso" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/picasso.webp' %}" alt="Picasso"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <!-- تکرار دوم برای infinite loop -->
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
+                        <img loading="lazy" src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
+                        <img loading="lazy" src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/vesta.webp' %}" alt="Vesta" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/vesta.webp' %}" alt="Vesta"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/pentel.webp' %}" alt="Pentel" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/pentel.webp' %}" alt="Pentel"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/canco.webp' %}" alt="canco" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/canco.webp' %}" alt="canco"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/c-class.webp' %}" alt="c-class" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/c-class.webp' %}" alt="c-class"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
 
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art"
+                            class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img src="{% static 'images/brands/picasso.webp' %}" alt="Picasso" class="brand-item__logo"
-                            loading="lazy">
+                        <img loading="lazy" src="{% static 'images/brands/picasso.webp' %}" alt="Picasso"
+                            class="brand-item__logo" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -538,7 +550,8 @@
                 <article class="article-card">
                     <a href="{% url 'website:blog-post-detail' pk=post.id %}">
                         <div class="card-image">
-                            <img src="{{ post.image.url }}" alt="{{ post.image_alt_text|default:post.title }}" />
+                            <img loading="lazy" src="{{ post.image.url }}"
+                                alt="{{ post.image_alt_text|default:post.title }}" />
                         </div>
                         <div class="card-content">
                             <h3 class="card-title">{{ post.title }}</h3>
@@ -562,7 +575,8 @@
             <div class="footer__main">
                 <div class="footer__col footer__col--brand">
                     <div class="footer__logo">
-                        <img src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar" class="footer__logo-img">
+                        <img loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar"
+                            class="footer__logo-img">
                     </div>
                     <h4 class="footer__title">آدرس حضوری</h4>
                     <p class="footer__desc">
@@ -668,7 +682,7 @@
                 <div class="trust-item trust-item--enamad">
                     <a referrerpolicy='origin' target='_blank'
                         href='https://trustseal.enamad.ir/?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'><img
-                            referrerpolicy='origin'
+                            loading="lazy" referrerpolicy='origin'
                             src='https://trustseal.enamad.ir/logo.aspx?id=7067017&Code=GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'
                             alt='' style='cursor:pointer' code='GPUNzNYAXnAH5ROcsqBd7RGqmpNQZJi2'></a>
                 </div>
@@ -722,8 +736,8 @@
         </div>
     </footer>
 
-    <script src="{% static 'js/home.js' %}"></script>
-    <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
+    <script src="{% static 'js/home.js' %}" defer></script>
+    <script src="{% static 'vendor/toastify/toastify.js' %}" defer></script>
     <script src="{% static 'vendor/toastify/toastify-es.js' %}"></script>
 
     {% include 'messages.html' %}
@@ -769,8 +783,30 @@
             });
         })();
     </script>
-    <script type="text/javascript">
-        !function () { var i = "M3pf84", d = document, g = d.createElement("script"), s = "https://www.goftino.com/widget/" + i, l = localStorage.getItem("goftino_" + i); g.type = "text/javascript", g.async = !0, g.src = l ? s + "?o=" + l : s; d.getElementsByTagName("head")[0].appendChild(g); }();
+    <!-- Goftino - لود با تأخیر برای بهبود پرفورمنس -->
+    <script>
+        (function () {
+            var loaded = false;
+            function loadGoftino() {
+                if (loaded) return;
+                loaded = true;
+                var i = "M3pf84",
+                    d = document,
+                    g = d.createElement("script"),
+                    s = "https://www.goftino.com/widget/" + i,
+                    l = localStorage.getItem("goftino_" + i);
+                g.type = "text/javascript";
+                g.async = true;
+                g.src = l ? s + "?o=" + l : s;
+                d.getElementsByTagName("head")[0].appendChild(g);
+            }
+
+            // بعد از تعامل کاربر یا بعد از ۵ ثانیه لود شود
+            ["scroll", "mousemove", "touchstart", "keydown"].forEach(function (evt) {
+                window.addEventListener(evt, loadGoftino, { once: true, passive: true });
+            });
+            setTimeout(loadGoftino, 5000);
+        })();
     </script>
 </body>
 

@@ -29,6 +29,10 @@
    2. Medium Screens & Laptops / Large Tablets (Max-width: 992px)
    -------------------------------------------------------------------------- */
 @media (max-width: 992px) {
+    .p {
+        margin-bottom: 1rem;
+    }
+
     .layout {
         grid-template-columns: 1fr !important;
         gap: 20px !important;
@@ -50,6 +54,10 @@
    3. Tablets (Max-width: 768px)
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
+    .p {
+        margin-bottom: 1rem;
+    }
+
     .sidebar {
         grid-template-columns: 1fr !important;
     }
@@ -117,6 +125,10 @@
    4. Mobile Devices (Max-width: 480px)
    -------------------------------------------------------------------------- */
 @media (max-width: 480px) {
+    .p {
+        margin-bottom: 1rem;
+    }
+
     .page-title {
         font-size: 18px !important;
     }
@@ -159,6 +171,10 @@
    5. Extra Small Mobile Devices (Below 400px)
    -------------------------------------------------------------------------- */
 @media (max-width: 400px) {
+    .p {
+        margin-bottom: 1rem;
+    }
+
     .products-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 6px !important;

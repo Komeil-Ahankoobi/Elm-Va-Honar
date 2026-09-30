@@ -1,7 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
 <!-- اگر این دو فونت/آیکون در base.html از قبل لود می‌شن، این دو خط رو حذف کنید -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link rel="stylesheet" href="{% static 'css/shop.css' %}" />
 <link rel="stylesheet" href="{% static 'css/shop-responsive.css' %}" />
 {% endblock extra_css %} {% block content %}
@@ -21,8 +19,33 @@
         <!-- RIGHT SIDEBAR -->
         <aside class="sidebar">
             <form method="get" class="filter-form">
+
+                <!-- Product Categories Accordion -->
+                <div class="filter-card category-filtered">
+                    <div class="filter-header">
+                        <span>دسته‌بندی محصولات</span>
+                    </div>
+                    <div class="category-list">
+                        {% for group in alphabet_categories %}
+                        <div class="category-group">
+                            <div class="category-group-title">{{ group.letter }}</div>
+                            <ul class="category-group-list">
+                                {% for category in group.categories %}
+                                <a href="?category={{ category.id }}">
+                                    <li>
+                                        <span>{{ category.title }}</span>
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </li>
+                                </a>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
                 <!-- Filter by Price -->
-                <div class="filter-card">
+                <div class=" p filter-card">
                     <div class="filter-header">
                         <span>فیلتر بر اساس قیمت</span>
                     </div>
@@ -46,29 +69,7 @@
                 </div>
             </form>
 
-            <!-- Product Categories Accordion -->
-            <div class="filter-card category-filtered">
-                <div class="filter-header">
-                    <span>دسته‌بندی محصولات</span>
-                </div>
-                <div class="category-list">
-                    {% for group in alphabet_categories %}
-                    <div class="category-group">
-                        <div class="category-group-title">{{ group.letter }}</div>
-                        <ul class="category-group-list">
-                            {% for category in group.categories %}
-                            <a href="?category={{ category.id }}">
-                                <li>
-                                    <span>{{ category.title }}</span>
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </li>
-                            </a>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
+
         </aside>
 
         <!-- LEFT MAIN PRODUCTS AREA -->
@@ -98,7 +99,7 @@
                                 گران‌ترین
                             </option>
                         </select>
-                        
+
                         <span>تعداد محصولات در هر صفحه: </span>
                         <select name="page_size" onchange="filterProducts(this)">
                             <option value="20" {% if request.GET.page_size == "20" or not request.GET.page_size %}selected{% endif %}>1 تا 20</option>
@@ -120,90 +121,84 @@
             <!-- Products Grid -->
             <div class="products-grid" id="product-grid">
                 {% for product in products %}
-                <div class="product-card reveal{% if not product.has_variants and product.stock <= 0 %} is-sold-out{% endif %}" style="cursor: pointer"
-                    data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
-                    {% if not product.has_variants and product.stock <= 0 %}
-                    {% elif product.has_discount %}
-                    <div class="discount-badge">
+                <div class="product-card reveal{% if not product.has_variants and product.stock <= 0 %} is-sold-out{% endif %}"
+                    style="cursor: pointer" data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                    {% if not product.has_variants and product.stock <= 0 %} {% elif product.has_discount %} <div
+                        class="discount-badge">
                         {% if product.has_variants %}تا {% endif %}{{ product.get_discount_percent }}٪ تخفیف
-                    </div>
-                    {% endif %}
-                    <div class="product-img">
-                        <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy" />
-                    </div>
+                </div>
+                {% endif %}
+                <div class="product-img">
+                    <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy" />
+                </div>
 
-                    <div class="product-title">{{ product.title }}</div>
+                <div class="product-title">{{ product.title }}</div>
 
-                    <div class="price-line">
-                        {% if product.has_discount and not product.has_variants and product.stock > 0 %}
-                        <span class="product-price-old">{{ product.get_real_price|intcomma }} تومان</span>
-                        {% endif %}
-
-                        {% if product.has_variants %}
-                        {% with price_range=product.get_price_range %}
-                        {% if filter_by == "exp_to_cheep" %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">تا {{ price_range.1|intcomma }} تومان</span>
-                        {% else %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
-                        {% endif %}
-                        {% endwith %}
-                        {% elif product.stock <= 0 %}
-                        <span class="product-price price-unavailable">ناموجود</span>
-                        {% else %}
-                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
-                        {% endif %}
-                    </div>
-
-                    {% if product.has_variants and product.has_discount %}
-                    <div class="price-variant-note">بسته به انتخاب شما</div>
+                <div class="price-line">
+                    {% if product.has_discount and not product.has_variants and product.stock > 0 %}
+                    <span class="product-price-old">{{ product.get_real_price|intcomma }} تومان</span>
                     {% endif %}
 
                     {% if product.has_variants %}
-                    <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
-                        <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
-                    </a>
+                    {% with price_range=product.get_price_range %}
+                    {% if filter_by == "exp_to_cheep" %}
+                    <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">تا {{ price_range.1|intcomma }} تومان</span>
                     {% else %}
-                    <button type="button" class="btn-add-cart{% if product.stock <= 0 %} is-disabled{% endif %}" aria-label="افزودن {{ product.title }} به سبد خرید"
-                        data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
-                        data-stock="{{ product.stock }}" {% if product.stock <= 0 %}disabled{% endif %}>
-                        <i class="fa-solid {% if product.stock <= 0 %}fa-ban{% else %}fa-cart-shopping{% endif %}"></i> {% if product.stock <= 0 %}ناموجود{% else %}افزودن به سبد خرید{% endif %}
-                    </button>
+                    <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
                     {% endif %}
+                    {% endwith %}
+                    {% elif product.stock <= 0 %} <span class="product-price price-unavailable">ناموجود</span>
+                        {% else %}
+                        <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
+                        {% endif %}
                 </div>
-                {% empty %}
-                <p>محصولی یافت نشد.</p>
-                {% endfor %}
-            </div>
 
-            <!-- Pagination -->
-            {% if page_obj.has_other_pages %}
-            <div class="pagination" aria-label="صفحه‌بندی محصولات">
-                {% if page_obj.has_previous %}
-                <a class="page-item" href="?page=1" aria-label="صفحه اول">&laquo;</a>
-                <a class="page-item page-item-nav" href="?page={{ page_obj.previous_page_number }}"
-                    aria-label="صفحه قبل">
-                    <span class="page-item-arrow">&lt;</span>
-                    <span class="page-item-label">قبلی</span>
+                {% if product.has_variants and product.has_discount %}
+                <div class="price-variant-note">بسته به انتخاب شما</div>
+                {% endif %}
+
+                {% if product.has_variants %}
+                <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
+                    <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
                 </a>
-                {% endif %} {% for i in page_obj.paginator.page_range %} {% if page_obj.number == i %}
-                <div class="page-item active">{{ i }}</div>
-                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-item"
-                    href="?page={{ i }}">{{ i }}</a>
-                    {% endif %} {% endfor %} {% if page_obj.has_next %}
-                    <a class="page-item page-item-nav" href="?page={{ page_obj.next_page_number }}"
-                        aria-label="صفحه بعد">
-                        <span class="page-item-label">بعدی</span>
-                        <span class="page-item-arrow">&gt;</span>
-                    </a>
-                    <a class="page-item" href="?page={{ page_obj.paginator.num_pages }}"
-                        aria-label="صفحه آخر">&raquo;</a>
-                    {% endif %}
+                {% else %}
+                <button type="button" class="btn-add-cart{% if product.stock <= 0 %} is-disabled{% endif %}"
+                    aria-label="افزودن {{ product.title }} به سبد خرید" data-url="{% url 'cart:session-add-product' %}"
+                    data-product-id="{{ product.id }}" data-stock="{{ product.stock }}" {% if product.stock <= 0 %}disabled{% endif %}>
+                    <i class="fa-solid {% if product.stock <= 0 %}fa-ban{% else %}fa-cart-shopping{% endif %}"></i> {% if product.stock <= 0 %}ناموجود{% else %}افزودن به سبد خرید{% endif %} </button>
+                        {% endif %}
             </div>
-            {% endif %}
-        </main>
+            {% empty %}
+            <p>محصولی یافت نشد.</p>
+            {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination" aria-label="صفحه‌بندی محصولات">
+        {% if page_obj.has_previous %}
+        <a class="page-item" href="?page=1" aria-label="صفحه اول">&laquo;</a>
+        <a class="page-item page-item-nav" href="?page={{ page_obj.previous_page_number }}" aria-label="صفحه قبل">
+            <span class="page-item-arrow">&lt;</span>
+            <span class="page-item-label">قبلی</span>
+        </a>
+        {% endif %} {% for i in page_obj.paginator.page_range %} {% if page_obj.number == i %}
+        <div class="page-item active">{{ i }}</div>
+        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a class="page-item"
+            href="?page={{ i }}">{{ i }}</a>
+            {% endif %} {% endfor %} {% if page_obj.has_next %}
+            <a class="page-item page-item-nav" href="?page={{ page_obj.next_page_number }}" aria-label="صفحه بعد">
+                <span class="page-item-label">بعدی</span>
+                <span class="page-item-arrow">&gt;</span>
+            </a>
+            <a class="page-item" href="?page={{ page_obj.paginator.num_pages }}" aria-label="صفحه آخر">&raquo;</a>
+            {% endif %}
+    </div>
+    {% endif %}
+    </main>
+</div>
 </div>
 
 {% endblock content %} {% block extra_js %}
-<script src="{% static 'js/shop.js' %}"></script>
+<script src="{% static 'js/shop.js' %}" defer></script>
 {% endblock extra_js %}

@@ -70,7 +70,7 @@ a {
 }
 
 .category-filtered{
-    margin-bottom: 6rem;
+    margin-bottom: 2rem;
 }
 
 /* ================= SIDEBAR (RIGHT) ================= */
@@ -104,6 +104,10 @@ a {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 15px;
+}
+
+.p {
+    margin-bottom: 6rem;
 }
 
 .filter-header {

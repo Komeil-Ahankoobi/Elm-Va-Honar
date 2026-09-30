@@ -19,45 +19,48 @@
     <div class="product-main">
         <!-- LEFT COLUMN: ACTIONS & SPECS -->
         <div class="buy-box">
-        <div class="price-area">
-            <div class="price-category-row">
-                <div class="price-box">
-                    <div class="price-value">قیمت</div>
+            <div class="price-area">
+                <div class="price-category-row">
+                    <div class="price-box">
+                        <div class="price-value">قیمت</div>
 
-                    {% if object.has_variants %}
-                    <!-- تا وقتی کاربر رنگ/سایز رو انتخاب نکرده، قیمت و تخفیفِ یک وریانت خاص رو نشون نمی‌دیم -->
-                    <div class="price-old-line" id="pd-price-old-line" style="display: none">
-                        <span class="product-price-old" id="pd-price-old"></span>
-                        <span class="discount-badge" id="pd-discount-badge"></span>
+                        {% if object.has_variants %}
+                        <!-- تا وقتی کاربر رنگ/سایز رو انتخاب نکرده، قیمت و تخفیفِ یک وریانت خاص رو نشون نمی‌دیم -->
+                        <div class="price-old-line" id="pd-price-old-line" style="display: none">
+                            <span class="product-price-old" id="pd-price-old"></span>
+                            <span class="discount-badge" id="pd-discount-badge"></span>
+                        </div>
+                        <span class="product-price price-placeholder" id="pd-price">یک گزینه را انتخاب کنید</span>
+                        {% else %}
+                        {% if object.stock > 0 and object.has_discount %}
+                        <div class="price-old-line" id="pd-price-old-line">
+                            <span class="product-price-old" id="pd-price-old">{{ object.get_real_price|intcomma }}
+                                تومان</span>
+                            <span class="discount-badge" id="pd-discount-badge">{{ object.get_discount_percent }}٪
+                                تخفیف</span>
+                        </div>
+                        {% endif %}
+                        {% if object.stock > 0 %}
+                        <span class="product-price {% if object.has_discount %}price-discounted{% endif %}"
+                            id="pd-price">{{ object.get_price|intcomma }} تومان</span>
+                        {% else %}
+                        <span class="product-price price-unavailable" id="pd-price">ناموجود</span>
+                        {% endif %}
+                        {% endif %}
                     </div>
-                    <span class="product-price price-placeholder" id="pd-price">یک گزینه را انتخاب کنید</span>
-                    {% else %}
-                    {% if object.stock > 0 and object.has_discount %}
-                    <div class="price-old-line" id="pd-price-old-line">
-                        <span class="product-price-old" id="pd-price-old">{{ object.get_real_price|intcomma }} تومان</span>
-                        <span class="discount-badge" id="pd-discount-badge">{{ object.get_discount_percent }}٪ تخفیف</span>
+
+                    {% if object.category.all %}
+                    <div class="category-box">
+                        <div class="price-value">دسته‌بندی</div>
+                        <div class="price-note">
+                            {% for category in object.category.all %}
+                            {{ category.title }}{% if not forloop.last %}، {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
-                    {% endif %}
-                    {% if object.stock > 0 %}
-                    <span class="product-price {% if object.has_discount %}price-discounted{% endif %}" id="pd-price">{{ object.get_price|intcomma }} تومان</span>
-                    {% else %}
-                    <span class="product-price price-unavailable" id="pd-price">ناموجود</span>
-                    {% endif %}
                     {% endif %}
                 </div>
-
-                {% if object.category.all %}
-                <div class="category-box">
-                    <div class="price-value">دسته‌بندی</div>
-                    <div class="price-note">
-                        {% for category in object.category.all %}
-                        {{ category.title }}{% if not forloop.last %}، {% endif %}
-                        {% endfor %}
-                    </div>
-                </div> 
-                {% endif %}
             </div>
-        </div>
 
             {% if object.has_variants %}
             <!-- تا وقتی کاربر یک رنگ/سایز انتخاب نکرده، موجودی هیچ وریانت خاصی رو نشون نمی‌دیم -->
@@ -68,6 +71,12 @@
                 </span>
             </div>
             {% else %}
+<<<<<<< HEAD
+            <div class="stock-status {% if not object.stock > 0 %}stock-status-out{% endif %}" id="pd-stock-status">
+                <i class="fa-solid {% if object.stock > 0 %}fa-check{% else %}fa-xmark{% endif %}"
+                    id="pd-stock-icon"></i>
+                <span id="pd-stock-text">{% if object.stock > 0 %}موجود در انبار{% else %}ناموجود{% endif %}</span>
+=======
             <div class="stock-status {% if not object.stock > 0 %}stock-status-out{% endif %}{% if object.stock > 0 and object.stock <= 5 %} stock-status-low{% endif %}" id="pd-stock-status">
                 <span class="stock-status-main">
                     <i class="fa-solid {% if object.stock > 0 %}fa-check{% else %}fa-xmark{% endif %}" id="pd-stock-icon"></i>
@@ -78,6 +87,7 @@
                     <i class="fa-solid fa-fire"></i> فقط <b>{{ object.stock }}</b> عدد باقی مانده
                 </span>
                 {% endif %}
+>>>>>>> ac72ca3649a5ac084b3ae910f813c324f9c3bdd0
             </div>
             {% endif %}
 
@@ -88,12 +98,15 @@
                 <label>انتخاب رنگ: <span id="pd-color-selected-name">—</span></label>
                 <div class="color-dots" id="pd-color-palette">
                     {% for variant in object.get_color_variants %}
-                    <button
-                        type="button"
-                        class="color-swatch{% if variant.stock <= 0 %} variant-unavailable{% endif %}"
-                        data-variant-id="{{ variant.id }}"
-                        data-color-code="{{ variant.get_hex_color }}"
+                    <button type="button" class="color-swatch{% if variant.stock <= 0 %} variant-unavailable{% endif %}"
+                        data-variant-id="{{ variant.id }}" data-color-code="{{ variant.get_hex_color }}"
                         data-color-name="{{ variant.get_color_display_name }}"
+<<<<<<< HEAD
+                        data-color-number="{{ variant.color_code }}" data-price="{{ variant.get_price }}"
+                        data-original-price="{{ variant.price }}" data-discount="{{ variant.discount_percent }}"
+                        data-stock="{{ variant.stock }}" data-specs="{{ variant.get_specs_json }}"
+                        aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}{% if variant.stock <= 0 %}، ناموجود{% endif %}">
+=======
                         data-color-number="{{ variant.color_code }}"
                         data-price="{{ variant.get_price }}"
                         data-original-price="{{ variant.price }}"
@@ -101,6 +114,7 @@
                         data-stock="{{ variant.stock }}"
                         data-specs="{{ variant.get_specs_json }}"
                         aria-label="انتخاب رنگ {{ variant.get_color_display_name }}، کد {{ variant.color_code }}{% if variant.stock <= 0 %}، ناموجود{% elif variant.stock <= 5 %}، تنها {{ variant.stock }} عدد باقی مانده{% endif %}">
+>>>>>>> ac72ca3649a5ac084b3ae910f813c324f9c3bdd0
                         <span class="dot" style="background-color: #{{ variant.get_hex_color }};"></span>
                         <span class="swatch-code">{{ variant.color_code }}</span>
                     </button>
@@ -115,17 +129,17 @@
                 <label>انتخاب سایز: <span id="pd-size-selected-name">—</span></label>
                 <div class="color-dots" id="pd-size-palette">
                     {% for variant in object.get_number_variants %}
-                    <button
-                        type="button"
-                        class="dot size-dot{% if variant.stock <= 0 %} variant-unavailable{% endif %}"
-                        data-variant-id="{{ variant.id }}"
-                        data-size-code="{{ variant.number_code }}"
-                        data-price="{{ variant.get_price }}"
-                        data-original-price="{{ variant.price }}"
-                        data-discount="{{ variant.discount_percent }}"
-                        data-stock="{{ variant.stock }}"
+                    <button type="button" class="dot size-dot{% if variant.stock <= 0 %} variant-unavailable{% endif %}"
+                        data-variant-id="{{ variant.id }}" data-size-code="{{ variant.number_code }}"
+                        data-price="{{ variant.get_price }}" data-original-price="{{ variant.price }}"
+                        data-discount="{{ variant.discount_percent }}" data-stock="{{ variant.stock }}"
                         data-specs="{{ variant.get_specs_json }}"
+<<<<<<< HEAD
+                        aria-label="انتخاب سایز {{ variant.number_code }}{% if variant.stock <= 0 %}، ناموجود{% endif %}">{{
+                        variant.number_code }}</button>
+=======
                         aria-label="انتخاب سایز {{ variant.number_code }}{% if variant.stock <= 0 %}، ناموجود{% elif variant.stock <= 5 %}، تنها {{ variant.stock }} عدد باقی مانده{% endif %}">{{ variant.number_code }}</button>
+>>>>>>> ac72ca3649a5ac084b3ae910f813c324f9c3bdd0
                     {% endfor %}
                 </div>
                 {% if not object.has_color_variants %}
@@ -134,16 +148,15 @@
             </div>
             {% endif %}
 
-            <button
-                type="button"
+            <button type="button"
                 class="btn-add-to-cart{% if not object.has_variants and object.stock <= 0 %} is-disabled{% endif %}"
-                aria-label="افزودن {{ object.title }} به سبد خرید"
-                data-url="{% url 'cart:session-add-product' %}"
-                data-product-id="{{ object.id }}"
-                data-stock="{{ object.stock }}"
-                {% if not object.has_variants and object.stock <= 0 %}disabled{% endif %}>
-                <i class="fa-solid {% if not object.has_variants and object.stock <= 0 %}fa-ban{% else %}fa-cart-shopping{% endif %}" id="pd-cart-icon"></i>
-                <span id="pd-cart-btn-text">{% if not object.has_variants and object.stock <= 0 %}ناموجود{% else %}افزودن به سبد خرید{% endif %}</span>
+                aria-label="افزودن {{ object.title }} به سبد خرید" data-url="{% url 'cart:session-add-product' %}"
+                data-product-id="{{ object.id }}" data-stock="{{ object.stock }}" {% if not object.has_variants and
+                object.stock <=0 %}disabled{% endif %}>
+                <i class="fa-solid {% if not object.has_variants and object.stock <= 0 %}fa-ban{% else %}fa-cart-shopping{% endif %}"
+                    id="pd-cart-icon"></i>
+                <span id="pd-cart-btn-text">{% if not object.has_variants and object.stock <= 0 %}ناموجود{% else
+                        %}افزودن به سبد خرید{% endif %}</span>
             </button>
 
             <div class="trust-badges">
@@ -183,55 +196,57 @@
         {% with gallery_images=object.product_images.all %}
         <div class="gallery-box{% if not object.has_variants and object.stock <= 0 %} is-sold-out{% endif %}">
             <div class="main-image-container" id="pd-gallery">
-                {% if not object.has_variants and object.stock <= 0 %}
-                <div class="sold-out-badge">ناموجود</div>
-                {% endif %}
-                <div class="pd-image-stack">
-                    {% if gallery_images %}
-                    {% for gallery_image in gallery_images %}
-                    <img
-                        class="pd-image{% if forloop.first %} active{% endif %}"
-                        src="{{ gallery_image.file.url }}"
-                        alt="{{ object.get_image_alt }} — نمای {{ forloop.counter }}"
-                        data-index="{{ forloop.counter0 }}" />
-                    {% endfor %}
-                    {% else %}
-                    <img
-                        class="pd-image active"
-                        src="{{ object.image.url }}"
-                        alt="{{ object.get_image_alt }}"
-                        data-index="0" />
-                    {% endif %}
-                </div>
-            </div>
-
-            {% if gallery_images|length > 1 %}
-            <div class="gallery-controls" id="pd-gallery-controls">
-                <button type="button" class="nav-arrow left" id="pd-gallery-left" aria-label="عکس بعدی">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-                <span class="gallery-controls-sep" aria-hidden="true"></span>
-                <button type="button" class="nav-arrow right" id="pd-gallery-right" aria-label="عکس قبلی">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-            </div>
+                {% if not object.has_variants and object.stock <= 0 %} <div class="sold-out-badge">ناموجود</div>
             {% endif %}
-
-            {% if gallery_images|length > 1 %}
-            <div class="thumbnail-list" id="pd-gallery-thumbs">
+            <div class="pd-image-stack">
+                {% if gallery_images %}
                 {% for gallery_image in gallery_images %}
-                <button type="button" class="thumb-item{% if forloop.first %} active{% endif %}" data-index="{{ forloop.counter0 }}" aria-label="نمای {{ forloop.counter }}">
-                    <img src="{{ gallery_image.file.url }}" alt="{{ object.get_image_alt }} — نمای {{ forloop.counter }}" />
-                </button>
+                <img loading="lazy" class="pd-image{% if forloop.first %} active{% endif %}"
+                    src="{{ gallery_image.file.url }}" alt="{{ object.get_image_alt }} — نمای {{ forloop.counter }}"
+                    data-index="{{ forloop.counter0 }}" />
                 {% endfor %}
+                {% else %}
+                <img loading="lazy" class="pd-image active" src="{{ object.image.url }}"
+                    alt="{{ object.get_image_alt }}" data-index="0" />
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-        {% endwith %}
-    </div>
 
-    <!-- TABS SECTION -->
-    <div class="tabs-container">
+        {% if gallery_images|length > 1 %}
+        <div class="gallery-controls" id="pd-gallery-controls">
+            <button type="button" class="nav-arrow left" id="pd-gallery-left" aria-label="عکس بعدی">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+            <span class="gallery-controls-sep" aria-hidden="true"></span>
+            <button type="button" class="nav-arrow right" id="pd-gallery-right" aria-label="عکس قبلی">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+        </div>
+        {% endif %}
+
+        {% if gallery_images|length > 1 %}
+        <div class="thumbnail-list" id="pd-gallery-thumbs">
+            {% for gallery_image in gallery_images %}
+            <button type="button" class="thumb-item{% if forloop.first %} active{% endif %}"
+                data-index="{{ forloop.counter0 }}" aria-label="نمای {{ forloop.counter }}">
+                <img loading="lazy" src="{{ gallery_image.file.url }}"
+                    alt="{{ object.get_image_alt }} — نمای {{ forloop.counter }}" />
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endwith %}
+</div>
+
+<!-- TABS SECTION -->
+<div class="tabs-container">
     <div class="tabs-header">
         <div class="tab-btn active" data-tab="desc">توضیحات محصول</div>
         <div class="tab-btn" data-tab="specs">مشخصات محصول</div>
@@ -276,49 +291,45 @@
         </table>
 
     </div>
+</div>
+
+<!-- RELATED PRODUCTS -->
+<div class="related-section">
+    {% if related_products.count != 0 %}
+    <div class="section-arrow left"><i class="fa-solid fa-chevron-left"></i></div>
+    <div class="section-arrow right"><i class="fa-solid fa-chevron-right"></i></div>
+    {% endif %}
+
+    <div class="related-section-header">
+        <div class="section-title">محصولات مرتبط</div>
+        <a href="{% url 'shop:show-product-view' %}" class="related-viewall">مشاهده همه محصولات</a>
     </div>
 
-    <!-- RELATED PRODUCTS -->
-    <div class="related-section">
-        {% if related_products.count != 0 %}
-        <div class="section-arrow left"><i class="fa-solid fa-chevron-left"></i></div>
-        <div class="section-arrow right"><i class="fa-solid fa-chevron-right"></i></div>
-        {% endif %}
-
-        <div class="related-section-header">
-            <div class="section-title">محصولات مرتبط</div>
-            <a href="{% url 'shop:show-product-view' %}" class="related-viewall">مشاهده همه محصولات</a>
-        </div>
-
-        <div class="related-grid">
-            {% for product in related_products %}
-            <div class="related-card" style="cursor: pointer" data-href="{{ product.get_absolute_url }}">
-                <button type="button" class="wishlist-icon-btn" aria-label="افزودن به علاقه‌مندی">
-                    <i class="fa-regular fa-heart wishlist-icon"></i>
-                </button>
-                <div class="related-img">
-                    <img src="{{ product.image.url }}" alt="{{ product.get_image_alt }}" loading="lazy" />
-                </div>
-
-                <div class="related-title">{{ product.title }}</div>
-                <div class="related-price">{{ product.get_price|intcomma }} تومان</div>
-                <button
-                    type="button"
-                    class="btn-card-add"
-                    aria-label="افزودن {{ product.title }} به سبد خرید"
-                    data-url="{% url 'cart:session-add-product' %}"
-                    data-product-id="{{ product.id }}">
-                    <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
-                </button>
+    <div class="related-grid">
+        {% for product in related_products %}
+        <div class="related-card" style="cursor: pointer" data-href="{{ product.get_absolute_url }}">
+            <button type="button" class="wishlist-icon-btn" aria-label="افزودن به علاقه‌مندی">
+                <i class="fa-regular fa-heart wishlist-icon"></i>
+            </button>
+            <div class="related-img">
+                <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.get_image_alt }}" loading="lazy" />
             </div>
-            {% empty %}
-            <p>محصول مرتبطی یافت نشد.</p>
-            {% endfor %}
+
+            <div class="related-title">{{ product.title }}</div>
+            <div class="related-price">{{ product.get_price|intcomma }} تومان</div>
+            <button type="button" class="btn-card-add" aria-label="افزودن {{ product.title }} به سبد خرید"
+                data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}">
+                <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+            </button>
         </div>
+        {% empty %}
+        <p>محصول مرتبطی یافت نشد.</p>
+        {% endfor %}
     </div>
 </div>
+</div>
 {% endblock content %} {% block extra_js %}
-<script src="{% static 'js/shop.js' %}"></script>
+<script src="{% static 'js/shop.js' %}" defer></script>
 
 <script type="application/ld+json">
     {

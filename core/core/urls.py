@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -23,13 +24,14 @@ from shop.sitemaps import ProductSitemap, CategorySitemap, StaticViewSitemap
 from django.http import HttpResponse
 
 sitemaps = {
-    'static': StaticViewSitemap,
-    'categories': CategorySitemap,
-    'products': ProductSitemap,
+    "static": StaticViewSitemap,
+    "categories": CategorySitemap,
+    "products": ProductSitemap,
 }
 
+
 def robots_txt(request):
-    sitemap_url = request.build_absolute_uri('/sitemap.xml')
+    sitemap_url = request.build_absolute_uri("/sitemap.xml")
     content = f"""User-agent: *
     Allow: /
     Disallow: /admin/
@@ -41,18 +43,28 @@ def robots_txt(request):
     Sitemap: {sitemap_url}
     """
     return HttpResponse(content, content_type="text/plain")
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('website.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('shop/', include('shop.urls')),
-    path('dashboard/', include('dashboard.urls')),
-    path('cart/', include('cart.urls')),
-    path('order/', include('order.urls')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('robots.txt', robots_txt),
-    path('payment/', include('payment.urls', namespace='payment')),
+    path("admin/", admin.site.urls),
+    path("", include("website.urls")),
+    path("accounts/", include("accounts.urls")),
+    path("shop/", include("shop.urls")),
+    path("dashboard/", include("dashboard.urls")),
+    path("cart/", include("cart.urls")),
+    path("order/", include("order.urls")),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    path("robots.txt", robots_txt),
+    path("payment/", include("payment.urls", namespace="payment")),
 ]
+
+
+urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
 
 
 # توجه: در حالت production (DEBUG=False)، سرو فایل‌های MEDIA دیگه از این طریق

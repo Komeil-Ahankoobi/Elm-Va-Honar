@@ -26,7 +26,7 @@
     {% for cat in object_list %}
     <a href="{% url 'shop:show-product-view' %}?category={{ cat.id }}" class="category-card">
         <div class="icon-wrapper">
-            <img src="{{ cat.image.url }}" alt="دفتر و کاغذ">
+            <img loading="lazy" src="{{ cat.image.url }}" alt="دفتر و کاغذ">
         </div>
         <span class="category-title">{{ cat.title }}</span>
         {% if request.user.is_staff %}
@@ -65,7 +65,8 @@
     {% for i in page_obj.paginator.page_range %}
     {% if page_obj.number == i %}
     <a href="?page={{ i }}" class="page-link active">{{ i }}</a>
-    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a href="?page={{ i }}" class="page-link">{{
+        i }}</a>
         {% elif i == 1 or i == page_obj.paginator.num_pages %}
         <a href="?page={{ i }}" class="page-link">{{ i }}</a>
         {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}

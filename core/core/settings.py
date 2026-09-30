@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
-    
     "accounts",
     "website",
     "shop",
@@ -239,6 +238,17 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-ZARINPAL_MERCHANT_ID = config("ZARINPAL_MERCHANT_ID", default="")
-ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=False)
+ZARINPAL_MERCHANT_ID = config(
+    "ZARINPAL_MERCHANT_ID", default="9f57ea6f-c224-403d-ae3f-f5e18dedb48a"
+)
+ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=True)
 ZARINPAL_CURRENCY = config("ZARINPAL_CURRENCY", default="IRT")
+
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    import socket
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]

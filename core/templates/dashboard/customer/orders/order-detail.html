@@ -131,7 +131,7 @@
                     <div class="product-row">
                         <div class="product-column">
                             {% if item.product.image %}
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}"
+                            <img loading="lazy" src="{{ item.product.image.url }}" alt="{{ item.product.title }}"
                                 class="product-thumb">
                             {% else %}
                             <div class="product-thumb-placeholder">
@@ -147,7 +147,8 @@
 
                                 {% if item.variant %}
                                 <div class="order-item-variant">
-                                    {% if item.variant.variant_type == "color" or item.variant.variant_type == "pars_color" %}
+                                    {% if item.variant.variant_type == "color" or item.variant.variant_type ==
+                                    "pars_color" %}
                                     <span class="order-variant-type">{{ item.variant.get_variant_type_display }}</span>
                                     <span class="order-variant-value">
                                         <span class="order-color-dot"
@@ -169,7 +170,8 @@
                             <small>تومان</small>
                         </div>
                         <div class="table-value" data-label="تخفیف">
-                            {% if item.has_discount %}<span class="discount-badge">٪{{ item.discount_percent }}</span>{% else %}<span class="no-discount">—</span>{% endif %}
+                            {% if item.has_discount %}<span class="discount-badge">٪{{ item.discount_percent }}</span>{%
+                            else %}<span class="no-discount">—</span>{% endif %}
                         </div>
                         <div class="table-value final-price" data-label="قیمت نهایی">{{ item.price|intcomma }}
                             <small>تومان</small>
@@ -206,7 +208,8 @@
                 <div class="shipping-list">
                     <div class="shipping-row">
                         <span>گیرنده</span>
-                        <strong>{{ order.user.user_profile.first_name }} {{ order.user.user_profile.last_name }}</strong>
+                        <strong>{{ order.user.user_profile.first_name }} {{ order.user.user_profile.last_name
+                            }}</strong>
                     </div>
                     <div class="shipping-row shipping-address">
                         <span>نشانی ارسال</span>
