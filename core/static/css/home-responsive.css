@@ -872,4 +872,13 @@
     footer.footer .trust-item--enamad {
         width: calc(50% - 6px) !important;
     }
+
+    .products-carousel-wrap .product-card {
+        width: 150px;
+    }
+
+    .products-carousel-wrap .product-img,
+    .products-carousel-wrap .product-img img {
+        height: 110px;
+    }
 }

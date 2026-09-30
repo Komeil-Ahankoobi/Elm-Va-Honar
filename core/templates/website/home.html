@@ -35,11 +35,9 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
         media="print" onload="this.media='all'" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         media="print" onload="this.media='all'" />
 </head>
 
@@ -53,8 +51,8 @@
 
                 <div class="header__logo-area">
                     <a href="{% url 'website:home' %}" class="header__logo">
-                        <img loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar"
-                            class="header__logo-img">
+                        <img width="165" height="55" loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}"
+                            alt="ElmvHonar" class="header__logo-img">
                     </a>
                 </div>
 
@@ -197,8 +195,8 @@
                             {% if slide.image_webp %}
                             <source srcset="{{ slide.image_webp }}" type="image/webp">
                             {% endif %}
-                            <img loading="lazy" src="{% static slide.image %}" alt="{{ slide.title|striptags }}"
-                                class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {% else %}loading="lazy" {% endif %}>
+                            <img width="1192" height="380" src="{% static slide.image %}"
+                                alt="{{ slide.title|striptags }}" class="hero__slide-img" {% if forloop.first %}loading="eager" fetchpriority="high" {% else %}loading="lazy" {% endif %}>
                         </picture>
                         <div class="hero__content">
                             <h1 class="hero__title">
@@ -306,7 +304,8 @@
                     {% for cat in popular_cats %}
                     <a href="{% url 'shop:show-product-view' %}?category={{ cat.id }}" class="category-circle-card">
                         <div class="category-circle-card__img-wrap">
-                            <img loading="lazy" src="{{ cat.image.url }}" alt="{{ cat.title }}" class="placeholder-img">
+                            <img width="100" height="100" loading="lazy" src="{{ cat.image.url }}" alt="{{ cat.title }}"
+                                class="placeholder-img">
                         </div>
                         <span class="category-circle-card__title">{{ cat.title }}</span>
                     </a>
@@ -331,8 +330,8 @@
 
                 {% for cat_baner in cat_baners %}
                 <div class="promo-card">
-                    <img loading="lazy" src="{{ cat_baner.baner_image.url }}" alt="{{ cat_baner.h3_text }}"
-                        class="placeholder-img placeholder-img--dark">
+                    <img width="371" height="160" loading="lazy" src="{{ cat_baner.baner_image.url }}"
+                        alt="{{ cat_baner.h3_text }}" class="placeholder-img placeholder-img--dark">
                     <div class="promo-card__content">
                         <h3 class="promo-card__title">{{ cat_baner.h3_text }}</h3>
                         <p class="promo-card__desc">{{ cat_baner.p_text }}</p>
@@ -376,8 +375,8 @@
                             </div>
                             {% endif %}
                             <div class="product-img">
-                                <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}"
-                                    loading="lazy" />
+                                <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}" width="180"
+                                    height="130" />
                             </div>
 
                             <div class="product-title">{{ product.title }}</div>
@@ -441,95 +440,99 @@
 
                     <!-- Duplicate list for seamless infinite loop -->
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
+                        <img width="150" height="60" loading="lazy"
+                            src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
+                        <img width="150" height="60" loading="lazy"
+                            src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/vesta.webp' %}" alt="Vesta"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/vesta.webp' %}"
+                            alt="Vesta" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/stadler.webp' %}"
+                            alt="Staedtler" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/pentel.webp' %}" alt="Pentel"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/pentel.webp' %}"
+                            alt="Pentel" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/canco.webp' %}" alt="canco"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/canco.webp' %}"
+                            alt="canco" class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/c-class.webp' %}" alt="c-class"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/c-class.webp' %}"
+                            alt="c-class" class="brand-item__logo" loading="lazy">
                     </div>
 
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/pars-art.webp' %}"
+                            alt="Pars Art" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/picasso.webp' %}" alt="Picasso"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/picasso.webp' %}"
+                            alt="Picasso" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <!-- تکرار دوم برای infinite loop -->
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
+                        <img width="150" height="60" loading="lazy"
+                            src="{% static 'images/brands/faber-castell.webp' %}" alt="Faber-Castell"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
+                        <img width="150" height="60" loading="lazy"
+                            src="{% static 'images/brands/winsor-newton.webp' %}" alt="Winsor & Newton"
                             class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/vesta.webp' %}" alt="Vesta"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/vesta.webp' %}"
+                            alt="Vesta" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/stadler.webp' %}" alt="Staedtler"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/stadler.webp' %}"
+                            alt="Staedtler" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/pentel.webp' %}" alt="Pentel"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/pentel.webp' %}"
+                            alt="Pentel" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/canco.webp' %}" alt="canco"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/canco.webp' %}"
+                            alt="canco" class="brand-item__logo" loading="lazy">
                     </div>
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/c-class.webp' %}" alt="c-class"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/c-class.webp' %}"
+                            alt="c-class" class="brand-item__logo" loading="lazy">
                     </div>
 
 
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/pars-art.webp' %}" alt="Pars Art"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/pars-art.webp' %}"
+                            alt="Pars Art" class="brand-item__logo" loading="lazy">
                     </div>
 
                     <div class="brand-item">
-                        <img loading="lazy" src="{% static 'images/brands/picasso.webp' %}" alt="Picasso"
-                            class="brand-item__logo" loading="lazy">
+                        <img width="150" height="60" loading="lazy" src="{% static 'images/brands/picasso.webp' %}"
+                            alt="Picasso" class="brand-item__logo" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -550,7 +553,7 @@
                 <article class="article-card">
                     <a href="{% url 'website:blog-post-detail' pk=post.id %}">
                         <div class="card-image">
-                            <img loading="lazy" src="{{ post.image.url }}"
+                            <img width="274" height="160" loading="lazy" src="{{ post.image.url }}"
                                 alt="{{ post.image_alt_text|default:post.title }}" />
                         </div>
                         <div class="card-content">
@@ -575,8 +578,8 @@
             <div class="footer__main">
                 <div class="footer__col footer__col--brand">
                     <div class="footer__logo">
-                        <img loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}" alt="ElmvHonar"
-                            class="footer__logo-img">
+                        <img width="165" height="55" loading="lazy" src="{% static 'images/logo/elmvhonar.webp' %}"
+                            alt="ElmvHonar" class="footer__logo-img">
                     </div>
                     <h4 class="footer__title">آدرس حضوری</h4>
                     <p class="footer__desc">
