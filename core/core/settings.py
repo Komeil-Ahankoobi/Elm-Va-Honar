@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
+    "debug_toolbar",
     "accounts",
     "website",
     "shop",
@@ -246,7 +247,6 @@ ZARINPAL_CURRENCY = config("ZARINPAL_CURRENCY", default="IRT")
 
 
 if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     import socket
 
