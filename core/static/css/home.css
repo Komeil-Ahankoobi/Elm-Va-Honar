@@ -23,7 +23,7 @@ body {
 
 .header__logo-img {
     height: 55px;
-    width: 165px;
+    width: 80px;
     display: block;
     object-fit: contain;
 }
