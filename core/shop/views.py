@@ -1,18 +1,26 @@
-from django.db.models import F, DecimalField, ExpressionWrapper, Q, Min, Max, Case, When
+from django.db.models import (
+    F,
+    DecimalField,
+    ExpressionWrapper,
+    Q,
+    Min,
+    Max,
+    Case,
+    When,
+    Prefetch,
+)
 from django.db.models.functions import Round
 
 from .models import (
-    ProductModel, 
+    ProductModel,
+    ProductVarientModel,
     ProductStatusType,
     ProductCategoryModel,
     VarientType,
 )
-from .colors import VISTA_ACRYLIC_COLORS, PARS_ACRYLIC_COLORS
-from django.views.generic import (
-    ListView,
-    DetailView
-)
 
+from .colors import VISTA_ACRYLIC_COLORS, PARS_ACRYLIC_COLORS
+from django.views.generic import ListView, DetailView
 
 PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹"
 ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩"
@@ -22,9 +30,38 @@ LATIN_DIGITS = "0123456789"
 # "آ" جزو حروف مستقل الفبا نیست، معمولاً با "ا" یکی در نظر گرفته می‌شه؛
 # پس تو normalize_first_letter تبدیلش می‌کنیم به "ا".
 PERSIAN_ALPHABET = [
-    "ا", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ", "د", "ذ",
-    "ر", "ز", "ژ", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ",
-    "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی",
+    "ا",
+    "ب",
+    "پ",
+    "ت",
+    "ث",
+    "ج",
+    "چ",
+    "ح",
+    "خ",
+    "د",
+    "ذ",
+    "ر",
+    "ز",
+    "ژ",
+    "س",
+    "ش",
+    "ص",
+    "ض",
+    "ط",
+    "ظ",
+    "ع",
+    "غ",
+    "ف",
+    "ق",
+    "ک",
+    "گ",
+    "ل",
+    "م",
+    "ن",
+    "و",
+    "ه",
+    "ی",
 ]
 
 # نویسه‌های عربی/فارسی مشابه که باید قبل از گروه‌بندی یکسان‌سازی بشن
@@ -59,20 +96,38 @@ def group_categories_by_letter(categories):
     result = []
     for letter in PERSIAN_ALPHABET:
         if letter in grouped:
-            result.append({
-                "letter": letter,
-                "categories": sorted(grouped[letter], key=lambda c: c.title),
-            })
+            result.append(
+                {
+                    "letter": letter,
+                    "categories": sorted(grouped[letter], key=lambda c: c.title),
+                }
+            )
     return result
 
+
 SEARCH_STOPWORDS = {
-    "سایز", "شماره", "نمره", "نمبر", "کد",
-    "رنگ", "اکریلیک", "اکرلیک", "ویستا",
+    "سایز",
+    "شماره",
+    "نمره",
+    "نمبر",
+    "کد",
+    "رنگ",
+    "اکریلیک",
+    "اکرلیک",
+    "ویستا",
 }
 
 PERSIAN_COLOR_KEYWORDS = {
     "قرمز": ["red", "scarlet", "ruby", "wine"],
-    "آبی": ["blue", "cerulean", "cobalt", "turquoise", "ultramarine", "prussian", "phthalo"],
+    "آبی": [
+        "blue",
+        "cerulean",
+        "cobalt",
+        "turquoise",
+        "ultramarine",
+        "prussian",
+        "phthalo",
+    ],
     "زرد": ["yellow", "lemon", "ochre", "naples"],
     "سبز": ["green", "viridian"],
     "بنفش": ["purple", "violet", "dioxazine"],
@@ -92,8 +147,7 @@ PERSIAN_COLOR_KEYWORDS = {
 
 def normalize_digits(text):
     translation_table = str.maketrans(
-        PERSIAN_DIGITS + ARABIC_DIGITS,
-        LATIN_DIGITS + LATIN_DIGITS
+        PERSIAN_DIGITS + ARABIC_DIGITS, LATIN_DIGITS + LATIN_DIGITS
     )
     return text.translate(translation_table)
 
@@ -116,70 +170,90 @@ class ShopProductView(ListView):
     template_name = "shop/shop.html"
     context_object_name = "products"
     paginate_by = 20
-    
+
     def get_paginate_by(self, queryset):
-        return self.request.GET.get('page_size', self.paginate_by)
+        return self.request.GET.get("page_size", self.paginate_by)
 
     def get_queryset(self):
         # قیمت محصول اصلی بعد از تخفیف خودش (برای محصولات بدون وریانت)
         own_final_price = ExpressionWrapper(
             F("price") - (F("price") * F("discount_percent") / 100),
-            output_field=DecimalField()
+            output_field=DecimalField(),
         )
         # قیمت هر وریانت بعد از تخفیف خودش
         variant_final_price = ExpressionWrapper(
-            F("varients__price") - (F("varients__price") * F("varients__discount_percent") / 100),
-            output_field=DecimalField()
+            F("varients__price")
+            - (F("varients__price") * F("varients__discount_percent") / 100),
+            output_field=DecimalField(),
         )
 
-        queryset = ProductModel.objects.filter(
-            status=ProductStatusType.publish.value
-        ).filter(
-            Q(varients__isnull=True)
-            | Q(varients__status=ProductStatusType.publish.value)
-        ).distinct().annotate(
-            # کمترین/بیشترین قیمت بین وریانت‌هایی که هم منتشر شدن هم موجودن
-            variant_available_min=Min(
-                variant_final_price,
-                filter=Q(varients__status=ProductStatusType.publish.value, varients__stock__gt=0)
-            ),
-            variant_available_max=Max(
-                variant_final_price,
-                filter=Q(varients__status=ProductStatusType.publish.value, varients__stock__gt=0)
-            ),
-            # fallback: اگه هیچ وریانت موجودی نبود، بین وریانت‌های منتشرشده (صرف‌نظر از موجودی)
-            variant_any_min=Min(
-                variant_final_price,
-                filter=Q(varients__status=ProductStatusType.publish.value)
-            ),
-            variant_any_max=Max(
-                variant_final_price,
-                filter=Q(varients__status=ProductStatusType.publish.value)
-            ),
-        ).annotate(
-            # اولویت با وریانت موجود، بعد وریانت منتشرشده (حتی ناموجود)، بعد قیمت خود محصول
-            final_price_min=Round(Case(
-                When(variant_available_min__isnull=False, then=F("variant_available_min")),
-                When(variant_any_min__isnull=False, then=F("variant_any_min")),
-                default=own_final_price,
-                output_field=DecimalField(),
-            )),
-            final_price_max=Round(Case(
-                When(variant_available_max__isnull=False, then=F("variant_available_max")),
-                When(variant_any_max__isnull=False, then=F("variant_any_max")),
-                default=own_final_price,
-                output_field=DecimalField(),
-            )),
+        queryset = (
+            ProductModel.objects.filter(status=ProductStatusType.publish.value)
+            .filter(
+                Q(varients__isnull=True)
+                | Q(varients__status=ProductStatusType.publish.value)
+            )
+            .distinct()
+            .annotate(
+                # کمترین/بیشترین قیمت بین وریانت‌هایی که هم منتشر شدن هم موجودن
+                variant_available_min=Min(
+                    variant_final_price,
+                    filter=Q(
+                        varients__status=ProductStatusType.publish.value,
+                        varients__stock__gt=0,
+                    ),
+                ),
+                variant_available_max=Max(
+                    variant_final_price,
+                    filter=Q(
+                        varients__status=ProductStatusType.publish.value,
+                        varients__stock__gt=0,
+                    ),
+                ),
+                # fallback: اگه هیچ وریانت موجودی نبود، بین وریانت‌های منتشرشده (صرف‌نظر از موجودی)
+                variant_any_min=Min(
+                    variant_final_price,
+                    filter=Q(varients__status=ProductStatusType.publish.value),
+                ),
+                variant_any_max=Max(
+                    variant_final_price,
+                    filter=Q(varients__status=ProductStatusType.publish.value),
+                ),
+            )
+            .annotate(
+                # اولویت با وریانت موجود، بعد وریانت منتشرشده (حتی ناموجود)، بعد قیمت خود محصول
+                final_price_min=Round(
+                    Case(
+                        When(
+                            variant_available_min__isnull=False,
+                            then=F("variant_available_min"),
+                        ),
+                        When(variant_any_min__isnull=False, then=F("variant_any_min")),
+                        default=own_final_price,
+                        output_field=DecimalField(),
+                    )
+                ),
+                final_price_max=Round(
+                    Case(
+                        When(
+                            variant_available_max__isnull=False,
+                            then=F("variant_available_max"),
+                        ),
+                        When(variant_any_max__isnull=False, then=F("variant_any_max")),
+                        default=own_final_price,
+                        output_field=DecimalField(),
+                    )
+                ),
+            )
         )
-        
-        if q := self.request.GET.get('q'):
+
+        if q := self.request.GET.get("q"):
             q_normalized = normalize_digits(q)
             raw_tokens = q_normalized.split()
 
             numeric_tokens = [t for t in raw_tokens if t.isdigit()]
             remaining_tokens = [
-                t for t in raw_tokens
-                if not t.isdigit() and t not in SEARCH_STOPWORDS
+                t for t in raw_tokens if not t.isdigit() and t not in SEARCH_STOPWORDS
             ]
 
             color_codes = set()
@@ -196,16 +270,29 @@ class ShopProductView(ListView):
             variant_conditions = []
             if numeric_tokens:
                 variant_conditions.append(
-                    Q(varients__variant_type=VarientType.number, varients__number_code__in=numeric_tokens)
+                    Q(
+                        varients__variant_type=VarientType.number,
+                        varients__number_code__in=numeric_tokens,
+                    )
                 )
                 variant_conditions.append(
-                    Q(varients__variant_type__in=[VarientType.color, VarientType.pars_color],
-                      varients__color_code__in=numeric_tokens)
+                    Q(
+                        varients__variant_type__in=[
+                            VarientType.color,
+                            VarientType.pars_color,
+                        ],
+                        varients__color_code__in=numeric_tokens,
+                    )
                 )
             if color_codes:
                 variant_conditions.append(
-                    Q(varients__variant_type__in=[VarientType.color, VarientType.pars_color],
-                      varients__color_code__in=color_codes)
+                    Q(
+                        varients__variant_type__in=[
+                            VarientType.color,
+                            VarientType.pars_color,
+                        ],
+                        varients__color_code__in=color_codes,
+                    )
                 )
 
             if variant_conditions:
@@ -217,86 +304,108 @@ class ShopProductView(ListView):
                 for word in title_tokens:
                     title_match &= Q(title__icontains=word)
 
-                search_filter |= (title_match & variant_match)
+                search_filter |= title_match & variant_match
 
             queryset = queryset.filter(search_filter).distinct()
 
         try:
-            if min_price := self.request.GET.get('min_price'):
+            if min_price := self.request.GET.get("min_price"):
                 min_price = int(min_price)
                 # اگه بیشترین قیمت محصول (بین وریانت‌ها یا خودش) از حد پایین کمتر باشه یعنی کلاً پایین‌تر از بازه‌س
                 queryset = queryset.filter(final_price_max__gte=min_price)
         except (ValueError, TypeError):
-            pass 
+            pass
         try:
-            if max_price := self.request.GET.get('max_price'):
+            if max_price := self.request.GET.get("max_price"):
                 max_price = int(max_price)
                 # اگه کمترین قیمت محصول از حد بالا بیشتر باشه یعنی کلاً بالاتر از بازه‌س
                 queryset = queryset.filter(final_price_min__lte=max_price)
         except (ValueError, TypeError):
             pass
-        
-        filter_by = self.request.GET.get('filter-by')
-        
-        if filter_by == 'cheep_to_exp':
-            queryset = queryset.order_by('final_price_min')
-        elif filter_by == 'exp_to_cheep':
-            queryset = queryset.order_by('-final_price_max')
-        elif filter_by == 'new':
-            queryset = queryset.order_by('-created_date')
+
+        filter_by = self.request.GET.get("filter-by")
+
+        if filter_by == "cheep_to_exp":
+            queryset = queryset.order_by("final_price_min")
+        elif filter_by == "exp_to_cheep":
+            queryset = queryset.order_by("-final_price_max")
+        elif filter_by == "new":
+            queryset = queryset.order_by("-created_date")
         else:
             # annotate با Min/Max باعث می‌شه جنگو دیگه Meta.ordering مدل رو
             # خودکار اعمال نکنه؛ پس باید همینجا صریح مرتب‌سازی پیش‌فرض (جدیدترین) رو بزنیم.
-            queryset = queryset.order_by('-created_date')
-            
-        if category := self.request.GET.get('category'):
-            queryset = queryset.filter(category__id=category)         
-        if brand := self.request.GET.get('brand'):
+            queryset = queryset.order_by("-created_date")
+
+        if category := self.request.GET.get("category"):
+            queryset = queryset.filter(category__id=category)
+        if brand := self.request.GET.get("brand"):
             queryset = queryset.filter(brand__id=brand)
 
-        if self.request.GET.get('special_products'):
-            queryset = queryset.filter(
-                status=ProductStatusType.publish.value
-            ).filter(
-                Q(discount_percent__gt=0)
-                | Q(varients__discount_percent__gt=0, varients__status=ProductStatusType.publish.value)
-            ).distinct()
-        
+        if self.request.GET.get("special_products"):
+            queryset = (
+                queryset.filter(status=ProductStatusType.publish.value)
+                .filter(
+                    Q(discount_percent__gt=0)
+                    | Q(
+                        varients__discount_percent__gt=0,
+                        varients__status=ProductStatusType.publish.value,
+                    )
+                )
+                .distinct()
+            )
+            
+        queryset = queryset.prefetch_related(
+            Prefetch(
+                "varients",
+                queryset=ProductVarientModel.objects.filter(
+                    status=ProductStatusType.publish.value
+                ),
+                to_attr="_shop_variants",
+            )
+        )
+
         return queryset
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['total_product'] = ProductModel.objects.count()
-        categories = ProductCategoryModel.objects.all().order_by('title')
-        context['categories'] = categories
-        context['alphabet_categories'] = group_categories_by_letter(categories)
-        context['avtive_page'] = 'show-product-view'
-        context['filter_by'] = self.request.GET.get('filter-by')
+        context["total_product"] = ProductModel.objects.count()
+        categories = ProductCategoryModel.objects.all().order_by("title")
+        context["categories"] = categories
+        context["alphabet_categories"] = group_categories_by_letter(categories)
+        context["avtive_page"] = "show-product-view"
+        context["filter_by"] = self.request.GET.get("filter-by")
 
         return context
-    
+
 
 class ShopProductDetailView(DetailView):
     template_name = "shop/product-detail.html"
-    queryset = ProductModel.objects.filter(
-        status=ProductStatusType.publish.value
-    ).filter(
-        Q(varients__isnull=True)
-        | Q(varients__status=ProductStatusType.publish.value)
-    ).distinct().prefetch_related("product_images")
-
+    queryset = (
+        ProductModel.objects.filter(status=ProductStatusType.publish.value)
+        .filter(
+            Q(varients__isnull=True)
+            | Q(varients__status=ProductStatusType.publish.value)
+        )
+        .distinct()
+        .prefetch_related("product_images")
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         product = self.object
-        related_products = ProductModel.objects.filter(
-            status=ProductStatusType.publish.value,
-            category__in=product.category.all()
-        ).filter(
-            Q(varients__isnull=True)
-            | Q(varients__status=ProductStatusType.publish.value)
-        ).exclude(id=product.id).distinct()[:4]
+        related_products = (
+            ProductModel.objects.filter(
+                status=ProductStatusType.publish.value,
+                category__in=product.category.all(),
+            )
+            .filter(
+                Q(varients__isnull=True)
+                | Q(varients__status=ProductStatusType.publish.value)
+            )
+            .exclude(id=product.id)
+            .distinct()[:4]
+        )
 
         context["related_products"] = related_products
         return context

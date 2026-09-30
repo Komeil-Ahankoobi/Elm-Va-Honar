@@ -243,3 +243,12 @@ ZARINPAL_MERCHANT_ID = config(
 )
 ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=True)
 ZARINPAL_CURRENCY = config("ZARINPAL_CURRENCY", default="IRT")
+
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    import socket
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]

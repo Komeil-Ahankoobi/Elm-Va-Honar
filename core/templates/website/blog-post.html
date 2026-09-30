@@ -51,7 +51,7 @@
     <article class="article-card">
         <a href="{% url 'website:blog-post-detail' pk=blog.id %}">
             <div class="card-image">
-                <img src="{{ blog.image.url }}" alt="{{ blog.image_alt_text|default:blog.title }}" />
+                <img loading="lazy" src="{{ blog.image.url }}" alt="{{ blog.image_alt_text|default:blog.title }}" />
             </div>
             <div class="card-content">
                 <h3 class="card-title">{{ blog.title }}</h3>
@@ -73,15 +73,15 @@
     <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&lt; قبلی</a>
     {% endif %} {% for i in page_obj.paginator.page_range %} {% if page_obj.number == i %}
     <a href="?page={{ i }}" class="page-link active">{{ i }}</a>
-    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
-    <a href="?page={{ i }}" class="page-link">{{ i }}</a>
-    {% elif i == 1 or i == page_obj.paginator.num_pages %}
-    <a href="?page={{ i }}" class="page-link">{{ i }}</a>
-    {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}
-    <span class="page-link page-link--dots">...</span>
-    {% endif %} {% endfor %} {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}" class="page-link">بعدی &gt;</a>
-    {% endif %}
+    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <a href="?page={{ i }}" class="page-link">{{
+        i }}</a>
+        {% elif i == 1 or i == page_obj.paginator.num_pages %}
+        <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+        {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}
+        <span class="page-link page-link--dots">...</span>
+        {% endif %} {% endfor %} {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="page-link">بعدی &gt;</a>
+        {% endif %}
 </section>
 {% endif %}
 
@@ -102,5 +102,5 @@
 
 
 {% block extra_js %}
-    <script src="{% static 'js/blog.js' %}" defer></script>
+<script src="{% static 'js/blog.js' %}" defer></script>
 {% endblock extra_js %}

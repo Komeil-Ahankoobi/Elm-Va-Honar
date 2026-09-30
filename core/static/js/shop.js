@@ -1,3 +1,7 @@
+// در ابتدای فایل shop.js بعد از "use strict";
+const isProductDetail = !!document.getElementById("pd-gallery") || !!document.getElementById("pd-color-palette");
+const isProductList = !!document.getElementById("product-grid");
+
 "use strict";
 
 (function initDate() {
@@ -13,6 +17,9 @@ function formatPrice(num) {
 }
 
 (function initSortSelectSync() {
+
+    if (!isProductDetail) return;
+
     const sortSelect = document.querySelector('select[name="filter-by"]');
     if (!sortSelect) return;
 
@@ -382,6 +389,9 @@ document.addEventListener("click", function (e) {
 
 // --- پالت انتخاب رنگ در صفحه جزئیات محصول ---
 (function initColorPalette() {
+
+    if (!isProductDetail) return;
+
     const palette = document.getElementById("pd-color-palette");
     if (!palette) return;
 
@@ -407,6 +417,9 @@ document.addEventListener("click", function (e) {
 })();
 
 (function initSizePalette() {
+
+    if (!isProductDetail) return;
+
     const palette = document.getElementById("pd-size-palette");
     if (!palette) return;
 
