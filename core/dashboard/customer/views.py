@@ -98,6 +98,9 @@ class CustomerDashboardOrderView(
     paginate_by = 3
 
     def get_queryset(self):
+        
+        OrderModel.expire_stale_pending(user=self.request.user)
+
         return OrderModel.objects.filter(user=self.request.user)
 
 
@@ -113,9 +116,10 @@ class CustomerDashboardOrderDetailView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order = self.object
-        context["total_tax"] = order.get_tax_amount()
+        context["total_post_price"] = order.get_post_price()
         context["total_basket_price"] = order.get_total_price()
         return context
+
 
 
 class CustomerDashboardCancelOrderView(
@@ -155,3 +159,32 @@ class CustomerDashboardCancelOrderView(
             message = "سفارش شما با موفقیت لغو شد."
 
         return JsonResponse({"success": True, "message": message})
+
+
+
+class CustomerDashboardAjaxCreateAddressView(
+    LoginRequiredMixin, HasCustomerAccessPermission, View
+):
+    def post(self, request):
+        form = UserAddressForm(request.POST)
+
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+
+            return JsonResponse(
+                {
+                    "success": True,
+                    "message": "آدرس شما با موفقیت ثبت شد",
+                    "address": {
+                        "id": address.id,
+                        "address": address.address,
+                        "state": address.state,
+                        "city": address.city,
+                        "zip_code": address.zip_code,
+                    },
+                }
+            )
+
+        return JsonResponse({"success": False, "errors": form.errors}, status=400)

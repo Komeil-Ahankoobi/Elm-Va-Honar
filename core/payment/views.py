@@ -3,29 +3,67 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from cart.cart import CartSession
-from order.models import OrderModel, OrderStatusType
+from order.models import InsufficientStockError, OrderModel, OrderStatusType
 from .models import PaymentModel, PaymentStatusType
 from .zarinpal_client import ZarinPalClient
+import logging
 
 
-class PaymentRequestView(View):
+logger = logging.getLogger(__name__)
+DEFINITIVE_FAILURE_CODES = {-50, -51, -53, -54, -55}
+
+
+class PaymentRequestView(LoginRequiredMixin, View):
     def get(self, request, order_id, *args, **kwargs):
-        order = get_object_or_404(OrderModel, pk=order_id, user=request.user)
-
-        amount = int(order.total_price)
+        client = ZarinPalClient(
+            callback_url=request.build_absolute_uri(reverse("payment:verify"))
+        )
 
         with transaction.atomic():
+            # قفل روی خودِ سفارش: اگه دو درخواست هم‌زمان برای یک سفارش بیاد
+            # (دبل‌کلیک یا چند تب)، دومی صبر می‌کنه تا اولی تموم بشه.
+            order = get_object_or_404(
+                OrderModel.objects.select_for_update(),
+                pk=order_id,
+                user=request.user,
+            )
+
+            # سفارش قبلاً پرداخت شده؛ دوباره پرداخت نمی‌سازیم.
+            if order.is_successful:
+                return redirect(
+                    reverse("order:order-success", kwargs={"order_id": order.pk})
+                )
+
+            # فقط سفارشِ «در حال پرداخت» که هنوز منقضی نشده اجازه پرداخت دارد.
+            if (
+                order.status != OrderStatusType.pending.value
+                or order.is_pending_expired
+            ):
+                messages.error(
+                    request,
+                    "این سفارش دیگر قابل پرداخت نیست. لطفاً دوباره سفارش ثبت کنید.",
+                )
+                return redirect(reverse_lazy("order:order-failed"))
+
+            amount = int(order.total_price)
+
             existing_pending = (
                 PaymentModel.objects.select_for_update()
-                .filter(order=order, status=PaymentStatusType.pending)
+                .filter(order=order, status=PaymentStatusType.pending.value)
                 .first()
             )
 
-            client = ZarinPalClient(
-                callback_url=request.build_absolute_uri(reverse("payment:verify"))
-            )
+            # برای همین سفارش پرداخت در جریان داریم؛ همان را ادامه می‌دهیم.
+            # اینطوری دبل‌کلیک یا رفرش، Authority جدید نمی‌سازد و
+            # Authority قبلی (که شاید کاربر با آن پرداخت کند) بی‌اعتبار نمی‌شود.
+            if existing_pending and existing_pending.amount == amount:
+                return redirect(
+                    client.generate_payment_url(existing_pending.authority_id)
+                )
+
             result = client.payment_request(
                 amount,
                 description=f"پرداخت سفارش شماره {order.pk}",
@@ -40,17 +78,7 @@ class PaymentRequestView(View):
                 messages.error(
                     request, "اتصال به درگاه پرداخت برقرار نشد، دوباره تلاش کن"
                 )
-
-                # خطای ارتباط/ساخت تراکنش به معنی لغو سفارش نیست.
-                # سفارش باید در وضعیت «در حال پرداخت» باقی بماند تا کاربر
-                # بتواند دوباره برای همان سفارش تلاش کند.
-                if order.status not in {
-                    OrderStatusType.cancelled.value,
-                    OrderStatusType.shipped.value,
-                }:
-                    order.status = OrderStatusType.pending.value
-                    order.save(update_fields=["status", "updated_date"])
-
+                # سفارش همان «در حال پرداخت» می‌ماند و وضعیتش را دست نمی‌زنیم.
                 return redirect(reverse_lazy("order:order-failed"))
 
             if existing_pending:
@@ -68,14 +96,6 @@ class PaymentRequestView(View):
                     response_json=result["raw"],
                 )
 
-            # به محض ایجاد تراکنش، سفارش در وضعیت «در حال پرداخت» است.
-            if order.status not in {
-                OrderStatusType.cancelled.value,
-                OrderStatusType.shipped.value,
-            }:
-                order.status = OrderStatusType.pending.value
-                order.save(update_fields=["status", "updated_date"])
-
         return redirect(client.generate_payment_url(authority))
 
 
@@ -85,17 +105,20 @@ class PaymentVerifyView(View):
         gateway_status = request.GET.get("Status")
 
         if not authority_id:
-            # چون Authority نداریم، نمی‌توانیم سفارش مشخصی را تغییر دهیم.
             return redirect(reverse_lazy("order:order-failed"))
 
+        order_id = get_object_or_404(PaymentModel, authority_id=authority_id).order_id
+
         with transaction.atomic():
+            order = get_object_or_404(
+                OrderModel.objects.select_for_update(), pk=order_id
+            )
             payment_obj = get_object_or_404(
                 PaymentModel.objects.select_for_update(),
                 authority_id=authority_id,
             )
-            order = payment_obj.order
 
-            # اگر قبلاً نتیجه‌اش مشخص شده، دوباره verify نمی‌کنیم.
+            # نتیجه‌ی این پرداخت قبلاً مشخص شده؛ دوباره تأیید نمی‌کنیم.
             if payment_obj.status != PaymentStatusType.pending.value:
                 is_success = payment_obj.status == PaymentStatusType.success.value
                 return redirect(
@@ -104,33 +127,20 @@ class PaymentVerifyView(View):
                     else reverse_lazy("order:order-failed")
                 )
 
-            # طبق رفتار callback زرین‌پال، Status فقط OK یا NOK است.
-            # NOK یعنی تراکنش ناموفق یا لغوشده توسط کاربر.
-            # در این مسیر سفارش را لغوشده ثبت می‌کنیم؛ خطاهای دیگری که
-            # قبل از callback رخ دهند، سفارش را لغو نمی‌کنند و در وضعیت
-            # «در حال پرداخت» باقی می‌مانند.
+            # کاربر در درگاه انصراف داده یا پرداخت ناموفق بوده.
             if gateway_status == "NOK":
                 payment_obj.status = PaymentStatusType.failed.value
                 payment_obj.save(update_fields=["status", "updated_date"])
 
-                order.cancel_payment()
+                # فقط سفارشِ «در حال پرداخت» لغو می‌شود، نه سفارشِ پرداخت‌شده.
+                if order.status == OrderStatusType.pending.value:
+                    order.cancel_payment()
 
                 return redirect(reverse_lazy("order:order-failed"))
 
-            # فقط Status=OK باید وارد مرحله Verify شود.
-            # اگر مقدار دیگری به callback رسید، پرداخت تأیید نشده است،
-            # اما این اتفاق به‌تنهایی دلیل لغو سفارش نیست.
+            # Status نه OK است نه NOK (درخواست ناقص یا دستکاری‌شده):
+            # هیچ چیزی را تغییر نمی‌دهیم.
             if gateway_status != "OK":
-                payment_obj.status = PaymentStatusType.failed.value
-                payment_obj.save(update_fields=["status", "updated_date"])
-
-                if order.status not in {
-                    OrderStatusType.cancelled.value,
-                    OrderStatusType.shipped.value,
-                }:
-                    order.status = OrderStatusType.pending.value
-                    order.save(update_fields=["status", "updated_date"])
-
                 return redirect(reverse_lazy("order:order-failed"))
 
             client = ZarinPalClient()
@@ -138,40 +148,74 @@ class PaymentVerifyView(View):
                 int(payment_obj.amount), payment_obj.authority_id
             )
 
-            is_success = result["ok"]
+            # ۱) پرداخت تأیید شد
+                        # ۱) پرداخت تأیید شد
+            if result["ok"]:
+                payment_obj.ref_id = result["ref_id"]
+                payment_obj.card_pan = result["card_pan"] or ""
+                payment_obj.card_hash = result["card_hash"] or ""
+                payment_obj.response_code = result["code"]
+                payment_obj.response_json = result["raw"]
+                payment_obj.status = PaymentStatusType.success.value
+                payment_obj.save()
 
-            payment_obj.ref_id = result["ref_id"]
-            payment_obj.card_pan = result["card_pan"] or ""
-            payment_obj.card_hash = result["card_hash"] or ""
-            payment_obj.response_code = result["code"]
-            payment_obj.response_json = result["raw"]
-            payment_obj.status = (
-                PaymentStatusType.success.value
-                if is_success
-                else PaymentStatusType.failed.value
-            )
-            payment_obj.save()
+                try:
+                    order.confirm_payment()
+                except InsufficientStockError:
+                    # پول دریافت و تأیید شده، ولی موجودی کالا همین حالا تمام شده.
+                    # سفارش لغو می‌شود و باید مبلغ به کاربر برگردانده شود
+                    # (در ادمین: پرداختِ «موفق» با سفارشِ «لغو شده»).
+                    order.cancel_payment()
+                    logger.error(
+                        "Paid but out of stock, refund needed: payment=%s order=%s",
+                        payment_obj.pk,
+                        order.pk,
+                    )
+                    messages.error(
+                        request,
+                        "پرداخت شما دریافت شد، اما موجودی یکی از کالاهای سفارش همین "
+                        "حالا تمام شد و سفارش ثبت نشد. لطفاً با پشتیبانی تماس بگیرید "
+                        f"و شماره‌ی سفارش {order.pk} را اعلام کنید تا مبلغ به حساب "
+                        "شما برگردد.",
+                    )
+                    return redirect(reverse_lazy("order:order-failed"))
 
-            if is_success:
-                # وضعیت سفارش، مصرف‌شدنِ کد تخفیف، کم‌کردنِ موجودی، و خالی‌کردنِ
-                # سبد خریدِ دیتابیسی همگی داخل confirm_payment و اتمیک انجام می‌شن.
-                order.confirm_payment()
-
-                # سبدِ سشن فقط اینجا قابل پاک‌کردنه چون به request نیاز داره.
+                # سبدِ سشن فقط اینجا قابل پاک‌کردن است چون به request نیاز دارد.
                 CartSession(request.session).clear()
-            else:
-                # Verify شکست خورده، اما کاربر لزوماً سفارش را لغو نکرده است.
-                # بنابراین سفارش در «در حال پرداخت» باقی می‌ماند تا امکان
-                # تلاش مجدد برای پرداخت وجود داشته باشد.
-                if order.status not in {
-                    OrderStatusType.cancelled.value,
-                    OrderStatusType.shipped.value,
-                }:
-                    order.status = OrderStatusType.pending.value
-                    order.save(update_fields=["status", "updated_date"])
 
-        return redirect(
-            reverse_lazy("order:order-success", kwargs={"order_id": order.pk})
-            if is_success
-            else reverse_lazy("order:order-failed")
-        )
+                return redirect(
+                    reverse_lazy("order:order-success", kwargs={"order_id": order.pk})
+                )
+
+            # ۲) درگاه صریحاً گفته پرداخت انجام نشده
+            if result["code"] in DEFINITIVE_FAILURE_CODES:
+                payment_obj.response_code = result["code"]
+                payment_obj.response_json = result["raw"]
+                payment_obj.status = PaymentStatusType.failed.value
+                payment_obj.save()
+
+                logger.warning(
+                    "Payment verify failed: payment=%s order=%s code=%s",
+                    payment_obj.pk,
+                    order.pk,
+                    result["code"],
+                )
+                return redirect(reverse_lazy("order:order-failed"))
+
+            # ۳) وضعیت نامشخص (قطعی اینترنت، timeout، خطای خود درگاه):
+            # ممکن است کاربر واقعاً پول داده باشد. پرداخت را «ناموفق» نمی‌کنیم
+            # و در همان حالت «در انتظار» می‌ماند تا بعداً دوباره تأیید شود.
+            logger.error(
+                "Payment verify uncertain: payment=%s order=%s code=%s message=%s",
+                payment_obj.pk,
+                order.pk,
+                result["code"],
+                result["message"],
+            )
+            messages.warning(
+                request,
+                "وضعیت پرداخت شما هنوز مشخص نشده است. اگر مبلغ از حساب شما کم شده، "
+                "لطفاً کمی بعد وضعیت سفارش را در «سفارش‌های من» بررسی کنید "
+                "یا با پشتیبانی تماس بگیرید.",
+            )
+            return redirect(reverse_lazy("order:order-failed"))
