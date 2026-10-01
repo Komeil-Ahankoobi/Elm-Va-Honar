@@ -752,3 +752,55 @@ body.modal-open {
     flex-direction: column;
     gap: 15px;
 }
+
+/* ================= TOP REFUND NOTICE (full-width banner) ================= */
+.refund-notice--top {
+    width: 100%;
+    margin-bottom: 22px;
+    padding: 16px 20px;
+    align-items: center;
+}
+
+.refund-notice--top .refund-notice-icon {
+    margin-top: 0;
+}
+
+.refund-notice--top .refund-notice-title {
+    font-size: 13px;
+}
+
+.refund-notice--top .refund-notice-text {
+    font-size: 12px;
+}
+
+/* موبایل: آیکن + عنوان تو یه ردیف، متن زیرش تمام‌عرض */
+@media (max-width: 768px) {
+    .refund-notice--top {
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 10px;
+        row-gap: 8px;
+        padding: 14px 15px;
+        margin-bottom: 18px;
+    }
+
+    .refund-notice--top .refund-notice-body {
+        display: contents;
+    }
+
+    .refund-notice--top .refund-notice-title {
+        flex: 1;
+        margin: 0;
+    }
+
+    .refund-notice--top .refund-notice-text {
+        flex: 0 0 100%;
+        line-height: 1.9;
+    }
+}
+
+@media (max-width: 360px) {
+    .refund-notice--top {
+        padding: 12px;
+    }
+}

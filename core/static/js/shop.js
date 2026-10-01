@@ -248,8 +248,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- Add to cart (لیست محصولات، جزئیات محصول، محصولات مرتبط) ---
     document.querySelectorAll(".btn-add-cart, .btn-add-to-cart, .btn-card-add").forEach((btn) => {
         btn.addEventListener("click", () => {
+            // لینک «انتخاب گزینه‌ها» خودش به صفحه جزئیات می‌ره، نباید addToCart صدا زده بشه
+            if (btn.tagName === "A") return;
+
             if (btn.disabled || btn.classList.contains("is-disabled")) {
-                showToast("این محصول در حال حاضر ناموجود است");
+                showToast("این محصول در حال حاضر ناموجود است", "warn");
                 return;
             }
 
@@ -259,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const selectedVariant = document.getElementById("selected-variant-id")?.value;
                 if (!selectedVariant) {
                     const message = colorPalette ? "لطفاً یک رنگ را انتخاب کنید" : "لطفاً یک سایز را انتخاب کنید";
-                    showToast(message);
+                    showToast(message, "warn");
                     return;
                 }
             }
@@ -349,9 +352,11 @@ async function addToCart(url, product_id) {
         const data = await response.json();
 
         updateCartBadge(data.total_quantity);
+        showToast("محصول به سبد خرید اضافه شد", "success");
 
     } catch (err) {
         console.error("خطا در افزودن محصول به سبد خرید:", err);
+        showToast("خطا در افزودن به سبد خرید، دوباره تلاش کنید", "error");
     }
 }
 
@@ -505,10 +510,182 @@ document.addEventListener("click", function (e) {
     });
 })();
 
-// --- نمایش پیام کوتاه (در صورت نبود پیاده‌سازی toast در جای دیگری از پروژه) ---
-function showToast(message) {
-    if (typeof window.showToast === "function" && window.showToast !== showToast) {
-        window.showToast(message);
+// --- فیلتر موبایل (باتم‌شیت) در صفحه لیست محصولات ---
+(function initMobileFilterSheet() {
+    const sheet = document.getElementById("filter-sheet");
+    const openBtn = document.getElementById("filter-open-btn");
+    if (!sheet || !openBtn) return;
+
+    const overlay = document.getElementById("filter-overlay");
+    const closeBtn = document.getElementById("filter-sheet-close");
+    const applyBtn = document.getElementById("filter-sheet-apply");
+    const clearBtn = document.getElementById("filter-sheet-clear");
+    const clearChip = document.getElementById("filter-clear-chip");
+    const badge = document.getElementById("filter-count-badge");
+    const minInput = sheet.querySelector('input[name="min_price"]');
+    const maxInput = sheet.querySelector('input[name="max_price"]');
+    const form = sheet.querySelector(".filter-form");
+    const categoryLinks = Array.from(sheet.querySelectorAll(".category-list a"));
+    const chips = Array.from(sheet.querySelectorAll(".filter-chip"));
+    const mq = window.matchMedia("(max-width: 992px)");
+
+    const DEFAULT_SORT = "new";
+    const DEFAULT_PAGE_SIZE = "20";
+
+    // overlay رو به body منتقل می‌کنیم تا هیچ والدی روی position:fixed اثر نذاره
+    if (overlay) document.body.appendChild(overlay);
+
+    // انتخاب‌های موقت کاربر داخل شیت (تا زمان زدن «اعمال فیلتر»)
+    const draft = { category: "", sort: DEFAULT_SORT, page_size: DEFAULT_PAGE_SIZE };
+
+    function categoryOf(link) {
+        try {
+            return new URL(link.href, window.location.origin).searchParams.get("category") || "";
+        } catch (e) {
+            return "";
+        }
+    }
+
+    function loadDraftFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        draft.category = params.get("category") || "";
+        draft.sort = params.get("filter-by") || DEFAULT_SORT;
+        draft.page_size = params.get("page_size") || DEFAULT_PAGE_SIZE;
+        if (minInput) minInput.value = params.get("min_price") || "";
+        if (maxInput) maxInput.value = params.get("max_price") || "";
+    }
+
+    function renderDraft() {
+        categoryLinks.forEach((link) => {
+            link.classList.toggle("is-selected", draft.category !== "" && categoryOf(link) === draft.category);
+        });
+        chips.forEach((chip) => {
+            const group = chip.closest("[data-chip-group]").dataset.chipGroup;
+            chip.classList.toggle("is-active", draft[group] === chip.dataset.value);
+        });
+    }
+
+    function renderBar() {
+        const params = new URLSearchParams(window.location.search);
+        let count = 0;
+        if (params.get("category")) count++;
+        if (params.get("min_price") || params.get("max_price")) count++;
+        const sort = params.get("filter-by");
+        if (sort && sort !== DEFAULT_SORT) count++;
+
+        if (badge) {
+            badge.hidden = count === 0;
+            badge.textContent = count.toLocaleString("fa-IR");
+        }
+        if (clearChip) clearChip.hidden = count === 0;
+    }
+
+    function openSheet() {
+        loadDraftFromUrl();
+        renderDraft();
+        sheet.classList.add("is-open");
+        overlay?.classList.add("is-open");
+        document.body.classList.add("filter-sheet-open");
+        openBtn.setAttribute("aria-expanded", "true");
+        closeBtn?.focus();
+    }
+
+    function closeSheet() {
+        sheet.classList.remove("is-open");
+        overlay?.classList.remove("is-open");
+        document.body.classList.remove("filter-sheet-open");
+        openBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function navigate(params) {
+        params.delete("page");
+        const qs = params.toString();
+        window.location.href = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+    }
+
+    function applyFilters() {
+        const params = new URLSearchParams(window.location.search);
+
+        if (draft.category) params.set("category", draft.category);
+        else params.delete("category");
+
+        let min = minInput ? parseInt(minInput.value, 10) : NaN;
+        let max = maxInput ? parseInt(maxInput.value, 10) : NaN;
+        if (!isNaN(min) && !isNaN(max) && min > max) [min, max] = [max, min];
+        if (!isNaN(min) && min >= 0) params.set("min_price", min);
+        else params.delete("min_price");
+        if (!isNaN(max) && max >= 0) params.set("max_price", max);
+        else params.delete("max_price");
+
+        if (draft.sort && draft.sort !== DEFAULT_SORT) params.set("filter-by", draft.sort);
+        else params.delete("filter-by");
+
+        if (draft.page_size && draft.page_size !== DEFAULT_PAGE_SIZE) params.set("page_size", draft.page_size);
+        else params.delete("page_size");
+
+        navigate(params);
+    }
+
+    // حذف فیلترها (جستجوی متنی q حفظ می‌شه، چون فیلتر حساب نمی‌شه)
+    function clearFilters_() {
+        const params = new URLSearchParams(window.location.search);
+        ["category", "brand", "min_price", "max_price", "filter-by", "page_size", "special_products"].forEach((k) =>
+            params.delete(k),
+        );
+        navigate(params);
+    }
+
+    openBtn.addEventListener("click", openSheet);
+    closeBtn?.addEventListener("click", closeSheet);
+    overlay?.addEventListener("click", closeSheet);
+    applyBtn?.addEventListener("click", applyFilters);
+    clearBtn?.addEventListener("click", clearFilters_);
+    clearChip?.addEventListener("click", clearFilters_);
+
+    // کلیک روی دسته‌بندی: فقط توی حالت موبایل انتخاب می‌شه (دسکتاپ مثل قبل لینک عادیه)
+    categoryLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+            if (!mq.matches) return;
+            e.preventDefault();
+            const id = categoryOf(link);
+            draft.category = draft.category === id ? "" : id;
+            renderDraft();
+        });
+    });
+
+    chips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+            const group = chip.closest("[data-chip-group]").dataset.chipGroup;
+            draft[group] = chip.dataset.value;
+            renderDraft();
+        });
+    });
+
+    // Enter توی فیلد قیمت (موبایل) = اعمال همه‌ی فیلترها
+    form?.addEventListener("submit", (e) => {
+        if (!mq.matches) return;
+        e.preventDefault();
+        applyFilters();
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && sheet.classList.contains("is-open")) closeSheet();
+    });
+
+    // اگه صفحه به دسکتاپ تغییر سایز داد، شیت بسته بشه
+    mq.addEventListener?.("change", (e) => {
+        if (!e.matches) closeSheet();
+    });
+
+    loadDraftFromUrl();
+    renderDraft();
+    renderBar();
+})();
+
+// --- نمایش پیام کوتاه (از toast.js استفاده می‌کنه) ---
+function showToast(message, type) {
+    if (typeof window.siteToast === "function") {
+        window.siteToast(message, type || "warn");
         return;
     }
     alert(message);

@@ -35,7 +35,7 @@ class SessionAddProduct(View):
         if product is None:
             return JsonResponse({"message": "محصول پیدا نشد"}, status=404)
 
-        if product.has_variants():
+        if product.has_variants:
             # محصولِ دارای وریانت باید یکی از وریانت‌های منتشرشده‌ی خودش را داشته باشد
             is_valid = (
                 variant_id is not None

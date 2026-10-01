@@ -15,6 +15,21 @@
         <p>اطلاعات سفارش خود را تکمیل و پرداخت را انجام دهید.</p>
     </div>
 
+    <!-- Refund / Cancellation Notice (full-width, top of page) -->
+    <div class="refund-notice refund-notice--top" role="note" aria-label="شرایط انصراف و بازگشت وجه">
+        <div class="refund-notice-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div class="refund-notice-body">
+            <h5 class="refund-notice-title">شرایط انصراف و بازگشت وجه</h5>
+            <p class="refund-notice-text">
+                در صورت پرداخت مبلغ سفارش و سپس منصرف شدن، مبلغی بابت کارمزد از پول پرداختی شما کسر شده و طی
+                <strong>۷۲ ساعت</strong> مابقی آن با هماهنگی‌های لازم توسط مدیر فروشگاه، به حساب شما عودت داده
+                می‌شود.
+            </p>
+        </div>
+    </div>
+
     <!-- Django Messages -->
     {% if messages %}
     <div class="checkout-messages" style="margin-bottom: 20px">
@@ -108,21 +123,6 @@
                             اعمال کد
                         </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Refund / Cancellation Notice -->
-            <div class="refund-notice" role="note" aria-label="شرایط انصراف و بازگشت وجه">
-                <div class="refund-notice-icon">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <div class="refund-notice-body">
-                    <h5 class="refund-notice-title">شرایط انصراف و بازگشت وجه</h5>
-                    <p class="refund-notice-text">
-                        در صورت پرداخت مبلغ سفارش و سپس منصرف شدن، مبلغی بابت کارمزد از پول پرداختی شما کسر شده و طی
-                        <strong>۷۲ ساعت</strong> مابقی آن با هماهنگی‌های لازم توسط مدیر فروشگاه، به حساب شما عودت داده
-                        می‌شود.
-                    </p>
                 </div>
             </div>
 

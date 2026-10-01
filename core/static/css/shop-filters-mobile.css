@@ -1,0 +1,312 @@
+/*
+ * فیلتر موبایل صفحه shop (باتم‌شیت)
+ * این فایل باید «بعد از» shop.css و shop-responsive.css لود بشه.
+ * روی دسکتاپ (> 992px) هیچ تغییری ایجاد نمی‌کنه.
+ */
+
+:root {
+    --fs-accent: #1a382b;        /* رنگ اصلی دکمه‌ها (همون سبز تیره‌ی «اعمال فیلتر») */
+    --fs-accent-hover: #12281e;
+    --fs-badge: #e8823a;         /* رنگ بج تعداد فیلتر فعال (نارنجی تم سایت) */
+    --fs-border: #e2e8f0;
+    --fs-muted: #707070;
+}
+
+/* ---------- پیش‌فرض (دسکتاپ): همه‌ی المان‌های موبایلی مخفی ---------- */
+.filter-overlay,
+.filter-sheet-header,
+.filter-sheet-footer,
+.filter-card--mobile,
+.mobile-filter-bar {
+    display: none;
+}
+
+body.filter-sheet-open {
+    overflow: hidden;
+}
+
+/* ---------- موبایل و تبلت (<= 992px) ---------- */
+@media (max-width: 992px) {
+
+    /* فیلترهای بالای لیست (مرتب‌سازی / تعداد در صفحه) توی شیت هستن */
+    .sort-dropdown {
+        display: none !important;
+    }
+
+    /* ---------- دکمه‌ی باز کردن فیلتر ---------- */
+    .mobile-filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 14px;
+    }
+
+    .filter-open-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 16px;
+        background: var(--fs-accent);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: bold;
+        font-family: inherit;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .filter-open-btn:hover,
+    .filter-open-btn:active {
+        background: var(--fs-accent-hover);
+    }
+
+    .filter-count-badge {
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        border-radius: 10px;
+        background: var(--fs-badge);
+        color: #fff;
+        font-size: 11px;
+        line-height: 20px;
+        text-align: center;
+    }
+
+    .filter-count-badge[hidden],
+    .filter-clear-chip[hidden] {
+        display: none;
+    }
+
+    .filter-clear-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 44px;
+        padding: 0 14px;
+        background: #fff;
+        color: #b3261e;
+        border: 1px solid #f1c0bc;
+        border-radius: 10px;
+        font-size: 12px;
+        font-family: inherit;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    /* ---------- پس‌زمینه‌ی تیره ---------- */
+    .filter-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(18, 22, 25, 0.55);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+        z-index: 10000;
+    }
+
+    .filter-overlay.is-open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* ---------- خود شیت (همون سایدبار قبلی) ---------- */
+    /* !important برای اینکه استایل‌های ریسپانسیو قبلی سایدبار رو خنثی کنه */
+    .sidebar#filter-sheet {
+        position: fixed !important;
+        top: auto !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: auto !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: 88vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 18px 18px 0 0;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18);
+        transform: translateY(105%);
+        visibility: hidden;
+        transition: transform 0.3s ease, visibility 0.3s ease;
+        z-index: 10001;
+        overflow: hidden;
+    }
+
+    .sidebar#filter-sheet.is-open {
+        transform: translateY(0);
+        visibility: visible;
+    }
+
+    .filter-sheet-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: none;
+        padding: 16px 18px 12px;
+        border-bottom: 1px solid var(--fs-border);
+    }
+
+    /* دستگیره‌ی کوچیک بالای شیت */
+    .filter-sheet-header::before {
+        content: "";
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        width: 40px;
+        height: 4px;
+        margin-left: -20px;
+        border-radius: 2px;
+        background: #d5dae1;
+    }
+
+    .filter-sheet-title {
+        font-size: 15px;
+        font-weight: bold;
+        color: #111;
+    }
+
+    .filter-sheet-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border: none;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: #333;
+        cursor: pointer;
+    }
+
+    /* بدنه‌ی قابل اسکرول */
+    #filter-sheet .filter-form {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px 16px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    #filter-sheet .filter-card {
+        margin: 0;
+    }
+
+    #filter-sheet .filter-card--mobile {
+        display: block;
+    }
+
+    /* ترتیب بخش‌ها داخل شیت: مرتب‌سازی ← قیمت ← دسته‌بندی ← تعداد در صفحه */
+    #filter-sheet .filter-card--sort { order: 1; }
+    #filter-sheet .filter-card--price { order: 2; }
+    #filter-sheet .filter-card--category { order: 3; }
+    #filter-sheet .filter-card--pagesize { order: 4; }
+
+    /* دکمه‌های داخل کارت قیمت جاشون رو به فوتر شیت دادن */
+    #filter-sheet .filter-actions {
+        display: none;
+    }
+
+    /* لیست دسته‌بندی: ارتفاع محدود تا اسکرول تو در تو آزاردهنده نشه */
+    #filter-sheet .category-list {
+        max-height: 230px;
+    }
+
+    #filter-sheet .category-list a.is-selected li {
+        background: #eef3f0;
+        color: var(--fs-accent);
+        font-weight: bold;
+    }
+
+    #filter-sheet .category-list a.is-selected li i {
+        color: var(--fs-accent);
+    }
+
+    /* ---------- چیپ‌های انتخاب (مرتب‌سازی / تعداد در صفحه) ---------- */
+    .filter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-top: 4px;
+    }
+
+    .filter-chip {
+        min-width: 56px;
+        height: 38px;
+        padding: 0 14px;
+        background: #fff;
+        color: #2b2b2b;
+        border: 1px solid var(--fs-border);
+        border-radius: 999px;
+        font-size: 12px;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .filter-chip.is-active {
+        background: var(--fs-accent);
+        border-color: var(--fs-accent);
+        color: #fff;
+        font-weight: bold;
+    }
+
+    /* ---------- فوتر چسبیده‌ی شیت ---------- */
+    .filter-sheet-footer {
+        display: flex;
+        gap: 10px;
+        flex: none;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+        background: #fff;
+        border-top: 1px solid var(--fs-border);
+    }
+
+    .filter-sheet-apply {
+        flex: 1;
+        height: 46px;
+        background: var(--fs-accent);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        font-family: inherit;
+        cursor: pointer;
+    }
+
+    .filter-sheet-apply:hover,
+    .filter-sheet-apply:active {
+        background: var(--fs-accent-hover);
+    }
+
+    .filter-sheet-clear {
+        flex: none;
+        height: 46px;
+        padding: 0 16px;
+        background: #fff;
+        color: #444;
+        border: 1px solid var(--fs-border);
+        border-radius: 10px;
+        font-size: 12px;
+        font-family: inherit;
+        cursor: pointer;
+    }
+
+    /* ویجت چت (گفتینو) موقع باز بودن شیت، روی دکمه‌ها نیفته */
+    body.filter-sheet-open #goftino_w,
+    body.filter-sheet-open [id^="goftino"] {
+        display: none !important;
+    }
+}
