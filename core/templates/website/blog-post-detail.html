@@ -223,51 +223,72 @@
 
                 <div class="products-grid">
                     {% for product in related %}
-                    <div class="product-card reveal" style="cursor: pointer"
-                        data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+                    {% if product.is_publish %}
+                    <div class="product-card reveal{% if not product.has_variants and product.stock <= 0 %} is-sold-out{% endif %}"
+                        style="cursor: pointer" data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
 
-                        {% if product.has_discount %}
+                        <!-- Discount -->
+                        {% if not product.has_variants and product.stock <= 0 %}
+                        {% elif product.has_discount %}
                         <div class="discount-badge">
                             {% if product.has_variants %}تا {% endif %}{{ product.get_discount_percent }}٪ تخفیف
                         </div>
                         {% endif %}
 
+                        <!-- Product Image -->
                         <div class="product-img">
                             <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}" />
                         </div>
 
+                        <!-- Product Title -->
                         <div class="product-title">{{ product.title }}</div>
 
+                        <!-- Price -->
                         <div class="price-line">
-                            {% if product.has_discount and not product.has_variants %}
+                            {% if product.has_discount and not product.has_variants and product.stock > 0 %}
                             <span class="product-price-old">{{ product.get_real_price|intcomma }} تومان</span>
                             {% endif %}
 
                             {% if product.has_variants %}
                             {% with price_range=product.get_price_range %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">
+                                از {{ price_range.0|intcomma }} تومان
+                            </span>
                             {% endwith %}
+                            {% elif product.stock <= 0 %}
+                            <span class="product-price price-unavailable">ناموجود</span>
                             {% else %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">
+                                {{ product.get_price|intcomma }} تومان
+                            </span>
                             {% endif %}
                         </div>
 
-                        {% if product.has_variants and product.has_discount %}
-                        <div class="price-variant-note">بسته به انتخاب شما</div>
-                        {% endif %}
+                        <!-- Variant Note -->
+                        <div class="price-variant-note">
+                            {% if product.has_variants and product.has_discount %}
+                            بسته به انتخاب شما
+                            {% endif %}
+                        </div>
 
+                        <!-- Add to Cart -->
                         {% if product.has_variants %}
                         <a href="{% url 'shop:show-product-detail-view' slug=product.slug %}" class="btn-add-cart">
-                            <i class="fa-solid fa-cart-shopping"></i> انتخاب گزینه‌ها
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            انتخاب گزینه‌ها
                         </a>
                         {% else %}
-                        <button type="button" class="btn-add-cart" aria-label="افزودن {{ product.title }} به سبد خرید"
-                            data-url="{% url 'cart:session-add-product' %}" data-product-id="{{ product.id }}"
-                            data-stock="{{ product.stock }}">
-                            <i class="fa-solid fa-cart-shopping"></i> افزودن به سبد خرید
+                        <button type="button" class="btn-add-cart{% if product.stock <= 0 %} is-disabled{% endif %}"
+                            aria-label="افزودن {{ product.title }} به سبد خرید"
+                            data-url="{% url 'cart:session-add-product' %}"
+                            data-product-id="{{ product.id }}" data-stock="{{ product.stock }}"
+                            {% if product.stock <= 0 %}disabled{% endif %}>
+                            <i class="fa-solid {% if product.stock <= 0 %}fa-ban{% else %}fa-cart-shopping{% endif %}"></i>
+                            {% if product.stock <= 0 %}ناموجود{% else %}افزودن به سبد خرید{% endif %}
                         </button>
                         {% endif %}
                     </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
 
@@ -282,4 +303,6 @@
 
 {% block extra_js %}
 <script src="{% static 'js/blog.js' %}" defer></script>
+<script src="{% static 'js/toast.js' %}" defer></script>
+<script src="{% static 'js/product-cards.js' %}" defer></script>
 {% endblock extra_js %}

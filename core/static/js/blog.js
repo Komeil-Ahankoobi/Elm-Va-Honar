@@ -16,13 +16,13 @@ function filterProducts(selectedElemnt) {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
 
-    const paramsName = selectedElemnt.name;
-    const paramsValue = selectedElemnt.value;
+    params.set(selectedElemnt.name, selectedElemnt.value);
 
-    params.set(paramsName, paramsValue);
+    window.location.href = `${url.pathname}?${params.toString()}`;
+}
 
-    const newUrl = `${url.pathname}?${params.toString()}`;
-    window.location.href = newUrl;
+function clearFilters() {
+    window.location.href = window.location.pathname;
 }
 
 (function initPagination() {
@@ -46,62 +46,16 @@ function filterProducts(selectedElemnt) {
     });
 })();
 
-document.addEventListener("click", function (e) {
-    const card = e.target.closest(".product-card[data-href], .related-card[data-href]");
-    if (!card) return;
-
-    if (
-        e.target.closest(
-            ".wishlist-btn, .wishlist-icon-btn, .btn-wishlist, .btn-add-cart, .btn-add-to-cart, .btn-card-add",
-        )
-    ) {
-        return;
-    }
-
-    window.location.href = card.dataset.href;
-});
-
 document.addEventListener('DOMContentLoaded', () => {
-  const supportBtn = document.querySelector('.support-widget__btn');
-  const footer = document.querySelector('footer'); // اگر تگ فوتر شما اسم دیگری دارد، اینجا جایگزین کنید
+    const supportBtn = document.querySelector('.support-widget__btn');
+    const footer = document.querySelector('footer');
 
-  if (supportBtn && footer) {
-    supportBtn.addEventListener('click', (e) => {
-      e.preventDefault(); // جلوگیری از رفتار پیش‌فرض لینک (#)
-      footer.scrollIntoView({
-        behavior: 'smooth'
-      });
-    });
-  }
+    if (supportBtn && footer) {
+        supportBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            footer.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
 });
 
-document.querySelectorAll('.related-products-section').forEach(section => {
-    const track = section.querySelector('.products-grid');
-    const nextBtn = section.querySelector('.next-btn');
-    const prevBtn = section.querySelector('.prev-btn');
-
-    nextBtn?.addEventListener('click', () => {
-        track.scrollBy({ left: -220, behavior: 'smooth' });
-    });
-
-    prevBtn?.addEventListener('click', () => {
-        track.scrollBy({ left: 220, behavior: 'smooth' });
-    });
-});
-
-function filterProducts(selectedElemnt) {
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    const paramsName = selectedElemnt.name;
-    const paramsValue = selectedElemnt.value;
-
-    params.set(paramsName, paramsValue);
-
-    const newUrl = `${url.pathname}?${params.toString()}`;
-    window.location.href = newUrl;
-}
-
-function clearFilters() {
-    window.location.href = window.location.pathname;
-}
+// کلیک روی کارت محصول و افزودن به سبد در product-cards.js هندل می‌شه.
