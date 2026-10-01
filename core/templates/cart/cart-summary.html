@@ -6,6 +6,21 @@
     <!-- Breadcrumb -->
     <div class="breadcrumbs"><a href="{% url 'website:home' %}">خانه</a> &gt; سبد خرید</div>
 
+    <!-- Refund / Cancellation Notice -->
+    {% if cart_items %}
+    <div class="refund-notice" id="refund-notice" role="note" aria-label="شرایط انصراف و بازگشت وجه">
+        <div class="refund-notice-icon"></div>
+        <div class="refund-notice-body">
+            <h5 class="refund-notice-title">شرایط انصراف و بازگشت وجه</h5>
+            <p class="refund-notice-text">
+                در صورت پرداخت مبلغ سفارش و سپس منصرف شدن، مبلغی بابت کارمزد از پول پرداختی شما کسر شده و طی
+                <strong>۷۲ ساعت</strong> مابقی آن با هماهنگی‌های لازم توسط مدیر فروشگاه، به حساب شما عودت داده
+                می‌شود.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Cart Main Content -->
     <div class="cart-grid">
         <!-- RIGHT: Cart Items Table -->
@@ -168,30 +183,15 @@
                     href="{% url 'order:order-checkout' %}"
                     class="btn-checkout {% if not cart_items %}is-disabled{% endif %}"
                     id="checkout-btn">
-                    ثبت سفارش <i class="fa-solid fa-arrow-left"></i>
+                    ثبت سفارش 
                 </a>
 
                 <a href="{% url 'shop:show-product-view' %}" class="btn-back-shop">
-                    <i class="fa-solid fa-cart-shopping"></i> بازگشت به فروشگاه
+                     بازگشت به فروشگاه
                 </a>
             </div>
 
-            <!-- Refund / Cancellation Notice -->
-            {% if cart_items %}
-            <div class="refund-notice" role="note" aria-label="شرایط انصراف و بازگشت وجه">
-                <div class="refund-notice-icon">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <div class="refund-notice-body">
-                    <h5 class="refund-notice-title">شرایط انصراف و بازگشت وجه</h5>
-                    <p class="refund-notice-text">
-                        در صورت پرداخت مبلغ سفارش و سپس منصرف شدن، مبلغی بابت کارمزد از پول پرداختی شما کسر شده و طی
-                        <strong>۷۲ ساعت</strong> مابقی آن با هماهنگی‌های لازم توسط مدیر فروشگاه، به حساب شما عودت داده
-                        می‌شود.
-                    </p>
-                </div>
-            </div>
-            {% endif %}
+
         </div>
     </div>
 </div>

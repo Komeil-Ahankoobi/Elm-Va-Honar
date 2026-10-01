@@ -21,7 +21,6 @@ body {
     background-color: var(--bg-body);
     color: var(--text-main);
     direction: rtl;
-    
 }
 
 a {
@@ -351,6 +350,7 @@ a {
     display: flex;
     gap: 12px;
     align-items: flex-start;
+    margin: 0 0 20px;
 }
 
 .refund-notice-icon {
@@ -361,14 +361,14 @@ a {
 }
 
 .refund-notice-title {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
     color: #222;
     margin-bottom: 4px;
 }
 
 .refund-notice-text {
-    font-size: 11px;
+    font-size: 14px;
     color: var(--text-muted);
     line-height: 1.6;
 }

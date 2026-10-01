@@ -202,7 +202,8 @@
 
             </article>
 
-            <!-- Related Products Section / Carousel -->
+            {% with related=blog.related_products.all %}
+            {% if related %}
             <section class="related-products-section">
 
                 <div class="slider-controls">
@@ -221,18 +222,18 @@
                 </div>
 
                 <div class="products-grid">
-
-                    {% for product in blog.related_products.all %}
+                    {% for product in related %}
                     <div class="product-card reveal" style="cursor: pointer"
                         data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
+
                         {% if product.has_discount %}
                         <div class="discount-badge">
                             {% if product.has_variants %}تا {% endif %}{{ product.get_discount_percent }}٪ تخفیف
                         </div>
                         {% endif %}
+
                         <div class="product-img">
-                            <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}"
-                                loading="lazy" />
+                            <img loading="lazy" src="{{ product.image.url }}" alt="{{ product.title }}" />
                         </div>
 
                         <div class="product-title">{{ product.title }}</div>
@@ -244,12 +245,10 @@
 
                             {% if product.has_variants %}
                             {% with price_range=product.get_price_range %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{
-                                price_range.0|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">از {{ price_range.0|intcomma }} تومان</span>
                             {% endwith %}
                             {% else %}
-                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{
-                                product.get_price|intcomma }} تومان</span>
+                            <span class="product-price {% if product.has_discount %}price-discounted{% endif %}">{{ product.get_price|intcomma }} تومان</span>
                             {% endif %}
                         </div>
 
@@ -269,13 +268,12 @@
                         </button>
                         {% endif %}
                     </div>
-                    {% empty %}
-                    <p class="empty-post-detail-product">محصولی یافت نشد.</p>
                     {% endfor %}
-
-
                 </div>
+
             </section>
+            {% endif %}
+            {% endwith %}
 
         </main>
     </div>
