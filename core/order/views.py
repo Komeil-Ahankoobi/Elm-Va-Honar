@@ -165,7 +165,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
                 or variant.status != ProductStatusType.publish.value
             ):
                 invalid_items.append(item)
-            elif variant is None and product.has_variants():
+            elif variant is None and product.has_variants:
                 invalid_items.append(item)
         return invalid_items
 

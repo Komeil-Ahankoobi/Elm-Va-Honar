@@ -1,20 +1,13 @@
 "use strict";
-
-/*
- * نوتیف (توست) مشترک سایت — بدون وابستگی به کتابخانه‌ی دیگه.
- * استفاده:  siteToast("پیام", "success" | "warn" | "error")
- *
- * ★ رنگ‌ها رو اینجا عوض کن (فقط همین بلوک) ★
- */
 (function () {
     const COLORS = {
-        background: "#beaf92", // پس‌زمینه‌ی نوتیف (هم‌رنگ دکمه‌ی چت سایت)
-        text: "#1c1c1c",       // رنگ متن (تیره، برای خوانایی روی پس‌زمینه‌ی کرم)
-        success: "#2e7d4f",    // موفقیت: سبز تیره (کنار کرم قشنگ‌تر از سبز روشن می‌شینه)
-        warn: "#c2621f",       // هشدار: نارنجی سوخته
-        error: "#b3261e",      // خطا: قرمز تیره
+        background: "#beaf92", 
+        text: "#1c1c1c",       
+        success: "#2e7d4f",
+        warn: "#c2621f",       
+        error: "#b3261e",      
     };
-    const DURATION = 3000; // میلی‌ثانیه
+    const DURATION = 3000; 
 
     const style = document.createElement("style");
     style.textContent = `
