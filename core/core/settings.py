@@ -256,3 +256,4 @@ ZARINPAL_MERCHANT_ID = config("ZARINPAL_MERCHANT_ID")
 ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=True)
 ZARINPAL_CURRENCY = config("ZARINPAL_CURRENCY", default="IRT")
 SITE_URL = config("SITE_URL", default="")
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
