@@ -191,10 +191,11 @@ class ProductModel(models.Model):
         return self.title
 
     def _get_shop_variants(self):
-        if hasattr(self, "_shop_variants"):
-            return self._shop_variants
-
-        return list(self.varients.filter(status=ProductStatusType.publish.value))
+        if not hasattr(self, "_shop_variants"):
+            self._shop_variants = list(
+                self.varients.filter(status=ProductStatusType.publish.value)
+            )
+        return self._shop_variants
 
     def get_visible_variants(self):
         return self._get_shop_variants()

@@ -6,39 +6,36 @@ from django.views.generic import (
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.db.models import Count, Q
-
+from django.db.models import Count, Q, Prefetch
 from .forms import NewsLetterForm
 from shop.models import (
     ProductModel,
+    ProductVarientModel,
     ProductCategoryModel,
     ProductBrandModel,
     ProductStatusType,
-    
 )
-from .models import BlogModel, BlogCategoryModel
-
+from .models import BlogModel, BlogCategoryModel, BlogStatusType
 
 class HomeView(TemplateView):
     template_name = "website/home.html"
-    
+
     def post(self, request, *args, **kwargs):
         form = NewsLetterForm(request.POST)
         if form.is_valid():
-            messages.success(request, 'شماره تلفن شما با موفقیت ثبت شد')
+            messages.success(request, "شماره تلفن شما با موفقیت ثبت شد")
             form.save()
         else:
-            messages.error(request, 'شماره تلفن وارد شده معتبر نمی باشد')
-        return redirect('website:home')
-
+            messages.error(request, "شماره تلفن وارد شده معتبر نمی باشد")
+        return redirect("website:home")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        product_url = reverse('shop:show-product-view')
-        categories_url = reverse('website:categories')
-        context['hero_slides'] = [
+        product_url = reverse("shop:show-product-view")
+        categories_url = reverse("website:categories")
+        context["hero_slides"] = [
             {
-                "image": 'images/sliders/slider-1.webp',
+                "image": "images/sliders/slider-1.webp",
                 "title1": "هر ایده",
                 "title2": "ابزاری مخصوص خود دارد",
                 "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
@@ -48,7 +45,7 @@ class HomeView(TemplateView):
                 "secondary_text": "دسته‌بندی‌ها",
             },
             {
-                "image": 'images/sliders/slider-2.webp',
+                "image": "images/sliders/slider-2.webp",
                 "title1": "هر ایده",
                 "title2": "ابزاری مخصوص خود دارد",
                 "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
@@ -58,7 +55,7 @@ class HomeView(TemplateView):
                 "secondary_text": "دسته‌بندی‌ها",
             },
             {
-                "image": 'images/sliders/slider-3.webp',
+                "image": "images/sliders/slider-3.webp",
                 "title1": "هر ایده",
                 "title2": "ابزاری مخصوص خود دارد",
                 "subtitle": "با بهترین لوازم هنری راهت را شروع کن و از مسیر لذت ببر...",
@@ -68,79 +65,92 @@ class HomeView(TemplateView):
                 "secondary_text": "دسته‌بندی‌ها",
             },
         ]
-        
-        
+
         context['popular_cats'] = ProductCategoryModel.objects.filter(popular=True)
         context['cat_baners'] = ProductCategoryModel.objects.filter(baner=True)
-        context['blog_posts'] = BlogModel.objects.all().order_by('-created_date')[:4]
-        context['special_products'] = ProductModel.objects.filter(
-                status=ProductStatusType.publish.value
-            ).filter(
+
+        context['blog_posts'] = (
+            BlogModel.objects
+            .filter(status=BlogStatusType.publish)
+            .order_by('-created_date')[:4]
+        )
+
+        context['special_products'] = (
+            ProductModel.objects
+            .filter(status=ProductStatusType.publish.value)
+            .filter(
                 Q(discount_percent__gt=0)
                 | Q(varients__discount_percent__gt=0, varients__status=ProductStatusType.publish.value)
-            ).distinct()[:8]
+            )
+            .distinct()
+            .prefetch_related(
+                Prefetch(
+                    'varients',
+                    queryset=ProductVarientModel.objects.filter(status=ProductStatusType.publish.value),
+                    to_attr='_shop_variants',
+                )
+            )[:8]
+        )
 
         return context
 
+
 class AboutView(TemplateView):
-    template_name = "website/about.html" 
-    
+    template_name = "website/about.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avtive_page'] = 'about'
+        context["avtive_page"] = "about"
         return context
 
 
 class RuleQuView(TemplateView):
-    template_name = 'website/rule_qu.html'
-    
-    
+    template_name = "website/rule_qu.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avtive_page'] = 'rule_qu'
+        context["avtive_page"] = "rule_qu"
         return context
 
 
 class CategoriesView(ListView):
-    template_name = 'website/categories.html'
+    template_name = "website/categories.html"
     paginate_by = 8
-    
+
     queryset = ProductCategoryModel.objects.filter(
         status=ProductStatusType.publish.value
     ).annotate(
         product_count=Count(
-            'products',
-            filter=Q(products__status=ProductStatusType.publish.value)
+            "products", filter=Q(products__status=ProductStatusType.publish.value)
         )
     )
 
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avtive_page'] = 'categories'
+        context["avtive_page"] = "categories"
         return context
-    
+
 
 class BrandsView(ListView):
-    template_name = 'website/brands.html'
+    template_name = "website/brands.html"
     paginate_by = 8
 
     queryset = ProductBrandModel.objects.filter(
         status=ProductStatusType.publish.value
     ).annotate(
         product_count=Count(
-            'products',
-            filter=Q(products__status=ProductStatusType.publish.value)
+            "products", filter=Q(products__status=ProductStatusType.publish.value)
         )
     )
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avtive_page'] = 'brands'
+        context["avtive_page"] = "brands"
         return context
 
+
 class BlogPostView(ListView):
-    template_name = 'website/blog-post.html'
+    template_name = "website/blog-post.html"
     paginate_by = 4
 
     def get_queryset(self):
@@ -162,22 +172,24 @@ class BlogPostView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avtive_page'] = 'blog-post'
-        context['filter_by'] = self.request.GET.get("filter-by")
-        context['selected_category'] = self.request.GET.get("category")
+        context["avtive_page"] = "blog-post"
+        context["filter_by"] = self.request.GET.get("filter-by")
+        context["selected_category"] = self.request.GET.get("category")
         return context
 
 
 class BlogPostDetailView(DetailView):
-    template_name = 'website/blog-post-detail.html'
-    queryset = BlogModel.objects.select_related('category').prefetch_related('key_points', 'faqs', 'related_products')
+    template_name = "website/blog-post-detail.html"
+    queryset = BlogModel.objects.select_related("category").prefetch_related(
+        "key_points", "faqs", "related_products"
+    )
     context_object_name = "blog"
-
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avtive_page'] = 'blog-post-detail'
-        context['sidebar_categories'] = BlogCategoryModel.objects.all()
-        context['related_posts'] = BlogModel.objects.filter(category=self.object.category).exclude(pk=self.object.pk)[:4]
+        context["avtive_page"] = "blog-post-detail"
+        context["sidebar_categories"] = BlogCategoryModel.objects.all()
+        context["related_posts"] = BlogModel.objects.filter(
+            category=self.object.category
+        ).exclude(pk=self.object.pk)[:4]
         return context
