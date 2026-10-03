@@ -460,6 +460,9 @@ a {
     flex-direction: column;
 
     position: relative;
+
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .product-card:hover {
@@ -647,6 +650,8 @@ a {
     text-decoration: none;
 
     text-align: center;
+
+    margin-top: auto; /* این خط را اضافه کن */
 }
 
 .btn-add-cart:hover {
