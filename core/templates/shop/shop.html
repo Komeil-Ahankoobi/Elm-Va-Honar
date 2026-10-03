@@ -266,7 +266,7 @@
             <div class="products-grid" id="product-grid">
 
                 {% for product in products %}
-
+ 
                 <div class="product-card reveal{% if not product.has_variants and product.stock <= 0 %} is-sold-out{% endif %}"
                     style="cursor: pointer" data-href="{% url 'shop:show-product-detail-view' slug=product.slug %}">
 
