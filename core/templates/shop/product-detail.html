@@ -1,6 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/product-detail.css' %}" />
-<link rel="stylesheet" href="{% static 'css/product-detail-stock.css' %}" />
 {% endblock extra_css %} {% block title %} {{ object.get_meta_title }} {% endblock title %} {% block meta_description %}
 {{ object.get_meta_description }} {% endblock meta_description %} {% block content %}
 <div class="container">
