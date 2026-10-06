@@ -6,10 +6,12 @@ from django.db import transaction
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
 from django.http import JsonResponse
+from urllib.parse import urlencode
 from django.utils import timezone
 from django.db import IntegrityError
 
 from dashboard.permissions import HasCustomerAccessPermission
+from payment.gateways import available_gateways
 from cart.utils import get_cart
 from order.models import (
     UserAddressModel,
@@ -30,6 +32,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 
     def form_valid(self, form):
         user = self.request.user
+        gateway = form.cleaned_data["gateway"]
 
         # اول سفارش‌های pending قدیمیِ منقضی‌شده‌ی همین کاربر رو پاک‌سازی
         # می‌کنیم (شاید همین الان زمانش تموم شده و بشه ادامه داد).
@@ -43,7 +46,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         # نداشته باشه.
         active_pending_order = OrderModel.get_active_pending_order(user)
         if active_pending_order:
-            response = self.redirect_if_double_submit(active_pending_order)
+            response = self.redirect_if_double_submit(active_pending_order, gateway)
             if response:
                 return response
             remaining_minutes = (active_pending_order.seconds_remaining // 60) + 1
@@ -89,7 +92,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
                         order = self.create_order(address)
                 except IntegrityError:
                     response = self.redirect_if_double_submit(
-                        OrderModel.get_active_pending_order(user)
+                        OrderModel.get_active_pending_order(user), gateway
                     )
                     if response:
                         return response
@@ -117,10 +120,16 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             )
             return redirect(reverse_lazy("order:order-failed"))
 
-        return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
+        return redirect(self.payment_url(order, gateway))
 
 
-    def redirect_if_double_submit(self, order):
+    @staticmethod
+    def payment_url(order, gateway):
+        base = reverse("payment:request", kwargs={"order_id": order.id})
+        return f"{base}?{urlencode({'gateway': gateway})}"
+
+
+    def redirect_if_double_submit(self, order, gateway):
         """
         اگر سفارشِ در حال پرداخت همین چند ثانیه‌ی پیش ساخته شده، یعنی کاربر
         دو بار دکمه را زده؛ به‌جای پیام «صبر کنید» به همان سفارش ادامه می‌دهیم.
@@ -129,7 +138,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
             return None
         age = (timezone.now() - order.created_date).total_seconds()
         if age < 10:
-            return redirect(reverse("payment:request", kwargs={"order_id": order.id}))
+            return redirect(self.payment_url(order, gateway))
         return None
     
 
@@ -212,6 +221,7 @@ class OrderCheckoutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["addresses"] = UserAddressModel.objects.filter(user=self.request.user)
+        context["gateways"] = available_gateways(self.request.user)
 
         cart = get_cart(self.request)
         price = cart.get_total_payment_amount()

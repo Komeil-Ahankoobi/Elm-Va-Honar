@@ -9,6 +9,7 @@ class PaymentModelAdmin(admin.ModelAdmin):
         "id",
         "order",
         "order_id",
+        "gateway",
         "amount",
         "status",
         "authority_id",
@@ -16,21 +17,20 @@ class PaymentModelAdmin(admin.ModelAdmin):
         "created_date",
         "updated_date",
     )
-
     list_filter = (
+        "gateway",
         "status",
         "created_date",
     )
-
     # امکان جستجو بر اساس ID سفارش
     search_fields = (
         "order__id",
         "authority_id",
         "ref_id",
     )
-
     # اطلاعات حساس/تولیدشده توسط درگاه فقط خواندنی باشند
     readonly_fields = (
+        "gateway",
         "authority_id",
         "ref_id",
         "amount",

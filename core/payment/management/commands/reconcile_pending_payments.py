@@ -5,8 +5,13 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
+from django.conf import settings
+
 from order.models import InsufficientStockError, OrderModel
+from payment.gateways import GatewayType
 from payment.models import PaymentModel, PaymentStatusType
+from payment.parsian_client import ParsianClient
+from payment.parsian_service import settle_parsian_payment
 from payment.views import DEFINITIVE_FAILURE_CODES
 from payment.zarinpal_client import ZarinPalClient
 
@@ -45,6 +50,7 @@ class Command(BaseCommand):
         cutoff = timezone.now() - timedelta(minutes=options["min_age"])
         payment_ids = list(
             PaymentModel.objects.filter(
+                gateway=GatewayType.zarinpal.value,
                 status=PaymentStatusType.pending.value,
                 created_date__lt=cutoff,
             ).values_list("pk", flat=True)
@@ -56,6 +62,8 @@ class Command(BaseCommand):
         for payment_pk in payment_ids:
             outcome = self._reconcile(payment_pk, client, options["fail_after"])
             counts[outcome] += 1
+
+        self._reconcile_parsian(cutoff)
 
         self.stdout.write(
             self.style.SUCCESS(
@@ -127,3 +135,27 @@ class Command(BaseCommand):
                 result["message"],
             )
             return "skipped"
+
+    def _reconcile_parsian(self, cutoff):
+        parsian_ids = list(
+            PaymentModel.objects.filter(
+                gateway=GatewayType.parsian.value,
+                status=PaymentStatusType.pending.value,
+                created_date__lt=cutoff,
+            ).values_list("pk", flat=True)
+        )
+        if not parsian_ids:
+            return
+        if not getattr(settings, "PARSIAN_LOGIN_ACCOUNT", ""):
+            logger.warning("Parsian pending payments exist but PARSIAN_LOGIN_ACCOUNT is empty")
+            return
+
+        client = ParsianClient()
+        counts = {}
+        for payment_pk in parsian_ids:
+            outcome, _order_id = settle_parsian_payment(payment_pk, client=client)
+            counts[outcome] = counts.get(outcome, 0) + 1
+        summary = " | ".join(f"{k}: {v}" for k, v in sorted(counts.items()))
+        self.stdout.write(
+            self.style.SUCCESS(f"پارسیان - بررسی شد: {len(parsian_ids)} | {summary}")
+        )
