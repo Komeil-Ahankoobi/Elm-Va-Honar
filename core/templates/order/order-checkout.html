@@ -135,6 +135,18 @@
                 </div>
             </div>
 
+            <!-- Payment Gateway Selection (باید صریحاً انتخاب شود؛ پیش‌فرض ندارد) -->
+            <div class="gateway-box" id="gateway-box">
+                <div class="gateway-title">انتخاب درگاه پرداخت</div>
+                <div class="gateway-subtitle">برای ادامه، یکی از درگاه‌های زیر را انتخاب کنید.</div>
+                {% for code, label in gateways %}
+                <label class="gateway-option">
+                    <input type="radio" name="gateway" value="{{ code }}" form="order-form" required />
+                    <span class="gateway-name">{{ label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+
             <!-- Pay Button -->
             <button type="submit" class="btn-pay" form="order-form">
                 <i class="fa-solid fa-lock"></i> پرداخت و تکمیل سفارش

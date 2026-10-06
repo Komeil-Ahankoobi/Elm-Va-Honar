@@ -293,3 +293,35 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
 })();
+
+
+// ================= PAYMENT GATEWAY SELECT =================
+(function () {
+    const radios = document.querySelectorAll('input[name="gateway"]');
+    if (!radios.length) return;
+
+    function clearGatewayValidity() {
+        radios.forEach((r) => r.setCustomValidity(""));
+    }
+
+    function syncSelected() {
+        radios.forEach((r) => {
+            const option = r.closest(".gateway-option");
+            if (option) option.classList.toggle("selected", r.checked);
+        });
+    }
+
+    radios.forEach((radio) => {
+        // تا درگاه انتخاب نشده، مرورگر ارسال فرم را متوقف می‌کند
+        radio.addEventListener("invalid", function () {
+            this.setCustomValidity("لطفاً درگاه پرداخت را انتخاب کنید");
+        });
+        radio.addEventListener("change", function () {
+            clearGatewayValidity();
+            syncSelected();
+        });
+    });
+
+    // بعد از برگشت با دکمه Back مرورگر ممکن است انتخاب قبلی برگردد
+    syncSelected();
+})();

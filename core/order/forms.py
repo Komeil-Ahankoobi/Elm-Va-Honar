@@ -1,6 +1,8 @@
 from django import forms 
 from django.utils import timezone
 
+from payment.gateways import available_gateways
+
 from .models import (
     UserAddressModel,
     CoponModel
@@ -9,10 +11,21 @@ from .models import (
 class OrderCheckoutForm(forms.Form):
     address_id = forms.IntegerField(required=True)
     copon = forms.CharField(required=False)
+    # درگاه پرداخت باید صریحاً انتخاب شود (پیش‌فرض ندارد)
+    gateway = forms.ChoiceField(
+        choices=[],
+        required=True,
+        error_messages={
+            'required': 'لطفاً درگاه پرداخت را انتخاب کنید.',
+            'invalid_choice': 'درگاه پرداخت انتخاب‌شده معتبر نیست.',
+        },
+    )
     
     def __init__(self, *args, **kwargs):    
         self.request = kwargs.pop('request', None)
         super(OrderCheckoutForm, self).__init__(*args, **kwargs)
+        user = getattr(self.request, 'user', None)
+        self.fields['gateway'].choices = available_gateways(user)
 
     
     def clean_address_id(self):

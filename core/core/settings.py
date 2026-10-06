@@ -257,3 +257,11 @@ ZARINPAL_SANDBOX = config("ZARINPAL_SANDBOX", cast=bool, default=True)
 ZARINPAL_CURRENCY = config("ZARINPAL_CURRENCY", default="IRT")
 SITE_URL = config("SITE_URL", default="")
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+
+PARSIAN_ENABLED = config("PARSIAN_ENABLED", cast=bool, default=False)
+PARSIAN_STAFF_ONLY = config("PARSIAN_STAFF_ONLY", cast=bool, default=True)
+PARSIAN_LOGIN_ACCOUNT = config("PARSIAN_LOGIN_ACCOUNT", default="")
+PARSIAN_AMOUNT_MULTIPLIER = config("PARSIAN_AMOUNT_MULTIPLIER", cast=int, default=10)
+PARSIAN_SUCCESS_STATUS = config("PARSIAN_SUCCESS_STATUS", cast=int, default=0)
+
