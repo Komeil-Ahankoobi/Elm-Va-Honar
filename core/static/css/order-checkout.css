@@ -60,15 +60,45 @@ a {
     color: var(--text-muted);
 }
 
-/* ================= CHECKOUT GRID ================= */
-.checkout-grid {
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 25px;
-    align-items: start;
+/* ================= CHECKOUT LAYOUT ================= */
+.checkout-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* RIGHT COLUMN: ADDRESSES */
+/* دسکتاپ: چیدمان ۲ ستونه */
+@media (min-width: 993px) {
+    .checkout-wrapper {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        grid-template-areas:
+            "notice notice"
+            "summary address"
+            "gateway address"
+            "action address";
+        gap: 25px;
+        align-items: start;
+    }
+
+    .checkout-step-notice {
+        grid-area: notice;
+    }
+    .checkout-step-summary {
+        grid-area: summary;
+    }
+    .checkout-step-gateway {
+        grid-area: gateway;
+    }
+    .checkout-step-action {
+        grid-area: action;
+    }
+    .checkout-step-address {
+        grid-area: address;
+    }
+}
+
+/* ================= ADDRESSES SECTION ================= */
 .addresses-section {
     background: transparent;
 }
@@ -128,26 +158,11 @@ a {
     border-radius: 4px;
 }
 
-.btn-edit {
-    background: transparent;
-    border: none;
-    color: #64748b;
-    font-size: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.btn-edit:hover {
-    color: #111;
-}
-
 .address-details {
     font-size: 12px;
     color: var(--text-muted);
     line-height: 1.8;
-    padding-left: 35px; /* ایجاد فضا برای دکمه رادیویی سمت چپ */
+    padding-left: 35px;
 }
 
 .address-radio {
@@ -184,13 +199,7 @@ a {
     color: var(--accent-green);
 }
 
-/* LEFT COLUMN: ORDER SUMMARY & SIDEBAR */
-.summary-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
+/* ================= SUMMARY BOX ================= */
 .summary-box {
     background: var(--card-bg);
     border-radius: 10px;
@@ -293,8 +302,10 @@ a {
     background-color: var(--accent-green-hover);
 }
 
-/* Refund Notice */
+/* ================= REFUND NOTICE ================= */
 .refund-notice {
+    background: #fffbe6;
+    border: 1px solid #ffe58f;
     border-radius: 10px;
     padding: 15px;
     display: flex;
@@ -322,7 +333,18 @@ a {
     line-height: 1.6;
 }
 
-/* Security Box */
+.refund-notice--top {
+    width: 100%;
+    align-items: center;
+}
+
+/* ================= ACTION STEP & SECURITY ================= */
+.checkout-step-action {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .security-box {
     background: #f1f5f9;
     border-radius: 8px;
@@ -351,7 +373,6 @@ a {
     line-height: 1.4;
 }
 
-/* Main Pay Button */
 .btn-pay {
     width: 100%;
     background-color: var(--accent-green);
@@ -373,35 +394,90 @@ a {
     background-color: var(--accent-green-hover);
 }
 
-.terms-text {
-    font-size: 10px;
-    color: var(--text-muted);
-    text-align: center;
-    line-height: 1.5;
+/* ================= PAYMENT GATEWAY SELECT ================= */
+.gateway-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 18px;
 }
 
-.terms-text a {
-    color: #111;
+.gateway-title {
+    font-size: 13px;
     font-weight: bold;
-    text-decoration: underline;
+    color: #111;
+    margin-bottom: 4px;
 }
 
-/* ================= MEDIA QUERIES (RESPONSIVE) ================= */
+.gateway-subtitle {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
 
-/* Tablet & Medium Screens (<= 992px) */
+.gateway-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.gateway-option + .gateway-option {
+    margin-top: 8px;
+}
+
+.gateway-option:hover {
+    border-color: var(--accent-green);
+}
+
+.gateway-option.selected {
+    border: 1.5px solid #2b2b2b;
+    background: #ffffff;
+}
+
+.gateway-option input[type="radio"] {
+    accent-color: var(--accent-green);
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.gateway-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* ================= MOBILE / RESPONSIVE (ORDER GUARANTEE) ================= */
 @media (max-width: 992px) {
-    .checkout-grid {
-        grid-template-columns: 1fr; /* ستون‌ها روی هم قرار می‌گیرند */
+    .checkout-wrapper {
+        display: flex;
+        flex-direction: column;
         gap: 20px;
     }
 
-    .addresses-section {
-        order: 1; /* ابتدا لیست آدرس‌ها */
-    }
-
-    .summary-sidebar {
-        order: 2; /* خلاصه سفارش در ادامه */
-    }
+    /* ترتیب دقیق و تضمین شده در حالت موبایل */
+    .checkout-step-notice {
+        order: 1 !important;
+    } /* ۱. هشدار */
+    .checkout-step-gateway {
+        order: 2 !important;
+    } /* ۲. انتخاب درگاه */
+    .checkout-step-address {
+        order: 3 !important;
+    } /* ۳. انتخاب آدرس */
+    .checkout-step-summary {
+        order: 4 !important;
+    } /* ۴. خلاصه سفارش */
+    .checkout-step-action {
+        order: 5 !important;
+    } /* ۵. امنیت + پرداخت */
 }
 
 /* Mobile Screens (<= 768px) */
@@ -444,6 +520,28 @@ a {
         width: 100%;
         justify-content: center;
     }
+
+    .refund-notice--top {
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 10px;
+        row-gap: 8px;
+        padding: 14px 15px;
+    }
+
+    .refund-notice--top .refund-notice-body {
+        display: contents;
+    }
+
+    .refund-notice--top .refund-notice-title {
+        flex: 1;
+        margin: 0;
+    }
+
+    .refund-notice--top .refund-notice-text {
+        flex: 0 0 100%;
+        line-height: 1.9;
+    }
 }
 
 /* Extra Small Mobile Screens (<= 360px) */
@@ -463,7 +561,8 @@ a {
     .address-card,
     .summary-box,
     .refund-notice,
-    .security-box {
+    .security-box,
+    .gateway-box {
         padding: 12px;
     }
 
@@ -495,7 +594,6 @@ a {
         font-size: 13px;
     }
 
-    /* فرم کد تخفیف در سایز ۳۶۰ پیکسل */
     .coupon-form {
         flex-direction: column;
         gap: 6px;
@@ -509,34 +607,6 @@ a {
     .btn-pay {
         padding: 10px;
         font-size: 12px;
-    }
-
-    .refund-notice {
-        gap: 8px;
-    }
-
-    .refund-notice-icon {
-        font-size: 15px;
-    }
-
-    .refund-notice-title {
-        font-size: 11px;
-    }
-
-    .refund-notice-text {
-        font-size: 10px;
-    }
-
-    .security-box i {
-        font-size: 18px;
-    }
-
-    .security-text h5 {
-        font-size: 10px;
-    }
-
-    .security-text p {
-        font-size: 9.5px;
     }
 }
 
@@ -746,128 +816,8 @@ body.modal-open {
     background: #fdecea;
 }
 
-
 #address-cards-container {
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-
-/* ================= TOP REFUND NOTICE (full-width banner) ================= */
-.refund-notice--top {
-    width: 100%;
-    margin-bottom: 22px;
-    padding: 16px 20px;
-    align-items: center;
-}
-
-.refund-notice--top .refund-notice-icon {
-    margin-top: 0;
-}
-
-.refund-notice--top .refund-notice-title {
-    font-size: 13px;
-}
-
-.refund-notice--top .refund-notice-text {
-    font-size: 12px;
-}
-
-/* موبایل: آیکن + عنوان تو یه ردیف، متن زیرش تمام‌عرض */
-@media (max-width: 768px) {
-    .refund-notice--top {
-        flex-wrap: wrap;
-        align-items: center;
-        column-gap: 10px;
-        row-gap: 8px;
-        padding: 14px 15px;
-        margin-bottom: 18px;
-    }
-
-    .refund-notice--top .refund-notice-body {
-        display: contents;
-    }
-
-    .refund-notice--top .refund-notice-title {
-        flex: 1;
-        margin: 0;
-    }
-
-    .refund-notice--top .refund-notice-text {
-        flex: 0 0 100%;
-        line-height: 1.9;
-    }
-}
-
-@media (max-width: 360px) {
-    .refund-notice--top {
-        padding: 12px;
-    }
-}
-
-
-/* ================= PAYMENT GATEWAY SELECT ================= */
-.gateway-box {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 18px;
-}
-
-.gateway-title {
-    font-size: 13px;
-    font-weight: bold;
-    color: #111;
-    margin-bottom: 4px;
-}
-
-.gateway-subtitle {
-    font-size: 10.5px;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-}
-
-.gateway-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: #fafafa;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.gateway-option + .gateway-option {
-    margin-top: 8px;
-}
-
-.gateway-option:hover {
-    border-color: var(--accent-green);
-}
-
-.gateway-option.selected {
-    border: 1.5px solid #2b2b2b;
-    background: #ffffff;
-}
-
-.gateway-option input[type="radio"] {
-    accent-color: var(--accent-green);
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    cursor: pointer;
-}
-
-.gateway-name {
-    font-size: 12px;
-    font-weight: bold;
-    color: #222;
-}
-
-@media (max-width: 360px) {
-    .gateway-box {
-        padding: 12px;
-    }
 }

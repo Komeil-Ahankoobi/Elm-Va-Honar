@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/order-checkout.css' %}" />
-{% endblock extra_css %} 
+{% endblock extra_css %}
 {% block content %}
 <div class="container">
     <!-- Breadcrumb -->
@@ -15,28 +15,11 @@
         <p>اطلاعات سفارش خود را تکمیل و پرداخت را انجام دهید.</p>
     </div>
 
-    <!-- Refund / Cancellation Notice (full-width, top of page) -->
-    <div class="refund-notice refund-notice--top" role="note" aria-label="شرایط انصراف و بازگشت وجه">
-        <div class="refund-notice-icon">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-        </div>
-        <div class="refund-notice-body">
-            <h5 class="refund-notice-title">شرایط انصراف و بازگشت وجه</h5>
-            <p class="refund-notice-text">
-                در صورت پرداخت مبلغ سفارش و سپس منصرف شدن، مبلغی بابت کارمزد از پول پرداختی شما کسر شده و طی
-                <strong>۷۲ ساعت</strong> مابقی آن با هماهنگی‌های لازم توسط مدیر فروشگاه، به حساب شما عودت داده
-                می‌شود.
-            </p>
-        </div>
-    </div>
-
     <!-- Django Messages -->
     {% if messages %}
     <div class="checkout-messages" style="margin-bottom: 20px">
         {% for message in messages %}
-        <div
-            class="checkout-alert checkout-alert-{{ message.tags }}"
-            style="
+        <div class="checkout-alert checkout-alert-{{ message.tags }}" style="
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -78,91 +61,45 @@
     </div>
     {% endif %}
 
-    <!-- Checkout Grid Layout -->
-    <div class="checkout-grid">
-        <!-- LEFT COLUMN: ORDER SUMMARY & PAYMENT -->
-        <div class="summary-sidebar">
-            <div class="summary-box">
-                <div class="summary-title">خلاصه سفارش</div>
-
-                <div class="summary-row">
-                    <span>جمع کل کالاها</span>
-                    <span class="value total-price">{{ price|intcomma }} تومان</span>
-                </div>
-                <div class="summary-row">
-                    <span>هزینه ارسال</span>
-                    <span class="value total-tax">{{ post_price|intcomma }} تومان</span>
-                </div>
-
-                <div class="summary-divider"></div>
-
-                <div class="summary-total">
-                    <span>مجموع پرداختی</span>
-                    <span class="total-price">{{ total_price|intcomma }} تومان</span>
-                </div>
-
-                <!-- Coupon Area -->
-                <div class="coupon-section" id="promo-row">
-                    <div class="coupon-title">کد تخفیف</div>
-                    <div class="coupon-subtitle">اگر کد تخفیف دارید، در کادر زیر وارد کنید.</div>
-                    <div class="coupon-form">
-                        <input
-                            type="text"
-                            class="promo-input"
-                            name="copon"
-                            id="promo-input"
-                            placeholder="کد تخفیف خود را وارد کنید"
-                            form="order-form" />
-                        <button
-                            data-url="{% url 'order:validate-copon' %}"
-                            data-csrf="{{ csrf_token }}"
-                            type="button"
-                            class="promo-apply"
-                            id="promo-apply"
-                            form="order-form">
-                            اعمال کد
-                        </button>
-                    </div>
-                </div>
+    <!-- Checkout Main Wrapper -->
+    <div class="checkout-wrapper">
+        <!-- 1. REFUND NOTICE -->
+        <div class="refund-notice refund-notice--top checkout-step-notice" role="note"
+            aria-label="شرایط انصراف و بازگشت وجه">
+            <div class="refund-notice-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-
-            <!-- Security Box -->
-            <div class="security-box">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div class="security-text">
-                    <h5>با اطمینان خرید کنید</h5>
-                    <p>اطلاعات شما به صورت امن و رمزنگاری شده منتقل می‌شوند.</p>
-                </div>
+            <div class="refund-notice-body">
+                <h5 class="refund-notice-title">شرایط انصراف و بازگشت وجه</h5>
+                <p class="refund-notice-text">
+                    در صورت پرداخت مبلغ سفارش و سپس منصرف شدن، مبلغی بابت کارمزد از پول پرداختی شما کسر شده و طی
+                    <strong>۷۲ ساعت</strong> مابقی آن با هماهنگی‌های لازم توسط مدیر فروشگاه، به حساب شما عودت داده
+                    می‌شود.
+                </p>
             </div>
-
-            <!-- Payment Gateway Selection (باید صریحاً انتخاب شود؛ پیش‌فرض ندارد) -->
-            <div class="gateway-box" id="gateway-box">
-                <div class="gateway-title">انتخاب درگاه پرداخت</div>
-                <div class="gateway-subtitle">برای ادامه، یکی از درگاه‌های زیر را انتخاب کنید.</div>
-                {% for code, label in gateways %}
-                <label class="gateway-option">
-                    <input type="radio" name="gateway" value="{{ code }}" form="order-form" required />
-                    <span class="gateway-name">{{ label }}</span>
-                </label>
-                {% endfor %}
-            </div>
-
-            <!-- Pay Button -->
-            <button type="submit" class="btn-pay" form="order-form">
-                <i class="fa-solid fa-lock"></i> پرداخت و تکمیل سفارش
-            </button>
         </div>
 
-        <!-- RIGHT COLUMN: ADDRESSES -->
-        <div class="addresses-section">
+        <!-- 2. GATEWAY SELECTION -->
+        <div class="gateway-box checkout-step-gateway" id="gateway-box">
+            <div class="gateway-title">انتخاب درگاه پرداخت</div>
+            <div class="gateway-subtitle">برای ادامه، یکی از درگاه‌های زیر را انتخاب کنید.</div>
+            {% for code, label in gateways %}
+            <label class="gateway-option">
+                <input type="radio" name="gateway" value="{{ code }}" form="order-form" required />
+                <span class="gateway-name">{{ label }}</span>
+            </label>
+            {% endfor %}
+        </div>
+
+        <!-- 3. ADDRESSES SECTION -->
+        <div class="addresses-section checkout-step-address">
             <div class="section-heading">آدرس‌های من</div>
 
             <form class="address-cards-list" method="post" action="." id="order-form">
                 {% csrf_token %}
                 <div id="address-cards-container">
                     {% for address in addresses %}
-                    <label
-                        class="address-card {% if forloop.first %}selected{% endif %}"
+                    <label class="address-card {% if forloop.first %}selected{% endif %}"
                         style="cursor: pointer; display: block">
                         <div class="address-header">
                             <div class="address-title-group">
@@ -185,14 +122,60 @@
                     {% endfor %}
                 </div>
 
-                <button
-                    type="button"
-                    id="add-address-trigger"
-                    class="add-address-btn"
-                    style="margin-top: 15px">
+                <button type="button" id="add-address-trigger" class="add-address-btn" style="margin-top: 15px">
                     <i class="fa-solid fa-plus"></i> + افزودن آدرس جدید
                 </button>
             </form>
+        </div>
+
+        <!-- 4. ORDER SUMMARY BOX -->
+        <div class="summary-box checkout-step-summary">
+            <div class="summary-title">خلاصه سفارش</div>
+
+            <div class="summary-row">
+                <span>جمع کل کالاها</span>
+                <span class="value total-price">{{ price|intcomma }} تومان</span>
+            </div>
+            <div class="summary-row">
+                <span>هزینه ارسال</span>
+                <span class="value total-tax">{{ post_price|intcomma }} تومان</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span>مجموع پرداختی</span>
+                <span class="total-price">{{ total_price|intcomma }} تومان</span>
+            </div>
+
+            <!-- Coupon Area -->
+            <div class="coupon-section" id="promo-row">
+                <div class="coupon-title">کد تخفیف</div>
+                <div class="coupon-subtitle">اگر کد تخفیف دارید، در کادر زیر وارد کنید.</div>
+                <div class="coupon-form">
+                    <input type="text" class="promo-input" name="copon" id="promo-input"
+                        placeholder="کد تخفیف خود را وارد کنید" form="order-form" />
+                    <button data-url="{% url 'order:validate-copon' %}" data-csrf="{{ csrf_token }}" type="button"
+                        class="promo-apply" id="promo-apply" form="order-form">
+                        اعمال کد
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. SECURITY & PAY BUTTON -->
+        <div class="checkout-step-action">
+            <div class="security-box">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div class="security-text">
+                    <h5>با اطمینان خرید کنید</h5>
+                    <p>اطلاعات شما به صورت امن و رمزنگاری شده منتقل می‌شوند.</p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-pay" form="order-form">
+                <i class="fa-solid fa-lock"></i> پرداخت و تکمیل سفارش
+            </button>
         </div>
     </div>
 </div>
@@ -209,9 +192,7 @@
 
         <div class="modal-alert" id="add-address-modal-alert" style="display: none"></div>
 
-        <form
-            id="add-address-form"
-            data-url="{% url 'dashboard:customer:address-ajax-create' %}"
+        <form id="add-address-form" data-url="{% url 'dashboard:customer:address-ajax-create' %}"
             data-csrf="{{ csrf_token }}">
             <div class="form-group">
                 <label for="modal_address">آدرس</label>
@@ -251,7 +232,6 @@
 
 {% endblock content %}
 {% block messages_toast %}{% endblock messages_toast %}
-
 
 {% block extra_js %}
 <script src="{% static 'js/order-checkout.js' %}"></script>
