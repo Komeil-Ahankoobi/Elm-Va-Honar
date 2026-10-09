@@ -19,8 +19,20 @@
 <body>
 
     <!-- ===================== MOBILE TOPBAR ===================== -->
-    <div class="mobile-topbar" style="display: flex; justify-content: space-between; align-items: center; ">
+    <div class="mobile-topbar">
+        <div>
+            <a href="{% url 'website:home' %}" class="logout-btn">
+                خروج
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <path d="M16 17l5-5-5-5" />
+                    <path d="M21 12H9" />
+                </svg>
+            </a>
+        </div>
+
         <div style="display: flex; align-items: center; justify-content: center;">
+            <span class="mobile-brand" style="margin-top: 4px;">ElmVHonar</span>
             <button type="button" class="hamburger-btn" id="sidebarToggle" aria-label="باز کردن منو">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 6h16" />
@@ -28,19 +40,8 @@
                     <path d="M4 18h16" />
                 </svg>
             </button>
-            <span class="mobile-brand">ElmVHonar</span>
         </div>
-        <div>
-            <a href="{% url 'website:home' %}" class="logout-btn">
-                خروج
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <path d="M16 17l5-5-5-5" />
-                    <path d="M21 12H9" />
-                </svg>
-            </a>
-        </div>
+
     </div>
 
     <!-- ===================== SIDEBAR OVERLAY ===================== -->
@@ -114,9 +115,6 @@
         </main>
     </div>
 
-    <!-- توجه: toastify-es.js نسخه‌ی ES Module هست و به‌عنوان اسکریپت معمولی
-         (بدون type="module") خطای "export declarations may only appear at
-         top level of a module" می‌ده. فقط نسخه‌ی UMD (toastify.js) کافیه. -->
     <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
     <script src="{% static 'js/customer-dashboard.js' %}"></script>
     {% include 'messages.html' %}

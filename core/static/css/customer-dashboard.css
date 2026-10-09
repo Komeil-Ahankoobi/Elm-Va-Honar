@@ -2,8 +2,6 @@
    Variables (matching site theme)
    ========================================================================== */
 
-/* main css */
-
 :root {
     --color-primary: #2f5d50;
     --color-primary-dark: #23473d;
@@ -36,6 +34,11 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -74,6 +77,7 @@ input {
 .mobile-topbar {
     display: none;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     background-color: var(--color-dark-bg);
     padding: 14px 16px;
@@ -488,7 +492,7 @@ input {
 }
 
 /* ==========================================================================
-   Responsive
+   Responsive (Unified Breakpoint for Mobile Topbar & Off-Canvas Sidebar)
    ========================================================================== */
 @media (max-width: 992px) {
     .content-grid {
@@ -496,7 +500,7 @@ input {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .mobile-topbar {
         display: flex;
     }
@@ -508,9 +512,9 @@ input {
     .sidebar {
         position: fixed;
         top: 0;
-        right: -300px; /* مخفی در بیرون از کادر سمت راست */
+        right: -320px; /* مخفی کامل در خارج از کادر صفحه */
         width: 280px;
-        max-width: 82%;
+        max-width: 82vw;
         height: 100vh;
         z-index: 1000;
         overflow-y: auto;
@@ -518,7 +522,7 @@ input {
         box-shadow: -6px 0 30px rgba(0, 0, 0, 0.25);
     }
 
-    /* کلاس open متناسب با فایل JS */
+    /* کلاس open برای باز شدن منو از راست */
     .sidebar.open {
         right: 0;
     }
@@ -544,8 +548,6 @@ input {
         font-size: 19px;
     }
 }
-
-/* end main css */
 
 /* setting css */
 
@@ -779,7 +781,6 @@ input {
         align-items: flex-start;
     }
 }
-/* end setting css */
 
 /* ==========================================================================
    Address List Page
@@ -892,7 +893,6 @@ button.edit-address-btn:hover {
     color: #c33c3c;
 }
 
-/* Info note */
 .info-note {
     display: flex;
     align-items: center;
@@ -914,9 +914,6 @@ button.edit-address-btn:hover {
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
 @media (max-width: 768px) {
     .address-list {
         grid-template-columns: 1fr;
@@ -944,11 +941,7 @@ button.edit-address-btn:hover {
 }
 
 /* ==========================================================================
-   end Address List Page
-   ========================================================================== */
-
-/* ==========================================================================
-   Address Create / 
+   Address Create / Edit
    ========================================================================== */
 .address-form-card {
     max-width: 640px;
@@ -1021,7 +1014,6 @@ button.edit-address-btn:hover {
     stroke: currentColor;
 }
 
-/* Select box */
 .select-box {
     padding-inline-end: 14px;
 }
@@ -1045,7 +1037,6 @@ button.edit-address-btn:hover {
     margin-inline-end: 6px;
 }
 
-/* Form actions */
 .form-actions {
     display: flex;
     align-items: center;
@@ -1091,10 +1082,6 @@ button.edit-address-btn:hover {
         align-items: stretch;
     }
 }
-
-/* ==========================================================================
-   end Address Create / 
-   ========================================================================== */
 
 /* ==========================================================================
    Password Action Box Styles
@@ -1168,7 +1155,6 @@ button.edit-address-btn:hover {
     flex-shrink: 0;
 }
 
-/* Password Box Responsive Rules */
 @media (max-width: 480px) {
     .password-action-card {
         flex-direction: column;
@@ -1191,7 +1177,6 @@ button.edit-address-btn:hover {
    FINAL ORDER PAGES FIX — scoped, compact and collision-resistant
    ========================================================================== */
 
-/* ---------- shared ---------- */
 .orders-page,
 .order-detail-page {
     width: 100%;
@@ -1624,7 +1609,6 @@ button.edit-address-btn:hover {
     height: 17px;
 }
 
-/* Exact same grid for header + every data row = guaranteed column alignment */
 .order-detail-page .products-table {
     width: 100%;
     overflow: hidden;
@@ -1828,7 +1812,6 @@ button.edit-address-btn:hover {
     text-align: left !important;
 }
 
-/* Payment card: explicitly reset any old flex/height rules that caused the huge gaps */
 .order-detail-page .payment-card {
     display: block !important;
     align-self: start !important;
@@ -1934,7 +1917,6 @@ button.edit-address-btn:hover {
     font-weight: 500;
 }
 
-/* ---------- responsive ---------- */
 @media (max-width: 1180px) {
     .orders-page .order-card-main {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2084,7 +2066,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ---------- small primitives used only by the order pages ---------- */
 .order-detail-page .breadcrumb {
     display: flex;
     align-items: center;
@@ -2153,14 +2134,6 @@ button.edit-address-btn:hover {
     width: 14px;
     height: 14px;
 }
-
-/* ============================================================================
-   FINAL ORDER PAGE PATCH
-   - hardens icon dimensions against global SVG rules
-   - keeps the desktop two-column detail layout until the page is genuinely narrow
-   - removes accidental stretching/empty heights
-   - keeps table header and row on exactly the same grid
-   ============================================================================ */
 
 .orders-page .orders-header-icon svg,
 .orders-page .order-cell-label svg,
@@ -2254,7 +2227,6 @@ button.edit-address-btn:hover {
     max-height: 21px !important;
 }
 
-/* Do not let old dashboard rules impose fixed heights on these cards. */
 .orders-page .order-card,
 .orders-page .orders-empty-state,
 .order-detail-page .order-summary-bar,
@@ -2266,7 +2238,6 @@ button.edit-address-btn:hover {
     max-height: none !important;
 }
 
-/* Detail: stable two-column desktop layout. */
 .order-detail-page .order-detail-layout {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 285px !important;
@@ -2286,7 +2257,6 @@ button.edit-address-btn:hover {
     flex: 0 0 auto !important;
 }
 
-/* Header and every product row use the exact same six tracks. */
 .order-detail-page .products-table-header,
 .order-detail-page .product-row {
     display: grid !important;
@@ -2329,7 +2299,6 @@ button.edit-address-btn:hover {
     white-space: nowrap !important;
 }
 
-/* Tablet: keep the side cards beside the products where there is room. */
 @media (max-width: 860px) {
     .order-detail-page .order-detail-layout {
         grid-template-columns: minmax(0, 1fr) 235px !important;
@@ -2343,7 +2312,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* Phone: table becomes labelled cards; sidebar remains normal-sized cards. */
 @media (max-width: 680px) {
     .order-detail-page .order-detail-layout {
         grid-template-columns: 1fr !important;
@@ -2386,12 +2354,6 @@ button.edit-address-btn:hover {
         font-size: 9px;
     }
 }
-
-/* ============================================================================
-   ORDER DETAIL — TYPOGRAPHY SCALE
-   Final readability pass: replace tiny 8–11px text with a comfortable
-   14–16px scale while keeping the layout compact.
-   ============================================================================ */
 
 .order-detail-page .summary-label {
     font-size: 14px !important;
@@ -2440,14 +2402,12 @@ button.edit-address-btn:hover {
     padding: 5px 10px;
 }
 
-/* Table headings */
 .order-detail-page .products-table-header {
     font-size: 14px !important;
     line-height: 1.7;
     min-height: 42px;
 }
 
-/* Product information */
 .order-detail-page .product-id {
     font-size: 13px !important;
 }
@@ -2480,7 +2440,6 @@ button.edit-address-btn:hover {
     font-size: 14px !important;
 }
 
-/* Shipping / delivery */
 .order-detail-page .shipping-row {
     font-size: 14px !important;
     line-height: 1.8;
@@ -2492,7 +2451,6 @@ button.edit-address-btn:hover {
     line-height: 1.9;
 }
 
-/* Payment summary */
 .order-detail-page .payment-line {
     font-size: 14px !important;
     line-height: 1.8;
@@ -2540,7 +2498,6 @@ button.edit-address-btn:hover {
     font-size: 13px !important;
 }
 
-/* Keep the typography readable on mobile as well */
 @media (max-width: 700px) {
     .order-detail-page .products-table-header {
         font-size: 14px !important;
@@ -2564,10 +2521,6 @@ button.edit-address-btn:hover {
         font-size: 15px !important;
     }
 }
-/* ============================================================================
-   ORDER LIST — TYPOGRAPHY SCALE
-   Match the readable typography scale used on Order Detail.
-   ============================================================================ */
 
 .orders-page .order-cell-label {
     font-size: 14px !important;
@@ -2660,12 +2613,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ============================================================================
-   FINAL RESPONSIVE SYSTEM — ORDER LIST + ORDER DETAIL
-   One clean responsive layer at the end to override older dashboard rules.
-   ============================================================================ */
-
-/* ---------- shared responsive foundations ---------- */
 .orders-page,
 .order-detail-page {
     width: 100%;
@@ -2684,7 +2631,6 @@ button.edit-address-btn:hover {
     min-width: 0;
 }
 
-/* ---------- ORDER LIST: tablet ---------- */
 @media (max-width: 1100px) {
     .orders-page .order-card {
         grid-template-columns: 1fr !important;
@@ -2726,7 +2672,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ---------- ORDER DETAIL: tablet ---------- */
 @media (max-width: 1000px) {
     .order-detail-page .order-detail-layout {
         grid-template-columns: minmax(0, 1fr) 250px !important;
@@ -2756,7 +2701,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ---------- both pages: compact desktop/tablet ---------- */
 @media (max-width: 820px) {
     .orders-page .orders-page-header,
     .order-detail-page .detail-header {
@@ -2794,7 +2738,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ---------- ORDER LIST: phone / narrow tablet ---------- */
 @media (max-width: 680px) {
     .orders-page .orders-page-header,
     .order-detail-page .detail-header {
@@ -2869,7 +2812,6 @@ button.edit-address-btn:hover {
         font-size: 14px !important;
     }
 
-    /* Detail summary becomes a clean vertical information stack. */
     .order-detail-page .order-summary-bar {
         grid-template-columns: 1fr !important;
     }
@@ -2915,7 +2857,6 @@ button.edit-address-btn:hover {
         font-size: 16px !important;
     }
 
-    /* Product table becomes stacked product cards instead of a tiny table. */
     .order-detail-page .products-table {
         overflow: visible !important;
     }
@@ -3022,7 +2963,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ---------- very small phones ---------- */
 @media (max-width: 420px) {
     .orders-page .orders-page-header,
     .order-detail-page .detail-header {
@@ -3090,9 +3030,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* ================================================================
-   ORDER DETAIL — BACK TO ORDERS BUTTON
-   ================================================================ */
 .order-detail-page .btn-back {
     position: relative;
     min-height: 46px;
@@ -3164,10 +3101,8 @@ button.edit-address-btn:hover {
 
 /* ================================================================
    MOBILE SIDEBAR — FIXED VIEWPORT / NO MENU SCROLL
-   The mobile drawer always fits the device viewport and keeps the
-   bottom action pinned to the lowest visible point.
    ================================================================ */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .sidebar {
         top: 0;
         bottom: 0;
@@ -3221,9 +3156,7 @@ button.edit-address-btn:hover {
     }
 }
 
-/* Very short phone screens: keep every menu item visible without
-   introducing an internal scrollbar. */
-@media (max-width: 768px) and (max-height: 620px) {
+@media (max-width: 960px) and (max-height: 620px) {
     .sidebar .brand {
         padding-top: 14px;
         padding-bottom: 14px;
@@ -3253,9 +3186,7 @@ button.edit-address-btn:hover {
     }
 }
 
-/* =========================
-   ADDRESS PAGE - MOBILE
-   ========================= */
+/* ADDRESS PAGE - MOBILE */
 @media (max-width: 560px) {
     .address-toolbar {
         width: 100%;
@@ -3268,10 +3199,7 @@ button.edit-address-btn:hover {
     }
 }
 
-/* =========================================================
-   ORDER ITEM VARIANT
-   ========================================================= */
-
+/* ORDER ITEM VARIANT */
 .order-detail-page .order-item-variant {
     display: flex;
     align-items: center;
@@ -3293,7 +3221,6 @@ button.edit-address-btn:hover {
     gap: 6px;
 }
 
-/* رنگ Variant */
 .order-detail-page .order-color-dot {
     width: 22px;
     height: 22px;
@@ -3304,7 +3231,6 @@ button.edit-address-btn:hover {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14);
 }
 
-/* کد رنگ */
 .order-detail-page .order-variant-code {
     font-size: 11px;
     font-weight: 600;
@@ -3312,39 +3238,26 @@ button.edit-address-btn:hover {
     direction: ltr;
 }
 
-/* شماره Variant */
 .order-detail-page .order-number-dot {
     width: 26px;
     height: 26px;
     flex: 0 0 26px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
     background: var(--color-bg);
     border: 1px solid var(--color-border);
-
     color: var(--color-primary);
     font-size: 11px;
     font-weight: 700;
-
     direction: ltr;
 }
 
-/* =========================================================
-   PROFILE PAGE
-   ========================================================= */
-
+/* PROFILE PAGE */
 .profile-page {
     width: 100%;
 }
-
-/* ---------------------------------------------------------
-   Page Header
-   --------------------------------------------------------- */
 
 .profile-page-header {
     width: 100%;
@@ -3358,93 +3271,56 @@ button.edit-address-btn:hover {
     margin-top: 0;
 }
 
-/* ---------------------------------------------------------
-   Main Profile Card
-   --------------------------------------------------------- */
-
 .profile-main-card {
     width: 100%;
-
     margin-top: 24px;
     padding: 28px;
-
     overflow: hidden;
 }
-
-/* ---------------------------------------------------------
-   Profile Header
-   --------------------------------------------------------- */
 
 .profile-card-top {
     display: flex;
     align-items: center;
-
     gap: 18px;
-
     min-height: 86px;
 }
-
-/* Avatar */
 
 .profile-avatar {
     width: 76px;
     height: 76px;
-
     flex: 0 0 76px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 50%;
-
     background: var(--color-primary);
     color: #fff;
-
     font-size: 27px;
     font-weight: 800;
-
     line-height: 1;
 }
-
-/* User info */
 
 .profile-user-info {
     display: flex;
     flex-direction: column;
-
     align-items: flex-start;
-
     gap: 7px;
 }
 
 .profile-name {
     margin: 0;
-
     color: var(--color-text);
-
     font-size: 20px;
     font-weight: 800;
-
     line-height: 1.6;
 }
-
-/* ---------------------------------------------------------
-   Divider
-   --------------------------------------------------------- */
 
 .profile-divider {
     width: 100%;
     height: 1px;
-
     margin: 24px 0;
-
     background: var(--color-border);
 }
-
-/* ---------------------------------------------------------
-   Information Header
-   --------------------------------------------------------- */
 
 .profile-info-header {
     width: 100%;
@@ -3456,46 +3332,27 @@ button.edit-address-btn:hover {
 
 .profile-card-description {
     margin: 6px 0 0;
-
     color: var(--color-text-muted);
-
     font-size: 13px;
     line-height: 1.7;
 }
 
-/* ---------------------------------------------------------
-   Information Grid
-   --------------------------------------------------------- */
-
 .profile-info-grid {
     display: grid;
-
     grid-template-columns: repeat(2, minmax(0, 1fr));
-
     gap: 14px;
-
     margin-top: 20px;
 }
-
-/* ---------------------------------------------------------
-   Information Item
-   --------------------------------------------------------- */
 
 .profile-info-item {
     display: flex;
     align-items: center;
-
     gap: 14px;
-
     min-height: 78px;
-
     padding: 14px 16px;
-
     border: 1px solid var(--color-border);
     border-radius: 12px;
-
     background: var(--color-bg);
-
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
@@ -3504,30 +3361,19 @@ button.edit-address-btn:hover {
 
 .profile-info-item:hover {
     border-color: var(--color-primary);
-
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.05);
-
     transform: translateY(-1px);
 }
-
-/* ---------------------------------------------------------
-   Information Icon
-   --------------------------------------------------------- */
 
 .profile-info-icon {
     width: 42px;
     height: 42px;
-
     flex: 0 0 42px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 10px;
-
     background: rgba(184, 134, 11, 0.1);
-
     color: var(--color-primary);
 }
 
@@ -3536,36 +3382,25 @@ button.edit-address-btn:hover {
     height: 21px;
 }
 
-/* ---------------------------------------------------------
-   Information Text
-   --------------------------------------------------------- */
-
 .profile-info-content {
     min-width: 0;
-
     display: flex;
     flex-direction: column;
-
     gap: 5px;
 }
 
 .profile-info-label {
     color: var(--color-text-muted);
-
     font-size: 12px;
     font-weight: 500;
-
     line-height: 1.5;
 }
 
 .profile-info-value {
     color: var(--color-text);
-
     font-size: 15px;
     font-weight: 700;
-
     line-height: 1.6;
-
     word-break: break-word;
 }
 
@@ -3573,10 +3408,6 @@ button.edit-address-btn:hover {
     direction: ltr;
     text-align: right;
 }
-
-/* =========================================================
-   TABLET
-   ========================================================= */
 
 @media (max-width: 800px) {
     .profile-main-card {
@@ -3588,31 +3419,21 @@ button.edit-address-btn:hover {
     }
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
 @media (max-width: 600px) {
     .profile-main-card {
         margin-top: 18px;
-
         padding: 18px;
     }
 
-    /* Profile header */
-
     .profile-card-top {
         gap: 13px;
-
         min-height: auto;
     }
 
     .profile-avatar {
         width: 62px;
         height: 62px;
-
         flex-basis: 62px;
-
         font-size: 22px;
     }
 
@@ -3620,32 +3441,24 @@ button.edit-address-btn:hover {
         font-size: 17px;
     }
 
-    /* Divider */
-
     .profile-divider {
         margin: 20px 0;
     }
 
-    /* Information */
-
     .profile-info-grid {
         grid-template-columns: 1fr;
-
         gap: 10px;
-
         margin-top: 16px;
     }
 
     .profile-info-item {
         min-height: 70px;
-
         padding: 12px 13px;
     }
 
     .profile-info-icon {
         width: 40px;
         height: 40px;
-
         flex-basis: 40px;
     }
 
@@ -3659,10 +3472,6 @@ button.edit-address-btn:hover {
     }
 }
 
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
 @media (max-width: 400px) {
     .profile-main-card {
         padding: 15px;
@@ -3675,9 +3484,7 @@ button.edit-address-btn:hover {
     .profile-avatar {
         width: 56px;
         height: 56px;
-
         flex-basis: 56px;
-
         font-size: 20px;
     }
 
@@ -3700,95 +3507,69 @@ button.edit-address-btn:hover {
 
 /* وضعیت‌های سفارش */
 .status-pill.status-1 {
-    /* در انتظار پرداخت */
     background: rgba(245, 158, 11, 0.12);
     color: #b45309;
 }
 
 .status-pill.status-2 {
-    /* پرداخت شده */
     background: rgba(34, 197, 94, 0.12);
     color: #15803d;
 }
 
 .status-pill.status-3 {
-    /* پردازش — بنفش */
     background: rgba(168, 85, 247, 0.15);
     color: #840eeb;
 }
 
 .status-pill.status-4 {
-    /* در حال آماده‌سازی */
     background: rgba(99, 102, 241, 0.12);
     color: #4338ca;
 }
 
 .status-pill.status-5 {
-    /* تحویل پست مبدا داده شد — آبی آسمانی */
     background: rgba(14, 165, 233, 0.15);
     color: #0284c7;
 }
 
 .status-pill.status-6 {
-    /* لغو شده */
     background: rgba(239, 68, 68, 0.12);
     color: #b91c1c;
 }
 
 .cancel-order-btn {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     padding: 10px 18px;
-
     border-radius: 12px;
-
     background: #c0392b;
-
     color: white;
-
     font-family: inherit;
-
     font-size: 14px;
-
     font-weight: 600;
-
     cursor: pointer;
-
     transition: 0.25s ease;
 }
 
 .cancel-order-btn:hover {
     background: #962d22;
-
     transform: translateY(-2px);
 }
 
 .order-cancel-box {
     margin-bottom: 20px;
-
     display: flex;
-
     justify-content: flex-start;
 }
 
-/* ============================================================================
-   CANCEL ORDER BUTTON & ACTION BOX STYLES
-   ============================================================================ */
-
-/* Detail Header Actions */
+/* CANCEL ORDER BUTTON & ACTION BOX STYLES */
 .order-detail-page .detail-actions {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Base Cancel Button */
 .cancel-order-btn {
     display: inline-flex;
     align-items: center;
@@ -3821,7 +3602,6 @@ button.edit-address-btn:hover {
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
 }
 
-/* Order List Action Box Layout Fix */
 .orders-page .order-card-action {
     display: flex;
     align-items: center;
@@ -3837,7 +3617,6 @@ button.edit-address-btn:hover {
     padding: 0 14px;
 }
 
-/* Responsive Fixes for Cancel Button */
 @media (max-width: 700px) {
     .order-detail-page .detail-header {
         flex-direction: column;
