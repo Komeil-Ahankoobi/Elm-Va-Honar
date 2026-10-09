@@ -18,6 +18,10 @@
     <div class="product-main">
         <!-- LEFT COLUMN: ACTIONS & SPECS -->
         <div class="buy-box">
+            <label>توضیحات محصول</label>
+
+            <p class="pd-description">{{ object.description }}</p>
+
             <div class="price-area">
                 <div class="price-category-row">
                     <div class="price-box">
@@ -85,7 +89,7 @@
             </div>
             {% endif %}
 
-            <p class="pd-description">{{ object.description }}</p>
+
 
             {% if object.has_color_variants %}
             <div class="color-selector">

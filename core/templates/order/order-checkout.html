@@ -85,8 +85,17 @@
             <div class="gateway-subtitle">برای ادامه، یکی از درگاه‌های زیر را انتخاب کنید.</div>
             {% for code, label in gateways %}
             <label class="gateway-option">
-                <input type="radio" name="gateway" value="{{ code }}" form="order-form" required />
-                <span class="gateway-name">{{ label }}</span>
+                <div class="gateway-info">
+                    <input type="radio" name="gateway" value="{{ code }}" form="order-form" required />
+                    <span class="gateway-name">{{ label }}</span>
+                </div>
+                <div class="gateway-logo">
+                    {% if code == 'zarinpal' or 'zarin' in code %}
+                    <img src="{% static 'images/zarinpal-logo.webp' %}" alt="{{ label }}" loading="lazy" />
+                    {% elif code == 'parsina' or 'pars' in code %}
+                    <img src="{% static 'images/parsian-logo.webp' %}" alt="{{ label }}" loading="lazy" />
+                    {% endif %}
+                </div>
             </label>
             {% endfor %}
         </div>
